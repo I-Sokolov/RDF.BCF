@@ -16,6 +16,8 @@
         /// </summary>
         public Project()
         {
+            var dir = System.IO.Directory.GetCurrentDirectory();
+            m_bcfProject = RDF.BCF.Native.OpenProject();
             m_topics = new Topics(this);
             m_extensions = new Extensions(this);
         }
@@ -81,7 +83,7 @@
         #region IMPLEMENTATION
         ///////////////////////////////////////////////////////////////////////////////////////////
         ///
-        private Int64 m_bcfFile = 0;
+        private IntPtr m_bcfProject = IntPtr.Zero;
         private Extensions m_extensions;
         private Topics m_topics;
 
@@ -93,16 +95,15 @@
 
         public virtual void Dispose(bool disposing)
         {
-            if (m_bcfFile != 0)
+            if (m_bcfProject != IntPtr.Zero)
             {
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects)
                 }
 
-                // TODO: free m_bcfFile
-                Console.WriteLine("TODO - dispose");
-                m_bcfFile = 0;
+                RDF.BCF.Native.CloseProject(m_bcfProject);
+                m_bcfProject = IntPtr.Zero;
             }
         }
 
