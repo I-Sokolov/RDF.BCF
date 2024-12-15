@@ -39,7 +39,7 @@ extern "C" {
     /// <summary>
     /// 
     /// </summary>
-    RDFBCF_EXPORT void bcfCloseProject(BCFProject* project);
+    RDFBCF_EXPORT bool bcfCloseProject(BCFProject* project);
 
     /// <summary>
     /// 

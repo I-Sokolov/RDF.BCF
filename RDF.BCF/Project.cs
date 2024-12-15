@@ -30,7 +30,7 @@
         /// </summary>
         public bool InitNew()
         {
-            return Native.InitNew();
+            return Native.InitNew(m_bcfProject);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@
         /// </summary>
         public bool ReadFile(string filePath)
         {
-            return Native.ReadFile(filePath);
+            return Native.ReadFile(m_bcfProject, filePath);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@
         /// </summary>
         public bool WriteFile(string filePath, Native.Version version = Native.Version._3_0)
         {
-            return Native.WriteFile(filePath, version);
+            return Native.WriteFile(m_bcfProject, filePath, version);
         }
 
         /// <summary>

@@ -22,11 +22,18 @@ RDFBCF_EXPORT BCFProject* bcfOpenProject(void)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT void bcfCloseProject(BCFProject* project)
+RDFBCF_EXPORT bool bcfCloseProject(BCFProject* project)
 {
     if (project) {
-        delete project;
+        if (project->Close()) {
+            delete project;
+            return true;
+        }
+        else {
+            return false;
+        }
     }
+    return true;
 }
 
 

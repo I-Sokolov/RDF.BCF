@@ -12,7 +12,7 @@ public:
     bool Unpack(const char* archivePath, const char* folder);
 
 private:
-    bool AddFolder(const std::filesystem::path& folderPath, std::string inzipPath, struct zip* zip);
+    bool AddFolder(const char* osPath, const char* zipPath, struct zip* zip);
 
 private:
     Log& m_log;

@@ -201,6 +201,7 @@
     <ClInclude Include="Archivator.h" />
     <ClInclude Include="bcfEngine.h" />
     <ClInclude Include="BCFProject.h" />
+    <ClInclude Include="FileSystem.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="pch.h" />
@@ -215,6 +216,7 @@
     <ClCompile Include="bcfEngine.cpp" />
     <ClCompile Include="BCFProject.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

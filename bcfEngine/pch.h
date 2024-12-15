@@ -12,6 +12,9 @@
 // add headers that you want to pre-compile here
 #include "framework.h"
 
-#include <filesystem>
+#include<list>
+#include<string>
+
+typedef std::list<std::string> StringList;
 
 #endif //PCH_H

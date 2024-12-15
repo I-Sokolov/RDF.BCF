@@ -24,15 +24,15 @@ namespace RDF.BCF
         public static extern IntPtr OpenProject();
 
         [DllImport(DDFBCFDLL, EntryPoint = "bcfCloseProject")]
-        public static extern void CloseProject(IntPtr project);
+        public static extern bool CloseProject(IntPtr project);
 
         [DllImport(DDFBCFDLL, EntryPoint = "bcfInitNew")]
-        public static extern bool InitNew();
+        public static extern bool InitNew(IntPtr project);
 
         [DllImport(DDFBCFDLL, EntryPoint = "bcfReadFile")]
-        public static extern bool ReadFile(string filePath);
+        public static extern bool ReadFile(IntPtr project, string filePath);
 
         [DllImport(DDFBCFDLL, EntryPoint = "bcfWriteFile")]
-        public static extern bool WriteFile(string filePath, Version version);
+        public static extern bool WriteFile(IntPtr project, string filePath, Version version);
     }
 }

@@ -1,10 +1,9 @@
 #include "pch.h"
+#include "Archivator.h"
 
 #include <zip.h>
-
 #include "Log.h"
-
-#include "Archivator.h"
+#include "FileSystem.h"
 
 
 /// <summary>
@@ -14,7 +13,7 @@ bool Archivator::Pack(const char* folder, const char* archivePath)
 {
     zip_t* zip = zip_open(archivePath, ZIP_CREATE | ZIP_TRUNCATE, nullptr);
     if (!zip) {
-        m_log.error("File write fail", "Can not open to write archive %s", archivePath);
+        m_log.error("Write file error", "Can not open to write archive %s", archivePath);
         return false;
     }
 
@@ -29,30 +28,34 @@ bool Archivator::Pack(const char* folder, const char* archivePath)
 /// <summary>
 /// 
 /// </summary>
-bool Archivator::AddFolder(const std::filesystem::path& folderPath, std::string inzipPath, struct zip* zip)
+bool Archivator::AddFolder(const char* osPath, const char* zipPath, struct zip* zip)
 {
-    for (const auto& entry : std::filesystem::directory_iterator(folderPath)) {
+    FileSystem fs(m_log);
 
-        std::string entryPath(inzipPath);
-        if (inzipPath.length() > 0)
-            entryPath.push_back('/');
-        entryPath.append(entry.path().filename().string());
+    FileSystem::DirList elems;
+    fs.GetDirContent(osPath, elems);
 
-        if (entry.is_directory()) {
-           
-            AddFolder(entry.path(), entryPath, zip);
+    for (auto& elem : elems) {
+
+        std::string ospath(osPath);
+        fs.AddPath(ospath, elem.name.c_str());
+
+        std::string zippath(zipPath);
+        fs.AddPath(zippath, elem.name.c_str(), true);
+
+        if (elem.folder) {
+            AddFolder(ospath.c_str(), zippath.c_str(), zip);
         }
         else {
-            auto filePath = entry.path().string();
-            zip_source_t* source = zip_source_file(zip, filePath.c_str(), 0, 0);
+            zip_source_t* source = zip_source_file(zip, ospath.c_str(), 0, 0);
             if (source) {
-                if (0 > zip_file_add(zip, entryPath.c_str(), source, ZIP_FL_ENC_GUESS)) {
-                    m_log.error("Fail add to zip", "Fail zip add file %s", filePath);
+                if (0 > zip_file_add(zip, zippath.c_str(), source, ZIP_FL_ENC_GUESS)) {
+                    m_log.error("Zip error", "Fail zip add file %s", ospath.c_str());
                     return false;
                 }
             }
             else {
-                m_log.error("Fail zip file", "Fail zip source file %s", filePath);
+                m_log.error("Zip error", "Fail zip source file %s", ospath.c_str());
                 return false;
             }
         }
@@ -67,9 +70,10 @@ bool Archivator::AddFolder(const std::filesystem::path& folderPath, std::string 
 /// </summary>
 bool Archivator::Unpack(const char* archivePath, const char* folder)
 {
+#if 0
     struct zip* archive = zip_open(archivePath, 0, NULL);
     if (archive == NULL) {
-        m_log.error ("File read fail",  "Failed to open archive %s", archivePath);
+        m_log.error ("File read error",  "Failed to open archive %s", archivePath);
         return false;
     }
 
@@ -89,7 +93,7 @@ bool Archivator::Unpack(const char* archivePath, const char* folder)
 
         FILE* outFile = fopen(filePath.string().c_str(), "wb");
         if (!outFile) {
-            m_log.error("File write fail", "Can not open to write archive %s", filePath.string().c_str());
+            m_log.error("File write error", "Can not open to write archive %s", filePath.string().c_str());
             return false;
         }
 
@@ -103,7 +107,7 @@ bool Archivator::Unpack(const char* archivePath, const char* folder)
     }
 
     zip_close(archive);
-
+#endif
     return true;
 }
 
