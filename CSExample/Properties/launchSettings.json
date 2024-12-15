@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CSExample": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

@@ -53,7 +53,7 @@ namespace CSExample
 
                 //
                 //
-                bcfData.SaveToFile("MyTest.bcf");
+                bcfData.WriteFile("MyTest.bcf");
             }
         }
 
@@ -73,7 +73,7 @@ namespace CSExample
         {
             using (var bcfData = new RDF.BCF.Project())
             {
-                bcfData.ReadFromFile("MyTest.bcf");
+                bcfData.ReadFile("MyTest.bcf");
 
                 WorkWithSchemaExtensionsExample(bcfData);
 

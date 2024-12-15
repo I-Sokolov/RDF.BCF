@@ -1,6 +1,20 @@
 #pragma once
 
+#include "bcfEngine.h"
+#include "Log.h"
+
 struct BCFProject
 {
+public:
+    BCFProject();
+    ~BCFProject();
+
+public:
+    bool InitNew();
+    bool Read(const char* bcfFilePath);
+    bool Write(const char* bcfFilePath, BCFVersion version);
+
+private:
+    Log m_log;
 };
 

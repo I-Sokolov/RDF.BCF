@@ -30,7 +30,7 @@
     <ClInclude Include="BCFProject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RDFBCF.h">
+    <ClInclude Include="bcfEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -50,11 +50,15 @@
     <ClCompile Include="BCFProject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RDFBCF.cpp">
+    <ClCompile Include="bcfEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="..\rdf.bcf\bimfile.cs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="InstallZipLib.bat" />
   </ItemGroup>
 </Project>

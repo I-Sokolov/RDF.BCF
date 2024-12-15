@@ -34,7 +34,8 @@ bool Archivator::AddFolder(const std::filesystem::path& folderPath, std::string 
     for (const auto& entry : std::filesystem::directory_iterator(folderPath)) {
 
         std::string entryPath(inzipPath);
-        entryPath.push_back('/');
+        if (inzipPath.length() > 0)
+            entryPath.push_back('/');
         entryPath.append(entry.path().filename().string());
 
         if (entry.is_directory()) {
@@ -42,8 +43,8 @@ bool Archivator::AddFolder(const std::filesystem::path& folderPath, std::string 
             AddFolder(entry.path(), entryPath, zip);
         }
         else {
-            auto filePath = entry.path().string().c_str();
-            zip_source_t* source = zip_source_file(zip, filePath, 0, 0);
+            auto filePath = entry.path().string();
+            zip_source_t* source = zip_source_file(zip, filePath.c_str(), 0, 0);
             if (source) {
                 if (0 > zip_file_add(zip, entryPath.c_str(), source, ZIP_FL_ENC_GUESS)) {
                     m_log.error("Fail add to zip", "Fail zip add file %s", filePath);

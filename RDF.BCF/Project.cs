@@ -3,21 +3,12 @@
     public class Project : IDisposable
     {
         /// <summary>
-        /// BCF file version
-        /// </summary>
-        public enum Version
-        {
-            _2_1 = 21,
-            _3_0 = 30
-        }
-
-        /// <summary>
         /// Creates new empty BCF data
         /// </summary>
         public Project()
         {
             var dir = System.IO.Directory.GetCurrentDirectory();
-            m_bcfProject = RDF.BCF.Native.OpenProject();
+            m_bcfProject = Native.OpenProject();
             m_topics = new Topics(this);
             m_extensions = new Extensions(this);
         }
@@ -37,26 +28,26 @@
         /// <summary>
         /// Populates BCF data with some preset data
         /// </summary>
-        public void InitNew()
+        public bool InitNew()
         {
-            Console.WriteLine($"TODO Initialize minimal required data");
+            return Native.InitNew();
         }
 
         /// <summary>
         /// Reads BCF data from given BCF XML file.
         /// Data can be modified after reading.
         /// </summary>
-        public void ReadFromFile(string filePath)
+        public bool ReadFile(string filePath)
         {
-            Console.WriteLine($"TODO Read BFC file {filePath}");
+            return Native.ReadFile(filePath);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public void SaveToFile(string filePath, Version version = Version._3_0)
+        public bool WriteFile(string filePath, Native.Version version = Native.Version._3_0)
         {
-            Console.WriteLine($"TODO save to BCF file {filePath} version {version}");
+            return Native.WriteFile(filePath, version);
         }
 
         /// <summary>

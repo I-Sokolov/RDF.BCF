@@ -58,6 +58,7 @@
   <ImportGroup Label="Shared">
     <Import Project="..\..\packages\libzip.redist.1.1.2.7\build\native\libzip.redist.targets" Condition="Exists('..\..\packages\libzip.redist.1.1.2.7\build\native\libzip.redist.targets')" />
     <Import Project="..\..\packages\libzip.1.1.2.7\build\native\libzip.targets" Condition="Exists('..\..\packages\libzip.1.1.2.7\build\native\libzip.targets')" />
+    <Import Project="..\..\packages\zlib-msvc-x64.1.2.11.8900\build\native\zlib-msvc-x64.targets" Condition="Exists('..\..\packages\zlib-msvc-x64.1.2.11.8900\build\native\zlib-msvc-x64.targets')" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -103,14 +104,14 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(SolutionDir)packages\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)packages\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\Release</AdditionalLibraryDirectories>
       <AdditionalDependencies>zip.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(SolutionDir)packages\libzip.redist.1.1.2.7\build\native\bin\$(Platform)\v140\$(Configuration)\zip.dll $(OutputPath) /y</Command>
+      <Command>InstallZipLib.bat "$(SolutionDir)" $(Platform) "$(OutputPath)"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
-      <Message>Copy zip.dll</Message>
+      <Message>Install libzip</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -132,14 +133,14 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(SolutionDir)packages\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)packages\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\Release</AdditionalLibraryDirectories>
       <AdditionalDependencies>zip.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(SolutionDir)packages\libzip.redist.1.1.2.7\build\native\bin\$(Platform)\v140\$(Configuration)\zip.dll $(OutputPath) /y</Command>
+      <Command>InstallZipLib.bat "$(SolutionDir)" $(Platform) "$(OutputPath)"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
-      <Message>Copy zip.dll</Message>
+      <Message>Install libzip</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -157,14 +158,14 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(SolutionDir)packages\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)packages\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\Release</AdditionalLibraryDirectories>
       <AdditionalDependencies>zip.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(SolutionDir)packages\libzip.redist.1.1.2.7\build\native\bin\$(Platform)\v140\$(Configuration)\zip.dll $(OutputPath) /y</Command>
+      <Command>InstallZipLib.bat "$(SolutionDir)" $(Platform) "$(OutputPath)"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
-      <Message>Copy zip.dll</Message>
+      <Message>Install libzip</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -186,27 +187,32 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(SolutionDir)packages\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)packages\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\Release</AdditionalLibraryDirectories>
       <AdditionalDependencies>zip.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(SolutionDir)packages\libzip.redist.1.1.2.7\build\native\bin\$(Platform)\v140\$(Configuration)\zip.dll $(OutputPath) /y</Command>
+      <Command>InstallZipLib.bat "$(SolutionDir)" $(Platform) "$(OutputPath)"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
-      <Message>Copy zip.dll</Message>
+      <Message>Install libzip</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Archivator.h" />
-    <ClInclude Include="RDFBCF.h" />
+    <ClInclude Include="bcfEngine.h" />
     <ClInclude Include="BCFProject.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Archivator.cpp" />
-    <ClCompile Include="RDFBCF.cpp" />
+    <ClCompile Include="Archivator.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="bcfEngine.cpp" />
     <ClCompile Include="BCFProject.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Log.cpp" />
@@ -218,6 +224,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\rdf.bcf\bimfile.cs" />
+    <None Include="InstallZipLib.bat" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
@@ -227,5 +235,6 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\packages\libzip.redist.1.1.2.7\build\native\libzip.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\libzip.redist.1.1.2.7\build\native\libzip.redist.targets'))" />
     <Error Condition="!Exists('..\..\packages\libzip.1.1.2.7\build\native\libzip.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\libzip.1.1.2.7\build\native\libzip.targets'))" />
+    <Error Condition="!Exists('..\..\packages\zlib-msvc-x64.1.2.11.8900\build\native\zlib-msvc-x64.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\zlib-msvc-x64.1.2.11.8900\build\native\zlib-msvc-x64.targets'))" />
   </Target>
 </Project>

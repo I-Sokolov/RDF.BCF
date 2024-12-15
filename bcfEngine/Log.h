@@ -3,6 +3,6 @@
 class Log
 {
 public:
-    void error(const char* code, const char* descr, ...) {}
+    void error(const char* code, const char* descr, ...);
 };
 
