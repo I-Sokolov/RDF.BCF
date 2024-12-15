@@ -24,8 +24,7 @@ BCFProject::~BCFProject()
 /// </summary>
 bool BCFProject::InitializeEmpty()
 {
-    FileSystem fs(m_log);
-    return fs.CreateTempDir(m_workingFolder);
+    return FileSystem::CreateTempDir(m_workingFolder, m_log);
 }
 
 /// <summary>
@@ -47,8 +46,7 @@ bool BCFProject::Close()
 {
     bool ok = true;
     if (!m_workingFolder.empty()) {
-        FileSystem fs(m_log);
-        ok = fs.Remove(m_workingFolder.c_str());
+        ok = FileSystem::Remove(m_workingFolder.c_str(), m_log);
         m_workingFolder.clear();
     }
     return ok;
@@ -70,8 +68,9 @@ bool BCFProject::Read(const char* bcfFilePath)
     if (!InitializeEmpty()) {
         return false;
     }
+
     Archivator ar(m_log);
-    return true; // ar.Unpack(bcfFilePath, R"(C:\Users\igor\Downloads\Test)");
+    return ar.Unpack("test.zip", m_workingFolder.c_str());
 }
 
 /// <summary>
@@ -82,6 +81,7 @@ bool BCFProject::Write(const char* bcfFilePath, BCFVersion version)
     if (!CheckInitialized()) {
         return false;
     }
+
     Archivator ar(m_log);
     return ar.Pack(R"(W:\DevArea\RDF\EBAPI\RDFGeomApi)", "test.zip");
 }

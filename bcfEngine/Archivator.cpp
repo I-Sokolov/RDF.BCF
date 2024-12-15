@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Archivator.h"
 
+#include <filesystem>
 #include <zip.h>
 #include "Log.h"
 #include "FileSystem.h"
@@ -30,18 +31,16 @@ bool Archivator::Pack(const char* folder, const char* archivePath)
 /// </summary>
 bool Archivator::AddFolder(const char* osPath, const char* zipPath, struct zip* zip)
 {
-    FileSystem fs(m_log);
-
     FileSystem::DirList elems;
-    fs.GetDirContent(osPath, elems);
+    FileSystem::GetDirContent(osPath, elems);
 
     for (auto& elem : elems) {
 
         std::string ospath(osPath);
-        fs.AddPath(ospath, elem.name.c_str());
+        FileSystem::AddPath(ospath, elem.name.c_str());
 
         std::string zippath(zipPath);
-        fs.AddPath(zippath, elem.name.c_str(), true);
+        FileSystem::AddPath(zippath, elem.name.c_str(), true);
 
         if (elem.folder) {
             AddFolder(ospath.c_str(), zippath.c_str(), zip);
@@ -70,16 +69,17 @@ bool Archivator::AddFolder(const char* osPath, const char* zipPath, struct zip* 
 /// </summary>
 bool Archivator::Unpack(const char* archivePath, const char* folder)
 {
-#if 0
     struct zip* archive = zip_open(archivePath, 0, NULL);
     if (archive == NULL) {
         m_log.error ("File read error",  "Failed to open archive %s", archivePath);
         return false;
     }
 
+    bool ok = true;
+
     int numFiles = zip_get_num_files(archive);
 
-    for (int i = 0; i < numFiles; ++i) {
+    for (int i = 0; i < numFiles && ok; ++i) {
         struct zip_file* file = zip_fopen_index(archive, i, 0);
         if (!file)
             continue;
@@ -88,26 +88,72 @@ bool Archivator::Unpack(const char* archivePath, const char* folder)
         zip_stat_init(&fileStat);
         zip_stat_index(archive, i, 0, &fileStat);
 
-        std::filesystem::path filePath (folder);
-        filePath.append (fileStat.name);
+        StringList folderNames;
+        std::string fileName;
+        SplitZipPath(fileStat.name, folderNames, fileName);
 
-        FILE* outFile = fopen(filePath.string().c_str(), "wb");
-        if (!outFile) {
-            m_log.error("File write error", "Can not open to write archive %s", filePath.string().c_str());
-            return false;
+        std::string path(folder);
+        if (!CreateFolders(path, folderNames)) {
+            ok = false;
+            break;
         }
 
-        std::vector<char> buffer(fileStat.size);
-        zip_fread(file, &buffer[0], fileStat.size);
+        FileSystem::AddPath(path, fileName.c_str());
 
-        fwrite(&buffer[0], 1, fileStat.size, outFile);
+        FILE* outFile = fopen(path.c_str(), "wb");
+        if (!outFile) {
+            m_log.error("File write error", "Can not open to write archive %s", path.c_str());
+            ok = false;
+            break;
+        }
+
+        if (fileStat.size > 0) {
+            std::vector<char> buffer(fileStat.size);
+            zip_fread(file, &buffer[0], fileStat.size);
+
+            fwrite(&buffer[0], 1, fileStat.size, outFile);
+        }
 
         fclose(outFile);
         zip_fclose(file);
     }
 
     zip_close(archive);
-#endif
+
+    return ok;
+}
+
+/// <summary>
+/// 
+/// </summary>
+void Archivator::SplitZipPath(const std::string& zipPath, StringList& folders, std::string& file)
+{
+    const char delimiter = '/';
+
+    size_t start = 0;
+    size_t end = zipPath.find(delimiter);
+
+    while (end != std::string::npos) {
+        folders.push_back(zipPath.substr(start, end - start));
+        start = end + 1;
+        end = zipPath.find(delimiter, start);
+    }
+
+    file = zipPath.substr(start);
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool Archivator::CreateFolders(std::string& path, StringList& folders)
+{
+    for (auto& folder : folders) {
+        FileSystem::AddPath(path, folder.c_str());
+        if (!FileSystem::CreateDir(path.c_str(), m_log)) {
+            return false;
+        }
+    }
     return true;
 }
+
 

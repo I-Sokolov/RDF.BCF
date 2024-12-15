@@ -34,18 +34,18 @@ void FileSystem::GetDirContent(const char* folderPath, DirList& elems)
 /// <summary>
 /// 
 /// </summary>
-bool FileSystem::Remove(const char* path)
+bool FileSystem::Remove(const char* path, Log& log)
 {
     if (std::filesystem::exists(path)) {
         
         if (std::filesystem::is_directory(path)) {
             for (const auto& entry : std::filesystem::directory_iterator(path)) {
-                Remove(entry.path().string().c_str());
+                Remove(entry.path().string().c_str(), log);
             }
         }
 
         if (!std::filesystem::remove(path)) {
-            m_log.error("Delete file error", "Can not delete %s", path);
+            log.error("Delete file error", "Can not delete %s", path);
             return false;
         }
     }
@@ -56,7 +56,7 @@ bool FileSystem::Remove(const char* path)
 /// <summary>
 /// 
 /// </summary>
-bool FileSystem::CreateTempDir(std::string& pathName)
+bool FileSystem::CreateTempDir(std::string& pathName, Log& log)
 {
     auto tmppath = std::filesystem::temp_directory_path();
 
@@ -73,12 +73,30 @@ bool FileSystem::CreateTempDir(std::string& pathName)
                 return true;
             }
             else {
-                m_log.error("Create dir error", "Can't create folder %s", tmpName.string().c_str());
+                log.error("Create dir error", "Can't create folder %s", tmpName.string().c_str());
                 return false;
             }
         }
     }    
 
-    m_log.error("Create dir error", "Can't find free temporary name");
+    log.error("Create dir error", "Can't find free temporary name");
     return false;
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool FileSystem::CreateDir(const char* pathName, Log& log)
+{
+    if (std::filesystem::exists(pathName)) {
+        if (!std::filesystem::is_directory(pathName)) {
+            log.error("Create dir error", "Path exist but it is a file %s", pathName);
+            return false;
+        }
+    }
+    else if (!std::filesystem::create_directory(pathName)) {
+        log.error("Create dir error", "Can't create folder %s", pathName);
+        return false;
+    }
+    return true;
 }

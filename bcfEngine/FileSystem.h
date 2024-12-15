@@ -14,21 +14,18 @@ public:
     typedef std::list<DirElem> DirList;
 
 public:
-    FileSystem (Log& log) : m_log(log) {}
-
-public:
-    void AddPath(std::string& path, const char* name, bool zippath = false);
+    static void AddPath(std::string& path, const char* name, bool zippath = false);
 
     //get directory list
-    void GetDirContent(const char* folderPath, DirList& elems);
+    static void GetDirContent(const char* folderPath, DirList& elems);
 
     //remove file of directory
-    bool Remove(const char* path);
+    static bool Remove(const char* path, Log& log);
 
     //
-    bool CreateTempDir(std::string& pathName);
+    static bool CreateTempDir(std::string& pathName, Log& log);
 
-private:
-    Log& m_log;
+    //
+    static bool CreateDir(const char* pathName, Log& log);
 };
 
