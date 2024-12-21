@@ -90,3 +90,35 @@ RDFBCF_EXPORT bool bcfWriteFile(BCFProject* project, const char* bcfFilePath, BC
     return false;
 }
 
+/// <summary>
+/// 
+/// </summary>
+RDFBCF_EXPORT const char* bcfGetEnumerationElement(BCFProject* project, BCFEnumeration enumeration, unsigned short index)
+{
+    if (project) {
+        return project->GetExtensions().GetElement(enumeration, index);
+    }
+    return NULL;
+}
+
+/// <summary>
+/// 
+/// </summary>
+RDFBCF_EXPORT bool bcfAddEnumerationElement(BCFProject* project, BCFEnumeration enumeration, const char* element)
+{
+    if (project) {
+        return project->GetExtensions().AddElement(enumeration, element);
+    }
+    return false;
+}
+
+/// <summary>
+/// 
+/// </summary>
+RDFBCF_EXPORT bool bcfRemoveEnumerationElement(BCFProject* project, BCFEnumeration enumeration, const char* element)
+{
+    if (project) {
+        return project->GetExtensions().RemoveElement(enumeration, element);
+    }
+    return false;
+}

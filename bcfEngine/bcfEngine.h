@@ -30,6 +30,16 @@ extern "C" {
         _3_0 = 30
     };
 
+    enum BCFEnumeration
+    {
+        BCFTopicTypes       = 1,
+        BCFTopicStatuses    = 2,
+        BCFPriorities       = 3,
+        BCFTopicLabels      = 4,
+        BCFUsers            = 5,
+        BCFSnippetTypes     = 6,
+        BCFStages           = 7
+    };
 
     /// <summary>
     /// 
@@ -65,6 +75,21 @@ extern "C" {
     /// 
     /// </summary>
     RDFBCF_EXPORT bool bcfWriteFile(BCFProject* project, const char* bcfFilePath, BCFVersion version);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    RDFBCF_EXPORT const char* bcfGetEnumerationElement(BCFProject* project, BCFEnumeration enumeration, unsigned short index);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    RDFBCF_EXPORT bool bcfAddEnumerationElement(BCFProject* project, BCFEnumeration enumeration, const char* element);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    RDFBCF_EXPORT bool bcfRemoveEnumerationElement(BCFProject* project, BCFEnumeration enumeration, const char* element);
 
 #ifdef __cplusplus
 } //extern "C"

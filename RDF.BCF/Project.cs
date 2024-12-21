@@ -13,6 +13,11 @@
         }
 
         /// <summary>
+        /// Native handler of BCF project to use in Native.* calls
+        /// </summary>
+        public IntPtr BCFProject { get { return m_bcfProject; } }
+
+        /// <summary>
         /// Get errors since last call of ClearErrors or since project creation
         /// </summary>
         public string GetErrors()

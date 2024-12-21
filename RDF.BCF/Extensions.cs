@@ -9,47 +9,35 @@ namespace RDF.BCF
     public class Extensions
     {
         /// <summary>
-        /// Types of BCF enumerations 
-        /// </summary>
-        public enum Enum
-        {
-            Users,
-            TopicTypes,
-            TopicStatuses,
-            Priorities,
-            TopicLabels,
-            SnippetTypes,
-            Stages
-        }
-
-        /// <summary>
         /// Get elements of enumeration of given type
         /// </summary>
-        public IEnumerable<string> GetEnumeration(Enum enumeration)
+        public IEnumerable<string> GetEnumeration(Native.BCFEnumeration enumeration)
         {
-            return new string[] { $"{enumeration}_A", $"{enumeration}_B"};
+            var list = new List<string>();
+            UInt16 index = 0;
+            string? elem = null;
+            while (null!=(elem = Native.GetEnumerationElement(m_project.BCFProject, enumeration, index++))){
+                list.Add(elem);
+            }
+            return list;
         }
 
         /// <summary>
         /// Modify enumeration of given type
         /// </summary>
-        public void AddEnumerationElement (Enum enumeration, string elem)
+        public bool AddEnumerationElement (Native.BCFEnumeration enumeration, string elem)
         {
+            return Native.AddEnumerationElement(m_project.BCFProject, enumeration, elem);
         }
 
         /// <summary>
         /// Modify elements of enumeration of given type
         /// </summary>
-        public void RemoveEnumerationElement (Enum enumeration, string elem)
+        public bool RemoveEnumerationElement (Native.BCFEnumeration enumeration, string elem)
         {
+            return Native.RemoveEnumerationElement(m_project.BCFProject, enumeration, elem);
         }
 
-        /// <summary>
-        /// Read enumerations form an XML file which follows BCF schema extensions.xsd 
-        /// </summary>
-        public void LoadExtensions (string filePath, bool append)
-        {
-        }
 
         #region IMPLEMENTATION
         ///////////////////////////////////////////////////////////////////////////////////////////

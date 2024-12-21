@@ -12,10 +12,16 @@
 // add headers that you want to pre-compile here
 #include "framework.h"
 
-#include<list>
-#include<string>
-#include<vector>
+#include <assert.h>
+
+#include <list>
+#include <string>
+#include <vector>
+#include <set>
 
 typedef std::list<std::string> StringList;
+typedef std::set<std::string> StringSet;
+
+#define NULL_CHECK(x) if (!x) { m_log.error ("NULL argument", "NULL argument"); return false; }
 
 #endif //PCH_H

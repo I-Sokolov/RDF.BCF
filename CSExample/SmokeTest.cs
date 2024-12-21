@@ -12,6 +12,7 @@ namespace CSExample
         public static void Run()
         {
             Errors();
+            Extensions();
         }
 
         static void ASSERT(bool condition)
@@ -40,6 +41,34 @@ namespace CSExample
 
                 errors = bcf.GetErrors();
                 ASSERT(errors.Length == 0);
+            }
+        }
+
+        static void Extensions()
+        {
+            var users = new string[] { "a.b@mail.com", "b Name" };
+
+            using (var bcf  = new RDF.BCF.Project())
+            {
+                var lst = bcf.Extensions.GetEnumeration(Native.BCFEnumeration.Users);
+                ASSERT(lst.Count() == 0);
+
+                bcf.Extensions.AddEnumerationElement(Native.BCFEnumeration.Users, users[0]);
+                bcf.Extensions.AddEnumerationElement(Native.BCFEnumeration.Users, users[1]);
+                bcf.Extensions.AddEnumerationElement(Native.BCFEnumeration.Users, users[0]);
+
+                lst = bcf.Extensions.GetEnumeration(Native.BCFEnumeration.Users);
+                ASSERT(lst.Count() == 2);
+                int i = 0;
+                foreach (var u in lst)
+                {
+                    ASSERT(u == users[i++]);
+                }
+
+                bcf.Extensions.RemoveEnumerationElement(Native.BCFEnumeration.Users, users[1]);
+                bcf.Extensions.RemoveEnumerationElement(Native.BCFEnumeration.Users, users[0]);
+                lst = bcf.Extensions.GetEnumeration(Native.BCFEnumeration.Users);
+                ASSERT(lst.Count() == 0);
             }
         }
     }

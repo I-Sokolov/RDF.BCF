@@ -7,21 +7,10 @@ namespace CSExample
     {
         static void Main(string[] args)
         {
-            try
-            {
-                SmokeTest.Run();
+            SmokeTest.Run();
 
-                CreateExample();
-                ReadExample();
-            }
-            catch (RDF.BCF.Exception ex)
-            {
-                Console.WriteLine($"BCF exception {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Generic exception {ex.Message}");
-            }
+            CreateExample();
+            ReadExample();
         }
 
         static void CreateExample()
@@ -123,7 +112,7 @@ namespace CSExample
             RDF.BCF.Extensions schema = project.Extensions;
 
             //registered
-            IEnumerable<string> users = schema.GetEnumeration(RDF.BCF.Extensions.Enum.Users);
+            IEnumerable<string> users = schema.GetEnumeration(RDF.BCF.Native.BCFEnumeration.Users);
             Console.Write("Users: ");
             foreach (string user in users) 
             { 
@@ -132,7 +121,7 @@ namespace CSExample
             Console.WriteLine();
 
             //
-            schema.AddEnumerationElement(RDF.BCF.Extensions.Enum.TopicStatuses, "Assigned");
+            schema.AddEnumerationElement(RDF.BCF.Native.BCFEnumeration.TopicStatuses, "Assigned");
         }
     }
 }

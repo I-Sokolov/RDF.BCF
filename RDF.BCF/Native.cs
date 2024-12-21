@@ -20,6 +20,21 @@ namespace RDF.BCF
             _3_0 = 30
         }
 
+        /// <summary>
+        /// Types of BCF extension enumerations 
+        /// </summary>
+        public enum BCFEnumeration
+        {
+            TopicTypes = 1,
+            TopicStatuses = 2,
+            Priorities = 3,
+            TopicLabels = 4,
+            Users = 5,
+            SnippetTypes = 6,
+            Stages = 7
+        };
+
+
         [DllImport(DDFBCFDLL, EntryPoint = "bcfOpenProject")]
         public static extern IntPtr OpenProject();
 
@@ -32,7 +47,7 @@ namespace RDF.BCF
         public static string GetErrors(IntPtr project)
         {
             var ptr = GetErrors_(project);
-            var str = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(ptr);
+            var str = Marshal.PtrToStringAnsi(ptr);
             return (str!=null) ? str : "";
         }
 
@@ -47,5 +62,20 @@ namespace RDF.BCF
 
         [DllImport(DDFBCFDLL, EntryPoint = "bcfWriteFile")]
         public static extern bool WriteFile(IntPtr project, string filePath, Version version);
+
+        [DllImport(DDFBCFDLL, EntryPoint = "bcfGetEnumerationElement")]
+        public static extern IntPtr GetEnumerationElement_(IntPtr project, BCFEnumeration extension, UInt16 index);
+
+        public static string? GetEnumerationElement(IntPtr project, BCFEnumeration enumeration, UInt16 index)
+        {
+            var ptr = GetEnumerationElement_(project, enumeration, index);
+            return Marshal.PtrToStringAnsi(ptr);
+        }
+
+        [DllImport(DDFBCFDLL, EntryPoint = "bcfAddEnumerationElement")]
+        public static extern bool AddEnumerationElement(IntPtr project, BCFEnumeration enumeration, string element);
+
+        [DllImport(DDFBCFDLL, EntryPoint = "bcfRemoveEnumerationElement")]
+        public static extern bool RemoveEnumerationElement(IntPtr project, BCFEnumeration enumeration, string element);
     }
 }

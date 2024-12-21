@@ -201,6 +201,7 @@
     <ClInclude Include="Archivator.h" />
     <ClInclude Include="bcfEngine.h" />
     <ClInclude Include="BCFProject.h" />
+    <ClInclude Include="Extensions.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Log.h" />
@@ -216,6 +217,7 @@
     <ClCompile Include="bcfEngine.cpp" />
     <ClCompile Include="BCFProject.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Extensions.cpp" />
     <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="pch.cpp">

@@ -48,5 +48,5 @@ const char* Log::getMessages()
 /// </summary>
 void Log::clear()
 {
-    m_buffer.clear();
+    m_messages.clear();
 }

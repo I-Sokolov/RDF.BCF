@@ -8,6 +8,7 @@
 /// 
 /// </summary>
 BCFProject::BCFProject()
+    : m_extensions (m_log)
 {
 }
 
@@ -40,7 +41,7 @@ void BCFProject::ClearErrors()
 /// </summary>
 bool BCFProject::InitializeEmpty()
 {
-    return FileSystem::CreateTempDir(m_workingFolder, m_log);
+    return FileSystem::CreateTempDir(m_bcfFolder, m_log);
 }
 
 /// <summary>
@@ -48,7 +49,7 @@ bool BCFProject::InitializeEmpty()
 /// </summary>
 bool BCFProject::CheckInitialized()
 {
-    if (m_workingFolder.empty()) {
+    if (m_bcfFolder.empty()) {
         m_log.error("Not initialized", "Init new or read BCF file before usage");
         return false;
     }
@@ -61,9 +62,9 @@ bool BCFProject::CheckInitialized()
 bool BCFProject::Close()
 {
     bool ok = true;
-    if (!m_workingFolder.empty()) {
-        ok = FileSystem::Remove(m_workingFolder.c_str(), m_log);
-        m_workingFolder.clear();
+    if (!m_bcfFolder.empty()) {
+        ok = FileSystem::Remove(m_bcfFolder.c_str(), m_log);
+        m_bcfFolder.clear();
     }
     return ok;
 }
@@ -86,7 +87,13 @@ bool BCFProject::Read(const char* bcfFilePath)
     }
 
     Archivator ar(m_log);
-    return ar.Unpack(bcfFilePath, m_workingFolder.c_str());
+    bool ok = ar.Unpack(bcfFilePath, m_bcfFolder.c_str());
+
+    if (ok) {
+        ok = m_extensions.Read(m_bcfFolder);
+    }
+
+    return ok;
 }
 
 /// <summary>
@@ -98,6 +105,12 @@ bool BCFProject::Write(const char* bcfFilePath, BCFVersion version)
         return false;
     }
 
-    Archivator ar(m_log);
-    return ar.Pack(R"(W:\DevArea\RDF\EBAPI\RDFGeomApi)", "test.zip");
+    bool ok = m_extensions.Write(m_bcfFolder);
+
+    if (ok) {
+        Archivator ar(m_log);
+        ok = ar.Pack(R"(W:\DevArea\RDF\EBAPI\RDFGeomApi)", "test.zip");
+    }
+
+    return ok;
 }

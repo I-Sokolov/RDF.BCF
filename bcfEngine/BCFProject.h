@@ -2,6 +2,7 @@
 
 #include "bcfEngine.h"
 #include "Log.h"
+#include "Extensions.h"
 
 struct BCFProject
 {
@@ -18,12 +19,16 @@ public:
     bool Write(const char* bcfFilePath, BCFVersion version);
     bool Close();
 
+    Extensions& GetExtensions() { return m_extensions; }
+
 private:
     bool InitializeEmpty();
     bool CheckInitialized();
 
 private:
     Log         m_log;
-    std::string m_workingFolder;
+    Extensions  m_extensions;
+
+    std::string m_bcfFolder;
 };
 
