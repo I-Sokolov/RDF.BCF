@@ -7,10 +7,26 @@
         /// </summary>
         public Project()
         {
-            var dir = System.IO.Directory.GetCurrentDirectory();
             m_bcfProject = Native.OpenProject();
             m_topics = new Topics(this);
             m_extensions = new Extensions(this);
+        }
+
+        /// <summary>
+        /// Get errors since last call of ClearErrors or since project creation
+        /// </summary>
+        public string GetErrors()
+        {
+            return Native.GetErrors(m_bcfProject);
+        }
+
+        /// <summary>
+        /// Clear errors reported since previous call of ClearErrors or since project creation
+        /// </summary>
+        public void ClearErrors()
+
+        {
+            Native.ClearErrors(m_bcfProject);
         }
 
         /// <summary>

@@ -10,6 +10,9 @@ public:
     ~BCFProject();
 
 public:
+    const char* GetErrors();
+    void        ClearErrors();
+
     bool InitNew();
     bool Read(const char* bcfFilePath);
     bool Write(const char* bcfFilePath, BCFVersion version);

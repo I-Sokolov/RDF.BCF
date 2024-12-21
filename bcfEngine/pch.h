@@ -14,6 +14,7 @@
 
 #include<list>
 #include<string>
+#include<vector>
 
 typedef std::list<std::string> StringList;
 

@@ -18,6 +18,28 @@ RDFBCF_EXPORT BCFProject* bcfOpenProject(void)
     return new BCFProject();
 }
 
+/// <summary>
+/// 
+/// </summary>
+RDFBCF_EXPORT const char* bcfGetErrors(BCFProject* project)
+{
+    if (project) {
+        return project->GetErrors();
+    }
+    else {
+        return "NULL ARGUMENT";
+    }
+}
+
+/// <summary>
+/// 
+/// </summary>
+RDFBCF_EXPORT void bcfClearErrors(BCFProject* project)
+{
+    if (project) {
+        project->ClearErrors();
+    }
+}
 
 /// <summary>
 /// 
@@ -29,11 +51,8 @@ RDFBCF_EXPORT bool bcfCloseProject(BCFProject* project)
             delete project;
             return true;
         }
-        else {
-            return false;
-        }
     }
-    return true;
+    return false;
 }
 
 
@@ -45,9 +64,7 @@ RDFBCF_EXPORT bool bcfInitNew(BCFProject* project)
     if (project) {
         return project->InitNew();
     }
-    else {
-        return false;
-    }
+    return false;
 }
 
 /// <summary>
@@ -55,12 +72,11 @@ RDFBCF_EXPORT bool bcfInitNew(BCFProject* project)
 /// </summary>
 RDFBCF_EXPORT bool bcfReadFile(BCFProject* project, const char* bcfFilePath)
 {
+    bool res = false;
     if (project) {
-        return project->Read(bcfFilePath);
+        res = project->Read(bcfFilePath);
     }
-    else {
-        return false;
-    }
+    return res;
 }
 
 /// <summary>
@@ -71,8 +87,6 @@ RDFBCF_EXPORT bool bcfWriteFile(BCFProject* project, const char* bcfFilePath, BC
     if (project) {
         return project->Write(bcfFilePath, version);
     }
-    else {
-        return false;
-    }
+    return false;
 }
 

@@ -44,6 +44,16 @@ extern "C" {
     /// <summary>
     /// 
     /// </summary>
+    RDFBCF_EXPORT const char* bcfGetErrors(BCFProject* project);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    RDFBCF_EXPORT void bcfClearErrors(BCFProject* project);
+
+    /// <summary>
+    /// 
+    /// </summary>
     RDFBCF_EXPORT bool bcfInitNew(BCFProject* project);
 
     /// <summary>

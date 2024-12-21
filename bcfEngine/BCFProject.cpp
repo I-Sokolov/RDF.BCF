@@ -22,6 +22,22 @@ BCFProject::~BCFProject()
 /// <summary>
 /// 
 /// </summary>
+const char* BCFProject::GetErrors()
+{
+    return m_log.getMessages();
+}
+
+/// <summary>
+/// 
+/// </summary>
+void BCFProject::ClearErrors()
+{
+    m_log.clear();
+}
+
+/// <summary>
+/// 
+/// </summary>
 bool BCFProject::InitializeEmpty()
 {
     return FileSystem::CreateTempDir(m_workingFolder, m_log);
@@ -70,7 +86,7 @@ bool BCFProject::Read(const char* bcfFilePath)
     }
 
     Archivator ar(m_log);
-    return ar.Unpack("test.zip", m_workingFolder.c_str());
+    return ar.Unpack(bcfFilePath, m_workingFolder.c_str());
 }
 
 /// <summary>

@@ -9,6 +9,8 @@ namespace CSExample
         {
             try
             {
+                SmokeTest.Run();
+
                 CreateExample();
                 ReadExample();
             }

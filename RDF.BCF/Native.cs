@@ -26,6 +26,19 @@ namespace RDF.BCF
         [DllImport(DDFBCFDLL, EntryPoint = "bcfCloseProject")]
         public static extern bool CloseProject(IntPtr project);
 
+        [DllImport(DDFBCFDLL, EntryPoint = "bcfGetErrors")]
+        public static extern IntPtr GetErrors_(IntPtr project);
+
+        public static string GetErrors(IntPtr project)
+        {
+            var ptr = GetErrors_(project);
+            var str = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(ptr);
+            return (str!=null) ? str : "";
+        }
+
+        [DllImport(DDFBCFDLL, EntryPoint = "bcfClearErrors")]
+        public static extern void ClearErrors(IntPtr project);
+
         [DllImport(DDFBCFDLL, EntryPoint = "bcfInitNew")]
         public static extern bool InitNew(IntPtr project);
 
