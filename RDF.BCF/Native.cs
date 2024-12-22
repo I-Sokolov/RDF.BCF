@@ -39,6 +39,7 @@ namespace RDF.BCF
         public static extern IntPtr OpenProject();
 
         [DllImport(DDFBCFDLL, EntryPoint = "bcfCloseProject")]
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool CloseProject(IntPtr project);
 
         [DllImport(DDFBCFDLL, EntryPoint = "bcfGetErrors")]
@@ -55,12 +56,15 @@ namespace RDF.BCF
         public static extern void ClearErrors(IntPtr project);
 
         [DllImport(DDFBCFDLL, EntryPoint = "bcfInitNew")]
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool InitNew(IntPtr project);
 
         [DllImport(DDFBCFDLL, EntryPoint = "bcfReadFile")]
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ReadFile(IntPtr project, string filePath);
 
         [DllImport(DDFBCFDLL, EntryPoint = "bcfWriteFile")]
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool WriteFile(IntPtr project, string filePath, Version version);
 
         [DllImport(DDFBCFDLL, EntryPoint = "bcfGetEnumerationElement")]
@@ -73,9 +77,11 @@ namespace RDF.BCF
         }
 
         [DllImport(DDFBCFDLL, EntryPoint = "bcfAddEnumerationElement")]
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool AddEnumerationElement(IntPtr project, BCFEnumeration enumeration, string element);
 
         [DllImport(DDFBCFDLL, EntryPoint = "bcfRemoveEnumerationElement")]
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool RemoveEnumerationElement(IntPtr project, BCFEnumeration enumeration, string element);
     }
 }

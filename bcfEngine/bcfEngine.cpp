@@ -72,11 +72,10 @@ RDFBCF_EXPORT bool bcfInitNew(BCFProject* project)
 /// </summary>
 RDFBCF_EXPORT bool bcfReadFile(BCFProject* project, const char* bcfFilePath)
 {
-    bool res = false;
     if (project) {
-        res = project->Read(bcfFilePath);
+        return project->Read(bcfFilePath);
     }
-    return res;
+    return false;
 }
 
 /// <summary>
