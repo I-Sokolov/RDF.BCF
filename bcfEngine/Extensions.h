@@ -19,7 +19,7 @@ private:
     StringSet* GetList(BCFEnumeration enumeration);
 
 private:
-    Log                     m_log;
+    Log&                    m_log;
     std::vector<StringSet>  m_elements;
 };
 

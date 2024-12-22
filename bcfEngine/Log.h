@@ -2,7 +2,13 @@
 
 class Log
 {
+private:
+    Log(const Log&) = delete;
+    void operator=(const Log&) = delete;
+
 public:
+    Log() {}
+
     void error(const char* code, const char* detailsFormat, ...);
     const char* getMessages();
     void clear();
