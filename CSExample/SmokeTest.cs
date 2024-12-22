@@ -53,7 +53,18 @@ namespace CSExample
                 var lst = bcf.Extensions.GetEnumeration(Native.BCFEnumeration.Users);
                 ASSERT(lst.Count() == 0);
 
-                bcf.Extensions.AddEnumerationElement(Native.BCFEnumeration.Users, users[0]);
+                var res = bcf.Extensions.AddEnumerationElement(Native.BCFEnumeration.Users, null);
+                ASSERT(!res);
+
+                var msg = bcf.GetErrors();
+                ASSERT(msg.Length != 0);
+                Console.WriteLine(msg);
+
+                bcf.ClearErrors();
+
+                res = bcf.Extensions.AddEnumerationElement(Native.BCFEnumeration.Users, users[0]);
+                ASSERT(res);
+
                 bcf.Extensions.AddEnumerationElement(Native.BCFEnumeration.Users, users[1]);
                 bcf.Extensions.AddEnumerationElement(Native.BCFEnumeration.Users, users[0]);
 

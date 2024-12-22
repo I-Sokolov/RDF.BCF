@@ -10,13 +10,13 @@ Extensions::Extensions(Log& log)
 
 bool Extensions::Read(const std::string& bcfFolder)
 {
-    assert(!"todo");
+    //assert(!"todo");
     return false;
 }
 
 bool Extensions::Write(const std::string& bcfFolder)
 {
-    assert(!"todo");
+    //assert(!"todo");
     return false;
 }
 
