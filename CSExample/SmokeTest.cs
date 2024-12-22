@@ -46,7 +46,7 @@ namespace CSExample
 
         static void Extensions()
         {
-            var users = new string[] { "a.b@mail.com", "b Name" };
+            var users = new string[] { "a.b@mail.com", "b " }; // Китайский 好 text" };
 
             using (var bcf  = new RDF.BCF.Project())
             {
