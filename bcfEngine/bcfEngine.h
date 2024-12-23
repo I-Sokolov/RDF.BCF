@@ -26,8 +26,9 @@ extern "C" {
     /// </summary>
     enum BCFVersion
     {
-        _2_1 = 21,
-        _3_0 = 30
+        BCFVerNotSupported = 0,
+        BCFVer_2_1 = 21,
+        BCFVer_3_0 = 30
     };
 
     enum BCFEnumeration

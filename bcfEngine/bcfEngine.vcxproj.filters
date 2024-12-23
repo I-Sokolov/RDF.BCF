@@ -72,6 +72,12 @@
     <ClInclude Include="XMLparser\_xml.h">
       <Filter>XMLparser</Filter>
     </ClInclude>
+    <ClInclude Include="Version.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLMacro.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -109,6 +115,9 @@
     </ClCompile>
     <ClCompile Include="XMLparser\_xml.cpp">
       <Filter>XMLparser</Filter>
+    </ClCompile>
+    <ClCompile Include="Version.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

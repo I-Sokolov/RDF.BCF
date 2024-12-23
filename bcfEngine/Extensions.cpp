@@ -1,64 +1,12 @@
 #include "pch.h"
 #include "Extensions.h"
 #include "FileSystem.h"
+#include "XMLMacro.h"
 
 /// <summary>
 /// 
 /// </summary>
 #define FILE_NAME "extensions.xml"
-
-
-/// <summary>
-/// 
-/// </summary>
-#define GET_ATTR(name)                      \
-    for (auto attr : elem.attributes()) {   \
-    if (attr) {                             \
-        auto attrName = attr->getName();    \
-        if (attrName == #name) {            \
-            m_##name = attr->getValue();    \
-        }                                   
-
-#define NEXT_ATTR(name)                     \
-            else if (attrName == #name) {   \
-            m_##name = attr->getValue();    \
-        }
-
-#define END_ATTR        \
-            else { ctx.LogMsg(MsgLevel::Warning, "Unknown attribute '%s'", attrName.c_str()); } } }
-
-
-/// <summary>
-/// 
-/// </summary>
-#define GET_CHILD(name)                     \
-    for (auto child : elem.children()) {    \
-        if (child) {                        \
-            auto&  tag= child->getName();   \
-            if (tag == #name) {             \
-                Read_##name(*child);        \
-            }
-
-#define NEXT_CHILD(name)                    \
-            else if (tag == #name) {        \
-                Read_##name(*child);        \
-            }
-
-#define GET_CHILD_MEMBER(name)              \
-    for (auto child : elem.children()) {    \
-        if (child) {                        \
-            auto&  tag= child->getName();   \
-            if (tag == #name) {             \
-                m_##name.Read(*child, ctx); \
-            }
-
-#define NEXT_CHILD_MEMBER(name)             \
-            else if (tag == #name) {        \
-                m_##name.Read(*child, ctx); \
-            }
-
-#define END_CHILDREN \
-            else { m_log.add(Log::Level::warning, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str()); } } }
 
 
 /// <summary>
@@ -91,9 +39,8 @@ bool Extensions::Read(const std::string& bcfFolder)
         }
     }
     catch (std::exception& ex) {
-        m_log.add(Log::Level::error, "Read file error", "Failed to read %s file : % s", FILE_NAME, ex.what());
+        m_log.add(Log::Level::error, "Read file error", "Failed to read %s file. %s", FILE_NAME, ex.what());
     }
-
 
     return ok;
 }
@@ -103,8 +50,21 @@ bool Extensions::Read(const std::string& bcfFolder)
 /// </summary>
 bool Extensions::Write(const std::string& bcfFolder)
 {
-    //assert(!"todo");
-    return false;
+    bool ok = false;
+
+    std::string path(bcfFolder);
+    FileSystem::AddPath(path, FILE_NAME);
+
+    try {
+        //_xml::_document doc(nullptr);
+        //doc.
+        ok = true;
+    }
+    catch (std::exception& ex) {
+        m_log.add(Log::Level::error, "Write file error", "Failed to write %s file. %s", FILE_NAME, ex.what());
+    }
+
+    return ok;
 }
 
 

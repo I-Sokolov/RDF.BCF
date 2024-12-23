@@ -206,6 +206,8 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Version.h" />
+    <ClInclude Include="XMLMacro.h" />
     <ClInclude Include="XMLparser\_errors.h" />
     <ClInclude Include="XMLparser\_io.h" />
     <ClInclude Include="XMLparser\_log.h" />
@@ -236,6 +238,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Version.cpp" />
     <ClCompile Include="XMLparser\_net.cpp" />
     <ClCompile Include="XMLparser\_reader.cpp" />
     <ClCompile Include="XMLparser\_serialization.cpp" />

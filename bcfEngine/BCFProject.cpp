@@ -8,7 +8,8 @@
 /// 
 /// </summary>
 BCFProject::BCFProject()
-    : m_extensions (m_log)
+    : m_version(m_log)
+    , m_extensions (m_log)
 {
 }
 
@@ -89,9 +90,8 @@ bool BCFProject::Read(const char* bcfFilePath)
     Archivator ar(m_log);
     bool ok = ar.Unpack(bcfFilePath, m_bcfFolder.c_str());
 
-    if (ok) {
-        ok = m_extensions.Read(m_bcfFolder);
-    }
+    ok = ok && m_version.Read(m_bcfFolder);
+    ok = ok && m_extensions.Read(m_bcfFolder);
 
     return ok;
 }
@@ -105,7 +105,11 @@ bool BCFProject::Write(const char* bcfFilePath, BCFVersion version)
         return false;
     }
 
-    bool ok = m_extensions.Write(m_bcfFolder);
+    m_version.Set(version);
+
+    bool ok = true;
+    ok = ok && m_version.Write(m_bcfFolder);
+    ok = ok && m_extensions.Write(m_bcfFolder);
 
     if (ok) {
         Archivator ar(m_log);
