@@ -5,7 +5,7 @@
 /// <summary>
 /// 
 /// </summary>
-void Log::error(const char* code, const char* detailsFormat, ...)
+void Log::add(Level level, const char* code, const char* detailsFormat, ...)
 {
     char details[1024];
     va_list args;
@@ -13,15 +13,35 @@ void Log::error(const char* code, const char* detailsFormat, ...)
     vsprintf_s(details, detailsFormat, args);
     va_end(args);
 
-    m_messages.push_front(Message());
+    m_messages.push_back(Message());
+    auto& message = m_messages.back();
 
-    m_messages.front().code.assign(code);
-    m_messages.front().details.assign(details);
+    message.level = level;
+    message.code.assign(code);
+    message.details.assign(details);
 
 #ifdef DEBUG
-    prntf("\nERROR %s\n%s\n\n", code, details);
-
+    printf("Add to log %s\n", message.ToString().c_str());
 #endif // DEBUG
+}
+
+std::string Log::Message::ToString()
+{
+    std::string str;
+
+    switch (level) {
+        case Level::error: str.append("ERROR: "); break;
+        case Level::warning: str.append("warning: "); break;
+        default: assert(false); str.append("UNKNOWN");
+    }
+
+    str.append(code);
+    str.push_back(':');
+    str.push_back(' ');
+
+    str.append(details);
+
+    return str;
 }
 
 
@@ -33,9 +53,7 @@ const char* Log::getMessages()
     m_buffer.clear();
 
     for (auto m : m_messages) {
-        m_buffer.append(m.code);
-        m_buffer.push_back('\n');
-        m_buffer.append(m.details);
+        m_buffer.append(m.ToString());
         m_buffer.push_back('\n');
         m_buffer.push_back('\n');
     }

@@ -206,6 +206,16 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="XMLparser\_errors.h" />
+    <ClInclude Include="XMLparser\_io.h" />
+    <ClInclude Include="XMLparser\_log.h" />
+    <ClInclude Include="XMLparser\_net.h" />
+    <ClInclude Include="XMLparser\_reader.h" />
+    <ClInclude Include="XMLparser\_schema_storage.h" />
+    <ClInclude Include="XMLparser\_serialization.h" />
+    <ClInclude Include="XMLparser\_string.h" />
+    <ClInclude Include="XMLparser\_time.h" />
+    <ClInclude Include="XMLparser\_xml.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Archivator.cpp">
@@ -226,6 +236,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="XMLparser\_net.cpp" />
+    <ClCompile Include="XMLparser\_reader.cpp" />
+    <ClCompile Include="XMLparser\_serialization.cpp" />
+    <ClCompile Include="XMLparser\_xml.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\rdf.bcf\bimfile.cs" />

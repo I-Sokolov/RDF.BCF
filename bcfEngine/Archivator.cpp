@@ -14,7 +14,7 @@ bool Archivator::Pack(const char* folder, const char* archivePath)
 {
     zip_t* zip = zip_open(archivePath, ZIP_CREATE | ZIP_TRUNCATE, nullptr);
     if (!zip) {
-        m_log.error("Write file error", "Can not open to write archive %s", archivePath);
+        m_log.add(Log::Level::error, "Write file error", "Can not open to write archive %s", archivePath);
         return false;
     }
 
@@ -49,12 +49,12 @@ bool Archivator::AddFolder(const char* osPath, const char* zipPath, struct zip* 
             zip_source_t* source = zip_source_file(zip, ospath.c_str(), 0, 0);
             if (source) {
                 if (0 > zip_file_add(zip, zippath.c_str(), source, ZIP_FL_ENC_GUESS)) {
-                    m_log.error("Zip error", "Fail zip add file %s", ospath.c_str());
+                    m_log.add(Log::Level::error, "Zip error", "Fail zip add file %s", ospath.c_str());
                     return false;
                 }
             }
             else {
-                m_log.error("Zip error", "Fail zip source file %s", ospath.c_str());
+                m_log.add(Log::Level::error, "Zip error", "Fail zip source file %s", ospath.c_str());
                 return false;
             }
         }
@@ -71,7 +71,7 @@ bool Archivator::Unpack(const char* archivePath, const char* folder)
 {
     struct zip* archive = zip_open(archivePath, 0, NULL);
     if (archive == NULL) {
-        m_log.error ("File read error",  "Failed to open archive %s", archivePath);
+        m_log.add(Log::Level::error, "File read",  "Failed to open archive %s", archivePath);
         return false;
     }
 
@@ -98,23 +98,26 @@ bool Archivator::Unpack(const char* archivePath, const char* folder)
             break;
         }
 
-        FileSystem::AddPath(path, fileName.c_str());
+        if (!fileName.empty()) {
+            FileSystem::AddPath(path, fileName.c_str());
 
-        FILE* outFile = fopen(path.c_str(), "wb");
-        if (!outFile) {
-            m_log.error("File write error", "Can not open to write archive %s", path.c_str());
-            ok = false;
-            break;
+            FILE* outFile = fopen(path.c_str(), "wb");
+            if (!outFile) {
+                m_log.add(Log::Level::error, "File write error", "Can not open to write archive %s", path.c_str());
+                ok = false;
+                break;
+            }
+
+            if (fileStat.size > 0) {
+                std::vector<char> buffer(fileStat.size);
+                zip_fread(file, &buffer[0], fileStat.size);
+
+                fwrite(&buffer[0], 1, fileStat.size, outFile);
+            }
+
+            fclose(outFile);
         }
-
-        if (fileStat.size > 0) {
-            std::vector<char> buffer(fileStat.size);
-            zip_fread(file, &buffer[0], fileStat.size);
-
-            fwrite(&buffer[0], 1, fileStat.size, outFile);
-        }
-
-        fclose(outFile);
+        
         zip_fclose(file);
     }
 

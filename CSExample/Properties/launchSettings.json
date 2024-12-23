@@ -2,6 +2,7 @@
   "profiles": {
     "CSExample": {
       "commandName": "Project",
+      "workingDirectory": "..\\output",
       "nativeDebugging": true
     }
   }

@@ -50,7 +50,7 @@ bool BCFProject::InitializeEmpty()
 bool BCFProject::CheckInitialized()
 {
     if (m_bcfFolder.empty()) {
-        m_log.error("Not initialized", "Init new or read BCF file before usage");
+        m_log.add(Log::Level::error, "Not initialized", "Init new or read BCF file before usage");
         return false;
     }
     return true;

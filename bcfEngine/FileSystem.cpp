@@ -45,7 +45,7 @@ bool FileSystem::Remove(const char* path, Log& log)
         }
 
         if (!std::filesystem::remove(path)) {
-            log.error("Delete file error", "Can not delete %s", path);
+            log.add(Log::Level::error, "File delete", "Can not delete %s", path);
             return false;
         }
     }
@@ -73,13 +73,13 @@ bool FileSystem::CreateTempDir(std::string& pathName, Log& log)
                 return true;
             }
             else {
-                log.error("Create dir error", "Can't create folder %s", tmpName.string().c_str());
+                log.add(Log::Level::error, "File write", "Can't create folder %s", tmpName.string().c_str());
                 return false;
             }
         }
     }    
 
-    log.error("Create dir error", "Can't find free temporary name");
+    log.add(Log::Level::error, "File write", "Can't find free temporary name");
     return false;
 }
 
@@ -90,12 +90,12 @@ bool FileSystem::CreateDir(const char* pathName, Log& log)
 {
     if (std::filesystem::exists(pathName)) {
         if (!std::filesystem::is_directory(pathName)) {
-            log.error("Create dir error", "Path exist but it is a file %s", pathName);
+            log.add(Log::Level::error, "File write", "Path exist, expected folder but it is a file: %s", pathName);
             return false;
         }
     }
     else if (!std::filesystem::create_directory(pathName)) {
-        log.error("Create dir error", "Can't create folder %s", pathName);
+        log.add(Log::Level::error, "File write", "Can't create folder %s", pathName);
         return false;
     }
     return true;

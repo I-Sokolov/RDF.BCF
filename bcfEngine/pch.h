@@ -9,6 +9,11 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
+//for XMLparser
+#define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
+#define _HAS_STD_BYTE 0
+
 // add headers that you want to pre-compile here
 #include "framework.h"
 
@@ -19,9 +24,11 @@
 #include <vector>
 #include <set>
 
+#include "XMLparser/_xml.h"
+
 typedef std::list<std::string> StringList;
 typedef std::set<std::string> StringSet;
 
-#define NULL_CHECK(x) if (!x) { m_log.error ("NULL argument", "NULL argument"); return false; }
+#define NULL_CHECK(x) if (!x) { m_log.add(Log::Level::error, "NULL argument", "NULL argument"); return false; }
 
 #endif //PCH_H

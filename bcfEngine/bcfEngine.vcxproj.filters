@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="XMLparser">
+      <UniqueIdentifier>{e390ec29-775c-46c7-b0ea-bf2bf85786bd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -39,6 +42,36 @@
     <ClInclude Include="Extensions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="XMLparser\_errors.h">
+      <Filter>XMLparser</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLparser\_io.h">
+      <Filter>XMLparser</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLparser\_log.h">
+      <Filter>XMLparser</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLparser\_net.h">
+      <Filter>XMLparser</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLparser\_reader.h">
+      <Filter>XMLparser</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLparser\_schema_storage.h">
+      <Filter>XMLparser</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLparser\_serialization.h">
+      <Filter>XMLparser</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLparser\_string.h">
+      <Filter>XMLparser</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLparser\_time.h">
+      <Filter>XMLparser</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLparser\_xml.h">
+      <Filter>XMLparser</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -64,6 +97,18 @@
     </ClCompile>
     <ClCompile Include="Extensions.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="XMLparser\_net.cpp">
+      <Filter>XMLparser</Filter>
+    </ClCompile>
+    <ClCompile Include="XMLparser\_reader.cpp">
+      <Filter>XMLparser</Filter>
+    </ClCompile>
+    <ClCompile Include="XMLparser\_serialization.cpp">
+      <Filter>XMLparser</Filter>
+    </ClCompile>
+    <ClCompile Include="XMLparser\_xml.cpp">
+      <Filter>XMLparser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

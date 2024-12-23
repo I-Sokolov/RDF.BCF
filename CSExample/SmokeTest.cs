@@ -9,12 +9,26 @@ namespace CSExample
 {
     internal class SmokeTest
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public static void Run()
         {
+            Console.WriteLine($"Running smoke tests. Current directory {System.IO.Directory.GetCurrentDirectory()}.");
+            Console.WriteLine("...");
+
+            Console.WriteLine("TEST Errors");
             Errors();
+
+            Console.WriteLine("TEST Extensions");
             Extensions();
+
+            Console.WriteLine("TESTS PASSED");
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         static void ASSERT(bool condition)
         {
             if (!condition)
@@ -23,6 +37,9 @@ namespace CSExample
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         static void Errors()
         {
             using (var bcf = new RDF.BCF.Project())
@@ -44,8 +61,22 @@ namespace CSExample
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         static void Extensions()
         {
+            using (var bcf = new RDF.BCF.Project())
+            {
+                var res = bcf.ReadFile("..\\TestCases\\User assignment.bcf");
+                ASSERT(res);
+
+                var lst = bcf.Extensions.GetEnumeration(Native.BCFEnumeration.Users);
+                ASSERT(lst.Count() == 3);
+            }
+
+            //
+            //
             var users = new string[] { "a.b@mail.com", "b " }; // Китайский 好 text" };
 
             using (var bcf  = new RDF.BCF.Project())

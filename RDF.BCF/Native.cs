@@ -9,7 +9,7 @@ namespace RDF.BCF
 {
     public class Native
     {
-        private const string DDFBCFDLL = @"..\..\bcfEngine.dll";
+        private const string DLL = "bcfEngine.dll";
 
         /// <summary>
         /// BCF file version
@@ -35,14 +35,14 @@ namespace RDF.BCF
         };
 
 
-        [DllImport(DDFBCFDLL, EntryPoint = "bcfOpenProject")]
+        [DllImport(DLL, EntryPoint = "bcfOpenProject")]
         public static extern IntPtr OpenProject();
 
-        [DllImport(DDFBCFDLL, EntryPoint = "bcfCloseProject")]
+        [DllImport(DLL, EntryPoint = "bcfCloseProject")]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool CloseProject(IntPtr project);
 
-        [DllImport(DDFBCFDLL, EntryPoint = "bcfGetErrors")]
+        [DllImport(DLL, EntryPoint = "bcfGetErrors")]
         public static extern IntPtr GetErrors_(IntPtr project);
 
         public static string GetErrors(IntPtr project)
@@ -52,22 +52,22 @@ namespace RDF.BCF
             return (str!=null) ? str : "";
         }
 
-        [DllImport(DDFBCFDLL, EntryPoint = "bcfClearErrors")]
+        [DllImport(DLL, EntryPoint = "bcfClearErrors")]
         public static extern void ClearErrors(IntPtr project);
 
-        [DllImport(DDFBCFDLL, EntryPoint = "bcfInitNew")]
+        [DllImport(DLL, EntryPoint = "bcfInitNew")]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool InitNew(IntPtr project);
 
-        [DllImport(DDFBCFDLL, EntryPoint = "bcfReadFile")]
+        [DllImport(DLL, EntryPoint = "bcfReadFile")]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ReadFile(IntPtr project, string filePath);
 
-        [DllImport(DDFBCFDLL, EntryPoint = "bcfWriteFile")]
+        [DllImport(DLL, EntryPoint = "bcfWriteFile")]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool WriteFile(IntPtr project, string filePath, Version version);
 
-        [DllImport(DDFBCFDLL, EntryPoint = "bcfGetEnumerationElement")]
+        [DllImport(DLL, EntryPoint = "bcfGetEnumerationElement")]
         public static extern IntPtr GetEnumerationElement_(IntPtr project, BCFEnumeration extension, UInt16 index);
 
         public static string? GetEnumerationElement(IntPtr project, BCFEnumeration enumeration, UInt16 index)
@@ -76,11 +76,11 @@ namespace RDF.BCF
             return Marshal.PtrToStringAnsi(ptr);
         }
 
-        [DllImport(DDFBCFDLL, EntryPoint = "bcfAddEnumerationElement")]
+        [DllImport(DLL, EntryPoint = "bcfAddEnumerationElement")]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool AddEnumerationElement(IntPtr project, BCFEnumeration enumeration, string element);
 
-        [DllImport(DDFBCFDLL, EntryPoint = "bcfRemoveEnumerationElement")]
+        [DllImport(DLL, EntryPoint = "bcfRemoveEnumerationElement")]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool RemoveEnumerationElement(IntPtr project, BCFEnumeration enumeration, string element);
     }
