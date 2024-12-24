@@ -1,14 +1,36 @@
 #pragma once
 
+#include "Log.h"
+
+/// <summary>
+/// base class for XML serialized data block
+/// </summary>
+class XMLFile
+{
+public:
+    XMLFile(Log& log) :m_log(log) {}
+
+    bool Read(const std::string& bcfFolder);
+    bool Write(const std::string& bcfFolder);
+
+protected:
+    virtual const char* FileName() = NULL;
+    virtual void ReadRoot(_xml::_element& elem) = NULL;
+
+protected:
+    Log& m_log;
+};
+
+
+/// <summary>
+/// XML reading macros
+/// </summary>
 enum class UnknownNames : bool
 {
     Allowed = false,
     NotAllowed = true
 };
 
-/// <summary>
-/// 
-/// </summary>
 #define GET_ATTR(name)                      \
     for (auto attr : elem.attributes()) {   \
     if (attr) {                             \
@@ -22,8 +44,8 @@ enum class UnknownNames : bool
             m_##name = attr->getValue();    \
         }
 
-#define END_ATTR(allNamesKnown)        \
-            else if ((bool)allNamesKnown) { m_log.add(Log::Level::warning, "XML parsing", "Unknown attribute %s in " __FUNCTION__, attrName.c_str()); } } }
+#define END_ATTR(onUnknownNames)        \
+            else if ((bool)onUnknownNames) { m_log.add(Log::Level::warning, "XML parsing", "Unknown attribute %s in " __FUNCTION__, attrName.c_str()); } } }
 
 
 /// <summary>

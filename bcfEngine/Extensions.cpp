@@ -1,72 +1,15 @@
 #include "pch.h"
+#include "bcfEngine.h"
 #include "Extensions.h"
-#include "FileSystem.h"
-#include "XMLMacro.h"
-
-/// <summary>
-/// 
-/// </summary>
-#define FILE_NAME "extensions.xml"
-
 
 /// <summary>
 /// 
 /// </summary>
 Extensions::Extensions(Log& log)
-    :m_log(log)
+    :XMLFile(log)
 {
     m_elements.resize(7);
 }
-
-
-/// <summary>
-/// 
-/// </summary>
-bool Extensions::Read(const std::string& bcfFolder)
-{
-    bool ok = false;
-
-    std::string path (bcfFolder);
-    FileSystem::AddPath(path, FILE_NAME);
-
-    try {
-        _xml::_document doc(nullptr);
-        doc.load(path.c_str());
-
-        if (auto root = doc.getRoot()) {
-            ReadRoot(*root);
-            ok = true;
-        }
-    }
-    catch (std::exception& ex) {
-        m_log.add(Log::Level::error, "Read file error", "Failed to read %s file. %s", FILE_NAME, ex.what());
-    }
-
-    return ok;
-}
-
-/// <summary>
-/// 
-/// </summary>
-bool Extensions::Write(const std::string& bcfFolder)
-{
-    bool ok = false;
-
-    std::string path(bcfFolder);
-    FileSystem::AddPath(path, FILE_NAME);
-
-    try {
-        //_xml::_document doc(nullptr);
-        //doc.
-        ok = true;
-    }
-    catch (std::exception& ex) {
-        m_log.add(Log::Level::error, "Write file error", "Failed to write %s file. %s", FILE_NAME, ex.what());
-    }
-
-    return ok;
-}
-
 
 /// <summary>
 /// 
@@ -159,7 +102,7 @@ void Extensions::ReadEnumeration(_xml::_element& elem, BCFEnumeration enumeratio
     auto list = GetList(enumeration);
     if (!list) {
         assert(false);
-        throw std::exception(FILE_NAME " parsing error");
+        throw std::exception(FileName());
     }
 
     for (auto child : elem.children()) {

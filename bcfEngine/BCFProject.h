@@ -3,6 +3,7 @@
 #include "bcfEngine.h"
 #include "Log.h"
 #include "Version.h"
+#include "ProjectInfo.h"
 #include "Extensions.h"
 
 struct BCFProject
@@ -30,6 +31,7 @@ private:
     Log         m_log;
     
     Version     m_version;
+    ProjectInfo m_projectInfo;
     Extensions  m_extensions;
 
     std::string m_bcfFolder;

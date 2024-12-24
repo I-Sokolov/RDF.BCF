@@ -1,24 +1,22 @@
 #pragma once
 
-#include "Log.h"
+#include "XMLFile.h"
 #include "bcfEngine.h"
 
-class Version
+
+class Version : public XMLFile
 {
 public:
-    Version(Log& log) :m_log(log) {}
-
-    bool Read(const std::string& bcfFolder);
-    bool Write(const std::string& bcfFolder);
+    Version(Log& log) : XMLFile(log) {}
 
     BCFVersion Get();
     void Set(BCFVersion version);
 
 private:
-    void ReadRoot(_xml::_element& elem);
+    virtual const char* FileName() override { return "bcf.version"; }
+    virtual void ReadRoot(_xml::_element& elem) override;
 
 private:
-    Log&        m_log;
     std::string m_VersionId;
 };
 

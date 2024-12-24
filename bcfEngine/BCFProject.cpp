@@ -9,6 +9,7 @@
 /// </summary>
 BCFProject::BCFProject()
     : m_version(m_log)
+    , m_projectInfo(m_log)
     , m_extensions (m_log)
 {
 }
@@ -91,6 +92,7 @@ bool BCFProject::Read(const char* bcfFilePath)
     bool ok = ar.Unpack(bcfFilePath, m_bcfFolder.c_str());
 
     ok = ok && m_version.Read(m_bcfFolder);
+    ok = ok && m_projectInfo.Read(m_bcfFolder);
     ok = ok && m_extensions.Read(m_bcfFolder);
 
     return ok;
@@ -108,6 +110,8 @@ bool BCFProject::Write(const char* bcfFilePath, BCFVersion version)
     m_version.Set(version);
 
     bool ok = true;
+
+    ok = ok && m_version.Write(m_bcfFolder);
     ok = ok && m_version.Write(m_bcfFolder);
     ok = ok && m_extensions.Write(m_bcfFolder);
 

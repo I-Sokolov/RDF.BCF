@@ -1,24 +1,23 @@
 #pragma once
 
-#include "Log.h"
-#include "bcfEngine.h"
+#include "XMLFile.h"
 
-class Extensions
+class Extensions : public XMLFile
 {
 public:
     Extensions(Log& log);
-
-    bool Read(const std::string& bcfFolder);
-    bool Write(const std::string& bcfFolder);
 
     const char* GetElement(BCFEnumeration enumeration, unsigned short index);
     bool AddElement(BCFEnumeration enumeration, const char* element);
     bool RemoveElement(BCFEnumeration enumeration, const char* element);
 
 private:
+    virtual const char* FileName() override { return "extensions.xml"; }
+    virtual void ReadRoot(_xml::_element& elem) override;
+
+private:
     StringSet* GetList(BCFEnumeration enumeration);
 
-    void ReadRoot(_xml::_element& elem);
     void ReadEnumeration(_xml::_element& elem, BCFEnumeration enumeration);
     void Read_TopicTypes(_xml::_element& elem) { ReadEnumeration(elem, BCFTopicTypes); }
     void Read_Priorities(_xml::_element& elem) { ReadEnumeration(elem, BCFPriorities); }
@@ -29,7 +28,6 @@ private:
     void Read_Stages(_xml::_element& elem) { ReadEnumeration(elem, BCFStages); }
 
 private:
-    Log& m_log;
     std::vector<StringSet>  m_elements;
 };
 
