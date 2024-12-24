@@ -155,3 +155,25 @@ RDFBCF_EXPORT const char* bcfGetTopicGUID(BCFProject* project, BCFIndex topic)
     }
     return NULL;
 }
+
+/// <summary>
+/// 
+/// </summary>
+RDFBCF_EXPORT BCFIndex bcfCreateTopic(BCFProject* project, const char* guid)
+{
+    if (project) {
+        return project->CreateTopic(guid);
+    }
+    return BCFIndex_ERROR;
+}
+
+/// <summary>
+/// 
+/// </summary>
+RDFBCF_EXPORT bool bcfRemoveTopic(BCFProject* project, BCFIndex topic)
+{
+    if (project) {
+        return project->RemoveTopic(topic);
+    }
+    return false;
+}

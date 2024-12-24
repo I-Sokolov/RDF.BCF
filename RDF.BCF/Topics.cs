@@ -10,20 +10,35 @@ namespace RDF.BCF
     public class Topics
     {
         /// <summary>
-        /// List of topics in the BCF data, existing to the moment of call
+        /// Get topics in the BCF data, existing to the moment of call
         /// </summary>
-        public IEnumerable<Topic> Items { get { return m_topics; } }
+        public IEnumerable<Topic> Items { get { return CreateList(); } }
 
         /// <summary>
         /// Creates new topic.
         /// Caller can assign GUID or it will generated automatically, GUID never changes after creation
         /// </summary>
-        public Topic Add (string title, string topicType, string topicStatus, Guid? guid = null) { return AddTopic(title, topicType, topicStatus, guid); }
+        public Topic? CreateTopic (string? guid = null) 
+        { 
+            var ntopic = Native.CreateTopic(m_project.Handle, guid); 
+            if (ntopic != Native.ERR_IND)
+            {
+                return new Topic (m_project, ntopic);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool RemoveTopic (Topic topic)
+        {
+            return Native.RemoveTopic(m_project.Handle, topic.Handle);
+        }
 
         #region IMPLEMENTATION
         ///////////////////////////////////////////////////////////////////////////////////////////
         private Project m_project;
-        private List<Topic> m_topics = new List<Topic>();
 
         ///
         internal Topics(Project project) 
@@ -31,11 +46,17 @@ namespace RDF.BCF
             m_project = project;
         }
 
-        private Topic AddTopic(string title, string topicType, string topicStatus, Guid? guid)
+        private List<Topic> CreateList()
         {
-            var topic = new Topic(m_project, title, topicType, topicStatus, guid);
-            m_topics.Add(topic);
-            return topic;
+            var list = new List<Topic> ();
+
+            var N = Native.GetTopicsCount(m_project.Handle);
+            for (UInt16 i = 0; i < N; i++)
+            {
+                list.Add(new Topic(m_project, i));
+            }
+
+            return list;
         }
 
         #endregion IMPLEMENTATION

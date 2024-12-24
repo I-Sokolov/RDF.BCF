@@ -16,7 +16,7 @@ namespace RDF.BCF
             var list = new List<string>();
             UInt16 index = 0;
             string elem;
-            while (""!=(elem = Native.GetEnumerationElement(m_project.BCFProject, enumeration, index++))){
+            while (""!=(elem = Native.GetEnumerationElement(m_project.Handle, enumeration, index++))){
                 list.Add(elem);
             }
             return list;
@@ -27,7 +27,7 @@ namespace RDF.BCF
         /// </summary>
         public bool AddEnumerationElement (Native.BCFEnumeration enumeration, string elem)
         {
-            return Native.AddEnumerationElement(m_project.BCFProject, enumeration, elem);
+            return Native.AddEnumerationElement(m_project.Handle, enumeration, elem);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace RDF.BCF
         /// </summary>
         public bool RemoveEnumerationElement (Native.BCFEnumeration enumeration, string elem)
         {
-            return Native.RemoveEnumerationElement(m_project.BCFProject, enumeration, elem);
+            return Native.RemoveEnumerationElement(m_project.Handle, enumeration, elem);
         }
 
 

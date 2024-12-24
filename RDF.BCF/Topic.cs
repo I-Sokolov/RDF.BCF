@@ -11,7 +11,7 @@ namespace RDF.BCF
         /// <summary>
         /// Read-only persistent topic identifier
         /// </summary>
-        public Guid Guid { get { return m_guid; } }
+        public string Guid { get { return Native.GetTopicGUID(m_project.Handle, m_handle); } }
 
         /// <summary>
         /// Title of the topic.
@@ -58,42 +58,26 @@ namespace RDF.BCF
         /// <summary>
         /// BIM files, associated with the topic
         /// </summary>
-        public BIMFiles BIMFiles { get { return m_topicFiles; } }
+        //public BIMFiles BIMFiles { get { return m_topicFiles; } }
 
         /// <summary>
         /// The topic comments
         /// </summary>
-        public Comments Comments { get { return m_comments; } }
+        //public Comments Comments { get { return m_comments; } }
 
-        public Viewpoints Viewpoints { get { return m_viewpoints; } }
+        //public Viewpoints Viewpoints { get { return m_viewpoints; } }
+
+        public UInt16 Handle { get { return m_handle; }  }
 
         #region IMPLEMENTATION
         ///////////////////////////////////////////////////////////////////////////////////////////
         Project m_project;
-        Guid m_guid;
-        BIMFiles m_topicFiles;
-        Comments m_comments;
-        Viewpoints m_viewpoints;
+        UInt16 m_handle;
         
-        internal Topic(Project project, string title, string topicType, string topicStatus, Guid? guid = null) 
+        internal Topic(Project project, UInt16 handle) 
         {
             m_project = project;
-            Title = title;
-            TopicType = topicType;
-            TopicStatus = topicStatus;
-
-            if (guid == null)
-            {
-                m_guid = Guid.NewGuid();
-            }
-            else
-            {
-                m_guid = guid.Value;
-            }
-
-            m_topicFiles = new BIMFiles(m_project, this);
-            m_comments = new Comments(m_project, this);
-            m_viewpoints = new Viewpoints(m_project, this);
+            m_handle = handle;
         }
 
         #endregion IMPLEMENTATION

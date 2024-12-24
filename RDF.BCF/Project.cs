@@ -15,7 +15,7 @@
         /// </param>
         public Project(string? currentUser = null, bool autoExtent = false, string? projectId = null)
         {
-            m_bcfProject = Native.CreateProject(currentUser, autoExtent, projectId);
+            m_handle = BCF.Native.CreateProject(currentUser, autoExtent, projectId);
             m_topics = new Topics(this);
             m_extensions = new Extensions(this);
         }
@@ -23,14 +23,14 @@
         /// <summary>
         /// Native handler of BCF project to use in Native.* calls
         /// </summary>
-        public IntPtr BCFProject { get { return m_bcfProject; } }
+        public IntPtr Handle { get { return m_handle; } }
 
         /// <summary>
         /// Get errors since last call of ClearErrors or since project creation
         /// </summary>
         public string GetErrors(bool cleanLog = true)
         {
-            return Native.GetErrors(m_bcfProject, cleanLog);
+            return BCF.Native.GetErrors(m_handle, cleanLog);
         }
 
         /// <summary>
@@ -39,26 +39,26 @@
         /// </summary>
         public bool ReadFile(string filePath)
         {
-            return Native.ReadFile(m_bcfProject, filePath);
+            return BCF.Native.ReadFile(m_handle, filePath);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public bool WriteFile(string filePath, Native.Version version = Native.Version._3_0)
+        public bool WriteFile(string filePath, Native.Version version = BCF.Native.Version._3_0)
         {
-            return Native.WriteFile(m_bcfProject, filePath, version);
+            return BCF.Native.WriteFile(m_handle, filePath, version);
         }
 
         /// <summary>
         /// ProjectId is required property
         /// </summary>
-        public string ProjectId { get { return Native.GetProjectId(m_bcfProject); } }
+        public string ProjectId { get { return BCF.Native.GetProjectId(m_handle); } }
 
         /// <summary>
         /// Name is optional property
         /// </summary>
-        public string Name { get { return Native.GetProjectName(m_bcfProject); } set { Native.SetProjectName(m_bcfProject, value); } }
+        public string Name { get { return BCF.Native.GetProjectName(m_handle); } set { BCF.Native.SetProjectName(m_handle, value); } }
 
         /// <summary>
         /// BCF data are mainly list of topics, enumerate or modify topics with the property
@@ -74,7 +74,7 @@
         #region IMPLEMENTATION
         ///////////////////////////////////////////////////////////////////////////////////////////
         ///
-        private IntPtr m_bcfProject = IntPtr.Zero;
+        private IntPtr m_handle = IntPtr.Zero;
         private Extensions m_extensions;
         private Topics m_topics;
 
@@ -86,19 +86,19 @@
 
         public virtual void Dispose(bool disposing)
         {
-            if (m_bcfProject != IntPtr.Zero)
+            if (m_handle != IntPtr.Zero)
             {
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects)
                 }
 
-                var remainedErrors = RDF.BCF.Native.GetErrors(m_bcfProject);
+                var remainedErrors = RDF.BCF.Native.GetErrors(m_handle);
                 System.Diagnostics.Trace.Assert(remainedErrors.Length == 0);
 
-                RDF.BCF.Native.DeleteProject(m_bcfProject);
+                RDF.BCF.Native.DeleteProject(m_handle);
 
-                m_bcfProject = IntPtr.Zero;
+                m_handle = IntPtr.Zero;
             }
         }
 

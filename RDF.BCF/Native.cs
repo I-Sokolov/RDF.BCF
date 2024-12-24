@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -34,6 +35,7 @@ namespace RDF.BCF
             Stages = 7
         };
 
+        public const UInt16 ERR_IND = UInt16.MaxValue;
 
         [DllImport(DLL, EntryPoint = "bcfCreateProject")]
         public static extern IntPtr CreateProject(string? currentUser = null, [param:MarshalAs(UnmanagedType.U1)] bool autoExtent = false, string? projectId = null);
@@ -92,6 +94,25 @@ namespace RDF.BCF
         [DllImport(DLL, EntryPoint = "bcfRemoveEnumerationElement")]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool RemoveEnumerationElement(IntPtr project, BCFEnumeration enumeration, string element);
+
+        [DllImport(DLL, EntryPoint = "bcfGetTopicsCount")]
+        public static extern UInt16 GetTopicsCount(IntPtr project);
+
+        [DllImport(DLL, EntryPoint = "bcfGetTopicGUID")]
+        private static extern IntPtr GetTopicGUID_(IntPtr project, UInt16 topic);
+
+        public static string GetTopicGUID(IntPtr project, UInt16 topic)
+        {
+            var ptr = GetTopicGUID_(project, topic);
+            return PtrToString(ptr);
+        }
+
+        [DllImport(DLL, EntryPoint = "bcfCreateTopic")]
+        public static extern UInt16 CreateTopic(IntPtr project, string? guid);
+
+        [DllImport(DLL, EntryPoint = "bcfRemoveTopic")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool RemoveTopic(IntPtr project, UInt16 topic);
 
         /// <summary>
         /// 

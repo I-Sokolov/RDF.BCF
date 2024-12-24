@@ -27,6 +27,8 @@ public:
 
     BCFIndex GetTopicsCount() { return (BCFIndex) m_topics.size(); }
     Topic* GetTopic(BCFIndex index);
+    BCFIndex CreateTopic(const char* guid);
+    bool RemoveTopic(BCFIndex index);
 
 private:
     bool ReadTopics(const std::string& bcfFolder);

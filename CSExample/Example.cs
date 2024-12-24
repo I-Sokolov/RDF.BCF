@@ -20,20 +20,26 @@ namespace CSExample
                 //
                 // create topic
                 //
-                var topic = bcfData.Topics.Add(title: "Topic1", topicType: "Test", topicStatus: "New");
+                var topic = bcfData.Topics.CreateTopic();
+                if (topic == null)
+                {
+                    Console.WriteLine(bcfData.GetErrors());
+                    return;
+                }
+                //.Add(title: "Topic1", topicType: "Test", topicStatus: "New");
 
                 topic.Description = "The wall need plaster layer";
 
-                topic.BIMFiles.Add("c:\\my.ifc");
+                //.BIMFiles.Add("c:\\my.ifc");
 
                 //
                 // create comment with viewpoint
                 //
-                var comment = topic.Comments.Add("Look here");
+                //var comment = topic.Comments.Add("Look here");
 
-                var viewpoint = CreateViewpointExample(topic);
+                //var viewpoint = CreateViewpointExample(topic);
 
-                comment.Viewpoint = viewpoint;
+                //comment.Viewpoint = viewpoint;
 
                 //
                 //
@@ -41,7 +47,7 @@ namespace CSExample
             }
         }
 
-
+        /*
         static RDF.BCF.Viewpoint CreateViewpointExample(RDF.BCF.Topic topic)
         {
             var viewpoint = topic.Viewpoints.Add();
@@ -51,7 +57,7 @@ namespace CSExample
             viewpoint.Exceptions = new string[] { "15LX1o$dj1O8G53cOqE8W$" };
 
             return viewpoint;
-        }
+        }*/
 
         static void ReadExample()
         {
@@ -75,13 +81,15 @@ namespace CSExample
                     }
 
                     //
+                    /*
                     Console.WriteLine("BIM file paths to load");
                     foreach (var bim in topic.BIMFiles.Items)
                     {
                         Console.WriteLine(bim.Reference);
-                    }
+                    }*/
 
                     //
+                    /*
                     foreach (var comment in topic.Comments.Items)
                     {
                         Console.WriteLine(comment.Text ?? "-no message-");
@@ -97,7 +105,7 @@ namespace CSExample
                                 Console.WriteLine($"   {id}");
                             }
                         }
-                    }
+                    }*/
 
                 }
             }

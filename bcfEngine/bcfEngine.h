@@ -53,6 +53,11 @@ extern "C" {
     /// <summary>
     /// 
     /// </summary>
+    #define BCFIndex_ERROR ((uint16_t)-1);
+
+    /// <summary>
+    /// 
+    /// </summary>
     RDFBCF_EXPORT BCFProject* bcfCreateProject(const char* currentUser, bool autoExtent, const char* projectId);
 
     /// <summary>
@@ -114,6 +119,16 @@ extern "C" {
     /// 
     /// </summary>
     RDFBCF_EXPORT const char* bcfGetTopicGUID(BCFProject* project, BCFIndex topic);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    RDFBCF_EXPORT BCFIndex bcfCreateTopic(BCFProject* project, const char* guid);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    RDFBCF_EXPORT bool bcfRemoveTopic(BCFProject* project, BCFIndex topic);
 
 #ifdef __cplusplus
 } //extern "C"

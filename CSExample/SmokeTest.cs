@@ -84,6 +84,8 @@ namespace CSExample
 
                 var lst = bcf.Extensions.GetEnumeration(Native.BCFEnumeration.Users);
                 ASSERT(lst.Count() == 3);
+
+                TestTopics(bcf.Topics);
             }
 
             //
@@ -122,6 +124,28 @@ namespace CSExample
                 lst = bcf.Extensions.GetEnumeration(Native.BCFEnumeration.Users);
                 ASSERT(lst.Count() == 0);
             }
+        }
+
+        static private void TestTopics(RDF.BCF.Topics topics)
+        {
+            var items = topics.Items;
+            ASSERT(items.Count() == 1);
+            
+            var topic = items.First();
+            ASSERT(topic.Guid == "7ad1a717-bf20-4c12-b511-cbd90370ddba");
+
+            topics.CreateTopic();
+
+            items =topics.Items;
+            ASSERT(items.Count() == 2);
+
+            topics.RemoveTopic(topic);
+
+            items = topics.Items;
+            ASSERT(items.Count() == 1);
+
+            topic = items.First();
+            ASSERT(topic.Guid != "7ad1a717-bf20-4c12-b511-cbd90370ddba");
         }
     }
 }

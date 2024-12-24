@@ -166,3 +166,33 @@ Topic* BCFProject::GetTopic(BCFIndex index)
         return NULL;
     }
 }
+
+/// <summary>
+/// 
+/// </summary>
+BCFIndex BCFProject::CreateTopic(const char* guid)
+{
+    auto topic = new Topic(*this, guid);
+    m_topics.push_back(topic);
+    return (BCFIndex)m_topics.size() - 1;
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFProject::RemoveTopic(BCFIndex index)
+{
+    if (index < m_topics.size()) {
+        if (m_topics[index])
+            delete m_topics[index];
+        for (auto i = index; i < m_topics.size() - 1; i++) {
+            m_topics[i] = m_topics[i + 1];
+        }
+        m_topics.resize(m_topics.size() - 1);
+        return true;
+    }
+    else {
+        m_log.add(Log::Level::error, "Index is out of range", "Index %d is out of topics range [0..%d]", 0, (int)m_topics.size());
+        return false;
+    }
+}
