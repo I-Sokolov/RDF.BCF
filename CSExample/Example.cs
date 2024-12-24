@@ -20,10 +20,10 @@ namespace CSExample
                 //
                 // create topic
                 //
-                var topic = bcfData.Topics.CreateTopic();
+                var topic = bcfData.Topics.TopicCreate();
                 if (topic == null)
                 {
-                    Console.WriteLine(bcfData.GetErrors());
+                    Console.WriteLine(bcfData.ErrorsGet());
                     return;
                 }
                 //.Add(title: "Topic1", topicType: "Test", topicStatus: "New");
@@ -43,7 +43,7 @@ namespace CSExample
 
                 //
                 //
-                bcfData.WriteFile("MyTest.bcf");
+                bcfData.FileWrite("MyTest.bcf");
             }
         }
 
@@ -63,9 +63,9 @@ namespace CSExample
         {
             using (var bcfData = new RDF.BCF.Project())
             {
-                if (!bcfData.ReadFile("MyTest.bcf")) {
+                if (!bcfData.FileRead("MyTest.bcf")) {
                     Console.WriteLine("READ BCF ERRORS:");
-                    Console.WriteLine(bcfData.GetErrors());
+                    Console.WriteLine(bcfData.ErrorsGet());
                     return;
                 }
 
@@ -117,7 +117,7 @@ namespace CSExample
             RDF.BCF.Extensions schema = project.Extensions;
 
             //registered
-            IEnumerable<string> users = schema.GetEnumeration(RDF.BCF.Native.BCFEnumeration.Users);
+            IEnumerable<string> users = schema.GetEnumeration(RDF.BCF.Interop.BCFEnumeration.Users);
             Console.Write("Users: ");
             foreach (string user in users) 
             { 
@@ -126,7 +126,7 @@ namespace CSExample
             Console.WriteLine();
 
             //
-            schema.AddEnumerationElement(RDF.BCF.Native.BCFEnumeration.TopicStatuses, "Assigned");
+            schema.EnumerationElementAdd(RDF.BCF.Interop.BCFEnumeration.TopicStatuses, "Assigned");
         }
     }
 }

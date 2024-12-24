@@ -11,7 +11,7 @@ namespace RDF.BCF
         /// <summary>
         /// Read-only persistent topic identifier
         /// </summary>
-        public string Guid { get { return Native.GetTopicGUID(m_project.Handle, m_handle); } }
+        public string Guid { get { return Interop.TopicGuid(m_project.Handle, m_handle); } }
 
         /// <summary>
         /// Title of the topic.

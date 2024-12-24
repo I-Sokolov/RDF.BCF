@@ -53,7 +53,7 @@ BCFProject::~BCFProject()
 /// <summary>
 /// 
 /// </summary>
-const char* BCFProject::GetErrors(bool cleanLog)
+const char* BCFProject::ErrorsGet(bool cleanLog)
 {
     return m_log.get(cleanLog);
 }
@@ -170,7 +170,7 @@ Topic* BCFProject::GetTopic(BCFIndex index)
 /// <summary>
 /// 
 /// </summary>
-BCFIndex BCFProject::CreateTopic(const char* guid)
+BCFIndex BCFProject::TopicCreate(const char* guid)
 {
     auto topic = new Topic(*this, guid);
     m_topics.push_back(topic);
@@ -180,7 +180,7 @@ BCFIndex BCFProject::CreateTopic(const char* guid)
 /// <summary>
 /// 
 /// </summary>
-bool BCFProject::RemoveTopic(BCFIndex index)
+bool BCFProject::TopicRemove(BCFIndex index)
 {
     if (index < m_topics.size()) {
         if (m_topics[index])

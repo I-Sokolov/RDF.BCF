@@ -13,7 +13,7 @@
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT BCFProject* bcfCreateProject(const char* currentUser, bool autoExtent, const char* projectId)
+RDFBCF_EXPORT BCFProject* bcfProjectCreate(const char* currentUser, bool autoExtent, const char* projectId)
 {
     return new BCFProject(currentUser, autoExtent, projectId);
 }
@@ -22,10 +22,10 @@ RDFBCF_EXPORT BCFProject* bcfCreateProject(const char* currentUser, bool autoExt
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT void bcfDeleteProject(BCFProject* project)
+RDFBCF_EXPORT void bcfProjectDelete(BCFProject* project)
 {
     if (project) {
-        assert(!*project->GetErrors());
+        assert(!*project->ErrorsGet());
         delete project;
     }
 }
@@ -33,10 +33,10 @@ RDFBCF_EXPORT void bcfDeleteProject(BCFProject* project)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT const char* bcfGetErrors(BCFProject* project, bool cleanLog)
+RDFBCF_EXPORT const char* bcfErrorsGet(BCFProject* project, bool cleanLog)
 {
     if (project) {
-        return project->GetErrors(cleanLog);
+        return project->ErrorsGet(cleanLog);
     }
     return "NULL ARGUMENT";
 }
@@ -44,7 +44,7 @@ RDFBCF_EXPORT const char* bcfGetErrors(BCFProject* project, bool cleanLog)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT bool bcfReadFile(BCFProject* project, const char* bcfFilePath)
+RDFBCF_EXPORT bool bcfFileRead(BCFProject* project, const char* bcfFilePath)
 {
     if (project) {
         return project->Read(bcfFilePath);
@@ -55,7 +55,7 @@ RDFBCF_EXPORT bool bcfReadFile(BCFProject* project, const char* bcfFilePath)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT bool bcfWriteFile(BCFProject* project, const char* bcfFilePath, BCFVersion version)
+RDFBCF_EXPORT bool bcfFileWrite(BCFProject* project, const char* bcfFilePath, BCFVersion version)
 {
     if (project) {
         return project->Write(bcfFilePath, version);
@@ -67,7 +67,7 @@ RDFBCF_EXPORT bool bcfWriteFile(BCFProject* project, const char* bcfFilePath, BC
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT const char* bcfGetProjectId(BCFProject* project)
+RDFBCF_EXPORT const char* bcfProjectIdGet(BCFProject* project)
 {
     if (project) {
         return project->GetGUID();
@@ -78,7 +78,7 @@ RDFBCF_EXPORT const char* bcfGetProjectId(BCFProject* project)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT const char* bcfGetProjectName(BCFProject* project)
+RDFBCF_EXPORT const char* bcfProjectNameGet(BCFProject* project)
 {
     if (project) {
         return project->GetName();
@@ -89,7 +89,7 @@ RDFBCF_EXPORT const char* bcfGetProjectName(BCFProject* project)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT bool bcfSetProjectName(BCFProject* project, const char* name)
+RDFBCF_EXPORT bool bcfProjectNameSet(BCFProject* project, const char* name)
 {
     if (project) {
         project->SetName(name);
@@ -102,7 +102,7 @@ RDFBCF_EXPORT bool bcfSetProjectName(BCFProject* project, const char* name)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT const char* bcfGetEnumerationElement(BCFProject* project, BCFEnumeration enumeration, BCFIndex index)
+RDFBCF_EXPORT const char* bcfEnumerationElementGet(BCFProject* project, BCFEnumeration enumeration, BCFIndex index)
 {
     if (project) {
         return project->GetExtensions().GetElement(enumeration, index);
@@ -113,7 +113,7 @@ RDFBCF_EXPORT const char* bcfGetEnumerationElement(BCFProject* project, BCFEnume
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT bool bcfAddEnumerationElement(BCFProject* project, BCFEnumeration enumeration, const char* element)
+RDFBCF_EXPORT bool bcfEnumerationElementAdd(BCFProject* project, BCFEnumeration enumeration, const char* element)
 {
     if (project) {
         return project->GetExtensions().AddElement(enumeration, element);
@@ -124,7 +124,7 @@ RDFBCF_EXPORT bool bcfAddEnumerationElement(BCFProject* project, BCFEnumeration 
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT bool bcfRemoveEnumerationElement(BCFProject* project, BCFEnumeration enumeration, const char* element)
+RDFBCF_EXPORT bool bcfEnumerationElementRemove(BCFProject* project, BCFEnumeration enumeration, const char* element)
 {
     if (project) {
         return project->GetExtensions().RemoveElement(enumeration, element);
@@ -135,10 +135,10 @@ RDFBCF_EXPORT bool bcfRemoveEnumerationElement(BCFProject* project, BCFEnumerati
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT BCFIndex bcfGetTopicsCount(BCFProject* project)
+RDFBCF_EXPORT BCFIndex bcfTopicsCount(BCFProject* project)
 {
     if (project) {
-        return project->GetTopicsCount();
+        return project->TopicsCount();
     }
     return 0;
 }
@@ -146,7 +146,7 @@ RDFBCF_EXPORT BCFIndex bcfGetTopicsCount(BCFProject* project)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT const char* bcfGetTopicGUID(BCFProject* project, BCFIndex topic)
+RDFBCF_EXPORT const char* bcfTopicGuid(BCFProject* project, BCFIndex topic)
 {
     if (project) {
         if (auto pt = project->GetTopic(topic)) {
@@ -159,10 +159,10 @@ RDFBCF_EXPORT const char* bcfGetTopicGUID(BCFProject* project, BCFIndex topic)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT BCFIndex bcfCreateTopic(BCFProject* project, const char* guid)
+RDFBCF_EXPORT BCFIndex bcfTopicCreate(BCFProject* project, const char* guid)
 {
     if (project) {
-        return project->CreateTopic(guid);
+        return project->TopicCreate(guid);
     }
     return BCFIndex_ERROR;
 }
@@ -170,10 +170,10 @@ RDFBCF_EXPORT BCFIndex bcfCreateTopic(BCFProject* project, const char* guid)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT bool bcfRemoveTopic(BCFProject* project, BCFIndex topic)
+RDFBCF_EXPORT bool bcfTopicRemove(BCFProject* project, BCFIndex topic)
 {
     if (project) {
-        return project->RemoveTopic(topic);
+        return project->TopicRemove(topic);
     }
     return false;
 }

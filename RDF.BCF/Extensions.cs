@@ -11,12 +11,12 @@ namespace RDF.BCF
         /// <summary>
         /// Get elements of enumeration of given type
         /// </summary>
-        public IEnumerable<string> GetEnumeration(Native.BCFEnumeration enumeration)
+        public IEnumerable<string> GetEnumeration(Interop.BCFEnumeration enumeration)
         {
             var list = new List<string>();
             UInt16 index = 0;
             string elem;
-            while (""!=(elem = Native.GetEnumerationElement(m_project.Handle, enumeration, index++))){
+            while (""!=(elem = Interop.EnumerationElementGet(m_project.Handle, enumeration, index++))){
                 list.Add(elem);
             }
             return list;
@@ -25,17 +25,17 @@ namespace RDF.BCF
         /// <summary>
         /// Modify enumeration of given type
         /// </summary>
-        public bool AddEnumerationElement (Native.BCFEnumeration enumeration, string elem)
+        public bool EnumerationElementAdd (Interop.BCFEnumeration enumeration, string elem)
         {
-            return Native.AddEnumerationElement(m_project.Handle, enumeration, elem);
+            return Interop.EnumerationElementAdd(m_project.Handle, enumeration, elem);
         }
 
         /// <summary>
         /// Modify elements of enumeration of given type
         /// </summary>
-        public bool RemoveEnumerationElement (Native.BCFEnumeration enumeration, string elem)
+        public bool EnumerationElementRemove (Interop.BCFEnumeration enumeration, string elem)
         {
-            return Native.RemoveEnumerationElement(m_project.Handle, enumeration, elem);
+            return Interop.EnumerationElementRemove(m_project.Handle, enumeration, elem);
         }
 
 

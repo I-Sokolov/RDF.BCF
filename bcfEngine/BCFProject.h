@@ -14,7 +14,7 @@ public:
     ~BCFProject();
 
 public:
-    const char* GetErrors(bool cleanLog = true);
+    const char* ErrorsGet(bool cleanLog = true);
 
     bool Read(const char* bcfFilePath);
     bool Write(const char* bcfFilePath, BCFVersion version);
@@ -25,10 +25,10 @@ public:
 
     Extensions& GetExtensions() { return m_extensions; }
 
-    BCFIndex GetTopicsCount() { return (BCFIndex) m_topics.size(); }
+    BCFIndex TopicsCount() { return (BCFIndex) m_topics.size(); }
     Topic* GetTopic(BCFIndex index);
-    BCFIndex CreateTopic(const char* guid);
-    bool RemoveTopic(BCFIndex index);
+    BCFIndex TopicCreate(const char* guid);
+    bool TopicRemove(BCFIndex index);
 
 private:
     bool ReadTopics(const std::string& bcfFolder);

@@ -44,21 +44,21 @@ namespace CSExample
         {
             using (var bcf = new RDF.BCF.Project())
             {
-                var errors = bcf.GetErrors();
+                var errors = bcf.ErrorsGet();
                 ASSERT(errors.Length==0);
 
                 Console.WriteLine("Expected errors....");
-                var res = bcf.ReadFile("J:\\NotExist.bcf");
+                var res = bcf.FileRead("J:\\NotExist.bcf");
                 ASSERT(!res);
 
-                errors = bcf.GetErrors(false);
+                errors = bcf.ErrorsGet(false);
                 ASSERT(errors.Length != 0);
                 Console.WriteLine(errors);
 
-                errors = bcf.GetErrors();
+                errors = bcf.ErrorsGet();
                 ASSERT(errors.Length != 0);
 
-                errors = bcf.GetErrors();
+                errors = bcf.ErrorsGet();
                 ASSERT(errors.Length == 0);
             }
         }
@@ -70,7 +70,7 @@ namespace CSExample
         {
             using (var bcf = new RDF.BCF.Project())
             {
-                var res = bcf.ReadFile("..\\TestCases\\User assignment.bcf");
+                var res = bcf.FileRead("..\\TestCases\\User assignment.bcf");
                 ASSERT(res);
 
                 var guid = bcf.ProjectId;
@@ -82,7 +82,7 @@ namespace CSExample
                 bcf.Name = "rename";
                 ASSERT(bcf.Name == "rename");
 
-                var lst = bcf.Extensions.GetEnumeration(Native.BCFEnumeration.Users);
+                var lst = bcf.Extensions.GetEnumeration(Interop.BCFEnumeration.Users);
                 ASSERT(lst.Count() == 3);
 
                 TestTopics(bcf.Topics);
@@ -94,24 +94,24 @@ namespace CSExample
 
             using (var bcf  = new RDF.BCF.Project())
             {
-                var lst = bcf.Extensions.GetEnumeration(Native.BCFEnumeration.Users);
+                var lst = bcf.Extensions.GetEnumeration(Interop.BCFEnumeration.Users);
                 ASSERT(lst.Count() == 0);
 
                 Console.WriteLine("Expected NULL argument error...");
-                var res = bcf.Extensions.AddEnumerationElement(Native.BCFEnumeration.Users, null);
+                var res = bcf.Extensions.EnumerationElementAdd(Interop.BCFEnumeration.Users, null);
                 ASSERT(!res);
 
-                var msg = bcf.GetErrors();
+                var msg = bcf.ErrorsGet();
                 ASSERT(msg.Length != 0);
                 Console.WriteLine(msg);
 
-                res = bcf.Extensions.AddEnumerationElement(Native.BCFEnumeration.Users, users[0]);
+                res = bcf.Extensions.EnumerationElementAdd(Interop.BCFEnumeration.Users, users[0]);
                 ASSERT(res);
 
-                bcf.Extensions.AddEnumerationElement(Native.BCFEnumeration.Users, users[1]);
-                bcf.Extensions.AddEnumerationElement(Native.BCFEnumeration.Users, users[0]);
+                bcf.Extensions.EnumerationElementAdd(Interop.BCFEnumeration.Users, users[1]);
+                bcf.Extensions.EnumerationElementAdd(Interop.BCFEnumeration.Users, users[0]);
 
-                lst = bcf.Extensions.GetEnumeration(Native.BCFEnumeration.Users);
+                lst = bcf.Extensions.GetEnumeration(Interop.BCFEnumeration.Users);
                 ASSERT(lst.Count() == 2);
                 int i = 0;
                 foreach (var u in lst)
@@ -119,9 +119,9 @@ namespace CSExample
                     ASSERT(u == users[i++]);
                 }
 
-                bcf.Extensions.RemoveEnumerationElement(Native.BCFEnumeration.Users, users[1]);
-                bcf.Extensions.RemoveEnumerationElement(Native.BCFEnumeration.Users, users[0]);
-                lst = bcf.Extensions.GetEnumeration(Native.BCFEnumeration.Users);
+                bcf.Extensions.EnumerationElementRemove(Interop.BCFEnumeration.Users, users[1]);
+                bcf.Extensions.EnumerationElementRemove(Interop.BCFEnumeration.Users, users[0]);
+                lst = bcf.Extensions.GetEnumeration(Interop.BCFEnumeration.Users);
                 ASSERT(lst.Count() == 0);
             }
         }
@@ -134,12 +134,12 @@ namespace CSExample
             var topic = items.First();
             ASSERT(topic.Guid == "7ad1a717-bf20-4c12-b511-cbd90370ddba");
 
-            topics.CreateTopic();
+            topics.TopicCreate();
 
             items =topics.Items;
             ASSERT(items.Count() == 2);
 
-            topics.RemoveTopic(topic);
+            topics.TopicRemove(topic);
 
             items = topics.Items;
             ASSERT(items.Count() == 1);

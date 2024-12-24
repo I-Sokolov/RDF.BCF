@@ -18,10 +18,10 @@ namespace RDF.BCF
         /// Creates new topic.
         /// Caller can assign GUID or it will generated automatically, GUID never changes after creation
         /// </summary>
-        public Topic? CreateTopic (string? guid = null) 
+        public Topic? TopicCreate (string? guid = null) 
         { 
-            var ntopic = Native.CreateTopic(m_project.Handle, guid); 
-            if (ntopic != Native.ERR_IND)
+            var ntopic = Interop.TopicCreate(m_project.Handle, guid); 
+            if (ntopic != Interop.ERR_IND)
             {
                 return new Topic (m_project, ntopic);
             }
@@ -31,9 +31,9 @@ namespace RDF.BCF
         /// <summary>
         /// 
         /// </summary>
-        public bool RemoveTopic (Topic topic)
+        public bool TopicRemove (Topic topic)
         {
-            return Native.RemoveTopic(m_project.Handle, topic.Handle);
+            return Interop.TopicRemove(m_project.Handle, topic.Handle);
         }
 
         #region IMPLEMENTATION
@@ -50,7 +50,7 @@ namespace RDF.BCF
         {
             var list = new List<Topic> ();
 
-            var N = Native.GetTopicsCount(m_project.Handle);
+            var N = Interop.TopicsCount(m_project.Handle);
             for (UInt16 i = 0; i < N; i++)
             {
                 list.Add(new Topic(m_project, i));
