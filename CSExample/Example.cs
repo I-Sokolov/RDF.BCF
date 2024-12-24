@@ -15,14 +15,12 @@ namespace CSExample
 
         static void CreateExample()
         {
-            using (var bcfData = new RDF.BCF.Project())
+            using (var bcfData = new RDF.BCF.Project("user@company.org", true))
             {
                 //
                 // init and set options
                 //
                 bcfData.InitNew();
-                bcfData.AutoExtentSchema = true; //I want automatically add new users, project types, statuses etc when use it
-                bcfData.CurrentUser = "igor.o.sokolov@rdf.bg"; //The user will be author will be mentioned in created/modified topics 
 
                 //
                 // create topic

@@ -13,9 +13,23 @@
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT BCFProject* bcfOpenProject(void)
+RDFBCF_EXPORT BCFProject* bcfCreateProject(const char* currentUser, bool autoExtent)
 {
-    return new BCFProject();
+    return new BCFProject(currentUser, autoExtent);
+}
+
+/// <summary>
+/// 
+/// </summary>
+RDFBCF_EXPORT bool bcfDeleteProject(BCFProject* project)
+{
+    if (project) {
+        if (project->Close()) {
+            delete project;
+            return true;
+        }
+    }
+    return false;
 }
 
 /// <summary>
@@ -40,21 +54,6 @@ RDFBCF_EXPORT void bcfClearErrors(BCFProject* project)
         project->ClearErrors();
     }
 }
-
-/// <summary>
-/// 
-/// </summary>
-RDFBCF_EXPORT bool bcfCloseProject(BCFProject* project)
-{
-    if (project) {
-        if (project->Close()) {
-            delete project;
-            return true;
-        }
-    }
-    return false;
-}
-
 
 /// <summary>
 /// 

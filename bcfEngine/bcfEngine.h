@@ -48,12 +48,12 @@ extern "C" {
     /// <summary>
     /// 
     /// </summary>
-    RDFBCF_EXPORT BCFProject* bcfOpenProject(void);
+    RDFBCF_EXPORT BCFProject* bcfCreateProject(const char* currentUser, bool autoExtent);
 
     /// <summary>
     /// 
     /// </summary>
-    RDFBCF_EXPORT bool bcfCloseProject(BCFProject* project);
+    RDFBCF_EXPORT bool bcfDeleteProject(BCFProject* project);
 
     /// <summary>
     /// 

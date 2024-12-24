@@ -5,9 +5,17 @@
         /// <summary>
         /// Creates new empty BCF data
         /// </summary>
-        public Project()
+        /// <param name="currentUser">
+        /// User must be set if you are going to create or modify topics.
+        /// </param>
+        /// <param name="autoExtent">
+        /// Enabling the option will automatically add to extensions enumerations new user, 
+        /// topic type, status etc. when you set the value which is not in enumeration yet.
+        /// If the option is disable, it makes strict checking and assigning any unknown elements will rise RDF.BCF.Exception.
+        /// </param>
+        public Project(string? currentUser = null, bool autoExtent = false)
         {
-            m_bcfProject = Native.OpenProject();
+            m_bcfProject = Native.CreateProject(currentUser, autoExtent);
             m_topics = new Topics(this);
             m_extensions = new Extensions(this);
         }
@@ -33,18 +41,6 @@
         {
             Native.ClearErrors(m_bcfProject);
         }
-
-        /// <summary>
-        /// Enabling the option will automatically add to extensions enumerations new user, 
-        /// topic type, status etc. when you set the value which is not in enumeration yet.
-        /// If the option is disable, it makes strict checking and assigning any unknown elements will rise RDF.BCF.Exception.
-        /// </summary>
-        public bool AutoExtentSchema { get; set; }
-
-        /// <summary>
-        /// User must be set if you are going to create or modify topic.
-        /// </summary>
-        public string? CurrentUser { get; set; }
 
         /// <summary>
         /// Populates BCF data with some preset data
@@ -114,7 +110,8 @@
                     // TODO: dispose managed state (managed objects)
                 }
 
-                RDF.BCF.Native.CloseProject(m_bcfProject);
+                if (!RDF.BCF.Native.DeleteProject(m_bcfProject))
+                    throw new ApplicationException (GetErrors ());
                 m_bcfProject = IntPtr.Zero;
             }
         }

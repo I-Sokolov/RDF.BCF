@@ -9,7 +9,7 @@
 struct BCFProject
 {
 public:
-    BCFProject();
+    BCFProject(const char* currentUser, bool autoExtent);
     ~BCFProject();
 
 public:

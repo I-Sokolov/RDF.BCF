@@ -35,12 +35,12 @@ namespace RDF.BCF
         };
 
 
-        [DllImport(DLL, EntryPoint = "bcfOpenProject")]
-        public static extern IntPtr OpenProject();
+        [DllImport(DLL, EntryPoint = "bcfCreateProject")]
+        public static extern IntPtr CreateProject(string? currentUser = null, [param:MarshalAs(UnmanagedType.U1)] bool autoExtent = false, string? projectId = null);
 
         [DllImport(DLL, EntryPoint = "bcfCloseProject")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool CloseProject(IntPtr project);
+        public static extern bool DeleteProject(IntPtr project);
 
         [DllImport(DLL, EntryPoint = "bcfGetErrors")]
         private static extern IntPtr GetErrors_(IntPtr project);

@@ -7,7 +7,7 @@
 /// <summary>
 /// 
 /// </summary>
-BCFProject::BCFProject()
+BCFProject::BCFProject(const char* currentUser, bool autoExtent)
     : m_version(m_log)
     , m_projectInfo(m_log)
     , m_extensions (m_log)
