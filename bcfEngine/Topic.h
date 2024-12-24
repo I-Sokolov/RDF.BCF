@@ -2,16 +2,17 @@
 
 struct BCFProject;
 
-class Topic
+#include "GUIDable.h"
+
+class Topic : public GUIDable
 {
 public:
     Topic(BCFProject& project, const char* guid);
 
-    const char* GUID() { return m_guid.c_str(); }
+    bool Read(const std::string& bcfFolder) { return true; };
+    bool Write(const std::string& bcfFolder) { return true; };
 
 private:
     BCFProject& m_project;
-
-    std::string m_guid;
 };
 

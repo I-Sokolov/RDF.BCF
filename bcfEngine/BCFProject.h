@@ -16,7 +16,6 @@ public:
 public:
     const char* GetErrors(bool cleanLog = true);
 
-    bool InitNew();
     bool Read(const char* bcfFilePath);
     bool Write(const char* bcfFilePath, BCFVersion version);
 
@@ -30,12 +29,23 @@ public:
     Topic* GetTopic(BCFIndex index);
 
 private:
+    bool ReadTopics(const std::string& bcfFolder);
+    bool WriteTopics(const std::string& bcfFolder);
+
+private:
+    struct Topics : std::vector<Topic*>
+    {
+        ~Topics();
+        void push_back(Topic* topic);
+    };
+
+private:
     Log         m_log;
     
     Version     m_version;
     ProjectInfo m_projectInfo;
     Extensions  m_extensions;
 
-    std::vector<Topic*> m_topics;
+    Topics      m_topics;
 };
 

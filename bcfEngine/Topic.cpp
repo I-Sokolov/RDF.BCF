@@ -6,8 +6,8 @@
 /// 
 /// </summary>
 Topic::Topic(BCFProject& project, const char* guid)
-    : m_project(project)
-    , m_guid(guid)
+    : GUIDable(guid)
+    , m_project(project)
 {
 
 }

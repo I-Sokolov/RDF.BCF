@@ -204,6 +204,7 @@
     <ClInclude Include="Extensions.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="GUIDable.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ProjectInfo.h" />
@@ -233,6 +234,7 @@
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Extensions.cpp" />
     <ClCompile Include="FileSystem.cpp" />
+    <ClCompile Include="GUIDable.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
