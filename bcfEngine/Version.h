@@ -13,7 +13,8 @@ public:
     void Set(BCFVersion version);
 
 private:
-    virtual const char* FileName() override { return "bcf.version"; }
+    //XMLFile implementation
+    virtual void GetRelativePathName(std::string& pathInBcfFolder) override { pathInBcfFolder.assign("bcf.version"); }
     virtual void ReadRoot(_xml::_element& elem) override;
 
 private:

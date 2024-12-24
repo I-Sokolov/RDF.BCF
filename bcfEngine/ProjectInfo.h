@@ -12,10 +12,11 @@ public:
     std::string m_Name;
 
 private:
-    virtual const char* FileName() override { return "project.bcfp"; }
+    //XMLFile implementation
+    virtual void GetRelativePathName(std::string& pathInBcfFolder) override { pathInBcfFolder.assign("project.bcfp"); }
     virtual void ReadRoot(_xml::_element& elem) override;
 
+private:
     void Read_Project(_xml::_element& elem);
-    void Read_Name(_xml::_element& elem);
 };
 

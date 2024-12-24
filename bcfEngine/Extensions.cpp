@@ -102,7 +102,7 @@ void Extensions::ReadEnumeration(_xml::_element& elem, BCFEnumeration enumeratio
     auto list = GetList(enumeration);
     if (!list) {
         assert(false);
-        throw std::exception(FileName());
+        throw std::exception("Invalid BCF enumeration in " __FUNCTION__);
     }
 
     for (auto child : elem.children()) {

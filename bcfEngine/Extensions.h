@@ -12,7 +12,8 @@ public:
     bool RemoveElement(BCFEnumeration enumeration, const char* element);
 
 private:
-    virtual const char* FileName() override { return "extensions.xml"; }
+    //XMLFile implementation
+    virtual void GetRelativePathName(std::string& pathInBcfFolder) override { pathInBcfFolder.assign("extensions.xml"); }
     virtual void ReadRoot(_xml::_element& elem) override;
 
 private:

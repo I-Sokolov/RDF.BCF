@@ -25,7 +25,6 @@ RDFBCF_EXPORT BCFProject* bcfProjectCreate(const char* currentUser, bool autoExt
 RDFBCF_EXPORT void bcfProjectDelete(BCFProject* project)
 {
     if (project) {
-        assert(!*project->ErrorsGet());
         delete project;
     }
 }
@@ -36,7 +35,7 @@ RDFBCF_EXPORT void bcfProjectDelete(BCFProject* project)
 RDFBCF_EXPORT const char* bcfErrorsGet(BCFProject* project, bool cleanLog)
 {
     if (project) {
-        return project->ErrorsGet(cleanLog);
+        return project->log().get(cleanLog);
     }
     return "NULL ARGUMENT";
 }

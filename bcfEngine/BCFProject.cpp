@@ -53,15 +53,6 @@ BCFProject::~BCFProject()
 /// <summary>
 /// 
 /// </summary>
-const char* BCFProject::ErrorsGet(bool cleanLog)
-{
-    return m_log.get(cleanLog);
-}
-
-
-/// <summary>
-/// 
-/// </summary>
 bool BCFProject::Read(const char* bcfFilePath)
 {
     std::string bcfFolder;

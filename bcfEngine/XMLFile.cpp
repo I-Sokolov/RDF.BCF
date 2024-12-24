@@ -9,8 +9,11 @@ bool XMLFile::Read(const std::string& bcfFolder)
 {
     bool ok = false;
 
+    std::string relPath;
+    GetRelativePathName(relPath);
+
     std::string path(bcfFolder);
-    FileSystem::AddPath(path, FileName());
+    FileSystem::AddPath(path, relPath.c_str());
 
     try {
         _xml::_document doc(nullptr);
@@ -22,7 +25,7 @@ bool XMLFile::Read(const std::string& bcfFolder)
         }
     }
     catch (std::exception& ex) {
-        m_log.add(Log::Level::error, "Read file error", "Failed to read %s file. %s", FileName(), ex.what());
+        m_log.add(Log::Level::error, "Read file error", "Failed to read %s file. %s", path.c_str(), ex.what());
     }
 
     return ok;
@@ -35,8 +38,11 @@ bool XMLFile::Write(const std::string& bcfFolder)
 {
     bool ok = false;
 
+    std::string relPath;
+    GetRelativePathName(relPath);
+
     std::string path(bcfFolder);
-    FileSystem::AddPath(path, FileName());
+    FileSystem::AddPath(path, relPath.c_str());
 
     try {
         //_xml::_document doc(nullptr);
@@ -44,7 +50,7 @@ bool XMLFile::Write(const std::string& bcfFolder)
         ok = true;
     }
     catch (std::exception& ex) {
-        m_log.add(Log::Level::error, "Write file error", "Failed to write %s file. %s", FileName(), ex.what());
+        m_log.add(Log::Level::error, "Write file error", "Failed to write %s file. %s", path.c_str(), ex.what());
     }
 
     return ok;

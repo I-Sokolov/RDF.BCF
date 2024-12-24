@@ -14,7 +14,7 @@ public:
     bool Write(const std::string& bcfFolder);
 
 protected:
-    virtual const char* FileName() = NULL;
+    virtual void GetRelativePathName(std::string& pathInBcfFolder) = NULL;
     virtual void ReadRoot(_xml::_element& elem) = NULL;
 
 protected:
@@ -63,6 +63,21 @@ enum class UnknownNames : bool
             else if (tag == #name) {        \
                 Read_##name(*child);        \
             }
+
+
+#define GET_CHILD_CONTENT(name)                         \
+    for (auto child : elem.children()) {                \
+        if (child) {                                    \
+            auto&  tag= child->getName();               \
+            if (tag == #name) {                         \
+                m_##name.assign(child->getContent());   \
+            }
+
+#define NEXT_CHILD_CONTENT(name)                        \
+            else if (tag == #name) {                    \
+                m_##name.assign(child->getContent());   \
+            }
+
 
 #define GET_CHILD_MEMBER(name)              \
     for (auto child : elem.children()) {    \

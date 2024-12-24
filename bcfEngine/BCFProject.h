@@ -14,7 +14,7 @@ public:
     ~BCFProject();
 
 public:
-    const char* ErrorsGet(bool cleanLog = true);
+    Log& log() { return m_log; }
 
     bool Read(const char* bcfFilePath);
     bool Write(const char* bcfFilePath, BCFVersion version);
