@@ -17,7 +17,7 @@ public:
     static void AddPath(std::string& path, const char* name, bool zippath = false);
 
     //get directory list
-    static void GetDirContent(const char* folderPath, DirList& elems);
+    static bool GetDirContent(const char* folderPath, DirList& elems, Log& log);
 
     //remove file of directory
     static bool Remove(const char* path, Log& log);

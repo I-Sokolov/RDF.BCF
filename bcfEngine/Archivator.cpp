@@ -32,7 +32,9 @@ bool Archivator::Pack(const char* folder, const char* archivePath)
 bool Archivator::AddFolder(const char* osPath, const char* zipPath, struct zip* zip)
 {
     FileSystem::DirList elems;
-    FileSystem::GetDirContent(osPath, elems);
+    if (!FileSystem::GetDirContent(osPath, elems, m_log)) {
+        return false;
+    }
 
     for (auto& elem : elems) {
 

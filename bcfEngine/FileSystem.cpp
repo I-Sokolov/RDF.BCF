@@ -22,12 +22,23 @@ void FileSystem::AddPath(std::string& path, const char* name, bool zippath)
 /// <summary>
 /// 
 /// </summary>
-void FileSystem::GetDirContent(const char* folderPath, DirList& elems)
+bool FileSystem::GetDirContent(const char* folderPath, DirList& elems, Log& log)
 {
-    for (const auto& entry : std::filesystem::directory_iterator(folderPath)) {
-        elems.push_back(DirElem());
-        elems.back().name = entry.path().filename().string();
-        elems.back().folder = entry.is_directory();
+    try {
+        for (const auto& entry : std::filesystem::directory_iterator(folderPath)) {
+            elems.push_back(DirElem());
+            elems.back().name = entry.path().filename().string();
+            elems.back().folder = entry.is_directory();
+        }
+        return true;
+    }
+    catch (std::exception& expt) {
+        log.add(Log::Level::error, "Directory list", "Failed to list directory %s: %s", folderPath, expt.what());
+        return false;
+    }
+    catch (...) {
+        log.add(Log::Level::error, "Directory list", "Failed to list directory %s: unknown error", folderPath);
+        return false;
     }
 }
 
@@ -36,21 +47,33 @@ void FileSystem::GetDirContent(const char* folderPath, DirList& elems)
 /// </summary>
 bool FileSystem::Remove(const char* path, Log& log)
 {
-    if (std::filesystem::exists(path)) {
-        
-        if (std::filesystem::is_directory(path)) {
-            for (const auto& entry : std::filesystem::directory_iterator(path)) {
-                Remove(entry.path().string().c_str(), log);
+    try {
+        if (std::filesystem::exists(path)) {
+
+            if (std::filesystem::is_directory(path)) {
+                for (const auto& entry : std::filesystem::directory_iterator(path)) {
+                    if (!Remove(entry.path().string().c_str(), log)) {
+                        return false;
+                    }
+                }
+            }
+
+            if (!std::filesystem::remove(path)) {
+                log.add(Log::Level::error, "File delete", "Can not delete %s", path);
+                return false;
             }
         }
 
-        if (!std::filesystem::remove(path)) {
-            log.add(Log::Level::error, "File delete", "Can not delete %s", path);
-            return false;
-        }
+        return true;
     }
-
-    return true;
+    catch (std::exception& expt) {
+        log.add(Log::Level::error, "File delete", "Can not delete %s: %s", path, expt.what());
+        return false;
+    }
+    catch (...) {
+        log.add(Log::Level::error, "File delete", "Can not delete %s: unknown error", path);
+        return false;
+    }
 }
 
 /// <summary>
@@ -58,29 +81,39 @@ bool FileSystem::Remove(const char* path, Log& log)
 /// </summary>
 bool FileSystem::CreateTempDir(std::string& pathName, Log& log)
 {
-    auto tmppath = std::filesystem::temp_directory_path();
+    try {
+        auto tmppath = std::filesystem::temp_directory_path();
 
-    for (int ind = 0; ind < 1000; ind++) {
-        char name[80];
-        snprintf(name, 79, "RDF.BCF.%d", ind);
-        
-        auto tmpName(tmppath);
-        tmpName.append(name);
+        for (int ind = 0; ind < 1000; ind++) {
+            char name[80];
+            snprintf(name, 79, "RDF.BCF.%d", ind);
 
-        if (!std::filesystem::exists(tmpName)) {
-            if (std::filesystem::create_directory(tmpName)) {
-                pathName = tmpName.string();
-                return true;
-            }
-            else {
-                log.add(Log::Level::error, "File write", "Can't create folder %s", tmpName.string().c_str());
-                return false;
+            auto tmpName(tmppath);
+            tmpName.append(name);
+
+            if (!std::filesystem::exists(tmpName)) {
+                if (std::filesystem::create_directory(tmpName)) {
+                    pathName = tmpName.string();
+                    return true;
+                }
+                else {
+                    log.add(Log::Level::error, "File write", "Can't create folder %s", tmpName.string().c_str());
+                    return false;
+                }
             }
         }
-    }    
 
-    log.add(Log::Level::error, "File write", "Can't find free temporary name");
-    return false;
+        log.add(Log::Level::error, "File write", "Can't find free temporary name");
+        return false;
+    }
+    catch (std::exception& expt) {
+        log.add(Log::Level::error, "File write", "Can not create a temporary folder: %s", expt.what());
+        return false;
+    }
+    catch (...) {
+        log.add(Log::Level::error, "File write", "Can not create a temporary folder: unknown error");
+        return false;
+    }
 }
 
 /// <summary>
@@ -88,15 +121,25 @@ bool FileSystem::CreateTempDir(std::string& pathName, Log& log)
 /// </summary>
 bool FileSystem::CreateDir(const char* pathName, Log& log)
 {
-    if (std::filesystem::exists(pathName)) {
-        if (!std::filesystem::is_directory(pathName)) {
-            log.add(Log::Level::error, "File write", "Path exist, expected folder but it is a file: %s", pathName);
+    try {
+        if (std::filesystem::exists(pathName)) {
+            if (!std::filesystem::is_directory(pathName)) {
+                log.add(Log::Level::error, "File write", "Path exist, expected folder but it is a file: %s", pathName);
+                return false;
+            }
+        }
+        else if (!std::filesystem::create_directory(pathName)) {
+            log.add(Log::Level::error, "File write", "Can't create folder %s", pathName);
             return false;
         }
+        return true;
     }
-    else if (!std::filesystem::create_directory(pathName)) {
-        log.add(Log::Level::error, "File write", "Can't create folder %s", pathName);
+    catch (std::exception& expt) {
+        log.add(Log::Level::error, "File write", "Can not create folder %s: %s", pathName, expt.what());
         return false;
     }
-    return true;
+    catch (...) {
+        log.add(Log::Level::error, "File write", "Can not create folder %s: unknown error", pathName);
+        return false;
+    }
 }
