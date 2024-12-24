@@ -7,7 +7,7 @@
 /// <summary>
 /// 
 /// </summary>
-BCFProject::BCFProject(const char* currentUser, bool autoExtent)
+BCFProject::BCFProject(const char* currentUser, bool autoExtent, const char* projectId)
     : m_version(m_log)
     , m_projectInfo(m_log)
     , m_extensions (m_log)
@@ -19,81 +19,41 @@ BCFProject::BCFProject(const char* currentUser, bool autoExtent)
 /// </summary>
 BCFProject::~BCFProject()
 {
-    Close();
-}
-
-/// <summary>
-/// 
-/// </summary>
-const char* BCFProject::GetErrors()
-{
-    return m_log.getMessages();
-}
-
-/// <summary>
-/// 
-/// </summary>
-void BCFProject::ClearErrors()
-{
-    m_log.clear();
-}
-
-/// <summary>
-/// 
-/// </summary>
-bool BCFProject::InitializeEmpty()
-{
-    return FileSystem::CreateTempDir(m_bcfFolder, m_log);
-}
-
-/// <summary>
-/// 
-/// </summary>
-bool BCFProject::CheckInitialized()
-{
-    if (m_bcfFolder.empty()) {
-        m_log.add(Log::Level::error, "Not initialized", "Init new or read BCF file before usage");
-        return false;
+    for (auto t : m_topics) {
+        delete t;
     }
-    return true;
+    m_topics.clear();
 }
 
 /// <summary>
 /// 
 /// </summary>
-bool BCFProject::Close()
+const char* BCFProject::GetErrors(bool cleanLog)
 {
-    bool ok = true;
-    if (!m_bcfFolder.empty()) {
-        ok = FileSystem::Remove(m_bcfFolder.c_str(), m_log);
-        m_bcfFolder.clear();
-    }
-    return ok;
+    return m_log.get(cleanLog);
 }
 
-/// <summary>
-/// 
-/// </summary>
-bool BCFProject::InitNew()
-{
-    return InitializeEmpty();
-}
 
 /// <summary>
 /// 
 /// </summary>
 bool BCFProject::Read(const char* bcfFilePath)
 {
-    if (!InitializeEmpty()) {
-        return false;
+    std::string bcfFolder;
+    bool ok = FileSystem::CreateTempDir(bcfFolder, m_log);
+
+    if (ok) {
+        
+        Archivator ar(m_log);
+        ok = ar.Unpack(bcfFilePath, bcfFolder.c_str());
+
+        ok = ok && m_version.Read(bcfFolder);
+        ok = ok && m_projectInfo.Read(bcfFolder);
+        ok = ok && m_extensions.Read(bcfFolder);
+
+        bool removed = FileSystem::Remove(bcfFolder.c_str(), m_log);
+        ok = ok && removed;
     }
-
-    Archivator ar(m_log);
-    bool ok = ar.Unpack(bcfFilePath, m_bcfFolder.c_str());
-
-    ok = ok && m_version.Read(m_bcfFolder);
-    ok = ok && m_projectInfo.Read(m_bcfFolder);
-    ok = ok && m_extensions.Read(m_bcfFolder);
 
     return ok;
 }
@@ -103,22 +63,38 @@ bool BCFProject::Read(const char* bcfFilePath)
 /// </summary>
 bool BCFProject::Write(const char* bcfFilePath, BCFVersion version)
 {
-    if (!CheckInitialized()) {
-        return false;
-    }
-
     m_version.Set(version);
 
-    bool ok = true;
-
-    ok = ok && m_version.Write(m_bcfFolder);
-    ok = ok && m_version.Write(m_bcfFolder);
-    ok = ok && m_extensions.Write(m_bcfFolder);
+    std::string bcfFolder;
+    bool ok = FileSystem::CreateTempDir(bcfFolder, m_log);
 
     if (ok) {
-        Archivator ar(m_log);
-        ok = ar.Pack(R"(W:\DevArea\RDF\EBAPI\RDFGeomApi)", "test.zip");
+        ok = ok && m_version.Write(bcfFolder);
+        ok = ok && m_version.Write(bcfFolder);
+        ok = ok && m_extensions.Write(bcfFolder);
+
+        if (ok) {
+            Archivator ar(m_log);
+            ok = ar.Pack(bcfFolder.c_str(), bcfFilePath);
+        }
+
+        bool removed = FileSystem::Remove(bcfFolder.c_str(), m_log);
+        ok = ok && removed;
     }
 
     return ok;
+}
+
+/// <summary>
+/// 
+/// </summary>
+Topic* BCFProject::GetTopic(BCFIndex index)
+{
+    if (index < m_topics.size()) {
+        return m_topics[index];
+    }
+    else {
+        m_log.add(Log::Level::error, "Index is out of range", "Index %d is out of topics range [0..%d]", 0, (int)m_topics.size());
+        return NULL;
+    }
 }

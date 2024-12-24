@@ -1,6 +1,12 @@
 #include "pch.h"
 #include "Log.h"
 
+/// <summary>
+/// 
+/// </summary>
+Log::~Log()
+{
+}
 
 /// <summary>
 /// 
@@ -48,7 +54,7 @@ std::string Log::Message::ToString()
 /// <summary>
 /// 
 /// </summary>
-const char* Log::getMessages()
+const char* Log::get(bool clean)
 {
     m_buffer.clear();
 
@@ -58,13 +64,10 @@ const char* Log::getMessages()
         m_buffer.push_back('\n');
     }
 
+    if (clean) {
+        m_messages.clear();
+    }
+
     return m_buffer.c_str();
 }
 
-/// <summary>
-/// 
-/// </summary>
-void Log::clear()
-{
-    m_messages.clear();
-}

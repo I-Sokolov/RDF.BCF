@@ -11,10 +11,11 @@ public:
 
 public:
     Log() {}
+    ~Log();
 
     void add(Level level, const char* code, const char* detailsFormat, ...);
-    const char* getMessages();
-    void clear();
+
+    const char* get(bool clean);
 
 private:
     struct Message

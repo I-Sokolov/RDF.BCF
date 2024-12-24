@@ -31,7 +31,7 @@ bool Extensions::AddElement(BCFEnumeration enumeration, const char* element)
 /// <summary>
 /// 
 /// </summary>
-const char* Extensions::GetElement(BCFEnumeration enumeration, unsigned short index)
+const char* Extensions::GetElement(BCFEnumeration enumeration, BCFIndex index)
 {
     auto list = GetList(enumeration);
     if (list) {

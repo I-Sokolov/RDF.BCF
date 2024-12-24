@@ -18,11 +18,6 @@ namespace CSExample
             using (var bcfData = new RDF.BCF.Project("user@company.org", true))
             {
                 //
-                // init and set options
-                //
-                bcfData.InitNew();
-
-                //
                 // create topic
                 //
                 var topic = bcfData.Topics.Add(title: "Topic1", topicType: "Test", topicStatus: "New");
@@ -62,7 +57,11 @@ namespace CSExample
         {
             using (var bcfData = new RDF.BCF.Project())
             {
-                bcfData.ReadFile("MyTest.bcf");
+                if (!bcfData.ReadFile("MyTest.bcf")) {
+                    Console.WriteLine("READ BCF ERRORS:");
+                    Console.WriteLine(bcfData.GetErrors());
+                    return;
+                }
 
                 WorkWithSchemaExtensionsExample(bcfData);
 

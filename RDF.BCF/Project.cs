@@ -13,9 +13,9 @@
         /// topic type, status etc. when you set the value which is not in enumeration yet.
         /// If the option is disable, it makes strict checking and assigning any unknown elements will rise RDF.BCF.Exception.
         /// </param>
-        public Project(string? currentUser = null, bool autoExtent = false)
+        public Project(string? currentUser = null, bool autoExtent = false, string? projectId = null)
         {
-            m_bcfProject = Native.CreateProject(currentUser, autoExtent);
+            m_bcfProject = Native.CreateProject(currentUser, autoExtent, projectId);
             m_topics = new Topics(this);
             m_extensions = new Extensions(this);
         }
@@ -28,26 +28,9 @@
         /// <summary>
         /// Get errors since last call of ClearErrors or since project creation
         /// </summary>
-        public string GetErrors()
+        public string GetErrors(bool cleanLog = true)
         {
-            return Native.GetErrors(m_bcfProject);
-        }
-
-        /// <summary>
-        /// Clear errors reported since previous call of ClearErrors or since project creation
-        /// </summary>
-        public void ClearErrors()
-
-        {
-            Native.ClearErrors(m_bcfProject);
-        }
-
-        /// <summary>
-        /// Populates BCF data with some preset data
-        /// </summary>
-        public bool InitNew()
-        {
-            return Native.InitNew(m_bcfProject);
+            return Native.GetErrors(m_bcfProject, cleanLog);
         }
 
         /// <summary>
@@ -110,8 +93,11 @@
                     // TODO: dispose managed state (managed objects)
                 }
 
-                if (!RDF.BCF.Native.DeleteProject(m_bcfProject))
-                    throw new ApplicationException (GetErrors ());
+                var remainedErrors = RDF.BCF.Native.GetErrors(m_bcfProject);
+                System.Diagnostics.Trace.Assert(remainedErrors.Length == 0);
+
+                RDF.BCF.Native.DeleteProject(m_bcfProject);
+
                 m_bcfProject = IntPtr.Zero;
             }
         }

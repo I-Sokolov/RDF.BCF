@@ -7,63 +7,38 @@
 #endif
 
 #include "bcfEngine.h"
-
 #include "BCFProject.h"
+#include "Topic.h"
 
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT BCFProject* bcfCreateProject(const char* currentUser, bool autoExtent)
+RDFBCF_EXPORT BCFProject* bcfCreateProject(const char* currentUser, bool autoExtent, const char* projectId)
 {
-    return new BCFProject(currentUser, autoExtent);
+    return new BCFProject(currentUser, autoExtent, projectId);
 }
 
-/// <summary>
-/// 
-/// </summary>
-RDFBCF_EXPORT bool bcfDeleteProject(BCFProject* project)
-{
-    if (project) {
-        if (project->Close()) {
-            delete project;
-            return true;
-        }
-    }
-    return false;
-}
 
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT const char* bcfGetErrors(BCFProject* project)
+RDFBCF_EXPORT void bcfDeleteProject(BCFProject* project)
 {
     if (project) {
-        return project->GetErrors();
-    }
-    else {
-        return "NULL ARGUMENT";
+        assert(!*project->GetErrors());
+        delete project;
     }
 }
 
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT void bcfClearErrors(BCFProject* project)
+RDFBCF_EXPORT const char* bcfGetErrors(BCFProject* project, bool cleanLog)
 {
     if (project) {
-        project->ClearErrors();
+        return project->GetErrors(cleanLog);
     }
-}
-
-/// <summary>
-/// 
-/// </summary>
-RDFBCF_EXPORT bool bcfInitNew(BCFProject* project)
-{
-    if (project) {
-        return project->InitNew();
-    }
-    return false;
+    return "NULL ARGUMENT";
 }
 
 /// <summary>
@@ -97,9 +72,7 @@ RDFBCF_EXPORT const char* bcfGetProjectId(BCFProject* project)
     if (project) {
         return project->GetGUID();
     }
-    else {
-        return NULL;
-    }
+    return NULL;
 }
 
 /// <summary>
@@ -110,9 +83,7 @@ RDFBCF_EXPORT const char* bcfGetProjectName(BCFProject* project)
     if (project) {
         return project->GetName();
     }
-    else {
-        return NULL;
-    }
+    return NULL;
 }
 
 /// <summary>
@@ -124,16 +95,14 @@ RDFBCF_EXPORT bool bcfSetProjectName(BCFProject* project, const char* name)
         project->SetName(name);
         return true;
     }
-    else {
-        return false;
-    }
+    return false;
 }
 
 
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT const char* bcfGetEnumerationElement(BCFProject* project, BCFEnumeration enumeration, unsigned short index)
+RDFBCF_EXPORT const char* bcfGetEnumerationElement(BCFProject* project, BCFEnumeration enumeration, BCFIndex index)
 {
     if (project) {
         return project->GetExtensions().GetElement(enumeration, index);
@@ -161,4 +130,28 @@ RDFBCF_EXPORT bool bcfRemoveEnumerationElement(BCFProject* project, BCFEnumerati
         return project->GetExtensions().RemoveElement(enumeration, element);
     }
     return false;
+}
+
+/// <summary>
+/// 
+/// </summary>
+RDFBCF_EXPORT BCFIndex bcfGetTopicsCount(BCFProject* project)
+{
+    if (project) {
+        return project->GetTopicsCount();
+    }
+    return 0;
+}
+
+/// <summary>
+/// 
+/// </summary>
+RDFBCF_EXPORT const char* bcfGetTopicGUID(BCFProject* project, BCFIndex topic)
+{
+    if (project) {
+        if (auto pt = project->GetTopic(topic)) {
+            return pt->GUID();
+        }
+    }
+    return NULL;
 }

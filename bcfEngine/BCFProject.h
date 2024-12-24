@@ -5,21 +5,20 @@
 #include "Version.h"
 #include "ProjectInfo.h"
 #include "Extensions.h"
+#include "Topic.h"
 
 struct BCFProject
 {
 public:
-    BCFProject(const char* currentUser, bool autoExtent);
+    BCFProject(const char* currentUser, bool autoExtent, const char* projectId);
     ~BCFProject();
 
 public:
-    const char* GetErrors();
-    void        ClearErrors();
+    const char* GetErrors(bool cleanLog = true);
 
     bool InitNew();
     bool Read(const char* bcfFilePath);
     bool Write(const char* bcfFilePath, BCFVersion version);
-    bool Close();
 
     const char* GetGUID() { return m_projectInfo.m_ProjectId.c_str(); }
     const char* GetName() { return m_projectInfo.m_Name.c_str(); }
@@ -27,9 +26,8 @@ public:
 
     Extensions& GetExtensions() { return m_extensions; }
 
-private:
-    bool InitializeEmpty();
-    bool CheckInitialized();
+    BCFIndex GetTopicsCount() { return (BCFIndex) m_topics.size(); }
+    Topic* GetTopic(BCFIndex index);
 
 private:
     Log         m_log;
@@ -38,6 +36,6 @@ private:
     ProjectInfo m_projectInfo;
     Extensions  m_extensions;
 
-    std::string m_bcfFolder;
+    std::vector<Topic*> m_topics;
 };
 

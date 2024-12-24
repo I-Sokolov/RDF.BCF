@@ -7,7 +7,7 @@ class Extensions : public XMLFile
 public:
     Extensions(Log& log);
 
-    const char* GetElement(BCFEnumeration enumeration, unsigned short index);
+    const char* GetElement(BCFEnumeration enumeration, BCFIndex index);
     bool AddElement(BCFEnumeration enumeration, const char* element);
     bool RemoveElement(BCFEnumeration enumeration, const char* element);
 

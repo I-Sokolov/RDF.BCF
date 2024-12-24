@@ -207,6 +207,7 @@
     <ClInclude Include="Log.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ProjectInfo.h" />
+    <ClInclude Include="Topic.h" />
     <ClInclude Include="Version.h" />
     <ClInclude Include="XMLFile.h" />
     <ClInclude Include="XMLparser\_errors.h" />
@@ -240,6 +241,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="ProjectInfo.cpp" />
+    <ClCompile Include="Topic.cpp" />
     <ClCompile Include="Version.cpp" />
     <ClCompile Include="XMLFile.cpp" />
     <ClCompile Include="XMLparser\_net.cpp" />

@@ -47,14 +47,16 @@ namespace CSExample
                 var errors = bcf.GetErrors();
                 ASSERT(errors.Length==0);
 
+                Console.WriteLine("Expected errors....");
                 var res = bcf.ReadFile("J:\\NotExist.bcf");
                 ASSERT(!res);
 
-                errors = bcf.GetErrors();
+                errors = bcf.GetErrors(false);
                 ASSERT(errors.Length != 0);
                 Console.WriteLine(errors);
 
-                bcf.ClearErrors();
+                errors = bcf.GetErrors();
+                ASSERT(errors.Length != 0);
 
                 errors = bcf.GetErrors();
                 ASSERT(errors.Length == 0);
@@ -93,15 +95,13 @@ namespace CSExample
                 var lst = bcf.Extensions.GetEnumeration(Native.BCFEnumeration.Users);
                 ASSERT(lst.Count() == 0);
 
+                Console.WriteLine("Expected NULL argument error...");
                 var res = bcf.Extensions.AddEnumerationElement(Native.BCFEnumeration.Users, null);
                 ASSERT(!res);
 
                 var msg = bcf.GetErrors();
                 ASSERT(msg.Length != 0);
-                Console.WriteLine("Expected NULL argument error...");
                 Console.WriteLine(msg);
-
-                bcf.ClearErrors();
 
                 res = bcf.Extensions.AddEnumerationElement(Native.BCFEnumeration.Users, users[0]);
                 ASSERT(res);

@@ -48,27 +48,22 @@ extern "C" {
     /// <summary>
     /// 
     /// </summary>
-    RDFBCF_EXPORT BCFProject* bcfCreateProject(const char* currentUser, bool autoExtent);
+    typedef uint16_t BCFIndex;
 
     /// <summary>
     /// 
     /// </summary>
-    RDFBCF_EXPORT bool bcfDeleteProject(BCFProject* project);
+    RDFBCF_EXPORT BCFProject* bcfCreateProject(const char* currentUser, bool autoExtent, const char* projectId);
 
     /// <summary>
     /// 
     /// </summary>
-    RDFBCF_EXPORT const char* bcfGetErrors(BCFProject* project);
+    RDFBCF_EXPORT void bcfDeleteProject(BCFProject* project);
 
     /// <summary>
     /// 
     /// </summary>
-    RDFBCF_EXPORT void bcfClearErrors(BCFProject* project);
-
-    /// <summary>
-    /// 
-    /// </summary>
-    RDFBCF_EXPORT bool bcfInitNew(BCFProject* project);
+    RDFBCF_EXPORT const char* bcfGetErrors(BCFProject* project, bool cleanLog);
 
     /// <summary>
     /// 
@@ -98,7 +93,7 @@ extern "C" {
     /// <summary>
     /// 
     /// </summary>
-    RDFBCF_EXPORT const char* bcfGetEnumerationElement(BCFProject* project, BCFEnumeration enumeration, unsigned short index);
+    RDFBCF_EXPORT const char* bcfGetEnumerationElement(BCFProject* project, BCFEnumeration enumeration, BCFIndex index);
 
     /// <summary>
     /// 
@@ -109,6 +104,16 @@ extern "C" {
     /// 
     /// </summary>
     RDFBCF_EXPORT bool bcfRemoveEnumerationElement(BCFProject* project, BCFEnumeration enumeration, const char* element);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    RDFBCF_EXPORT BCFIndex bcfGetTopicsCount(BCFProject* project);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    RDFBCF_EXPORT const char* bcfGetTopicGUID(BCFProject* project, BCFIndex topic);
 
 #ifdef __cplusplus
 } //extern "C"
