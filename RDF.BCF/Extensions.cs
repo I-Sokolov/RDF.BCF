@@ -15,8 +15,8 @@ namespace RDF.BCF
         {
             var list = new List<string>();
             UInt16 index = 0;
-            string? elem = null;
-            while (null!=(elem = Native.GetEnumerationElement(m_project.BCFProject, enumeration, index++))){
+            string elem;
+            while (""!=(elem = Native.GetEnumerationElement(m_project.BCFProject, enumeration, index++))){
                 list.Add(elem);
             }
             return list;

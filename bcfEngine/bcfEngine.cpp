@@ -89,6 +89,48 @@ RDFBCF_EXPORT bool bcfWriteFile(BCFProject* project, const char* bcfFilePath, BC
     return false;
 }
 
+
+/// <summary>
+/// 
+/// </summary>
+RDFBCF_EXPORT const char* bcfGetProjectId(BCFProject* project)
+{
+    if (project) {
+        return project->GetGUID();
+    }
+    else {
+        return NULL;
+    }
+}
+
+/// <summary>
+/// 
+/// </summary>
+RDFBCF_EXPORT const char* bcfGetProjectName(BCFProject* project)
+{
+    if (project) {
+        return project->GetName();
+    }
+    else {
+        return NULL;
+    }
+}
+
+/// <summary>
+/// 
+/// </summary>
+RDFBCF_EXPORT bool bcfSetProjectName(BCFProject* project, const char* name)
+{
+    if (project) {
+        project->SetName(name);
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+
 /// <summary>
 /// 
 /// </summary>

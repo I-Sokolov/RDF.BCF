@@ -31,6 +31,9 @@ extern "C" {
         BCFVer_3_0 = 30
     };
 
+    /// <summary>
+    /// 
+    /// </summary>
     enum BCFEnumeration
     {
         BCFTopicTypes       = 1,
@@ -76,6 +79,21 @@ extern "C" {
     /// 
     /// </summary>
     RDFBCF_EXPORT bool bcfWriteFile(BCFProject* project, const char* bcfFilePath, BCFVersion version);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    RDFBCF_EXPORT const char* bcfGetProjectId(BCFProject* project);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    RDFBCF_EXPORT const char* bcfGetProjectName(BCFProject* project);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    RDFBCF_EXPORT bool bcfSetProjectName(BCFProject* project, const char* name);
 
     /// <summary>
     /// 

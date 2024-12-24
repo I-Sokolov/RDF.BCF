@@ -74,12 +74,12 @@
         /// <summary>
         /// ProjectId is required property
         /// </summary>
-        public string ProjectId { get { return ""; } set { } }
+        public string ProjectId { get { return Native.GetProjectId(m_bcfProject); } }
 
         /// <summary>
         /// Name is optional property
         /// </summary>
-        public string? Name { get { return null; } set { } }
+        public string Name { get { return Native.GetProjectName(m_bcfProject); } set { Native.SetProjectName(m_bcfProject, value); } }
 
         /// <summary>
         /// BCF data are mainly list of topics, enumerate or modify topics with the property

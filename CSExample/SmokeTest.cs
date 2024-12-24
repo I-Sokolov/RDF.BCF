@@ -71,6 +71,15 @@ namespace CSExample
                 var res = bcf.ReadFile("..\\TestCases\\User assignment.bcf");
                 ASSERT(res);
 
+                var guid = bcf.ProjectId;
+                ASSERT(guid == "de894a86-3a08-4ea0-b2d1-6c222b5602d1");
+
+                var name = bcf.Name;
+                ASSERT(name == "BCF 3.0 test cases");
+
+                bcf.Name = "rename";
+                ASSERT(bcf.Name == "rename");
+
                 var lst = bcf.Extensions.GetEnumeration(Native.BCFEnumeration.Users);
                 ASSERT(lst.Count() == 3);
             }
@@ -89,6 +98,7 @@ namespace CSExample
 
                 var msg = bcf.GetErrors();
                 ASSERT(msg.Length != 0);
+                Console.WriteLine("Expected NULL argument error...");
                 Console.WriteLine(msg);
 
                 bcf.ClearErrors();

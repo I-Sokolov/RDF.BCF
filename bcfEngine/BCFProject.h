@@ -21,6 +21,10 @@ public:
     bool Write(const char* bcfFilePath, BCFVersion version);
     bool Close();
 
+    const char* GetGUID() { return m_projectInfo.m_ProjectId.c_str(); }
+    const char* GetName() { return m_projectInfo.m_Name.c_str(); }
+    void SetName(const char* name) { m_projectInfo.m_Name = name; }
+
     Extensions& GetExtensions() { return m_extensions; }
 
 private:
