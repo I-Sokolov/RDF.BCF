@@ -7,10 +7,10 @@
 GUIDable::GUIDable(const char* guid)
 {
     if (guid) {
-        m_guid.assign(guid);
+        m_Guid.assign(guid);
     }
     else {
-        m_guid = CreateNewGUID();
+        m_Guid = CreateNewGUID();
     }
 }
 

@@ -7,8 +7,9 @@
 /// </summary>
 void Version::ReadRoot(_xml::_element& elem)
 {
-    GET_ATTR(VersionId)
-    END_ATTR(UnknownNames::Allowed)
+    ATTRS_START
+    ATTR_GET(VersionId)
+    ATTRS_END(UnknownNames::Allowed)
 }
 
 /// <summary>

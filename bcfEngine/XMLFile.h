@@ -18,9 +18,22 @@ protected:
     virtual void ReadRoot(_xml::_element& elem) = NULL;
 
 protected:
+    template <class TReadable> void ReadToList(std::vector<TReadable>& list, _xml::_element& elem, const char* childName);
+
+protected:
     Log& m_log;
 };
 
+
+/// <summary>
+/// XML element content text
+/// </summary>
+class XMLText : public std::string
+{
+public:
+    XMLText(Log&){}
+    void Read(_xml::_element& elem) { assign(elem.getContent()); }
+};
 
 /// <summary>
 /// XML reading macros
@@ -31,66 +44,74 @@ enum class UnknownNames : bool
     NotAllowed = true
 };
 
-#define GET_ATTR(name)                      \
+#define ATTRS_START                         \
     for (auto attr : elem.attributes()) {   \
     if (attr) {                             \
         auto attrName = attr->getName();    \
+
+#define ATTR_GET(name)                      \
         if (attrName == #name) {            \
             m_##name = attr->getValue();    \
-        }                                   
+        } else
 
-#define NEXT_ATTR(name)                     \
-            else if (attrName == #name) {   \
-            m_##name = attr->getValue();    \
-        }
-
-#define END_ATTR(onUnknownNames)        \
-            else if ((bool)onUnknownNames) { m_log.add(Log::Level::warning, "XML parsing", "Unknown attribute %s in " __FUNCTION__, attrName.c_str()); } } }
+#define ATTRS_END(onUnknownNames)           \
+        if ((bool)onUnknownNames) { m_log.add(Log::Level::warning, "XML parsing", "Unknown attribute %s in " __FUNCTION__, attrName.c_str()); } } }
 
 
 /// <summary>
 /// 
 /// </summary>
-#define GET_CHILD(name)                     \
+#define CHILDREN_START                      \
     for (auto child : elem.children()) {    \
         if (child) {                        \
             auto&  tag= child->getName();   \
+
+
+#define CHILD_READ(name)                    \
             if (tag == #name) {             \
                 Read_##name(*child);        \
-            }
-
-#define NEXT_CHILD(name)                    \
-            else if (tag == #name) {        \
-                Read_##name(*child);        \
-            }
+            } else
 
 
-#define GET_CHILD_CONTENT(name)                         \
-    for (auto child : elem.children()) {                \
-        if (child) {                                    \
-            auto&  tag= child->getName();               \
+#define CHILD_GET_CONTENT(name)                         \
             if (tag == #name) {                         \
                 m_##name.assign(child->getContent());   \
             }
 
-#define NEXT_CHILD_CONTENT(name)                        \
-            else if (tag == #name) {                    \
-                m_##name.assign(child->getContent());   \
+#define CHILD_GET_LIST(name)                            \
+            if (tag == #name) {                         \
+                ReadToList(m_lst##name, *child, NULL);  \
+            }                                           \
+            else if (tag == #name "s") {                \
+                ReadToList(m_lst##name, *child, #name); \
+            } else
+
+
+#define CHILDREN_END \
+        { m_log.add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str()); } } }
+
+
+/// <summary>
+/// 
+/// </summary>
+template <class TReadable> void XMLFile::ReadToList(std::vector<TReadable>& list, _xml::_element& elem, const char* childName)
+{
+    if (!childName) {
+        list.push_back(TReadable(m_log));
+        list.back().Read(elem);
+    }
+    else {
+        for (auto child : elem.children()) {
+            if (child) {
+                auto& tag = child->getName();
+                if (tag == childName) {
+                    list.push_back(TReadable(m_log));
+                    list.back().Read(elem);
+                }
+                else {
+                    m_log.add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str());
+                }
             }
-
-
-#define GET_CHILD_MEMBER(name)              \
-    for (auto child : elem.children()) {    \
-        if (child) {                        \
-            auto&  tag= child->getName();   \
-            if (tag == #name) {             \
-                m_##name.Read(*child, ctx); \
-            }
-
-#define NEXT_CHILD_MEMBER(name)             \
-            else if (tag == #name) {        \
-                m_##name.Read(*child, ctx); \
-            }
-
-#define END_CHILDREN \
-            else { m_log.add(Log::Level::warning, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str()); } } }
+        }
+    }
+}

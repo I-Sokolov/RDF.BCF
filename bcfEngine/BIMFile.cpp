@@ -7,11 +7,13 @@
 /// </summary>
 void BIMFile::Read(_xml::_element& elem)
 {
-    GET_ATTR(IsExternal)
-    END_ATTR(UnknownNames::NotAllowed)
+    ATTRS_START
+        ATTR_GET(IsExternal)
+    ATTRS_END(UnknownNames::NotAllowed)
 
-    GET_CHILD_CONTENT(Filename)
-    NEXT_CHILD_CONTENT(Date)
-    NEXT_CHILD_CONTENT(Reference)
-    END_CHILDREN
+    CHILDREN_START
+        CHILD_GET_CONTENT(Filename)
+        CHILD_GET_CONTENT(Date)
+        CHILD_GET_CONTENT(Reference)
+    CHILDREN_END
 }

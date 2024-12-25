@@ -20,9 +20,9 @@ BCFProject::Topics::~Topics()
 /// </summary>
 void BCFProject::Topics::push_back(Topic* topic)
 {
-    if (*topic->GUID()) {
+    if (*topic->Guid()) {
         for (auto it = begin(); it != end(); it++) {
-            if (0 == strcmp(topic->GUID(), (*it)->GUID())) {
+            if (0 == strcmp(topic->Guid(), (*it)->Guid())) {
                 delete (*it);
                 erase(it);
                 break;

@@ -7,8 +7,9 @@
 /// </summary>
 void ProjectInfo::ReadRoot(_xml::_element& elem)
 {
-    GET_CHILD(Project)
-    END_CHILDREN
+    CHILDREN_START
+        CHILD_READ(Project)
+    CHILDREN_END
 }
 
 /// <summary>
@@ -16,10 +17,12 @@ void ProjectInfo::ReadRoot(_xml::_element& elem)
 /// </summary>
 void ProjectInfo::Read_Project(_xml::_element& elem)
 {
-    GET_ATTR(ProjectId)
-    END_ATTR(UnknownNames::NotAllowed)
+    ATTRS_START
+        ATTR_GET(ProjectId)
+    ATTRS_END(UnknownNames::NotAllowed)
 
-    GET_CHILD_CONTENT(Name)
-    END_CHILDREN
+    CHILDREN_START
+        CHILD_GET_CONTENT(Name)
+    CHILDREN_END
 }
 

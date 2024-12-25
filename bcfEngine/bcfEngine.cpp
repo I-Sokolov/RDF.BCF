@@ -149,7 +149,7 @@ RDFBCF_EXPORT const char* bcfTopicGuid(BCFProject* project, BCFIndex topic)
 {
     if (project) {
         if (auto pt = project->GetTopic(topic)) {
-            return pt->GUID();
+            return pt->Guid();
         }
     }
     return NULL;

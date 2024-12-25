@@ -84,14 +84,15 @@ StringSet* Extensions::GetList(BCFEnumeration enumeration)
 /// </summary>
 void Extensions::ReadRoot(_xml::_element& elem)
 {
-    GET_CHILD(TopicTypes)
-    NEXT_CHILD(TopicStatuses)
-    NEXT_CHILD(Priorities)
-    NEXT_CHILD(TopicLabels)
-    NEXT_CHILD(Users)
-    NEXT_CHILD(SnippetTypes)
-    NEXT_CHILD(Stages)
-    END_CHILDREN
+    CHILDREN_START
+        CHILD_READ(TopicTypes)
+        CHILD_READ(TopicStatuses)
+        CHILD_READ(Priorities)
+        CHILD_READ(TopicLabels)
+        CHILD_READ(Users)
+        CHILD_READ(SnippetTypes)
+        CHILD_READ(Stages)
+    CHILDREN_END
 }
 
 /// <summary>

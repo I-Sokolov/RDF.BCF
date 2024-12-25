@@ -8,7 +8,7 @@
 /// </summary>
 Topic::Topic(BCFProject& project, const char* guid)
     : GUIDable(guid)
-    , XMLFile(m_project.log())
+    , XMLFile(project.log())
     , m_project(project)
 {
 
@@ -19,7 +19,7 @@ Topic::Topic(BCFProject& project, const char* guid)
 /// </summary>
 void Topic::GetRelativePathName(std::string& pathInBcfFolder)
 { 
-    pathInBcfFolder.assign(GUID());
+    pathInBcfFolder.assign(Guid());
     FileSystem::AddPath (pathInBcfFolder, "markup.bcf"); 
 }
 
@@ -28,9 +28,10 @@ void Topic::GetRelativePathName(std::string& pathInBcfFolder)
 /// </summary>
 void Topic::ReadRoot(_xml::_element& elem)
 {
-    GET_CHILD(Header)
-    NEXT_CHILD(Topic)
-    END_CHILDREN
+    CHILDREN_START
+        CHILD_READ(Header)
+        CHILD_READ(Topic)
+    CHILDREN_END
 }
 
 /// <summary>
@@ -38,26 +39,9 @@ void Topic::ReadRoot(_xml::_element& elem)
 /// </summary>
 void Topic::Read_Header(_xml::_element& elem)
 {
-    GET_CHILD(Files)
-    END_CHILDREN
-}
-
-/// <summary>
-/// 
-/// </summary>
-void Topic::Read_Files(_xml::_element& elem)
-{
-    GET_CHILD(File)
-    END_CHILDREN
-}
-
-/// <summary>
-/// 
-/// </summary>
-void Topic::Read_File(_xml::_element& elem)
-{
-    m_bimFiles.push_back(BIMFile(m_log));
-    m_bimFiles.back().Read(elem);
+    CHILDREN_START
+        CHILD_GET_LIST(File)
+    CHILDREN_END
 }
 
 /// <summary>
@@ -65,5 +49,21 @@ void Topic::Read_File(_xml::_element& elem)
 /// </summary>
 void Topic::Read_Topic(_xml::_element& elem)
 {
+    ATTRS_START
+        ATTR_GET(Guid)
+        ATTR_GET(ServerAssignedId)
+        ATTR_GET(TopicStatus)
+        ATTR_GET(TopicType)
+    ATTRS_END(UnknownNames::NotAllowed)
 
+    CHILDREN_START
+        CHILD_GET_CONTENT(Title)
+        CHILD_GET_LIST(ReferenceLink)
+        CHILD_GET_LIST(Label)
+        CHILD_GET_CONTENT(CreationDate)
+        CHILD_GET_CONTENT(CreationAuthor)
+        CHILD_GET_CONTENT(ModifiedDate)
+        CHILD_GET_CONTENT(AssignedTo)
+        CHILD_GET_LIST(DocumentReference)
+    CHILDREN_END
 }
