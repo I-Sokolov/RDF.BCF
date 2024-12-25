@@ -202,6 +202,9 @@
     <ClInclude Include="bcfEngine.h" />
     <ClInclude Include="BCFProject.h" />
     <ClInclude Include="BIMFile.h" />
+    <ClInclude Include="BimSnippet.h" />
+    <ClInclude Include="Comment.h" />
+    <ClInclude Include="DocumentReference.h" />
     <ClInclude Include="Extensions.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="framework.h" />
@@ -211,6 +214,7 @@
     <ClInclude Include="ProjectInfo.h" />
     <ClInclude Include="Topic.h" />
     <ClInclude Include="Version.h" />
+    <ClInclude Include="ViewPoint.h" />
     <ClInclude Include="XMLFile.h" />
     <ClInclude Include="XMLparser\_errors.h" />
     <ClInclude Include="XMLparser\_io.h" />
@@ -233,6 +237,7 @@
     <ClCompile Include="bcfEngine.cpp" />
     <ClCompile Include="BCFProject.cpp" />
     <ClCompile Include="BIMFile.cpp" />
+    <ClCompile Include="Comment.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Extensions.cpp" />
     <ClCompile Include="FileSystem.cpp" />

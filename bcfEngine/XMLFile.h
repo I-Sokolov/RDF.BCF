@@ -82,7 +82,7 @@ enum class UnknownNames : bool
             if (tag == #name) {                         \
                 ReadToList(m_lst##name, *child, NULL);  \
             }                                           \
-            else if (tag == #name "s") {                \
+            else if(0==_stricmp(tag.c_str(),#name "s")){\
                 ReadToList(m_lst##name, *child, #name); \
             } else
 

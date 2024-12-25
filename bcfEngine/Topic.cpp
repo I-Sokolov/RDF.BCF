@@ -54,16 +54,25 @@ void Topic::Read_Topic(_xml::_element& elem)
         ATTR_GET(ServerAssignedId)
         ATTR_GET(TopicStatus)
         ATTR_GET(TopicType)
-    ATTRS_END(UnknownNames::NotAllowed)
+        ATTRS_END(UnknownNames::NotAllowed)
 
-    CHILDREN_START
+        CHILDREN_START
         CHILD_GET_CONTENT(Title)
         CHILD_GET_LIST(ReferenceLink)
+        CHILD_GET_CONTENT(Priority)
+        CHILD_GET_CONTENT(Index)
         CHILD_GET_LIST(Label)
         CHILD_GET_CONTENT(CreationDate)
         CHILD_GET_CONTENT(CreationAuthor)
         CHILD_GET_CONTENT(ModifiedDate)
+        CHILD_GET_CONTENT(ModifiedAuthor)
+        CHILD_GET_CONTENT(DueDate)
         CHILD_GET_CONTENT(AssignedTo)
+        CHILD_GET_CONTENT(Description)
+        CHILD_GET_CONTENT(Stage)
         CHILD_GET_LIST(DocumentReference)
-    CHILDREN_END
+        CHILD_GET_LIST(RelatedTopic)
+        CHILD_GET_LIST(Comment)
+        CHILD_GET_LIST(ViewPoint)
+        CHILDREN_END
 }

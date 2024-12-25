@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "GUIDable.h"
+#include "XMLFile.h"
 
 /// <summary>
 /// 
@@ -41,4 +42,14 @@ std::string GUIDable::CreateNewGUID()
     }
 
     return oss.str();
+}
+
+/// <summary>
+/// 
+/// </summary>
+void GuidReference::Read(_xml::_element& elem)
+{
+    ATTRS_START
+        ATTR_GET(Guid)
+    ATTRS_END(UnknownNames::NotAllowed)
 }
