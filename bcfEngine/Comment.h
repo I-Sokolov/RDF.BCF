@@ -7,7 +7,7 @@ struct BCFProject;
 class Comment : public GUIDable
 {
 public:
-    Comment(BCFProject& project) : GUIDable(NULL), m_project(project) {}
+    Comment(BCFProject& project) : GUIDable(NULL), m_project(project), m_Viewpoint(project) {}
 
     void Read(_xml::_element& elem, const std::string& folder);
 
@@ -20,6 +20,6 @@ private:
     std::string                m_Comment;
     std::string                m_ModifiedDate;
     std::string                m_ModifiedAuthor;
-    std::vector<GuidReference> m_Viewpoints;
+    GuidReference              m_Viewpoint;
 };
 
