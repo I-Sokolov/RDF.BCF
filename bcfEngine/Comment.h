@@ -20,6 +20,6 @@ private:
     std::string                m_Comment;
     std::string                m_ModifiedDate;
     std::string                m_ModifiedAuthor;
-    std::vector<GuidReference> m_lstViewpoint;
+    std::vector<GuidReference> m_Viewpoints;
 };
 

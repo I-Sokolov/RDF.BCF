@@ -65,6 +65,10 @@ enum class UnknownNames : bool
         if (child) {                        \
             auto&  tag= child->getName();   \
 
+#define CHILD_GET_CONTENT(name)                         \
+            if (tag == #name) {                         \
+                m_##name.assign(child->getContent());   \
+            } else
 
 #define CHILD_READ(name)                                \
             if (tag == #name) {                         \
@@ -72,19 +76,23 @@ enum class UnknownNames : bool
             } else
 
 
-#define CHILD_GET_CONTENT(name)                         \
-            if (tag == #name) {                         \
-                m_##name.assign(child->getContent());   \
+#define CHILD_READ_MEMBER(name)                         \
+            if (tag == #name) {                        \
+                m_##name.Read(*child, folder);         \
             } else
 
-#define CHILD_GET_LIST(name)                                                                            \
-            if (tag == #name) {                                                                         \
-                ReadToList(m_lst##name, m_project, *child, folder, NULL, m_project.log());              \
-            }                                                                                           \
-            else if(0==_stricmp(tag.c_str(),#name "s")) {                                               \
-                ReadToList(m_lst##name, m_project, *child, folder, #name, m_project.log());             \
+#define CHILD_GET_LIST(listName, elemName)                                                          \
+            if (tag == #elemName) {                                                                 \
+                ReadList(m_##listName, m_project, *child, folder, NULL, m_project.log());           \
+            }                                                                                       \
+            else if(tag == #listName) {                                                             \
+                ReadList(m_##listName, m_project, *child, folder, #elemName, m_project.log());      \
             } else
 
+#define CHILD_ADD_TO_LIST(listName, elemName)                                                       \
+            if(tag == #elemName) {                                                                  \
+                AddToList(m_##listName, m_project, *child, folder);                                 \
+            } else
 
 #define CHILDREN_END \
         { m_project.log().add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str()); } } }
@@ -93,8 +101,18 @@ enum class UnknownNames : bool
 /// <summary>
 /// 
 /// </summary>
+template <class TReadable>
+void AddToList(std::vector<TReadable>& list, BCFProject& project, _xml::_element& elem, const std::string& folder)
+{
+    list.push_back(TReadable(project));
+    list.back().Read(elem, folder);
+}
+
+/// <summary>
+/// 
+/// </summary>
 template <class TReadable> 
-void ReadToList(std::vector<TReadable>& list, BCFProject& project, _xml::_element& elem, const std::string& folder, const char* childName, Log& log)
+void ReadList(std::vector<TReadable>& list, BCFProject& project, _xml::_element& elem, const std::string& folder, const char* childName, Log& log)
 {
     if (!childName) {
         list.push_back(TReadable(project));

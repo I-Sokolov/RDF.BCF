@@ -3,10 +3,10 @@
 struct BCFProject;
 
 
-class DocumentReference
+class Bitmap
 {
 public:
-    DocumentReference(BCFProject& project) : m_project(project) { assert(!"TODO"); }
+    Bitmap(BCFProject& project) : m_project(project) { assert(!"TODO"); }
 
     void Read(_xml::_element & elem, const std::string& folder) {}
 

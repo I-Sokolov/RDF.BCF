@@ -1,16 +1,16 @@
 #pragma once
 
-class Log;
+struct BCFProject;
 
 
 class BimSnippet
 {
 public:
-    BimSnippet(Log& log) : m_log(log) {}
+    BimSnippet(BCFProject& project) : m_project(project) {}
 
     void Read(_xml::_element & elem) {}
 
 private:
-    Log& m_log;
+    BCFProject& m_project;
 };
 

@@ -3,10 +3,10 @@
 struct BCFProject;
 
 
-class DocumentReference
+class Line
 {
 public:
-    DocumentReference(BCFProject& project) : m_project(project) { assert(!"TODO"); }
+    Line(BCFProject& project) : m_project(project) {}
 
     void Read(_xml::_element & elem, const std::string& folder) {}
 

@@ -203,14 +203,20 @@
     <ClInclude Include="BCFProject.h" />
     <ClInclude Include="BIMFile.h" />
     <ClInclude Include="BimSnippet.h" />
+    <ClInclude Include="Bitmap.h" />
+    <ClInclude Include="ClippingPlane.h" />
+    <ClInclude Include="Color.h" />
     <ClInclude Include="Comment.h" />
+    <ClInclude Include="Component.h" />
     <ClInclude Include="DocumentReference.h" />
     <ClInclude Include="Extensions.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GUIDable.h" />
+    <ClInclude Include="Line.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Point.h" />
     <ClInclude Include="ProjectInfo.h" />
     <ClInclude Include="Topic.h" />
     <ClInclude Include="Version.h" />
@@ -249,6 +255,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Point.cpp" />
     <ClCompile Include="ProjectInfo.cpp" />
     <ClCompile Include="Topic.cpp" />
     <ClCompile Include="Version.cpp" />

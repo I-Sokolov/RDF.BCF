@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "bcfEngine.h"
 #include "Topic.h"
 #include "BCFProject.h"
 #include "FileSystem.h"
@@ -9,7 +10,7 @@
 Topic::Topic(BCFProject& project, const char* guid)
     : GUIDable(guid)
     , XMLFile(project)
-    , m_project(project)
+    , m_BimSnippet(project)
 {
 
 }
@@ -32,7 +33,7 @@ void Topic::ReadRoot(_xml::_element& elem, const std::string& folder)
 void Topic::Read_Header(_xml::_element& elem, const std::string& folder)
 {
     CHILDREN_START
-        CHILD_GET_LIST(File)
+        CHILD_GET_LIST(Files, File)
     CHILDREN_END
 }
 
@@ -50,10 +51,10 @@ void Topic::Read_Topic(_xml::_element& elem, const std::string& folder)
 
     CHILDREN_START
         CHILD_GET_CONTENT(Title)
-        CHILD_GET_LIST(ReferenceLink)
+        CHILD_GET_LIST(ReferenceLinks, ReferenceLink)
         CHILD_GET_CONTENT(Priority)
         CHILD_GET_CONTENT(Index)
-        CHILD_GET_LIST(Label)
+        CHILD_GET_LIST(Labels, Label)
         CHILD_GET_CONTENT(CreationDate)
         CHILD_GET_CONTENT(CreationAuthor)
         CHILD_GET_CONTENT(ModifiedDate)
@@ -62,9 +63,9 @@ void Topic::Read_Topic(_xml::_element& elem, const std::string& folder)
         CHILD_GET_CONTENT(AssignedTo)
         CHILD_GET_CONTENT(Description)
         CHILD_GET_CONTENT(Stage)
-        CHILD_GET_LIST(DocumentReference)
-        CHILD_GET_LIST(RelatedTopic)
-        CHILD_GET_LIST(Comment)
-        CHILD_GET_LIST(ViewPoint)
+        CHILD_GET_LIST(DocumentReferences, DocumentReference)
+        CHILD_GET_LIST(RelatedTopics, RelatedTopic)
+        CHILD_GET_LIST(Comments, Comment)
+        CHILD_GET_LIST(Viewpoints, ViewPoint)
     CHILDREN_END
 }

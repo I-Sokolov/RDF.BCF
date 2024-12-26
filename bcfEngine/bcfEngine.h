@@ -31,6 +31,12 @@ extern "C" {
         BCFVer_3_0 = 30
     };
 
+    enum BCFCamera
+    {
+        BCFCameraPerspective = 0,
+        BCFCameraOrthogonal = 1
+    };
+
     /// <summary>
     /// 
     /// </summary>

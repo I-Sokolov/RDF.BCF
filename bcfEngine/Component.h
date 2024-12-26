@@ -3,14 +3,16 @@
 struct BCFProject;
 
 
-class DocumentReference
+class Component
 {
 public:
-    DocumentReference(BCFProject& project) : m_project(project) { assert(!"TODO"); }
+    Component(BCFProject& project) : m_project(project) {}
 
     void Read(_xml::_element & elem, const std::string& folder) {}
 
 private:
     BCFProject& m_project;
+
+    std::string m_IfcGuid;
 };
 

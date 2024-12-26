@@ -25,20 +25,15 @@ private:
     void Read_Topic(_xml::_element& elem, const std::string& folder);
 
 private:
-    BCFProject& m_project;
-
-    //Header
-    std::vector<BIMFile>            m_lstFile;
-
-    //Topic
+    std::vector<BIMFile>            m_Files;
     std::string                     m_ServerAssignedId;
     std::string                     m_TopicStatus;
     std::string                     m_TopicType;
     std::string                     m_Title;
-    std::vector<XMLText>            m_lstReferenceLink;
+    std::vector<XMLText>            m_ReferenceLinks;
     std::string                     m_Priority;
     std::string                     m_Index;
-    std::vector<XMLText>            m_lstLabel;
+    std::vector<XMLText>            m_Labels;
     std::string                     m_CreationDate;
     std::string                     m_CreationAuthor;
     std::string                     m_ModifiedDate;
@@ -47,10 +42,10 @@ private:
     std::string                     m_AssignedTo;
     std::string                     m_Description;
     std::string                     m_Stage;
-    std::vector<BimSnippet>         m_lstBimSnippet;
-    std::vector<DocumentReference>  m_lstDocumentReference;
-    std::vector<GuidReference>      m_lstRelatedTopic;
-    std::vector<Comment>            m_lstComment;
-    std::vector<ViewPoint>          m_lstViewPoint;
+    BimSnippet                      m_BimSnippet;
+    std::vector<DocumentReference>  m_DocumentReferences;
+    std::vector<GuidReference>      m_RelatedTopics;
+    std::vector<Comment>            m_Comments;
+    std::vector<ViewPoint>          m_Viewpoints;
 };
 

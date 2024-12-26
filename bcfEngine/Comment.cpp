@@ -18,6 +18,6 @@ void Comment::Read(_xml::_element& elem, const std::string& folder)
         CHILD_GET_CONTENT(Comment)
         CHILD_GET_CONTENT(ModifiedDate)
         CHILD_GET_CONTENT(ModifiedAuthor)
-        CHILD_GET_LIST(Viewpoint)
+        CHILD_GET_LIST(Viewpoints, ViewPoint)
     CHILDREN_END
 }
