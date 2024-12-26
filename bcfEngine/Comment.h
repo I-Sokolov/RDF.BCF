@@ -2,12 +2,17 @@
 
 #include "GUIDable.h"
 
+struct BCFProject;
+
 class Comment : public GUIDable
 {
 public:
-    Comment(Log& log) : GUIDable(NULL), m_log(log) {}
+    Comment(BCFProject& project) : GUIDable(NULL), m_project(project) {}
 
-    void Read(_xml::_element& elem);
+    void Read(_xml::_element& elem, const std::string& folder);
+
+private:
+    BCFProject&                m_project;
 
 private:
     std::string                m_Date;
@@ -16,8 +21,5 @@ private:
     std::string                m_ModifiedDate;
     std::string                m_ModifiedAuthor;
     std::vector<GuidReference> m_lstViewpoint;
-
-private:
-    Log& m_log;
 };
 

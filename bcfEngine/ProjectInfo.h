@@ -5,7 +5,7 @@
 class ProjectInfo : public XMLFile
 {
 public:
-    ProjectInfo(Log& log) :XMLFile(log) {}
+    ProjectInfo(BCFProject& project) :XMLFile(project) {}
 
 public:
     std::string m_ProjectId;
@@ -13,10 +13,10 @@ public:
 
 private:
     //XMLFile implementation
-    virtual void GetRelativePathName(std::string& pathInBcfFolder) override { pathInBcfFolder.assign("project.bcfp"); }
-    virtual void ReadRoot(_xml::_element& elem) override;
+    virtual const char* XMLFileName() override { return "project.bcfp"; }
+    virtual void ReadRoot(_xml::_element& elem, const std::string& folder) override;
 
 private:
-    void Read_Project(_xml::_element& elem);
+    void Read_Project(_xml::_element& elem, const std::string& folder);
 };
 

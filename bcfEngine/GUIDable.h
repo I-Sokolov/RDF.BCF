@@ -1,6 +1,6 @@
 #pragma once
 
-class Log;
+struct BCFProject;
 
 /// <summary>
 /// 
@@ -27,10 +27,10 @@ protected:
 struct GuidReference : public GUIDable
 {
 public:
-    GuidReference(Log& log) : GUIDable(NULL), m_log(log) {}
+    GuidReference(BCFProject& project) : GUIDable(NULL), m_project(project) {}
 
-    void Read(_xml::_element& elem);
+    void Read(_xml::_element& elem, const std::string&);
 
 private:
-    Log& m_log;
+    BCFProject& m_project;
 };

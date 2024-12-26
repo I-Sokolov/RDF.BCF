@@ -1,14 +1,15 @@
 #include "pch.h"
 #include "Version.h"
+#include "BCFProject.h"
 
 
 /// <summary>
 /// 
 /// </summary>
-void Version::ReadRoot(_xml::_element& elem)
+void Version::ReadRoot(_xml::_element& elem, const std::string& /*folder*/)
 {
     ATTRS_START
-    ATTR_GET(VersionId)
+        ATTR_GET(VersionId)
     ATTRS_END(UnknownNames::Allowed)
 }
 

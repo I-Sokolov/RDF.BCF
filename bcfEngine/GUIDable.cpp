@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "GUIDable.h"
 #include "XMLFile.h"
+#include "BCFProject.h"
 
 /// <summary>
 /// 
@@ -47,7 +48,7 @@ std::string GUIDable::CreateNewGUID()
 /// <summary>
 /// 
 /// </summary>
-void GuidReference::Read(_xml::_element& elem)
+void GuidReference::Read(_xml::_element& elem, const std::string& /*folder*/)
 {
     ATTRS_START
         ATTR_GET(Guid)

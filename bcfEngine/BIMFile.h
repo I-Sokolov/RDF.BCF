@@ -1,16 +1,16 @@
 #pragma once
 
-class Log;
+struct BCFProject;
 
 class BIMFile
 {
 public:
-    BIMFile (Log& log) : m_log(log) {}
+    BIMFile (BCFProject& project) : m_project(project) {}
 
-    void Read(_xml::_element& elem);
+    void Read(_xml::_element& elem, const std::string& folder);
 
 private:
-    Log&        m_log;
+    BCFProject& m_project;
 
     std::string m_IsExternal;
     std::string m_Filename;

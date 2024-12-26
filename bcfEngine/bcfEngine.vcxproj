@@ -252,6 +252,7 @@
     <ClCompile Include="ProjectInfo.cpp" />
     <ClCompile Include="Topic.cpp" />
     <ClCompile Include="Version.cpp" />
+    <ClCompile Include="ViewPoint.cpp" />
     <ClCompile Include="XMLFile.cpp" />
     <ClCompile Include="XMLparser\_net.cpp" />
     <ClCompile Include="XMLparser\_reader.cpp" />

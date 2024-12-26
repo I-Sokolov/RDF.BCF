@@ -1,16 +1,16 @@
 #pragma once
 
-class Log;
+struct BCFProject;
 
 
 class DocumentReference
 {
 public:
-    DocumentReference(Log& log) : m_log(log) {}
+    DocumentReference(BCFProject& project) : m_project(project) {}
 
-    void Read(_xml::_element & elem) {}
+    void Read(_xml::_element & elem, const std::string& folder) {}
 
 private:
-    Log& m_log;
+    BCFProject& m_project;
 };
 

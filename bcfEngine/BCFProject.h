@@ -9,6 +9,10 @@
 
 struct BCFProject
 {
+private:
+    BCFProject(const BCFProject&) = delete;
+    void operator=(const BCFProject&) = delete;
+
 public:
     BCFProject(const char* currentUser, bool autoExtent, const char* projectId);
     ~BCFProject();

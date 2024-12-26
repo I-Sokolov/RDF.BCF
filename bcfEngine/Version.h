@@ -7,15 +7,15 @@
 class Version : public XMLFile
 {
 public:
-    Version(Log& log) : XMLFile(log) {}
+    Version(BCFProject& project) : XMLFile(project) {}
 
     BCFVersion Get();
     void Set(BCFVersion version);
 
 private:
     //XMLFile implementation
-    virtual void GetRelativePathName(std::string& pathInBcfFolder) override { pathInBcfFolder.assign("bcf.version"); }
-    virtual void ReadRoot(_xml::_element& elem) override;
+    virtual const char* XMLFileName() override { return "bcf.version"; }
+    virtual void ReadRoot(_xml::_element& elem, const std::string& folder) override;
 
 private:
     std::string m_VersionId;

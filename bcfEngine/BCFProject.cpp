@@ -37,9 +37,9 @@ void BCFProject::Topics::push_back(Topic* topic)
 /// 
 /// </summary>
 BCFProject::BCFProject(const char* currentUser, bool autoExtent, const char* projectId)
-    : m_version(m_log)
-    , m_projectInfo(m_log)
-    , m_extensions (m_log)
+    : m_version(*this)
+    , m_projectInfo(*this)
+    , m_extensions (*this)
 {
 }
 
@@ -63,9 +63,9 @@ bool BCFProject::Read(const char* bcfFilePath)
         Archivator ar(m_log);
         ok = ar.Unpack(bcfFilePath, bcfFolder.c_str());
 
-        ok = ok && m_version.Read(bcfFolder);
-        ok = ok && m_projectInfo.Read(bcfFolder);
-        ok = ok && m_extensions.Read(bcfFolder);
+        ok = ok && m_version.ReadFile(bcfFolder);
+        ok = ok && m_projectInfo.ReadFile(bcfFolder);
+        ok = ok && m_extensions.ReadFile(bcfFolder);
         
         ok = ok && ReadTopics(bcfFolder);
 
@@ -93,9 +93,9 @@ bool BCFProject::Write(const char* bcfFilePath, BCFVersion version)
     if (ok) {
         ok = ok && WriteTopics(bcfFolder);
 
-        ok = ok && m_version.Write(bcfFolder);
-        ok = ok && m_version.Write(bcfFolder);
-        ok = ok && m_extensions.Write(bcfFolder);
+        ok = ok && m_version.WriteFile(bcfFolder);
+        ok = ok && m_version.WriteFile(bcfFolder);
+        ok = ok && m_extensions.WriteFile(bcfFolder);
 
         if (ok) {
             Archivator ar(m_log);
@@ -123,7 +123,10 @@ bool BCFProject::ReadTopics(const std::string& bcfFolder)
         if (ok && elem.folder) {
             auto topic = new Topic(*this, elem.name.c_str());
             m_topics.push_back(topic);
-            ok = ok && topic->Read(bcfFolder);
+
+            std::string topicFolder(bcfFolder);
+            FileSystem::AddPath(topicFolder, elem.name.c_str());
+            ok = ok && topic->ReadFile(topicFolder);
         }
     }
 
@@ -138,7 +141,7 @@ bool BCFProject::WriteTopics(const std::string& bcfFolder)
     bool ok = true;
 
     for (auto topic : m_topics) {
-        ok = ok && topic->Write(bcfFolder);
+        ok = ok && topic->WriteFile(bcfFolder);
     }
 
     return ok;

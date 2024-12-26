@@ -1,12 +1,13 @@
 #include "pch.h"
 #include "bcfEngine.h"
 #include "Extensions.h"
+#include "BCFProject.h"
 
 /// <summary>
 /// 
 /// </summary>
-Extensions::Extensions(Log& log)
-    :XMLFile(log)
+Extensions::Extensions(BCFProject& project)
+    :XMLFile(project)
 {
     m_elements.resize(7);
 }
@@ -74,7 +75,7 @@ StringSet* Extensions::GetList(BCFEnumeration enumeration)
         return &m_elements[ind];
     }
     else {
-        m_log.add(Log::Level::error, "Index is out of range", "Index %d is out of extensions types range [0..%d]", (int)ind, (int)m_elements.size());
+        m_project.log().add(Log::Level::error, "Index is out of range", "Index %d is out of extensions types range [0..%d]", (int)ind, (int)m_elements.size());
         return NULL;
     }
 }
@@ -82,7 +83,7 @@ StringSet* Extensions::GetList(BCFEnumeration enumeration)
 /// <summary>
 /// 
 /// </summary>
-void Extensions::ReadRoot(_xml::_element& elem)
+void Extensions::ReadRoot(_xml::_element& elem, const std::string& folder)
 {
     CHILDREN_START
         CHILD_READ(TopicTypes)
@@ -98,7 +99,7 @@ void Extensions::ReadRoot(_xml::_element& elem)
 /// <summary>
 /// 
 /// </summary>
-void Extensions::ReadEnumeration(_xml::_element& elem, BCFEnumeration enumeration)
+void Extensions::ReadEnumeration(_xml::_element& elem, const std::string& /*folder*/, BCFEnumeration enumeration)
 {
     auto list = GetList(enumeration);
     if (!list) {

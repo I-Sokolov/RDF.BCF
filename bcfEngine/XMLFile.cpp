@@ -1,31 +1,29 @@
 #include "pch.h"
+#include "BCFProject.h"
 #include "XMLFile.h"
 #include "FileSystem.h"
 
 /// <summary>
 /// 
 /// </summary>
-bool XMLFile::Read(const std::string& bcfFolder)
+bool XMLFile::ReadFile(const std::string& bcfFolder)
 {
     bool ok = false;
 
-    std::string relPath;
-    GetRelativePathName(relPath);
-
     std::string path(bcfFolder);
-    FileSystem::AddPath(path, relPath.c_str());
+    FileSystem::AddPath(path, XMLFileName());
 
     try {
         _xml::_document doc(nullptr);
         doc.load(path.c_str());
 
         if (auto root = doc.getRoot()) {
-            ReadRoot(*root);
+            ReadRoot(*root, bcfFolder);
             ok = true;
         }
     }
     catch (std::exception& ex) {
-        m_log.add(Log::Level::error, "Read file error", "Failed to read %s file. %s", path.c_str(), ex.what());
+        m_project.log().add(Log::Level::error, "Read file error", "Failed to read %s file. %s", path.c_str(), ex.what());
     }
 
     return ok;
@@ -34,15 +32,12 @@ bool XMLFile::Read(const std::string& bcfFolder)
 /// <summary>
 /// 
 /// </summary>
-bool XMLFile::Write(const std::string& bcfFolder)
+bool XMLFile::WriteFile(const std::string& bcfFolder)
 {
     bool ok = false;
 
-    std::string relPath;
-    GetRelativePathName(relPath);
-
     std::string path(bcfFolder);
-    FileSystem::AddPath(path, relPath.c_str());
+    FileSystem::AddPath(path, XMLFileName());
 
     try {
         //_xml::_document doc(nullptr);
@@ -50,7 +45,7 @@ bool XMLFile::Write(const std::string& bcfFolder)
         ok = true;
     }
     catch (std::exception& ex) {
-        m_log.add(Log::Level::error, "Write file error", "Failed to write %s file. %s", path.c_str(), ex.what());
+        m_project.log().add(Log::Level::error, "Write file error", "Failed to write %s file. %s", path.c_str(), ex.what());
     }
 
     return ok;

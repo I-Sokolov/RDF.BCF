@@ -2,23 +2,25 @@
 
 #include "Log.h"
 
+struct BCFProject;
+
 /// <summary>
 /// base class for XML serialized data block
 /// </summary>
 class XMLFile
 {
 public:
-    XMLFile(Log& log) :m_log(log) {}
+    XMLFile(BCFProject& project) :m_project(project) {}
 
-    bool Read(const std::string& bcfFolder);
-    bool Write(const std::string& bcfFolder);
-
-protected:
-    virtual void GetRelativePathName(std::string& pathInBcfFolder) = NULL;
-    virtual void ReadRoot(_xml::_element& elem) = NULL;
+    bool ReadFile(const std::string& folder);
+    bool WriteFile(const std::string& folder);
 
 protected:
-    Log& m_log;
+    virtual const char* XMLFileName() = NULL;
+    virtual void ReadRoot(_xml::_element& elem, const std::string& folder) = NULL;
+
+protected:
+    BCFProject& m_project;
 };
 
 
@@ -28,8 +30,8 @@ protected:
 class XMLText : public std::string
 {
 public:
-    XMLText(Log&){}
-    void Read(_xml::_element& elem) { assign(elem.getContent()); }
+    XMLText(BCFProject&) {}
+    void Read(_xml::_element& elem, const std::string&) { assign(elem.getContent()); }
 };
 
 /// <summary>
@@ -52,7 +54,7 @@ enum class UnknownNames : bool
         } else
 
 #define ATTRS_END(onUnknownNames)           \
-        if ((bool)onUnknownNames) { m_log.add(Log::Level::warning, "XML parsing", "Unknown attribute %s in " __FUNCTION__, attrName.c_str()); } } }
+        if ((bool)onUnknownNames) { m_project.log().add(Log::Level::warning, "XML parsing", "Unknown attribute %s in " __FUNCTION__, attrName.c_str()); } } }
 
 
 /// <summary>
@@ -64,9 +66,9 @@ enum class UnknownNames : bool
             auto&  tag= child->getName();   \
 
 
-#define CHILD_READ(name)                    \
-            if (tag == #name) {             \
-                Read_##name(*child);        \
+#define CHILD_READ(name)                                \
+            if (tag == #name) {                         \
+                Read_##name(*child, folder);            \
             } else
 
 
@@ -75,35 +77,36 @@ enum class UnknownNames : bool
                 m_##name.assign(child->getContent());   \
             } else
 
-#define CHILD_GET_LIST(name)                                    \
-            if (tag == #name) {                                 \
-                ReadToList(m_lst##name, *child, NULL, m_log);   \
-            }                                                   \
-            else if(0==_stricmp(tag.c_str(),#name "s")) {       \
-                ReadToList(m_lst##name, *child, #name, m_log);  \
+#define CHILD_GET_LIST(name)                                                                            \
+            if (tag == #name) {                                                                         \
+                ReadToList(m_lst##name, m_project, *child, folder, NULL, m_project.log());              \
+            }                                                                                           \
+            else if(0==_stricmp(tag.c_str(),#name "s")) {                                               \
+                ReadToList(m_lst##name, m_project, *child, folder, #name, m_project.log());             \
             } else
 
 
 #define CHILDREN_END \
-        { m_log.add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str()); } } }
+        { m_project.log().add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str()); } } }
 
 
 /// <summary>
 /// 
 /// </summary>
-template <class TReadable> void ReadToList(std::vector<TReadable>& list, _xml::_element& elem, const char* childName, Log& log)
+template <class TReadable> 
+void ReadToList(std::vector<TReadable>& list, BCFProject& project, _xml::_element& elem, const std::string& folder, const char* childName, Log& log)
 {
     if (!childName) {
-        list.push_back(TReadable(log));
-        list.back().Read(elem);
+        list.push_back(TReadable(project));
+        list.back().Read(elem, folder);
     }
     else {
         for (auto child : elem.children()) {
             if (child) {
                 auto& tag = child->getName();
                 if (tag == childName) {
-                    list.push_back(TReadable(log));
-                    list.back().Read(*child);
+                    list.push_back(TReadable(project));
+                    list.back().Read(*child, folder);
                 }
                 else {
                     log.add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str());

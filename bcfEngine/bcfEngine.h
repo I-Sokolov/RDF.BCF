@@ -53,7 +53,7 @@ extern "C" {
     /// <summary>
     /// 
     /// </summary>
-    #define BCFIndex_ERROR ((uint16_t)-1);
+    #define BCFIndex_ERROR ((uint16_t)-1)
 
     /// <summary>
     /// 

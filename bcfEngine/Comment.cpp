@@ -1,11 +1,12 @@
 #include "pch.h"
 #include "Comment.h"
 #include "XMLFile.h"
+#include "BCFProject.h"
 
 /// <summary>
 /// 
 /// </summary>
-void Comment::Read(_xml::_element& elem)
+void Comment::Read(_xml::_element& elem, const std::string& folder)
 {
     ATTRS_START
         ATTR_GET(Guid)

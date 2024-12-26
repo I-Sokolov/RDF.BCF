@@ -5,7 +5,7 @@
 class Extensions : public XMLFile
 {
 public:
-    Extensions(Log& log);
+    Extensions(BCFProject& project);
 
     const char* GetElement(BCFEnumeration enumeration, BCFIndex index);
     bool AddElement(BCFEnumeration enumeration, const char* element);
@@ -13,20 +13,20 @@ public:
 
 private:
     //XMLFile implementation
-    virtual void GetRelativePathName(std::string& pathInBcfFolder) override { pathInBcfFolder.assign("extensions.xml"); }
-    virtual void ReadRoot(_xml::_element& elem) override;
+    virtual const char* XMLFileName() override { return "extensions.xml"; }
+    virtual void ReadRoot(_xml::_element& elem, const std::string& folder) override;
 
 private:
     StringSet* GetList(BCFEnumeration enumeration);
 
-    void ReadEnumeration(_xml::_element& elem, BCFEnumeration enumeration);
-    void Read_TopicTypes(_xml::_element& elem) { ReadEnumeration(elem, BCFTopicTypes); }
-    void Read_Priorities(_xml::_element& elem) { ReadEnumeration(elem, BCFPriorities); }
-    void Read_TopicStatuses(_xml::_element& elem) { ReadEnumeration(elem, BCFTopicStatuses); }
-    void Read_TopicLabels(_xml::_element& elem) { ReadEnumeration(elem, BCFTopicLabels); }
-    void Read_Users(_xml::_element& elem) { ReadEnumeration(elem, BCFUsers); }
-    void Read_SnippetTypes(_xml::_element& elem) { ReadEnumeration(elem, BCFSnippetTypes); }
-    void Read_Stages(_xml::_element& elem) { ReadEnumeration(elem, BCFStages); }
+    void ReadEnumeration(_xml::_element& elem, const std::string& folder, BCFEnumeration enumeration);
+    void Read_TopicTypes(_xml::_element& elem, const std::string& folder) { ReadEnumeration(elem, folder, BCFTopicTypes); }
+    void Read_Priorities(_xml::_element& elem, const std::string& folder) { ReadEnumeration(elem, folder, BCFPriorities); }
+    void Read_TopicStatuses(_xml::_element& elem, const std::string& folder) { ReadEnumeration(elem, folder, BCFTopicStatuses); }
+    void Read_TopicLabels(_xml::_element& elem, const std::string& folder) { ReadEnumeration(elem, folder, BCFTopicLabels); }
+    void Read_Users(_xml::_element& elem, const std::string& folder) { ReadEnumeration(elem, folder, BCFUsers); }
+    void Read_SnippetTypes(_xml::_element& elem, const std::string& folder) { ReadEnumeration(elem, folder, BCFSnippetTypes); }
+    void Read_Stages(_xml::_element& elem, const std::string& folder) { ReadEnumeration(elem, folder, BCFStages); }
 
 private:
     std::vector<StringSet>  m_elements;

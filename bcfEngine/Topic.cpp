@@ -8,25 +8,17 @@
 /// </summary>
 Topic::Topic(BCFProject& project, const char* guid)
     : GUIDable(guid)
-    , XMLFile(project.log())
+    , XMLFile(project)
     , m_project(project)
 {
 
 }
 
-/// <summary>
-/// 
-/// </summary>
-void Topic::GetRelativePathName(std::string& pathInBcfFolder)
-{ 
-    pathInBcfFolder.assign(Guid());
-    FileSystem::AddPath (pathInBcfFolder, "markup.bcf"); 
-}
 
 /// <summary>
 /// 
 /// </summary>
-void Topic::ReadRoot(_xml::_element& elem)
+void Topic::ReadRoot(_xml::_element& elem, const std::string& folder)
 {
     CHILDREN_START
         CHILD_READ(Header)
@@ -37,7 +29,7 @@ void Topic::ReadRoot(_xml::_element& elem)
 /// <summary>
 /// 
 /// </summary>
-void Topic::Read_Header(_xml::_element& elem)
+void Topic::Read_Header(_xml::_element& elem, const std::string& folder)
 {
     CHILDREN_START
         CHILD_GET_LIST(File)
@@ -47,7 +39,7 @@ void Topic::Read_Header(_xml::_element& elem)
 /// <summary>
 /// 
 /// </summary>
-void Topic::Read_Topic(_xml::_element& elem)
+void Topic::Read_Topic(_xml::_element& elem, const std::string& folder)
 {
     ATTRS_START
         ATTR_GET(Guid)

@@ -1,11 +1,12 @@
 #include "pch.h"
 #include "BIMFile.h"
 #include "XMLFile.h"
+#include "BCFProject.h"
 
 /// <summary>
 /// 
 /// </summary>
-void BIMFile::Read(_xml::_element& elem)
+void BIMFile::Read(_xml::_element& elem, const std::string&)
 {
     ATTRS_START
         ATTR_GET(IsExternal)

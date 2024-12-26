@@ -1,16 +1,22 @@
 #pragma once
 
-class Log;
+#include "XMLFile.h"
+#include "GUIDable.h"
 
-
-class ViewPoint
+class ViewPoint : public GUIDable, public XMLFile
 {
 public:
-    ViewPoint(Log& log) : m_log(log) {}
+    ViewPoint(BCFProject& project) : GUIDable(NULL), XMLFile(project) {}
 
-    void Read(_xml::_element & elem) {}
+    void Read(_xml::_element& elem, const std::string& folder);
 
 private:
-    Log& m_log;
+    //XMLFile implementation
+    virtual const char* XMLFileName() override { return m_Viewpoint.c_str(); }
+    virtual void ReadRoot(_xml::_element& elem, const std::string& folder) override;
+
+private:
+    std::string m_Viewpoint; //name.bcfv
+    std::string m_Snapshot;  //name.jpg
 };
 
