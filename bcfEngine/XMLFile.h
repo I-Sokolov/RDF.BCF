@@ -18,9 +18,6 @@ protected:
     virtual void ReadRoot(_xml::_element& elem) = NULL;
 
 protected:
-    template <class TReadable> void ReadToList(std::vector<TReadable>& list, _xml::_element& elem, const char* childName);
-
-protected:
     Log& m_log;
 };
 
@@ -78,12 +75,12 @@ enum class UnknownNames : bool
                 m_##name.assign(child->getContent());   \
             } else
 
-#define CHILD_GET_LIST(name)                            \
-            if (tag == #name) {                         \
-                ReadToList(m_lst##name, *child, NULL);  \
-            }                                           \
-            else if(0==_stricmp(tag.c_str(),#name "s")){\
-                ReadToList(m_lst##name, *child, #name); \
+#define CHILD_GET_LIST(name)                                    \
+            if (tag == #name) {                                 \
+                ReadToList(m_lst##name, *child, NULL, m_log);   \
+            }                                                   \
+            else if(0==_stricmp(tag.c_str(),#name "s")) {       \
+                ReadToList(m_lst##name, *child, #name, m_log);  \
             } else
 
 
@@ -94,10 +91,10 @@ enum class UnknownNames : bool
 /// <summary>
 /// 
 /// </summary>
-template <class TReadable> void XMLFile::ReadToList(std::vector<TReadable>& list, _xml::_element& elem, const char* childName)
+template <class TReadable> void ReadToList(std::vector<TReadable>& list, _xml::_element& elem, const char* childName, Log& log)
 {
     if (!childName) {
-        list.push_back(TReadable(m_log));
+        list.push_back(TReadable(log));
         list.back().Read(elem);
     }
     else {
@@ -105,11 +102,11 @@ template <class TReadable> void XMLFile::ReadToList(std::vector<TReadable>& list
             if (child) {
                 auto& tag = child->getName();
                 if (tag == childName) {
-                    list.push_back(TReadable(m_log));
-                    list.back().Read(elem);
+                    list.push_back(TReadable(log));
+                    list.back().Read(*child);
                 }
                 else {
-                    m_log.add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str());
+                    log.add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str());
                 }
             }
         }

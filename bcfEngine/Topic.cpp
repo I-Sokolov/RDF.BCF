@@ -54,9 +54,9 @@ void Topic::Read_Topic(_xml::_element& elem)
         ATTR_GET(ServerAssignedId)
         ATTR_GET(TopicStatus)
         ATTR_GET(TopicType)
-        ATTRS_END(UnknownNames::NotAllowed)
+    ATTRS_END(UnknownNames::NotAllowed)
 
-        CHILDREN_START
+    CHILDREN_START
         CHILD_GET_CONTENT(Title)
         CHILD_GET_LIST(ReferenceLink)
         CHILD_GET_CONTENT(Priority)
@@ -74,5 +74,5 @@ void Topic::Read_Topic(_xml::_element& elem)
         CHILD_GET_LIST(RelatedTopic)
         CHILD_GET_LIST(Comment)
         CHILD_GET_LIST(ViewPoint)
-        CHILDREN_END
+    CHILDREN_END
 }
