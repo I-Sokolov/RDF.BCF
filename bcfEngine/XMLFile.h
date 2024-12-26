@@ -76,7 +76,7 @@ enum class UnknownNames : bool
 #define CHILD_GET_CONTENT(name)                         \
             if (tag == #name) {                         \
                 m_##name.assign(child->getContent());   \
-            }
+            } else
 
 #define CHILD_GET_LIST(name)                            \
             if (tag == #name) {                         \
