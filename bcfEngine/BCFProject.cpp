@@ -36,10 +36,11 @@ void BCFProject::Topics::push_back(Topic* topic)
 /// <summary>
 /// 
 /// </summary>
-BCFProject::BCFProject(const char* currentUser, bool autoExtent, const char* projectId)
+BCFProject::BCFProject(const char* projectId)
     : m_version(*this)
-    , m_projectInfo(*this)
+    , m_projectInfo(*this, projectId)
     , m_extensions (*this)
+    , m_autoExtentSchema(true)
 {
 }
 

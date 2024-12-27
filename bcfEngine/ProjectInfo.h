@@ -5,7 +5,7 @@
 class ProjectInfo : public XMLFile
 {
 public:
-    ProjectInfo(BCFProject& project) :XMLFile(project) {}
+    ProjectInfo(BCFProject& project, const char* projectId);
 
 public:
     std::string m_ProjectId;

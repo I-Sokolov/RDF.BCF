@@ -2,6 +2,19 @@
 #include "ProjectInfo.h"
 #include "BCFProject.h"
 
+/// <summary>
+/// 
+/// </summary>
+ProjectInfo::ProjectInfo(BCFProject& project, const char* projectId)
+    : XMLFile(project) 
+{
+    if (projectId) {
+        m_ProjectId.assign(projectId);
+    }
+    else {
+        m_ProjectId = GUIDable::CreateNewGUID();
+    }
+}
 
 /// <summary>
 /// 

@@ -5,17 +5,9 @@
         /// <summary>
         /// Creates new empty BCF data
         /// </summary>
-        /// <param name="currentUser">
-        /// User must be set if you are going to create or modify topics.
-        /// </param>
-        /// <param name="autoExtent">
-        /// Enabling the option will automatically add to extensions enumerations new user, 
-        /// topic type, status etc. when you set the value which is not in enumeration yet.
-        /// If the option is disable, it makes strict checking and assigning any unknown elements will rise RDF.BCF.Exception.
-        /// </param>
-        public Project(string? currentUser = null, bool autoExtent = false, string? projectId = null)
+        public Project(string? projectId = null)
         {
-            m_handle = BCF.Interop.ProjectCreate(currentUser, autoExtent, projectId);
+            m_handle = BCF.Interop.ProjectCreate(projectId);
             m_topics = new Topics(this);
             m_extensions = new Extensions(this);
         }
@@ -48,6 +40,22 @@
         public bool FileWrite(string filePath, Interop.Version version = BCF.Interop.Version._3_0)
         {
             return BCF.Interop.FileWrite(m_handle, filePath, version);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="currentUser">
+        /// User must be set if you are going to create or modify topics.
+        /// </param>
+        /// <param name="autoExtent">
+        /// Enabling the option will automatically add to extensions enumerations new user, 
+        /// topic type, status etc. when you set the value which is not in enumeration yet.
+        /// If the option is disable, it makes strict checking and assigning any unknown elements will rise RDF.BCF.Exception.
+        /// </param>
+        public bool SetEditor(string user, bool autoExtent)
+        {
+            return BCF.Interop.SetEditor(m_handle, user, autoExtent);
         }
 
         /// <summary>

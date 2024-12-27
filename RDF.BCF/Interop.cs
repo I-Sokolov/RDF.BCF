@@ -38,7 +38,7 @@ namespace RDF.BCF
         public const UInt16 ERR_IND = UInt16.MaxValue;
 
         [DllImport(DLL, EntryPoint = "bcfProjectCreate")]
-        public static extern IntPtr ProjectCreate(string? currentUser = null, [param:MarshalAs(UnmanagedType.U1)] bool autoExtent = false, string? projectId = null);
+        public static extern IntPtr ProjectCreate(string? projectId = null);
 
         [DllImport(DLL, EntryPoint = "bcfProjectDelete")]
         public static extern void ProjectDelete(IntPtr project);
@@ -58,6 +58,10 @@ namespace RDF.BCF
         [DllImport(DLL, EntryPoint = "bcfFileWrite")]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool FileWrite(IntPtr project, string filePath, Version version);
+
+        [DllImport(DLL, EntryPoint = "bcfSetEditor")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool SetEditor(IntPtr project, string user, [param: MarshalAs(UnmanagedType.U1)] bool autoExtent);
 
         [DllImport(DLL, EntryPoint = "bcfProjectIdGet")]
         private static extern IntPtr ProjectIdGet_(IntPtr project);

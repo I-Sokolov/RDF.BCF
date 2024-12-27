@@ -14,7 +14,7 @@ private:
     void operator=(const BCFProject&) = delete;
 
 public:
-    BCFProject(const char* currentUser, bool autoExtent, const char* projectId);
+    BCFProject(const char* projectId = NULL);
     ~BCFProject();
 
 public:
@@ -23,14 +23,16 @@ public:
     bool Read(const char* bcfFilePath);
     bool Write(const char* bcfFilePath, BCFVersion version);
 
-    const char* GetGUID() { return m_projectInfo.m_ProjectId.c_str(); }
+    bool SetEditor(const char* user, bool autoExtentSchema) { m_editor = user; m_autoExtentSchema = autoExtentSchema; return true; }
+
+    const char* GetProjectId() { return m_projectInfo.m_ProjectId.c_str(); }
     const char* GetName() { return m_projectInfo.m_Name.c_str(); }
     void SetName(const char* name) { m_projectInfo.m_Name = name; }
 
     Extensions& GetExtensions() { return m_extensions; }
 
     BCFIndex TopicsCount() { return (BCFIndex) m_topics.size(); }
-    Topic* GetTopic(BCFIndex index);
+    Topic* GetTopic(BCFIndex index); //do not delete, valid until project destroyed or TopicRemove
     BCFIndex TopicCreate(const char* guid);
     bool TopicRemove(BCFIndex index);
 
@@ -51,6 +53,9 @@ private:
     Version     m_version;
     ProjectInfo m_projectInfo;
     Extensions  m_extensions;
+
+    std::string m_editor;
+    bool        m_autoExtentSchema;
 
     Topics      m_topics;
 };

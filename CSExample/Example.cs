@@ -15,8 +15,10 @@ namespace CSExample
 
         static void CreateExample()
         {
-            using (var bcfData = new RDF.BCF.Project("user@company.org", true))
+            using (var bcfData = new RDF.BCF.Project())
             {
+                bcfData.SetEditor("user@company.org", true);
+
                 //
                 // create topic
                 //

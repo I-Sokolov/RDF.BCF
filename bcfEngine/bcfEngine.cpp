@@ -1,11 +1,5 @@
 #include "pch.h"
 
-#ifdef _WINDOWS
-#define RDFBCF_EXPORT __declspec(dllexport) 
-#else
-#define RDFBCF_EXPORT 
-#endif
-
 #include "bcfEngine.h"
 #include "BCFProject.h"
 #include "Topic.h"
@@ -13,9 +7,9 @@
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT BCFProject* bcfProjectCreate(const char* currentUser, bool autoExtent, const char* projectId)
+RDFBCF_EXPORT BCFProject* bcfProjectCreate(const char* projectId)
 {
-    return new BCFProject(currentUser, autoExtent, projectId);
+    return new BCFProject(projectId);
 }
 
 
@@ -62,6 +56,16 @@ RDFBCF_EXPORT bool bcfFileWrite(BCFProject* project, const char* bcfFilePath, BC
     return false;
 }
 
+/// <summary>
+/// 
+/// </summary>
+RDFBCF_EXPORT bool bcfSetEditor(BCFProject* project, const char* user, bool autoExtent)
+{
+    if (project) {
+        return project->SetEditor(user, autoExtent);
+    }
+    return false;
+}
 
 /// <summary>
 /// 
@@ -69,7 +73,7 @@ RDFBCF_EXPORT bool bcfFileWrite(BCFProject* project, const char* bcfFilePath, BC
 RDFBCF_EXPORT const char* bcfProjectIdGet(BCFProject* project)
 {
     if (project) {
-        return project->GetGUID();
+        return project->GetProjectId();
     }
     return NULL;
 }

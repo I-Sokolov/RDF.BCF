@@ -1,7 +1,7 @@
 #pragma once
 
 #include "XMLFile.h"
-#include "bcfEngine.h"
+#include "bcfTypes.h"
 
 
 class Version : public XMLFile
