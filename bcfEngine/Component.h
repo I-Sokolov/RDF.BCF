@@ -6,13 +6,15 @@ struct BCFProject;
 class Component
 {
 public:
-    Component(BCFProject& project) : m_project(project) {}
+    Component(BCFProject& project) : m_project(project) { }
 
-    void Read(_xml::_element & elem, const std::string& folder) {}
+    void Read(_xml::_element& elem, const std::string& folder);
 
 private:
     BCFProject& m_project;
 
     std::string m_IfcGuid;
+    std::string m_OriginatingSystem;
+    std::string m_AuthoringToolId;
 };
 

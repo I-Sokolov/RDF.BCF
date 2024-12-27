@@ -6,7 +6,7 @@ struct BCFProject;
 class Line
 {
 public:
-    Line(BCFProject& project) : m_project(project) {}
+    Line(BCFProject& project) : m_project(project) { assert(!"TODO"); }
 
     void Read(_xml::_element & elem, const std::string& folder) {}
 

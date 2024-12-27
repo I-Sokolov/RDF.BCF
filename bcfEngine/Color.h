@@ -5,7 +5,7 @@
 class Color
 {
 public:
-    Color(BCFProject& project) : m_project(project) {}
+    Color(BCFProject& project) : m_project(project) { assert(!"TODO"); }
 
     void Read(_xml::_element & elem, const std::string& folder) {}
 

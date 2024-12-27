@@ -244,6 +244,7 @@
     <ClCompile Include="BCFProject.cpp" />
     <ClCompile Include="BIMFile.cpp" />
     <ClCompile Include="Comment.cpp" />
+    <ClCompile Include="Component.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Extensions.cpp" />
     <ClCompile Include="FileSystem.cpp" />
