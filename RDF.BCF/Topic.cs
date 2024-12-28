@@ -14,46 +14,22 @@ namespace RDF.BCF
         public string Guid { get { return Interop.TopicGuid(m_project.Handle, m_handle); } }
 
         /// <summary>
-        /// Title of the topic.
+        /// Topic attributes
         /// </summary>
-        public string Title { get; set; }
-
-        /// <summary>
-        /// Type of the topic(Predefined list in “extensions.xml”)
-        /// </summary>
-        public string TopicType { get; set; }
-
-        /// <summary>
-        /// Status of the topic(Predefined list in “extensions.xml”)
-        /// </summary>
-        public string TopicStatus { get; set; }
-
-        /// <summary>
-        /// Description of the topic.
-        /// </summary>
-        public string? Description { get; set; }
-
-        /// <summary>
-        /// Date when the topic was created.
-        /// ISO 8601 compatible YYYY-MM-DDThh:mm:ss format with optional time zone indicators.
-        /// </summary>
-        public string CreationDate { get { return "2016-04-28T16:31:12.270+02:00 todo"; } }
-
-        /// <summary>
-        /// User who created the topic.
-        /// </summary>
-        public string CreationAuthor { get { return "CreationAuthor todo"; } }
-
-        /// <summary>
-        /// Date when the topic was last modified.  only when Topic has been modified after creation.
-        /// ISO 8601 compatible YYYY-MM-DDThh:mm:ss format with optional time zone indicators.
-        /// </summary>
-        public string? ModifiedDate { get { return null; } }
-
-        /// <summary>
-        /// User who modified the topic. Exists only when Topic has been modified after creation.
-        /// </summary>
-        public string? ModifiedAuthor { get { return null; } }
+        public string ServerAssignedId { get { return Interop.TopicGetServerAssignedId(m_project.Handle, m_handle); } set { Interop.TopicSetServerAssignedId(m_project.Handle, m_handle, value); } }
+        public string TopicStatus { get { return Interop.TopicGetTopicStatus(m_project.Handle, m_handle); } set { Interop.TopicSetTopicStatus(m_project.Handle, m_handle, value); } }
+        public string TopicType { get { return Interop.TopicGetTopicType(m_project.Handle, m_handle); } set { Interop.TopicSetTopicType(m_project.Handle, m_handle, value); } }
+        public string Title { get { return Interop.TopicGetTitle(m_project.Handle, m_handle); } set { Interop.TopicSetTitle(m_project.Handle, m_handle, value); } }
+        public string Priority { get { return Interop.TopicGetPriority(m_project.Handle, m_handle); } set { Interop.TopicSetPriority(m_project.Handle, m_handle, value); } }
+        public string CreationDate { get { return Interop.TopicGetCreationDate(m_project.Handle, m_handle); } }
+        public string CreationAuthor { get { return Interop.TopicGetCreationAuthor(m_project.Handle, m_handle); } }
+        public string ModifiedDate { get { return Interop.TopicGetModifiedDate(m_project.Handle, m_handle); } }
+        public string ModifiedAuthor { get { return Interop.TopicGetModifiedAuthor(m_project.Handle, m_handle); } }
+        public string DueDate { get { return Interop.TopicGetDueDate(m_project.Handle, m_handle); } set { Interop.TopicSetDueDate(m_project.Handle, m_handle, value); } }
+        public string AssignedTo { get { return Interop.TopicGetAssignedTo(m_project.Handle, m_handle); } set { Interop.TopicSetAssignedTo(m_project.Handle, m_handle, value); } }
+        public string Description { get { return Interop.TopicGetDescription(m_project.Handle, m_handle); } set { Interop.TopicSetDescription(m_project.Handle, m_handle, value); } }
+        public string Stage { get { return Interop.TopicGetStage(m_project.Handle, m_handle); } set { Interop.TopicSetStage(m_project.Handle, m_handle, value); } }
+        public int Index { get { return Interop.TopicGetIndex(m_project.Handle, m_handle); } set { Interop.TopicSetIndex(m_project.Handle, m_handle, value); } }
 
         /// <summary>
         /// BIM files, associated with the topic

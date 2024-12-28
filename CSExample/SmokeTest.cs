@@ -25,6 +25,9 @@ namespace CSExample
             Console.WriteLine("TEST Extensions");
             Extensions();
 
+            Console.WriteLine("TEST Topics");
+            Topics();
+
             Console.WriteLine("TESTS PASSED");
         }
 
@@ -47,7 +50,7 @@ namespace CSExample
             using (var bcf = new RDF.BCF.Project())
             {
                 var errors = bcf.ErrorsGet();
-                ASSERT(errors.Length==0);
+                ASSERT(errors.Length == 0);
 
                 Console.WriteLine("Expected errors....");
                 var res = bcf.FileRead("J:\\NotExist.bcf");
@@ -94,7 +97,7 @@ namespace CSExample
             //
             var users = new string[] { "a.b@mail.com", "b " }; // Китайский 好 text" };
 
-            using (var bcf  = new RDF.BCF.Project())
+            using (var bcf = new RDF.BCF.Project())
             {
                 var lst = bcf.Extensions.GetEnumeration(Interop.BCFEnumeration.Users);
                 ASSERT(lst.Count() == 0);
@@ -136,7 +139,7 @@ namespace CSExample
 
             var items = topics.Items;
             ASSERT(items.Count() == 1);
-            
+
             var topic = items.First();
             ASSERT(topic.Guid == "7ad1a717-bf20-4c12-b511-cbd90370ddba");
 
@@ -165,6 +168,13 @@ namespace CSExample
             topic = topics.TopicCreate("Topic Type", "Topic Title", "Topic Status");
             ASSERT(topic != null);
 
+            if (topic != null)
+            {
+                ASSERT(topic.ServerAssignedId.Length == 0);
+                var stat = topic.TopicStatus;
+                ASSERT(stat == "Topic Status");
+                Console.WriteLine(stat);
+            }
 
             items = topics.Items;
             ASSERT(items.Count() == 2);
@@ -183,6 +193,17 @@ namespace CSExample
 
             topic = items.First();
             ASSERT(topic.Guid != "7ad1a717-bf20-4c12-b511-cbd90370ddba");
+        }
+
+        static private void Topics()
+        {
+            using (var bcf = new RDF.BCF.Project())
+            {
+                bool ok = bcf.SetEditor("Smoke-tester", true);
+                ASSERT(ok);
+
+                //CreateTopic
+            }
         }
     }
 }

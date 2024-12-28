@@ -145,7 +145,7 @@ BCFIndex BCFProject::TopicCreate(const char* type, const char* title, const char
 
         bool ok = topic->SetTopicType(type);
         ok = ok && topic->SetTitle(title);
-        ok = ok && topic->SetTopicStatus(title);
+        ok = ok && topic->SetTopicStatus(status);
 
         if (!ok) {
             delete topic;

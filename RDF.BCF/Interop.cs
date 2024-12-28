@@ -121,6 +121,109 @@ namespace RDF.BCF
         /// <summary>
         /// 
         /// </summary>
+        /// <returns></returns>
+        [DllImport(DLL, EntryPoint = "bcfTopicGetServerAssignedId")]
+        private static extern IntPtr TopicGetServerAssignedId_(IntPtr project, UInt16 topic);        
+        public static string TopicGetServerAssignedId (IntPtr project, UInt16 topic) { return PtrToString (TopicGetServerAssignedId_(project, topic)); }
+
+        [DllImport(DLL, EntryPoint = "bcfTopicGetTopicStatus")]
+        private static extern IntPtr TopicGetTopicStatus_(IntPtr project, UInt16 topic);
+        public static string TopicGetTopicStatus(IntPtr project, UInt16 topic) { return PtrToString(TopicGetTopicStatus_(project, topic)); }
+
+        [DllImport(DLL, EntryPoint = "bcfTopicGetTopicType")]
+        private static extern IntPtr TopicGetTopicType_(IntPtr project, UInt16 topic);
+        public static string TopicGetTopicType(IntPtr project, UInt16 topic) { return PtrToString(TopicGetTopicType_(project, topic)); }
+
+        [DllImport(DLL, EntryPoint = "bcfTopicGetTitle")]
+        private static extern IntPtr TopicGetTitle_(IntPtr project, UInt16 topic);
+        public static string TopicGetTitle(IntPtr project, UInt16 topic) { return PtrToString(TopicGetTitle_(project, topic)); }
+
+        [DllImport(DLL, EntryPoint = "bcfTopicGetPriority")]
+        private static extern IntPtr TopicGetPriority_(IntPtr project, UInt16 topic);
+        public static string TopicGetPriority(IntPtr project, UInt16 topic) { return PtrToString(TopicGetPriority_(project, topic)); }
+
+        [DllImport(DLL, EntryPoint = "bcfTopicGetCreationDate")]
+        private static extern IntPtr TopicGetCreationDate_(IntPtr project, UInt16 topic);
+        public static string TopicGetCreationDate(IntPtr project, UInt16 topic) { return PtrToString(TopicGetCreationDate_(project, topic)); }
+
+        [DllImport(DLL, EntryPoint = "bcfTopicGetCreationAuthor")]
+        private static extern IntPtr TopicGetCreationAuthor_(IntPtr project, UInt16 topic);
+        public static string TopicGetCreationAuthor(IntPtr project, UInt16 topic) { return PtrToString(TopicGetCreationAuthor_(project, topic)); }
+
+        [DllImport(DLL, EntryPoint = "bcfTopicGetModifiedDate")]
+        private static extern IntPtr TopicGetModifiedDate_(IntPtr project, UInt16 topic);
+        public static string TopicGetModifiedDate(IntPtr project, UInt16 topic) { return PtrToString(TopicGetModifiedDate_(project, topic)); }
+
+        [DllImport(DLL, EntryPoint = "bcfTopicGetModifiedAuthor")]
+        private static extern IntPtr TopicGetModifiedAuthor_(IntPtr project, UInt16 topic);
+        public static string TopicGetModifiedAuthor(IntPtr project, UInt16 topic) { return PtrToString(TopicGetModifiedAuthor_(project, topic)); }
+
+        [DllImport(DLL, EntryPoint = "bcfTopicGetDueDate")]
+        private static extern IntPtr TopicGetDueDate_(IntPtr project, UInt16 topic);
+        public static string TopicGetDueDate(IntPtr project, UInt16 topic) { return PtrToString(TopicGetDueDate_(project, topic)); }
+
+        [DllImport(DLL, EntryPoint = "bcfTopicGetAssignedTo")]
+        private static extern IntPtr TopicGetAssignedTo_(IntPtr project, UInt16 topic);
+        public static string TopicGetAssignedTo(IntPtr project, UInt16 topic) { return PtrToString(TopicGetAssignedTo_(project, topic)); }
+
+        [DllImport(DLL, EntryPoint = "bcfTopicGetDescription")]
+        private static extern IntPtr TopicGetDescription_(IntPtr project, UInt16 topic);
+        public static string TopicGetDescription(IntPtr project, UInt16 topic) { return PtrToString(TopicGetDescription_(project, topic)); }
+
+        [DllImport(DLL, EntryPoint = "bcfTopicGetStage")]
+        private static extern IntPtr TopicGetStage_(IntPtr project, UInt16 topic);
+        public static string TopicGetStage(IntPtr project, UInt16 topic) { return PtrToString(TopicGetStage_(project, topic)); }
+
+        [DllImport(DLL, EntryPoint = "bcfTopicGetIndex")]
+        public static extern int TopicGetIndex(IntPtr project, UInt16 topic);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [DllImport(DLL, EntryPoint = "bcfTopicSetServerAssignedId")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool TopicSetServerAssignedId(IntPtr project, UInt16 topic, string val);
+
+        [DllImport(DLL, EntryPoint = "bcfTopicSetTopicType")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool TopicSetTopicType(IntPtr project, UInt16 topic, string val);
+
+        [DllImport(DLL, EntryPoint = "bcfTopicSetTitle")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool TopicSetTitle(IntPtr project, UInt16 topic, string val);
+
+        [DllImport(DLL, EntryPoint = "bcfTopicSetTopicStatus")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool TopicSetTopicStatus(IntPtr project, UInt16 topic, string val);
+
+        [DllImport(DLL, EntryPoint = "bcfTopicSetPriority")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool TopicSetPriority(IntPtr project, UInt16 topic, string val);
+
+        [DllImport(DLL, EntryPoint = "bcfTopicSetDueDate")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool TopicSetDueDate(IntPtr project, UInt16 topic, string val);
+
+        [DllImport(DLL, EntryPoint = "bcfTopicSetAssignedTo")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool TopicSetAssignedTo(IntPtr project, UInt16 topic, string val);
+
+        [DllImport(DLL, EntryPoint = "bcfTopicSetDescription")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool TopicSetDescription(IntPtr project, UInt16 topic, string val);
+
+        [DllImport(DLL, EntryPoint = "bcfTopicSetStage")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool TopicSetStage(IntPtr project, UInt16 topic, string val);
+
+        [DllImport(DLL, EntryPoint = "bcfTopicSetIndex")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool TopicSetIndex(IntPtr project, UInt16 topic, int val);
+
+
+        /// <summary>
+        /// 
+        /// </summary>
         private static string PtrToString(IntPtr ptr)
         {
             var str = Marshal.PtrToStringUTF8(ptr);
