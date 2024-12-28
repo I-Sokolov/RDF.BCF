@@ -162,10 +162,10 @@ RDFBCF_EXPORT const char* bcfTopicGuid(BCFProject* project, BCFIndex topic)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT BCFIndex bcfTopicCreate(BCFProject* project, const char* topicType, const char* topicStatus, const char* guid)
+RDFBCF_EXPORT BCFIndex bcfTopicCreate(BCFProject* project, const char* type, const char* title, const char* status, const char* guid)
 {
     if (project) {
-        return project->TopicCreate(topicType, topicStatus, guid);
+        return project->TopicCreate(type, title, status, guid);
     }
     return BCFIndex_ERROR;
 }
@@ -177,6 +177,79 @@ RDFBCF_EXPORT bool bcfTopicRemove(BCFProject* project, BCFIndex topic)
 {
     if (project) {
         return project->TopicRemove(topic);
+    }
+    return false;
+}
+
+/// <summary>
+/// 
+/// </summary>
+
+#define TOPIC_GET_ATTR(ATTR)                                                        \
+RDFBCF_EXPORT const char* bcfTopicGet##ATTR (BCFProject* project, BCFIndex topic)   \
+{                                                                                   \
+    if (project) {                                                                  \
+        if (auto t = project->GetTopic(topic)) {                                    \
+            return t->Get##ATTR ();                                                 \
+        }                                                                           \
+    }                                                                               \
+    return NULL;                                                                    \
+}
+
+TOPIC_GET_ATTR(ServerAssignedId)
+TOPIC_GET_ATTR(TopicStatus)
+TOPIC_GET_ATTR(TopicType)
+TOPIC_GET_ATTR(Title)
+TOPIC_GET_ATTR(Priority)
+TOPIC_GET_ATTR(CreationDate)
+TOPIC_GET_ATTR(CreationAuthor)
+TOPIC_GET_ATTR(ModifiedDate)
+TOPIC_GET_ATTR(ModifiedAuthor)
+TOPIC_GET_ATTR(DueDate)
+TOPIC_GET_ATTR(AssignedTo)
+TOPIC_GET_ATTR(Description)
+TOPIC_GET_ATTR(Stage)
+
+RDFBCF_EXPORT int         bcfTopicGetIndex(BCFProject* project, BCFIndex topic)
+{
+    if (project) {
+        if (auto t = project->GetTopic(topic)) {
+            return t->GetIndex();
+        }
+    }
+    return 0;
+}
+
+
+/// <summary>
+/// 
+/// </summary>
+#define TOPIC_SET_ATTR(ATTR)                                                        \
+RDFBCF_EXPORT bool bcfTopicSet##ATTR (BCFProject* project, BCFIndex topic, const char* val)\
+{                                                                                   \
+    if (project) {                                                                  \
+        if (auto t = project->GetTopic(topic)) {                                    \
+            return t->Set##ATTR (val);                                              \
+        }                                                                           \
+    }                                                                               \
+    return false;                                                                   \
+}
+
+TOPIC_SET_ATTR(ServerAssignedId)
+TOPIC_SET_ATTR(TopicType)
+TOPIC_SET_ATTR(Title)
+TOPIC_SET_ATTR(Priority)
+TOPIC_SET_ATTR(DueDate)
+TOPIC_SET_ATTR(AssignedTo)
+TOPIC_SET_ATTR(Description)
+TOPIC_SET_ATTR(Stage)
+
+RDFBCF_EXPORT bool SetIndex(BCFProject* project, BCFIndex topic, int val)
+{
+    if (project) {
+        if (auto t = project->GetTopic(topic)) {
+            return t->SetIndex(val);
+        }
     }
     return false;
 }

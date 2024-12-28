@@ -75,7 +75,7 @@ StringSet* Extensions::GetList(BCFEnumeration enumeration)
         return &m_elements[ind];
     }
     else {
-        m_project.log().add(Log::Level::error, "Index is out of range", "Index %d is out of extensions types range [0..%d]", (int)ind, (int)m_elements.size());
+        m_project.log().add(Log::Level::error, "Extension schema", "Index %d is out of extensions types range [0..%d]", (int)ind, (int)m_elements.size());
         return NULL;
     }
 }
@@ -113,4 +113,27 @@ void Extensions::ReadEnumeration(_xml::_element& elem, const std::string& /*fold
             list->insert(content);
         }
     }
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool Extensions::CheckElement(BCFEnumeration enumeration, const char* element)
+{
+    auto list = GetList(enumeration);
+    if (!list) {
+        return false;
+    }
+
+    if (list->find(element) != list->end()) {
+        return true;
+    }
+
+    if (Project().GetAutoExtentSchema()) {
+        list->insert(element);
+        return true;
+    }
+
+    m_project.log().add(Log::Level::error, "Extension schema", "%s is not in enumeration", element);
+    return false;
 }

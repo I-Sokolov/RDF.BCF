@@ -11,6 +11,9 @@ public:
     bool AddElement(BCFEnumeration enumeration, const char* element);
     bool RemoveElement(BCFEnumeration enumeration, const char* element);
 
+public:
+    bool CheckElement(BCFEnumeration enumeration, const char* element);
+
 private:
     //XMLFile implementation
     virtual const char* XMLFileName() override { return "extensions.xml"; }

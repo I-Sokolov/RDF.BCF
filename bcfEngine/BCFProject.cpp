@@ -137,11 +137,29 @@ Topic* BCFProject::GetTopic(BCFIndex index)
 /// <summary>
 /// 
 /// </summary>
-BCFIndex BCFProject::TopicCreate(const char* topicType, const char* topicStatus, const char* guid)
+BCFIndex BCFProject::TopicCreate(const char* type, const char* title, const char* status, const char* guid)
 {
-    auto topic = new Topic(*this, guid);
-    m_topics.push_back(topic);
-    return (BCFIndex)m_topics.size() - 1;
+    auto topic = new Topic(*this, guid ? guid : "");
+
+    if (topic) {
+
+        bool ok = topic->SetTopicType(type);
+        ok = ok && topic->SetTitle(title);
+        ok = ok && topic->SetTopicStatus(title);
+
+        if (!ok) {
+            delete topic;
+            topic = NULL;
+        }
+    }
+
+    if (topic) {
+        m_topics.push_back(topic);
+        return (BCFIndex)m_topics.size() - 1;
+    }
+    else {
+        return BCFIndex_ERROR;
+    }
 }
 
 /// <summary>

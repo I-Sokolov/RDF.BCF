@@ -18,6 +18,37 @@ public:
 public:
     const char* Guid() { return m_Guid.c_str(); }
 
+    const char* GetServerAssignedId() { return m_ServerAssignedId.c_str(); }
+    const char* GetTopicStatus() { return m_TopicStatus.c_str(); }
+    const char* GetTopicType() { return m_TopicType.c_str(); }
+    const char* GetTitle() { return m_Title.c_str(); }
+    const char* GetPriority() { return m_Priority.c_str(); }
+    int GetIndex() { return atoi(m_Index.c_str()); }
+    const char* GetCreationDate() { return m_CreationDate.c_str(); }
+    const char* GetCreationAuthor() { return m_CreationAuthor.c_str(); }
+    const char* GetModifiedDate() { return m_ModifiedDate.c_str(); }
+    const char* GetModifiedAuthor() { return m_ModifiedAuthor.c_str(); }
+    const char* GetDueDate() { return m_DueDate.c_str(); }
+    const char* GetAssignedTo() { return m_AssignedTo.c_str(); }
+    const char* GetDescription() { return m_Description.c_str(); }
+    const char* GetStage() { return m_Stage.c_str(); }
+
+    bool SetServerAssignedId(const char* val);
+    bool SetTopicStatus(const char* val);
+    bool SetTopicType(const char* val);
+    bool SetTitle(const char* val);
+    bool SetPriority(const char* val);
+    bool SetIndex(int val);
+    bool SetDueDate(const char* val);
+    bool SetAssignedTo(const char* val);
+    bool SetDescription(const char* val);
+    bool SetStage(const char* val);
+
+public:
+    BimSnippet& GetBimSnippet() { return m_BimSnippet; }
+
+    bool UpdateAuthor();
+
 private:
     //XMLFile implementation
     virtual const char* XMLFileName() override { return "markup.bcf"; }
@@ -51,5 +82,8 @@ private:
     GuidList<GuidReference>         m_RelatedTopics;
     GuidList<Comment>               m_Comments;
     GuidList<ViewPoint>             m_Viewpoints;
+
+private:
+    bool                            m_bReadFromFile;
 };
 

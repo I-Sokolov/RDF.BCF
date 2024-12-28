@@ -8,10 +8,10 @@ struct BCFProject;
 /// <summary>
 /// base class for XML serialized data block
 /// </summary>
-class XMLFile
+class XMLFile : public BCFObject
 {
 public:
-    XMLFile(BCFProject& project) :m_project(project) {}
+    XMLFile(BCFProject& project) : BCFObject(project) {}
 
     bool ReadFile(const std::string& folder);
     bool WriteFile(const std::string& folder);
@@ -20,8 +20,6 @@ protected:
     virtual const char* XMLFileName() = NULL;
     virtual void ReadRoot(_xml::_element& elem, const std::string& folder) = NULL;
 
-protected:
-    BCFProject& m_project;
 };
 
 

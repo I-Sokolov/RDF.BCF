@@ -1,4 +1,5 @@
 ﻿
+using System.Diagnostics;
 using System.Xml.Linq;
 
 namespace CSExample
@@ -17,12 +18,15 @@ namespace CSExample
         {
             using (var bcfData = new RDF.BCF.Project())
             {
-                bcfData.SetEditor("user@company.org", true);
-
                 //
                 // create topic
                 //
-                var topic = bcfData.Topics.TopicCreate();
+
+                //
+                bcfData.SetEditor("user@company.org", true);
+
+                //
+                var topic = bcfData.Topics.TopicCreate("Topic Type", "Topic Title", "Topic Status");
                 if (topic == null)
                 {
                     Console.WriteLine(bcfData.ErrorsGet());

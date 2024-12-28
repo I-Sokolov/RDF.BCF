@@ -24,6 +24,8 @@ public:
     bool Write(const char* bcfFilePath, BCFVersion version);
 
     bool SetEditor(const char* user, bool autoExtentSchema) { m_editor = user; m_autoExtentSchema = autoExtentSchema; return true; }
+    const char* GetEditor() { return m_editor.c_str(); }
+    bool GetAutoExtentSchema() { return m_autoExtentSchema; }
 
     const char* ProjectId() { return m_projectInfo.m_ProjectId.c_str(); }
     const char* GetName() { return m_projectInfo.m_Name.c_str(); }
@@ -33,7 +35,7 @@ public:
 
     BCFIndex TopicsCount() { return (BCFIndex) m_topics.size(); }
     Topic* GetTopic(BCFIndex index); //do not delete, valid until project destroyed or TopicRemove
-    BCFIndex TopicCreate(const char* topicType, const char* topicStatus, const char* guid = NULL);
+    BCFIndex TopicCreate(const char* type, const char* title, const char* status, const char* guid = NULL);
     bool TopicRemove(BCFIndex index);
 
 private:

@@ -112,7 +112,7 @@ namespace RDF.BCF
         }
 
         [DllImport(DLL, EntryPoint = "bcfTopicCreate")]
-        public static extern UInt16 TopicCreate(IntPtr project, string? guid);
+        public static extern UInt16 TopicCreate(IntPtr project, string type, string title, string status, string? guid);
 
         [DllImport(DLL, EntryPoint = "bcfTopicRemove")]
         [return: MarshalAs(UnmanagedType.U1)]

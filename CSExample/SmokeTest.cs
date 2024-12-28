@@ -1,9 +1,11 @@
 ﻿using RDF.BCF;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace CSExample
 {
@@ -85,7 +87,7 @@ namespace CSExample
                 var lst = bcf.Extensions.GetEnumeration(Interop.BCFEnumeration.Users);
                 ASSERT(lst.Count() == 3);
 
-                TestTopics(bcf.Topics);
+                TestTopics(bcf);
             }
 
             //
@@ -98,7 +100,9 @@ namespace CSExample
                 ASSERT(lst.Count() == 0);
 
                 Console.WriteLine("Expected NULL argument error...");
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
                 var res = bcf.Extensions.EnumerationElementAdd(Interop.BCFEnumeration.Users, null);
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
                 ASSERT(!res);
 
                 var msg = bcf.ErrorsGet();
@@ -126,20 +130,53 @@ namespace CSExample
             }
         }
 
-        static private void TestTopics(RDF.BCF.Topics topics)
+        static private void TestTopics(RDF.BCF.Project bcf)
         {
+            RDF.BCF.Topics topics = bcf.Topics;
+
             var items = topics.Items;
             ASSERT(items.Count() == 1);
             
             var topic = items.First();
             ASSERT(topic.Guid == "7ad1a717-bf20-4c12-b511-cbd90370ddba");
 
-            topics.TopicCreate();
+            //
+            // new topic create
+            // 
+            Console.WriteLine("Expected error - author not set");
+            topic = topics.TopicCreate("Topic Type", "Topic Title", "Topic Status");
+            ASSERT(topic == null);
+            Console.WriteLine(bcf.ErrorsGet());
 
-            items =topics.Items;
+            //
+            bcf.SetEditor("John Smith", false);
+
+            Console.WriteLine("Expected error - author unknown");
+            topic = topics.TopicCreate("Topic Type", "Topic Title", "Topic Status");
+            ASSERT(topic == null);
+            Console.WriteLine(bcf.ErrorsGet());
+
+            items = topics.Items;
+            ASSERT(items.Count() == 1);
+
+            //
+            bcf.SetEditor("John Smith", true);
+
+            topic = topics.TopicCreate("Topic Type", "Topic Title", "Topic Status");
+            ASSERT(topic != null);
+
+
+            items = topics.Items;
             ASSERT(items.Count() == 2);
+            topic = items.First();
 
-            topics.TopicRemove(topic);
+            //
+            // remove
+            //
+            if (topic != null)
+            {
+                topics.TopicRemove(topic);
+            }
 
             items = topics.Items;
             ASSERT(items.Count() == 1);

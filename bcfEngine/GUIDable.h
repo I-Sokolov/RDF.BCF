@@ -5,38 +5,56 @@ struct BCFProject;
 /// <summary>
 /// 
 /// </summary>
-struct BCFGuid : private std::string
+struct BCFObject
 {
 public:
-    BCFGuid(BCFProject& project, const char* guid) : m_project(project) { if (guid) assign(guid); }
+    BCFObject(BCFProject& project) : m_project(project) {}
+
+    BCFProject& Project() { return m_project; }
+
+protected:
+    static std::string GetCurrentDate() { return GetCurrentTime(); }
+    static std::string GetCurrentTime();
+
+    bool SetIntVal(std::string& prop, int val);
+
+protected:
+    BCFProject& m_project;
+};
+
+/// <summary>
+/// 
+/// </summary>
+struct BCFGuid : public BCFObject
+{
+public:
+    BCFGuid(BCFProject& project, const char* guid);
 
     void CreateNew();
 
-    bool empty() const { return __super::empty(); }
+    bool empty() const { return value.empty(); }
     void assign(const std::string& s);
 
-    const char* c_str() { return __super::c_str(); }
+    const char* c_str() { return value.c_str(); }
 
 private:
-    BCFProject& m_project;
+    std::string value;
 };
 
 
 /// <summary>
 /// 
 /// </summary>
-struct GuidReference
+struct GuidReference : public BCFObject
 {
 public:
-    GuidReference(BCFProject& project) : m_project(project), m_Guid(project, NULL) {}
+    GuidReference(BCFProject& project) : BCFObject(project), m_Guid(project, NULL) {}
 
     void Read(_xml::_element& elem, const std::string&);
 
     const char* Guid() { return m_Guid.c_str(); }
 
 private:
-    BCFProject& m_project;
-
     BCFGuid     m_Guid;
 };
 
@@ -67,6 +85,7 @@ struct GuidList : public OwningList<Item>
 
             for (auto it = this->begin(); it != this->end(); it++) {
                 if (0 == strcmp(item->Guid(), (*it)->Guid())) {
+                    //LogDuplicatedGuid(item->Guid());
                     delete (*it);
                     this->erase(it);
                     break;
@@ -79,4 +98,8 @@ struct GuidList : public OwningList<Item>
             assert(!"Guid must be set before adding to list");
         }
     }
+
+private:
+    //void LogDuplicatedGuid(BCFGuid& guid);
+
 };
