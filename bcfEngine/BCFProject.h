@@ -25,7 +25,7 @@ public:
 
     bool SetEditor(const char* user, bool autoExtentSchema) { m_editor = user; m_autoExtentSchema = autoExtentSchema; return true; }
 
-    const char* GetProjectId() { return m_projectInfo.m_ProjectId.c_str(); }
+    const char* ProjectId() { return m_projectInfo.m_ProjectId.c_str(); }
     const char* GetName() { return m_projectInfo.m_Name.c_str(); }
     void SetName(const char* name) { m_projectInfo.m_Name = name; }
 
@@ -33,19 +33,13 @@ public:
 
     BCFIndex TopicsCount() { return (BCFIndex) m_topics.size(); }
     Topic* GetTopic(BCFIndex index); //do not delete, valid until project destroyed or TopicRemove
-    BCFIndex TopicCreate(const char* guid);
+    BCFIndex TopicCreate(const char* topicType, const char* topicStatus, const char* guid = NULL);
     bool TopicRemove(BCFIndex index);
 
 private:
     bool ReadTopics(const std::string& bcfFolder);
     bool WriteTopics(const std::string& bcfFolder);
 
-private:
-    struct Topics : std::vector<Topic*>
-    {
-        ~Topics();
-        void push_back(Topic* topic);
-    };
 
 private:
     Log         m_log;
@@ -57,6 +51,6 @@ private:
     std::string m_editor;
     bool        m_autoExtentSchema;
 
-    Topics      m_topics;
+    GuidList<Topic>  m_topics;
 };
 

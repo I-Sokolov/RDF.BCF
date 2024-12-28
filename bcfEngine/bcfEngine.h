@@ -83,7 +83,7 @@ extern "C" {
     /// <summary>
     /// 
     /// </summary>
-    RDFBCF_EXPORT BCFIndex bcfTopicCreate(BCFProject* project, const char* guid);
+    RDFBCF_EXPORT BCFIndex bcfTopicCreate(BCFProject* project, const char* topicType, const char* topicStatus, const char* guid);
 
     /// <summary>
     /// 

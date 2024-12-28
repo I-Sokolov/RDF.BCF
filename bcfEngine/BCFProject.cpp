@@ -4,34 +4,6 @@
 #include "Archivator.h"
 #include "FileSystem.h"
 
-/// <summary>
-/// 
-/// </summary>
-BCFProject::Topics::~Topics()
-{
-    for (auto t : *this) {
-        delete t;
-    }
-    clear();
-}
-
-/// <summary>
-/// 
-/// </summary>
-void BCFProject::Topics::push_back(Topic* topic)
-{
-    if (*topic->Guid()) {
-        for (auto it = begin(); it != end(); it++) {
-            if (0 == strcmp(topic->Guid(), (*it)->Guid())) {
-                delete (*it);
-                erase(it);
-                break;
-            }
-        }
-    }
-
-    __super::push_back(topic);
-}
 
 /// <summary>
 /// 
@@ -83,7 +55,7 @@ bool BCFProject::Read(const char* bcfFilePath)
 bool BCFProject::Write(const char* bcfFilePath, BCFVersion version)
 {
     if (m_projectInfo.m_ProjectId.empty()) {
-        m_projectInfo.m_ProjectId = GUIDable::CreateNewGUID();
+        m_projectInfo.m_ProjectId.CreateNew();
     }
 
     m_version.Set(version);
@@ -165,7 +137,7 @@ Topic* BCFProject::GetTopic(BCFIndex index)
 /// <summary>
 /// 
 /// </summary>
-BCFIndex BCFProject::TopicCreate(const char* guid)
+BCFIndex BCFProject::TopicCreate(const char* topicType, const char* topicStatus, const char* guid)
 {
     auto topic = new Topic(*this, guid);
     m_topics.push_back(topic);

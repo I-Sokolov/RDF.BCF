@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Log.h"
+#include "GUIDable.h"
 
 struct BCFProject;
 
@@ -46,11 +47,11 @@ enum class UnknownNames : bool
 #define ATTRS_START                         \
     for (auto attr : elem.attributes()) {   \
     if (attr) {                             \
-        auto attrName = attr->getName();    \
+        auto& attrName = attr->getName();   \
 
-#define ATTR_GET(name)                      \
-        if (attrName == #name) {            \
-            m_##name = attr->getValue();    \
+#define ATTR_GET(name)                          \
+        if (attrName == #name) {                \
+            m_##name.assign (attr->getValue()); \
         } else
 
 #define ATTRS_END(onUnknownNames)           \
@@ -102,29 +103,32 @@ enum class UnknownNames : bool
 /// 
 /// </summary>
 template <class TReadable>
-void AddToList(std::vector<TReadable>& list, BCFProject& project, _xml::_element& elem, const std::string& folder)
+void AddToList(OwningList<TReadable>& list, BCFProject& project, _xml::_element& elem, const std::string& folder)
 {
-    list.push_back(TReadable(project));
-    list.back().Read(elem, folder);
+    auto item = new TReadable(project);
+    item->Read(elem, folder);
+    list.push_back(item);
 }
 
 /// <summary>
 /// 
 /// </summary>
 template <class TReadable> 
-void ReadList(std::vector<TReadable>& list, BCFProject& project, _xml::_element& elem, const std::string& folder, const char* childName, Log& log)
+void ReadList(OwningList<TReadable>& list, BCFProject& project, _xml::_element& elem, const std::string& folder, const char* childName, Log& log)
 {
     if (!childName) {
-        list.push_back(TReadable(project));
-        list.back().Read(elem, folder);
+        auto item = new TReadable(project);
+        item->Read(elem, folder);
+        list.push_back(item);
     }
     else {
         for (auto child : elem.children()) {
             if (child) {
                 auto& tag = child->getName();
                 if (tag == childName) {
-                    list.push_back(TReadable(project));
-                    list.back().Read(*child, folder);
+                    auto item = new TReadable(project);
+                    item->Read(*child, folder);
+                    list.push_back(item);
                 }
                 else {
                     log.add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str());

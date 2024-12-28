@@ -73,7 +73,7 @@ RDFBCF_EXPORT bool bcfSetEditor(BCFProject* project, const char* user, bool auto
 RDFBCF_EXPORT const char* bcfProjectIdGet(BCFProject* project)
 {
     if (project) {
-        return project->GetProjectId();
+        return project->ProjectId();
     }
     return NULL;
 }
@@ -162,10 +162,10 @@ RDFBCF_EXPORT const char* bcfTopicGuid(BCFProject* project, BCFIndex topic)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT BCFIndex bcfTopicCreate(BCFProject* project, const char* guid)
+RDFBCF_EXPORT BCFIndex bcfTopicCreate(BCFProject* project, const char* topicType, const char* topicStatus, const char* guid)
 {
     if (project) {
-        return project->TopicCreate(guid);
+        return project->TopicCreate(topicType, topicStatus, guid);
     }
     return BCFIndex_ERROR;
 }

@@ -7,13 +7,8 @@
 /// </summary>
 ProjectInfo::ProjectInfo(BCFProject& project, const char* projectId)
     : XMLFile(project) 
+    , m_ProjectId(project, projectId)
 {
-    if (projectId) {
-        m_ProjectId.assign(projectId);
-    }
-    else {
-        m_ProjectId = GUIDable::CreateNewGUID();
-    }
 }
 
 /// <summary>

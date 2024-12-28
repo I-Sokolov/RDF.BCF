@@ -7,9 +7,9 @@
 /// <summary>
 /// 
 /// </summary>
-ViewPoint::ViewPoint(BCFProject& project)
-    : GUIDable(NULL)
-    , XMLFile(project)
+ViewPoint::ViewPoint(BCFProject& project, const char* guid)
+    : XMLFile(project)
+    , m_Guid(project, guid)
     , m_cameraType(BCFCameraPerspective)
     , m_CameraViewPoint(project)
     , m_CameraDirection(project)

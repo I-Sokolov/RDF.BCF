@@ -1,6 +1,7 @@
 #pragma once
 
 #include "XMLFile.h"
+#include "GUIDable.h"
 
 class ProjectInfo : public XMLFile
 {
@@ -8,7 +9,7 @@ public:
     ProjectInfo(BCFProject& project, const char* projectId);
 
 public:
-    std::string m_ProjectId;
+    BCFGuid     m_ProjectId;
     std::string m_Name;
 
 private:

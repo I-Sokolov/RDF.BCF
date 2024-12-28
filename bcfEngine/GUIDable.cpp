@@ -6,21 +6,10 @@
 /// <summary>
 /// 
 /// </summary>
-GUIDable::GUIDable(const char* guid)
+void BCFGuid::CreateNew()
 {
-    if (guid) {
-        m_Guid.assign(guid);
-    }
-    else {
-        m_Guid = CreateNewGUID();
-    }
-}
+    assert(empty());
 
-/// <summary>
-/// 
-/// </summary>
-std::string GUIDable::CreateNewGUID()
-{
     std::ostringstream oss;
     for (int i = 0; i < 4; i++) {
         oss << std::hex << std::setw(2) << std::setfill('0') << rand() % 256;
@@ -42,8 +31,22 @@ std::string GUIDable::CreateNewGUID()
         oss << std::hex << std::setw(2) << std::setfill('0') << rand() % 256;
     }
 
-    return oss.str();
+    assign(oss.str());
 }
+
+/// <summary>
+/// 
+/// </summary>
+void BCFGuid::assign(const std::string& s)
+{ 
+    if (empty()) {
+        __super::assign(s);
+    }
+    else if (*this!=s) {
+        m_project.log().add(Log::Level::warning, "Inconsitent GUIDs",  "%s is aloso referenced as %s", c_str(), s.c_str());
+    }
+}
+
 
 /// <summary>
 /// 

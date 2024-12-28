@@ -9,10 +9,10 @@
 #include "Component.h"
 #include "Color.h"
 
-class ViewPoint : public GUIDable, public XMLFile
+class ViewPoint : public XMLFile
 {
 public:
-    ViewPoint(BCFProject& project);
+    ViewPoint(BCFProject& project, const char* guid = NULL);
 
     void Read(_xml::_element& elem, const std::string& folder);
 
@@ -29,18 +29,20 @@ private:
     void Read_OrthogonalCamera(_xml::_element& elem, const std::string& folder);
 
 private:
+    BCFGuid     m_Guid;
+
     std::string m_Viewpoint; //name.bcfv
     std::string m_Snapshot;  //name.jpg
 
-    std::vector<Component>      m_Selection;
+    OwningList<Component>       m_Selection;
     
     std::string                 m_DefaultVisibility;
     std::string                 m_SpacesVisible;
     std::string                 m_SpaceBoundariesVisible;
     std::string                 m_OpeningsVisible;
-    std::vector<Component>      m_Exceptions;
+    OwningList<Component>       m_Exceptions;
     
-    std::vector<Color>          m_Coloring;
+    OwningList<Color>           m_Coloring;
 
     BCFCamera                   m_cameraType;
     Point                       m_CameraViewPoint;
@@ -50,8 +52,8 @@ private:
     std::string                 m_FieldOfView;
     std::string                 m_AspectRatio;
 
-    std::vector<Line>           m_Lines;
-    std::vector<ClippingPlane>  m_ClippingPlanes;
-    std::vector<Bitmap>         m_Bitmaps;
+    OwningList<Line>            m_Lines;
+    OwningList<ClippingPlane>   m_ClippingPlanes;
+    OwningList<Bitmap>          m_Bitmaps;
 };
 

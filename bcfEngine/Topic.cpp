@@ -8,8 +8,8 @@
 /// 
 /// </summary>
 Topic::Topic(BCFProject& project, const char* guid)
-    : GUIDable(guid)
-    , XMLFile(project)
+    : XMLFile(project)
+    , m_Guid(project, guid)
     , m_BimSnippet(project)
 {
 
