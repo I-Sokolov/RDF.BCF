@@ -111,15 +111,16 @@ extern "C" {
     /// <summary>
     /// 
     /// </summary>
-    RDFBCF_EXPORT bool SetServerAssignedId(BCFProject* project, BCFIndex topic, const char* val);
-    RDFBCF_EXPORT bool SetTopicType(BCFProject* project, BCFIndex topic, const char* val);
-    RDFBCF_EXPORT bool SetTitle(BCFProject* project, BCFIndex topic, const char* val);
-    RDFBCF_EXPORT bool SetPriority(BCFProject* project, BCFIndex topic, const char* val);
-    RDFBCF_EXPORT bool SetDueDate(BCFProject* project, BCFIndex topic, const char* val);
-    RDFBCF_EXPORT bool SetAssignedTo(BCFProject* project, BCFIndex topic, const char* val);
-    RDFBCF_EXPORT bool SetDescription(BCFProject* project, BCFIndex topic, const char* val);
-    RDFBCF_EXPORT bool SetStage(BCFProject* project, BCFIndex topic, const char* val);
-    RDFBCF_EXPORT bool SetIndex(BCFProject* project, BCFIndex topic, int val);
+    RDFBCF_EXPORT bool bcfTopicSetServerAssignedId(BCFProject* project, BCFIndex topic, const char* val);
+    RDFBCF_EXPORT bool bcfTopicSetTopicStatus(BCFProject* project, BCFIndex topic, const char* val);
+    RDFBCF_EXPORT bool bcfTopicSetTopicType(BCFProject* project, BCFIndex topic, const char* val);
+    RDFBCF_EXPORT bool bcfTopicSetTitle(BCFProject* project, BCFIndex topic, const char* val);
+    RDFBCF_EXPORT bool bcfTopicSetPriority(BCFProject* project, BCFIndex topic, const char* val);
+    RDFBCF_EXPORT bool bcfTopicSetDueDate(BCFProject* project, BCFIndex topic, const char* val);
+    RDFBCF_EXPORT bool bcfTopicSetAssignedTo(BCFProject* project, BCFIndex topic, const char* val);
+    RDFBCF_EXPORT bool bcfTopicSetDescription(BCFProject* project, BCFIndex topic, const char* val);
+    RDFBCF_EXPORT bool bcfTopicSetStage(BCFProject* project, BCFIndex topic, const char* val);
+    RDFBCF_EXPORT bool bcfTopicSetIndex(BCFProject* project, BCFIndex topic, int val);
 
 
 #ifdef __cplusplus

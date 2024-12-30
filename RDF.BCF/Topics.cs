@@ -12,7 +12,7 @@ namespace RDF.BCF
         /// <summary>
         /// Get topics in the BCF data, existing to the moment of call
         /// </summary>
-        public IEnumerable<Topic> Items { get { return CreateList(); } }
+        public Topic[] Items { get { return CreateList(); } }
 
         /// <summary>
         /// Creates new topic.
@@ -46,14 +46,15 @@ namespace RDF.BCF
             m_project = project;
         }
 
-        private List<Topic> CreateList()
+        private Topic[] CreateList()
         {
-            var list = new List<Topic> ();
-
             var N = Interop.TopicsCount(m_project.Handle);
+
+            var list = new Topic[N];
+
             for (UInt16 i = 0; i < N; i++)
             {
-                list.Add(new Topic(m_project, i));
+                list[i] = new Topic(m_project, i);
             }
 
             return list;

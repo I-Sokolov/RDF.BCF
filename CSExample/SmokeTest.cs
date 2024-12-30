@@ -202,7 +202,80 @@ namespace CSExample
                 bool ok = bcf.SetEditor("Smoke-tester", true);
                 ASSERT(ok);
 
-                //CreateTopic
+                SetTopicAttributes(bcf, true);
+                GetTopicAttributes(bcf, true);
+            }
+        }
+
+        static private void SetTopicAttributes(RDF.BCF.Project bcf, bool newFile)
+        {
+            var topic = bcf.Topics.TopicCreate("Type1", "Title1", "Status1");
+            bcf.Topics.TopicCreate("Type1", "Title1", "Status1", "myGuid");
+            ASSERT(topic != null);
+            if (topic != null)
+            {
+                topic.TopicType = "Type";
+                topic.Title = "Title";
+                topic.TopicStatus = "Status";
+                topic.ServerAssignedId = "ServerAssignedId";
+                topic.TopicType = "TopicType";
+                topic.Priority = "Priority";
+                topic.DueDate = "DueDate";
+                topic.AssignedTo = "AssignedTo";
+                topic.Description = "Description";
+                topic.Stage = "Stage";
+                topic.Index = 7;
+            }
+
+        }
+
+        static private void GetTopicAttributes(RDF.BCF.Project bcf, bool newFile)
+        {
+            ASSERT(bcf.Topics.Items.Count() == 2);
+
+            var topic = bcf.Topics.Items[1];
+            ASSERT(topic != null);
+            if (topic != null)
+            {
+                ASSERT(topic.TopicType == "Type1");
+                ASSERT(topic.Title == "Title1");
+                ASSERT(topic.TopicStatus == "Status1");
+                ASSERT(topic.ServerAssignedId == "");
+                ASSERT(topic.TopicType == "Type1");
+                ASSERT(topic.Priority == "");
+                ASSERT(topic.DueDate == "");
+                ASSERT(topic.AssignedTo == "");
+                ASSERT(topic.Description == "");
+                ASSERT(topic.Stage == "");
+                ASSERT(topic.Index == 0);
+
+                ASSERT(topic.CreationDate.Length > 0);
+                ASSERT(topic.CreationAuthor == "Smoke-tester");
+                ASSERT(topic.ModifiedDate.Length == 0);
+                ASSERT(topic.ModifiedAuthor.Length == 0);
+            }
+
+            topic = bcf.Topics.Items[0];
+            ASSERT(topic != null);
+            if (topic != null)
+            {
+                ASSERT(topic.TopicType == "TopicType");
+                ASSERT(topic.Title == "Title");
+                ASSERT(topic.TopicStatus == "Status");
+                ASSERT(topic.ServerAssignedId == "ServerAssignedId");
+                ASSERT(topic.TopicType == "TopicType");
+                ASSERT(topic.Title == "Title");
+                ASSERT(topic.Priority == "Priority");
+                ASSERT(topic.DueDate == "DueDate");
+                ASSERT(topic.AssignedTo == "AssignedTo");
+                ASSERT(topic.Description == "Description");
+                ASSERT(topic.Stage == "Stage");
+                ASSERT(topic.Index == 7);
+
+                ASSERT(topic.CreationDate.Length > 0);
+                ASSERT(topic.CreationAuthor == "Smoke-tester");
+                ASSERT(topic.ModifiedDate.Length == 0);
+                ASSERT(topic.ModifiedAuthor.Length == 0);
             }
         }
     }

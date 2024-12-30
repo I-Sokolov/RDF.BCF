@@ -236,6 +236,7 @@ RDFBCF_EXPORT bool bcfTopicSet##ATTR (BCFProject* project, BCFIndex topic, const
 }
 
 TOPIC_SET_ATTR(ServerAssignedId)
+TOPIC_SET_ATTR(TopicStatus)
 TOPIC_SET_ATTR(TopicType)
 TOPIC_SET_ATTR(Title)
 TOPIC_SET_ATTR(Priority)
@@ -244,7 +245,7 @@ TOPIC_SET_ATTR(AssignedTo)
 TOPIC_SET_ATTR(Description)
 TOPIC_SET_ATTR(Stage)
 
-RDFBCF_EXPORT bool SetIndex(BCFProject* project, BCFIndex topic, int val)
+RDFBCF_EXPORT bool bcfTopicSetIndex(BCFProject* project, BCFIndex topic, int val)
 {
     if (project) {
         if (auto t = project->GetTopic(topic)) {
