@@ -74,54 +74,65 @@ extern "C" {
     /// 
     /// </summary>
     RDFBCF_EXPORT BCFIndex bcfTopicsCount(BCFProject* project);
-
-    /// <summary>
-    /// 
-    /// </summary>
-    RDFBCF_EXPORT const char* bcfTopicGuid(BCFProject* project, BCFIndex topic);
-
-    /// <summary>
-    /// 
-    /// </summary>
     RDFBCF_EXPORT BCFIndex bcfTopicCreate(BCFProject* project, const char* type, const char* title, const char* status, const char* guid);
-
-    /// <summary>
-    /// 
-    /// </summary>
     RDFBCF_EXPORT bool bcfTopicRemove(BCFProject* project, BCFIndex topic);
 
     /// <summary>
     /// 
     /// </summary>
-    RDFBCF_EXPORT const char* bcfTopicGetServerAssignedId(BCFProject* project, BCFIndex topic);
-    RDFBCF_EXPORT const char* bcfTopicGetTopicStatus(BCFProject* project, BCFIndex topic);
-    RDFBCF_EXPORT const char* bcfTopicGetTopicType(BCFProject* project, BCFIndex topic);
-    RDFBCF_EXPORT const char* bcfTopicGetTitle(BCFProject* project, BCFIndex topic);
-    RDFBCF_EXPORT const char* bcfTopicGetPriority(BCFProject* project, BCFIndex topic);
-    RDFBCF_EXPORT const char* bcfTopicGetCreationDate(BCFProject* project, BCFIndex topic);
-    RDFBCF_EXPORT const char* bcfTopicGetCreationAuthor(BCFProject* project, BCFIndex topic);
-    RDFBCF_EXPORT const char* bcfTopicGetModifiedDate(BCFProject* project, BCFIndex topic);
-    RDFBCF_EXPORT const char* bcfTopicGetModifiedAuthor(BCFProject* project, BCFIndex topic);
-    RDFBCF_EXPORT const char* bcfTopicGetDueDate(BCFProject* project, BCFIndex topic);
-    RDFBCF_EXPORT const char* bcfTopicGetAssignedTo(BCFProject* project, BCFIndex topic);
-    RDFBCF_EXPORT const char* bcfTopicGetDescription(BCFProject* project, BCFIndex topic);
-    RDFBCF_EXPORT const char* bcfTopicGetStage(BCFProject* project, BCFIndex topic);
-    RDFBCF_EXPORT int         bcfTopicGetIndex(BCFProject* project, BCFIndex topic);
+    RDFBCF_EXPORT const char* bcfTopicGetGuid               (BCFProject* project, BCFIndex topic);
+    RDFBCF_EXPORT const char* bcfTopicGetServerAssignedId   (BCFProject* project, BCFIndex topic);
+    RDFBCF_EXPORT const char* bcfTopicGetTopicStatus        (BCFProject* project, BCFIndex topic);
+    RDFBCF_EXPORT const char* bcfTopicGetTopicType          (BCFProject* project, BCFIndex topic);
+    RDFBCF_EXPORT const char* bcfTopicGetTitle              (BCFProject* project, BCFIndex topic);
+    RDFBCF_EXPORT const char* bcfTopicGetPriority           (BCFProject* project, BCFIndex topic);
+    RDFBCF_EXPORT const char* bcfTopicGetCreationDate       (BCFProject* project, BCFIndex topic);
+    RDFBCF_EXPORT const char* bcfTopicGetCreationAuthor     (BCFProject* project, BCFIndex topic);
+    RDFBCF_EXPORT const char* bcfTopicGetModifiedDate       (BCFProject* project, BCFIndex topic);
+    RDFBCF_EXPORT const char* bcfTopicGetModifiedAuthor     (BCFProject* project, BCFIndex topic);
+    RDFBCF_EXPORT const char* bcfTopicGetDueDate            (BCFProject* project, BCFIndex topic);
+    RDFBCF_EXPORT const char* bcfTopicGetAssignedTo         (BCFProject* project, BCFIndex topic);
+    RDFBCF_EXPORT const char* bcfTopicGetDescription        (BCFProject* project, BCFIndex topic);
+    RDFBCF_EXPORT const char* bcfTopicGetStage              (BCFProject* project, BCFIndex topic);
+    RDFBCF_EXPORT int         bcfTopicGetIndex              (BCFProject* project, BCFIndex topic);
 
     /// <summary>
     /// 
     /// </summary>
-    RDFBCF_EXPORT bool bcfTopicSetServerAssignedId(BCFProject* project, BCFIndex topic, const char* val);
-    RDFBCF_EXPORT bool bcfTopicSetTopicStatus(BCFProject* project, BCFIndex topic, const char* val);
-    RDFBCF_EXPORT bool bcfTopicSetTopicType(BCFProject* project, BCFIndex topic, const char* val);
-    RDFBCF_EXPORT bool bcfTopicSetTitle(BCFProject* project, BCFIndex topic, const char* val);
-    RDFBCF_EXPORT bool bcfTopicSetPriority(BCFProject* project, BCFIndex topic, const char* val);
-    RDFBCF_EXPORT bool bcfTopicSetDueDate(BCFProject* project, BCFIndex topic, const char* val);
-    RDFBCF_EXPORT bool bcfTopicSetAssignedTo(BCFProject* project, BCFIndex topic, const char* val);
-    RDFBCF_EXPORT bool bcfTopicSetDescription(BCFProject* project, BCFIndex topic, const char* val);
-    RDFBCF_EXPORT bool bcfTopicSetStage(BCFProject* project, BCFIndex topic, const char* val);
-    RDFBCF_EXPORT bool bcfTopicSetIndex(BCFProject* project, BCFIndex topic, int val);
+    RDFBCF_EXPORT bool bcfTopicSetServerAssignedId          (BCFProject* project, BCFIndex topic, const char* val);
+    RDFBCF_EXPORT bool bcfTopicSetTopicStatus               (BCFProject* project, BCFIndex topic, const char* val);
+    RDFBCF_EXPORT bool bcfTopicSetTopicType                 (BCFProject* project, BCFIndex topic, const char* val);
+    RDFBCF_EXPORT bool bcfTopicSetTitle                     (BCFProject* project, BCFIndex topic, const char* val);
+    RDFBCF_EXPORT bool bcfTopicSetPriority                  (BCFProject* project, BCFIndex topic, const char* val);
+    RDFBCF_EXPORT bool bcfTopicSetDueDate                   (BCFProject* project, BCFIndex topic, const char* val);
+    RDFBCF_EXPORT bool bcfTopicSetAssignedTo                (BCFProject* project, BCFIndex topic, const char* val);
+    RDFBCF_EXPORT bool bcfTopicSetDescription               (BCFProject* project, BCFIndex topic, const char* val);
+    RDFBCF_EXPORT bool bcfTopicSetStage                     (BCFProject* project, BCFIndex topic, const char* val);
+    RDFBCF_EXPORT bool bcfTopicSetIndex                     (BCFProject* project, BCFIndex topic, int val);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    RDFBCF_EXPORT BCFIndex bcfCommentsCount     (BCFProject* project, BCFIndex topic);
+    RDFBCF_EXPORT BCFIndex bcfCommentCreate     (BCFProject* project, BCFIndex topic, const char* guid);
+    RDFBCF_EXPORT bool bcfCommentRemove         (BCFProject* project, BCFIndex topic, BCFIndex comment);
+
+    /// <summary>
+    ///
+    /// </summary>
+    RDFBCF_EXPORT const char* bcfCommentGetGuid             (BCFProject* project, BCFIndex topic, BCFIndex comment);
+    RDFBCF_EXPORT const char* bcfCommentGetDate             (BCFProject* project, BCFIndex topic, BCFIndex comment);
+    RDFBCF_EXPORT const char* bcfCommentGetAuthor           (BCFProject* project, BCFIndex topic, BCFIndex comment);
+    RDFBCF_EXPORT const char* bcfCommentGetModifiedDate     (BCFProject* project, BCFIndex topic, BCFIndex comment);
+    RDFBCF_EXPORT const char* bcfCommentGetModifiedAuthor   (BCFProject* project, BCFIndex topic, BCFIndex comment);
+    RDFBCF_EXPORT const char* bcfCommentGetComment          (BCFProject* project, BCFIndex topic, BCFIndex comment);
+    RDFBCF_EXPORT BCFIndex    bcfCommentGetViewPoint        (BCFProject* project, BCFIndex topic, BCFIndex comment);
+
+    /// <summary>
+    ///
+    /// </summary>
+    RDFBCF_EXPORT bool bcfCommentSetComment     (BCFProject* project, BCFIndex topic, BCFIndex comment, const char* text);
+    RDFBCF_EXPORT bool bcfCommentSetViewPoint   (BCFProject* project, BCFIndex topic, BCFIndex comment, BCFIndex viewPoint);
 
 #ifdef __cplusplus
 } //extern "C"

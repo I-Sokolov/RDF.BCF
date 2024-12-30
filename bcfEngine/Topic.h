@@ -16,8 +16,7 @@ public:
     Topic(BCFProject& project, const char* guid);
 
 public:
-    const char* Guid() { return m_Guid.c_str(); }
-
+    const char* GetGuid() { return m_Guid.c_str(); }
     const char* GetServerAssignedId() { return m_ServerAssignedId.c_str(); }
     const char* GetTopicStatus() { return m_TopicStatus.c_str(); }
     const char* GetTopicType() { return m_TopicType.c_str(); }

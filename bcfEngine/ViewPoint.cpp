@@ -9,6 +9,7 @@
 /// </summary>
 ViewPoint::ViewPoint(Topic& topic, const char* guid)
     : XMLFile(topic.Project())
+    , m_topic(topic)
     , m_Guid(topic.Project(), guid)
     , m_cameraType(BCFCameraPerspective)
     , m_CameraViewPoint(topic.Project())
@@ -127,4 +128,17 @@ void  ViewPoint::Read_OrthogonalCamera(_xml::_element& elem, const std::string& 
     CHILDREN_END
 }
 
+BCFIndex ViewPoint::GetIndex()
+{
+    BCFIndex N = m_topic.ViewPointsCount();
+    for (BCFIndex i = 0; i < N; i++) {
+        auto vp = m_topic.ViewPointGet(i);
+        if (vp == this) {
+            return i;
+        }
+    }
+
+    log().add(Log::Level::error, "Out of range", "ViewPoint %s is not from topic %s", GetGuid(), m_topic.GetGuid());
+    return BCFIndex_ERROR;
+}
 

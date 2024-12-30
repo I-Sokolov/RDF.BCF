@@ -61,7 +61,7 @@ bool Comment::SetViewPoint(ViewPoint* viewPoint)
     const char* guid = NULL;
 
     if (viewPoint) {
-        guid = viewPoint->Guid();
+        guid = viewPoint->GetGuid();
       
         if (!m_topic.ViewPointByGuid(guid)) {
             ok = false;

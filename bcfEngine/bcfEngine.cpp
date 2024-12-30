@@ -149,19 +149,6 @@ RDFBCF_EXPORT BCFIndex bcfTopicsCount(BCFProject* project)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT const char* bcfTopicGuid(BCFProject* project, BCFIndex topic)
-{
-    if (project) {
-        if (auto pt = project->TopicGet(topic)) {
-            return pt->Guid();
-        }
-    }
-    return NULL;
-}
-
-/// <summary>
-/// 
-/// </summary>
 RDFBCF_EXPORT BCFIndex bcfTopicCreate(BCFProject* project, const char* type, const char* title, const char* status, const char* guid)
 {
     if (project) {
@@ -196,6 +183,7 @@ RDFBCF_EXPORT const char* bcfTopicGet##ATTR (BCFProject* project, BCFIndex topic
     return NULL;                                                                    \
 }
 
+TOPIC_GET_ATTR(Guid)
 TOPIC_GET_ATTR(ServerAssignedId)
 TOPIC_GET_ATTR(TopicStatus)
 TOPIC_GET_ATTR(TopicType)
@@ -250,6 +238,131 @@ RDFBCF_EXPORT bool bcfTopicSetIndex(BCFProject* project, BCFIndex topic, int val
     if (project) {
         if (auto t = project->TopicGet(topic)) {
             return t->SetIndex(val);
+        }
+    }
+    return false;
+}
+
+/// <summary>
+/// 
+/// </summary>
+RDFBCF_EXPORT BCFIndex bcfCommentsCount(BCFProject* project, BCFIndex topic)
+{
+    if (project) {
+        if (auto tp = project->TopicGet(topic)) {
+            return tp->CommentsCount();
+        }
+    }
+    return 0;
+}
+
+/// <summary>
+/// 
+/// </summary>
+RDFBCF_EXPORT const char* bcfCommentGuid(BCFProject* project, BCFIndex topic, BCFIndex comment)
+{
+    if (project) {
+        if (auto tp = project->TopicGet(topic)) {
+            if (auto cmnt = tp->CommentGet(comment)) {
+                return cmnt->GetGuid();
+            }
+        }
+    }
+    return 0;
+}
+
+/// <summary>
+/// 
+/// </summary>
+RDFBCF_EXPORT BCFIndex bcfCommentCreate(BCFProject* project, BCFIndex topic, const char* guid)
+{
+    if (project) {
+        if (auto tp = project->TopicGet(topic)) {
+            return tp->CommentCreate(guid);
+        }
+    }
+    return 0;
+}
+
+
+/// <summary>
+/// 
+/// </summary>
+RDFBCF_EXPORT bool bcfCommentRemove(BCFProject* project, BCFIndex topic, BCFIndex comment)
+{
+    if (project) {
+        if (auto tp = project->TopicGet(topic)) {
+            tp->CommentRemove(comment);
+        }
+    }
+    return 0;
+}
+
+/// <summary>
+///
+/// </summary>
+#define COMMENT_GET_ATTR(ATTR)                                                      \
+RDFBCF_EXPORT const char* bcfCommentGet##ATTR (BCFProject* project, BCFIndex topic, BCFIndex comment) \
+{                                                                                   \
+    if (project) {                                                                  \
+        if (auto t = project->TopicGet(topic)) {                                    \
+            if (auto c = t->CommentGet(comment)) {                                  \
+                return c->Get##ATTR();                                              \
+            }                                                                       \
+        }                                                                           \
+    }                                                                               \
+    return NULL;                                                                    \
+}
+
+
+COMMENT_GET_ATTR(Guid           )
+COMMENT_GET_ATTR(Date           )
+COMMENT_GET_ATTR(Author         )
+COMMENT_GET_ATTR(ModifiedDate   )
+COMMENT_GET_ATTR(ModifiedAuthor )
+COMMENT_GET_ATTR(Comment        )
+
+/// <summary>
+///
+/// </summary>
+RDFBCF_EXPORT BCFIndex bcfCommentGetViewPoint(BCFProject* project, BCFIndex topic, BCFIndex comment)
+{
+    if (project) {
+        if (auto tp = project->TopicGet(topic)) {
+            if (auto cmnt = tp->CommentGet(comment)) {
+                if (auto vp = cmnt->GetViewPoint()) {
+                    return vp->GetIndex();
+                }
+            }
+        }
+    }
+    return BCFIndex_ERROR;
+}
+
+/// <summary>
+///
+/// </summary>
+RDFBCF_EXPORT bool bcfCommentSetComment(BCFProject* project, BCFIndex topic, BCFIndex comment, const char* text)
+{
+    if (project) {
+        if (auto tp = project->TopicGet(topic)) {
+            if (auto cmnt = tp->CommentGet(comment)) {
+                return cmnt->SetComment(text);
+            }
+        }
+    }
+    return false;
+}
+
+RDFBCF_EXPORT bool bcfCommentSetViewPoint(BCFProject* project, BCFIndex topic, BCFIndex comment, BCFIndex viewPoint)
+{
+    if (project) {
+        if (auto tp = project->TopicGet(topic)) {
+            if (auto cmnt = tp->CommentGet(comment)) {
+                if (auto vp = tp->ViewPointGet(viewPoint)) {
+                    return cmnt->SetViewPoint(vp);
+                }
+            }
         }
     }
     return false;

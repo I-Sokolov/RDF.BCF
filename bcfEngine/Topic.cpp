@@ -245,15 +245,15 @@ ViewPoint* Topic::ViewPointByGuid(const char* guid)
 {
     if (guid && *guid) {
         for (auto vp : m_Viewpoints) {
-            if (vp && 0 == strcmp(vp->Guid(), guid)) {
+            if (vp && 0 == strcmp(vp->GetGuid(), guid)) {
                 return vp;
             }
         }
 
-        Log().add(Log::Level::error, "Invalid reference", "Viewpoint with GUID %s not found in topic %s", guid, Guid());
+        Log().add(Log::Level::error, "Invalid reference", "Viewpoint with GUID %s not found in topic %s", guid, GetGuid());
     }
     else {
-        Log().add(Log::Level::error, "NULL GUID", "Viewpoingt with NULL GUID is requested from topic %s", Guid());
+        Log().add(Log::Level::error, "NULL GUID", "Viewpoingt with NULL GUID is requested from topic %s", GetGuid());
     }
 
     return NULL;

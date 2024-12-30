@@ -102,12 +102,12 @@ namespace RDF.BCF
         [DllImport(DLL, EntryPoint = "bcfTopicsCount")]
         public static extern UInt16 TopicsCount(IntPtr project);
 
-        [DllImport(DLL, EntryPoint = "bcfTopicGuid")]
-        private static extern IntPtr TopicGuid_(IntPtr project, UInt16 topic);
+        [DllImport(DLL, EntryPoint = "bcfTopicGetGuid")]
+        private static extern IntPtr TopicGetGuid_(IntPtr project, UInt16 topic);
 
-        public static string TopicGuid(IntPtr project, UInt16 topic)
+        public static string TopicGetGuid(IntPtr project, UInt16 topic)
         {
-            var ptr = TopicGuid_(project, topic);
+            var ptr = TopicGetGuid_(project, topic);
             return PtrToString(ptr);
         }
 

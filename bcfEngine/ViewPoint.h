@@ -17,7 +17,9 @@ public:
     void Read(_xml::_element& elem, const std::string& folder);
 
 public:
-    const char* Guid() { return m_Guid.c_str(); }
+    BCFIndex GetIndex();
+
+    const char* GetGuid() { return m_Guid.c_str(); }
 
 private:
     //XMLFile implementation
@@ -32,6 +34,8 @@ private:
     void Read_OrthogonalCamera(_xml::_element& elem, const std::string& folder);
 
 private:
+    Topic&      m_topic;
+
     BCFGuid     m_Guid;
 
     std::string m_Viewpoint; //name.bcfv

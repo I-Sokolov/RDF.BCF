@@ -123,10 +123,10 @@ struct GuidList : public OwningList<Item>
 {
     void push_back(Item* item)
     {
-        if (*item->Guid()) {
+        if (*item->GetGuid()) {
 
             for (auto it = this->begin(); it != this->end(); it++) {
-                if (0 == strcmp(item->Guid(), (*it)->Guid())) {
+                if (0 == strcmp(item->GetGuid(), (*it)->GetGuid())) {
                     //LogDuplicatedGuid(item->Guid());
                     delete (*it);
                     this->erase(it);
