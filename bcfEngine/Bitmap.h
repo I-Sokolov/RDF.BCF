@@ -1,16 +1,13 @@
 #pragma once
 
-struct BCFProject;
+class ViewPoint;
 
 
 class Bitmap
 {
 public:
-    Bitmap(BCFProject& project) : m_project(project) { assert(!"TODO"); }
+    Bitmap(ViewPoint&) {}
 
     void Read(_xml::_element & elem, const std::string& folder) {}
-
-private:
-    BCFProject& m_project;
 };
 

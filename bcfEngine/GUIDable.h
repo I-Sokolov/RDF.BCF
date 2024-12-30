@@ -3,6 +3,8 @@
 #include "bcfTypes.h"
 #include "Log.h"
 
+class Topic;
+
 /// <summary>
 /// 
 /// </summary>
@@ -12,12 +14,16 @@ public:
     BCFObject(BCFProject& project) : m_project(project) {}
 
     BCFProject& Project() { return m_project; }
+    Log& log();
 
 protected:
+    bool SetIntVal(std::string& prop, int val);
+
+    bool UpdateAuthor(std::string& author, std::string& date);
+
+private:
     static std::string GetCurrentDate() { return GetCurrentTime(); }
     static std::string GetCurrentTime();
-
-    bool SetIntVal(std::string& prop, int val);
 
 protected:
     BCFProject& m_project;
@@ -49,14 +55,15 @@ private:
 struct GuidReference : public BCFObject
 {
 public:
-    GuidReference(BCFProject& project) : BCFObject(project), m_Guid(project, NULL) {}
+    GuidReference(Topic& topic);
 
     void Read(_xml::_element& elem, const std::string&);
 
-    const char* Guid() { return m_Guid.c_str(); }
+    const char* GetGuid() { return m_Guid.c_str(); }
+    void SetGuid(const char* guid) { if (guid && *guid) m_Guid.assign(guid); else m_Guid.clear(); }
 
 private:
-    BCFGuid     m_Guid;
+    std::string    m_Guid;
 };
 
 /// <summary>

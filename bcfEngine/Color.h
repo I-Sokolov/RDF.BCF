@@ -5,13 +5,11 @@
 class Color
 {
 public:
-    Color(BCFProject& project) : m_project(project) { assert(!"TODO"); }
+    Color(ViewPoint& viewPoint) {}
 
     void Read(_xml::_element & elem, const std::string& folder) {}
 
 private:
-    BCFProject&             m_project;
-
     std::string             m_Color;
     std::vector<Component>  m_Components;
 };

@@ -23,11 +23,40 @@ std::string BCFObject::GetCurrentTime()
 /// <summary>
 /// 
 /// </summary>
+Log& BCFObject::log()
+{
+    return m_project.log();
+}
+
+/// <summary>
+/// 
+/// </summary>
 bool BCFObject::SetIntVal(std::string& prop, int val)
 {
     char sz[80];
     sprintf(sz, "%d", val);
     prop.assign(sz);
+    return true;
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFObject::UpdateAuthor(std::string& author, std::string& date)
+{
+    const char* editor = Project().GetEditor();
+    if (!*editor) {
+        Project().log().add(Log::Level::error, "Configuration", "Current editor is not set");
+        return false;
+    }
+
+    if (!Project().GetExtensions().CheckElement(BCFUsers, editor)) {
+        return false;
+    }
+
+    author.assign(editor);
+    date.assign(GetCurrentDate());
+
     return true;
 }
 
@@ -90,6 +119,14 @@ void BCFGuid::assign(const std::string& s)
     else if (value!=s) {
         m_project.log().add(Log::Level::warning, "Inconsitent GUIDs",  "%s is aloso referenced as %s", value.c_str(), s.c_str());
     }
+}
+
+/// <summary>
+/// 
+/// </summary>
+GuidReference::GuidReference(Topic& topic) 
+    : BCFObject(topic.Project())
+{
 }
 
 

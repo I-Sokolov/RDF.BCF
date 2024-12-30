@@ -6,6 +6,14 @@
 /// <summary>
 /// 
 /// </summary>
+BCFProject& BIMFile::Project()
+{
+    return m_topic.Project();
+}
+
+/// <summary>
+/// 
+/// </summary>
 void BIMFile::Read(_xml::_element& elem, const std::string&)
 {
     ATTRS_START

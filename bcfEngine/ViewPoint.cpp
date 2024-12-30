@@ -7,15 +7,14 @@
 /// <summary>
 /// 
 /// </summary>
-ViewPoint::ViewPoint(BCFProject& project, const char* guid)
-    : XMLFile(project)
-    , m_Guid(project, guid)
+ViewPoint::ViewPoint(Topic& topic, const char* guid)
+    : XMLFile(topic.Project())
+    , m_Guid(topic.Project(), guid)
     , m_cameraType(BCFCameraPerspective)
-    , m_CameraViewPoint(project)
-    , m_CameraDirection(project)
-    , m_CameraUpVector(project)
+    , m_CameraViewPoint(topic.Project())
+    , m_CameraDirection(topic.Project())
+    , m_CameraUpVector(topic.Project())
 {
-
 }
 
 /// <summary>

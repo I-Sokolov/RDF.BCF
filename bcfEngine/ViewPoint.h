@@ -12,9 +12,12 @@
 class ViewPoint : public XMLFile
 {
 public:
-    ViewPoint(BCFProject& project, const char* guid = NULL);
+    ViewPoint(Topic& topic, const char* guid = NULL);
 
     void Read(_xml::_element& elem, const std::string& folder);
+
+public:
+    const char* Guid() { return m_Guid.c_str(); }
 
 private:
     //XMLFile implementation

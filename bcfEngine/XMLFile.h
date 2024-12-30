@@ -4,6 +4,7 @@
 #include "GUIDable.h"
 
 struct BCFProject;
+class Topic;
 
 /// <summary>
 /// base class for XML serialized data block
@@ -29,8 +30,8 @@ protected:
 class XMLText : public std::string
 {
 public:
-    XMLText(BCFProject&) {}
-    void Read(_xml::_element& elem, const std::string&) { assign(elem.getContent()); }
+    XMLText(Topic&) {}
+    void Read(_xml::_element& elem, const std::string&) { assign(elem.getContent()); }    
 };
 
 /// <summary>
@@ -53,7 +54,7 @@ enum class UnknownNames : bool
         } else
 
 #define ATTRS_END(onUnknownNames)           \
-        if ((bool)onUnknownNames) { m_project.log().add(Log::Level::warning, "XML parsing", "Unknown attribute %s in " __FUNCTION__, attrName.c_str()); } } }
+        if ((bool)onUnknownNames) { Project().log().add(Log::Level::warning, "XML parsing", "Unknown attribute %s in " __FUNCTION__, attrName.c_str()); } } }
 
 
 /// <summary>
@@ -82,28 +83,28 @@ enum class UnknownNames : bool
 
 #define CHILD_GET_LIST(listName, elemName)                                                          \
             if (tag == #elemName) {                                                                 \
-                ReadList(m_##listName, m_project, *child, folder, NULL, m_project.log());           \
+                ReadList(m_##listName, *this, *child, folder, NULL, m_project.log());               \
             }                                                                                       \
             else if(tag == #listName) {                                                             \
-                ReadList(m_##listName, m_project, *child, folder, #elemName, m_project.log());      \
+                ReadList(m_##listName, *this, *child, folder, #elemName, m_project.log());          \
             } else
 
 #define CHILD_ADD_TO_LIST(listName, elemName)                                                       \
             if(tag == #elemName) {                                                                  \
-                AddToList(m_##listName, m_project, *child, folder);                                 \
+                AddToList(m_##listName, *this, *child, folder);                                     \
             } else
 
 #define CHILDREN_END \
-        { m_project.log().add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str()); } } }
+        { Project().log().add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str()); } } }
 
 
 /// <summary>
 /// 
 /// </summary>
-template <class TReadable>
-void AddToList(OwningList<TReadable>& list, BCFProject& project, _xml::_element& elem, const std::string& folder)
+template <class TReadable, class TContainer>
+void AddToList(OwningList<TReadable>& list, TContainer& container, _xml::_element& elem, const std::string& folder)
 {
-    auto item = new TReadable(project);
+    auto item = new TReadable(container);
     item->Read(elem, folder);
     list.push_back(item);
 }
@@ -111,11 +112,11 @@ void AddToList(OwningList<TReadable>& list, BCFProject& project, _xml::_element&
 /// <summary>
 /// 
 /// </summary>
-template <class TReadable> 
-void ReadList(OwningList<TReadable>& list, BCFProject& project, _xml::_element& elem, const std::string& folder, const char* childName, Log& log)
+template <class TReadable, class TContainer> 
+void ReadList(OwningList<TReadable>& list, TContainer& container, _xml::_element& elem, const std::string& folder, const char* childName, Log& log)
 {
     if (!childName) {
-        auto item = new TReadable(project);
+        auto item = new TReadable(container);
         item->Read(elem, folder);
         list.push_back(item);
     }
@@ -124,7 +125,7 @@ void ReadList(OwningList<TReadable>& list, BCFProject& project, _xml::_element& 
             if (child) {
                 auto& tag = child->getName();
                 if (tag == childName) {
-                    auto item = new TReadable(project);
+                    auto item = new TReadable(container);
                     item->Read(*child, folder);
                     list.push_back(item);
                 }

@@ -10,6 +10,8 @@ public:
 
     void Read(_xml::_element& elem, const std::string& folder);
 
+    BCFProject& Project() { return m_project; }
+
 private:
     BCFProject& m_project;
 

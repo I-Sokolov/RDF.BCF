@@ -1,16 +1,13 @@
 #pragma once
 
-struct BCFProject;
+class ViewPoint;
 
 
 class Line
 {
 public:
-    Line(BCFProject& project) : m_project(project) { assert(!"TODO"); }
+    Line(ViewPoint& viewPoint) { assert(!"TODO"); }
 
     void Read(_xml::_element & elem, const std::string& folder) {}
-
-private:
-    BCFProject& m_project;
 };
 

@@ -44,15 +44,19 @@ public:
     bool SetDescription(const char* val);
     bool SetStage(const char* val);
 
+    BCFIndex ViewPointsCount() { return (BCFIndex)m_Viewpoints.size(); }
+    ViewPoint* ViewPointGet(BCFIndex index) { return m_Viewpoints.Get(index, log()); }
+    BCFIndex ViewPointCreate(const char* guid = NULL);
+    bool ViewPointRemove(BCFIndex index) { return m_Viewpoints.Remove(index, log()); }
+    ViewPoint* ViewPointByGuid(const char* guid);
+
     BCFIndex CommentsCount() { return (BCFIndex)m_Comments.size(); }
-    Topic* CommentGet(BCFIndex index); //do not delete, valid until project destroyed or TopicRemove
-    BCFIndex CommentCreate(const char* type, const char* title, const char* status, const char* guid = NULL);
-    bool CommentRemove(BCFIndex index);
+    Comment* CommentGet(BCFIndex index) { return m_Comments.Get(index, log()); }
+    BCFIndex CommentCreate(const char* guid = NULL);
+    bool CommentRemove(BCFIndex index) { return m_Comments.Remove(index, log()); }
 
 public:
     BimSnippet& GetBimSnippet() { return m_BimSnippet; }
-
-    bool UpdateAuthor();
 
 private:
     //XMLFile implementation
@@ -62,6 +66,8 @@ private:
 private:
     void Read_Header(_xml::_element& elem, const std::string& folder);
     void Read_Topic(_xml::_element& elem, const std::string& folder);
+
+    bool UpdateAuthor();
 
 private:
     BCFGuid                         m_Guid;

@@ -1,17 +1,19 @@
 #pragma once
 
 struct BCFProject;
-
+class ViewPoint;
 
 class Component
 {
 public:
-    Component(BCFProject& project) : m_project(project) { }
+    Component(ViewPoint& viewPoint);
 
     void Read(_xml::_element& elem, const std::string& folder);
 
+    BCFProject& Project();
+
 private:
-    BCFProject& m_project;
+    ViewPoint& m_viewPoint;
 
     std::string m_IfcGuid;
     std::string m_OriginatingSystem;

@@ -6,6 +6,22 @@
 /// <summary>
 /// 
 /// </summary>
+Component::Component(ViewPoint& viewPoint)
+    : m_viewPoint (viewPoint)
+{
+}
+
+/// <summary>
+/// 
+/// </summary>
+BCFProject& Component::Project()
+{
+    return m_viewPoint.Project();
+}
+
+/// <summary>
+/// 
+/// </summary>
 void Component::Read(_xml::_element& elem, const std::string&)
 {
     ATTRS_START

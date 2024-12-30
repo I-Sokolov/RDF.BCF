@@ -206,24 +206,84 @@ bool Topic::SetStage(const char* val)
 /// </summary>
 bool Topic::UpdateAuthor()
 {
-    const char* editor = Project().GetEditor();
-    if (!*editor) {
-        Project().log().add(Log::Level::error, "Configuration", "Current editor is not set");
-        return false;
+    return __super::UpdateAuthor(m_bReadFromFile ? m_ModifiedAuthor : m_CreationAuthor, m_bReadFromFile ? m_ModifiedAuthor : m_CreationDate);
+}
+
+/// <summary>
+/// 
+/// </summary>
+BCFIndex Topic::ViewPointCreate(const char* guid)
+{
+    auto viewPoint = new ViewPoint(*this, guid ? guid : "");
+
+    if (viewPoint) {
+        /*
+        bool ok = topic->SetTopicType(type);
+        ok = ok && topic->SetTitle(title);
+        ok = ok && topic->SetTopicStatus(status);
+
+        if (!ok) {
+            delete topic;
+            topic = NULL;
+        }
+        */
     }
 
-    if (!Project().GetExtensions().CheckElement(BCFUsers, editor)) {
-        return false;
-    }
-
-    if (!m_bReadFromFile) {
-        m_CreationAuthor.assign(editor);
-        m_CreationDate.assign (GetCurrentDate());
+    if (viewPoint) {
+        m_Viewpoints.push_back(viewPoint);
+        return (BCFIndex)m_Comments.size() - 1;
     }
     else {
-        m_ModifiedAuthor.assign(editor);
-        m_ModifiedDate.assign (GetCurrentDate());
+        return BCFIndex_ERROR;
+    }
+}
+
+/// <summary>
+/// 
+/// </summary>
+ViewPoint* Topic::ViewPointByGuid(const char* guid)
+{
+    if (guid && *guid) {
+        for (auto vp : m_Viewpoints) {
+            if (vp && 0 == strcmp(vp->Guid(), guid)) {
+                return vp;
+            }
+        }
+
+        Log().add(Log::Level::error, "Invalid reference", "Viewpoint with GUID %s not found in topic %s", guid, Guid());
+    }
+    else {
+        Log().add(Log::Level::error, "NULL GUID", "Viewpoingt with NULL GUID is requested from topic %s", Guid());
     }
 
-    return true;
+    return NULL;
+}
+
+/// <summary>
+/// 
+/// </summary>
+BCFIndex Topic::CommentCreate(const char* guid)
+{
+    auto topic = new Comment(*this, guid ? guid : "");
+
+    if (topic) {
+        /*
+        bool ok = topic->SetTopicType(type);
+        ok = ok && topic->SetTitle(title);
+        ok = ok && topic->SetTopicStatus(status);
+
+        if (!ok) {
+            delete topic;
+            topic = NULL;
+        }
+        */
+    }
+
+    if (topic) {
+        m_Comments.push_back(topic);
+        return (BCFIndex)m_Comments.size() - 1;
+    }
+    else {
+        return BCFIndex_ERROR;
+    }
 }
