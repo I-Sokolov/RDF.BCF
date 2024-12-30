@@ -34,9 +34,9 @@ public:
     Extensions& GetExtensions() { return m_extensions; }
 
     BCFIndex TopicsCount() { return (BCFIndex) m_topics.size(); }
-    Topic* GetTopic(BCFIndex index); //do not delete, valid until project destroyed or TopicRemove
+    Topic* TopicGet(BCFIndex index) { return m_topics.Get(index, m_log); }
     BCFIndex TopicCreate(const char* type, const char* title, const char* status, const char* guid = NULL);
-    bool TopicRemove(BCFIndex index);
+    bool TopicRemove(BCFIndex index) { return m_topics.Remove(index, m_log); }
 
 private:
     bool ReadTopics(const std::string& bcfFolder);

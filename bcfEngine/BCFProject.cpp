@@ -123,20 +123,6 @@ bool BCFProject::WriteTopics(const std::string& bcfFolder)
 /// <summary>
 /// 
 /// </summary>
-Topic* BCFProject::GetTopic(BCFIndex index)
-{
-    if (index < m_topics.size()) {
-        return m_topics[index];
-    }
-    else {
-        m_log.add(Log::Level::error, "Index is out of range", "Index %d is out of topics range [0..%d]", 0, (int)m_topics.size());
-        return NULL;
-    }
-}
-
-/// <summary>
-/// 
-/// </summary>
 BCFIndex BCFProject::TopicCreate(const char* type, const char* title, const char* status, const char* guid)
 {
     auto topic = new Topic(*this, guid ? guid : "");
@@ -162,22 +148,3 @@ BCFIndex BCFProject::TopicCreate(const char* type, const char* title, const char
     }
 }
 
-/// <summary>
-/// 
-/// </summary>
-bool BCFProject::TopicRemove(BCFIndex index)
-{
-    if (index < m_topics.size()) {
-        if (m_topics[index])
-            delete m_topics[index];
-        for (auto i = index; i < m_topics.size() - 1; i++) {
-            m_topics[i] = m_topics[i + 1];
-        }
-        m_topics.resize(m_topics.size() - 1);
-        return true;
-    }
-    else {
-        m_log.add(Log::Level::error, "Index is out of range", "Index %d is out of topics range [0..%d]", 0, (int)m_topics.size());
-        return false;
-    }
-}

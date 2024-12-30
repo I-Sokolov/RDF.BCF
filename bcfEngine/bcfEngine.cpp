@@ -152,7 +152,7 @@ RDFBCF_EXPORT BCFIndex bcfTopicsCount(BCFProject* project)
 RDFBCF_EXPORT const char* bcfTopicGuid(BCFProject* project, BCFIndex topic)
 {
     if (project) {
-        if (auto pt = project->GetTopic(topic)) {
+        if (auto pt = project->TopicGet(topic)) {
             return pt->Guid();
         }
     }
@@ -189,7 +189,7 @@ RDFBCF_EXPORT bool bcfTopicRemove(BCFProject* project, BCFIndex topic)
 RDFBCF_EXPORT const char* bcfTopicGet##ATTR (BCFProject* project, BCFIndex topic)   \
 {                                                                                   \
     if (project) {                                                                  \
-        if (auto t = project->GetTopic(topic)) {                                    \
+        if (auto t = project->TopicGet(topic)) {                                    \
             return t->Get##ATTR ();                                                 \
         }                                                                           \
     }                                                                               \
@@ -213,7 +213,7 @@ TOPIC_GET_ATTR(Stage)
 RDFBCF_EXPORT int         bcfTopicGetIndex(BCFProject* project, BCFIndex topic)
 {
     if (project) {
-        if (auto t = project->GetTopic(topic)) {
+        if (auto t = project->TopicGet(topic)) {
             return t->GetIndex();
         }
     }
@@ -228,7 +228,7 @@ RDFBCF_EXPORT int         bcfTopicGetIndex(BCFProject* project, BCFIndex topic)
 RDFBCF_EXPORT bool bcfTopicSet##ATTR (BCFProject* project, BCFIndex topic, const char* val)\
 {                                                                                   \
     if (project) {                                                                  \
-        if (auto t = project->GetTopic(topic)) {                                    \
+        if (auto t = project->TopicGet(topic)) {                                    \
             return t->Set##ATTR (val);                                              \
         }                                                                           \
     }                                                                               \
@@ -248,7 +248,7 @@ TOPIC_SET_ATTR(Stage)
 RDFBCF_EXPORT bool bcfTopicSetIndex(BCFProject* project, BCFIndex topic, int val)
 {
     if (project) {
-        if (auto t = project->GetTopic(topic)) {
+        if (auto t = project->TopicGet(topic)) {
             return t->SetIndex(val);
         }
     }

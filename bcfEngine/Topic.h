@@ -44,6 +44,11 @@ public:
     bool SetDescription(const char* val);
     bool SetStage(const char* val);
 
+    BCFIndex CommentsCount() { return (BCFIndex)m_Comments.size(); }
+    Topic* CommentGet(BCFIndex index); //do not delete, valid until project destroyed or TopicRemove
+    BCFIndex CommentCreate(const char* type, const char* title, const char* status, const char* guid = NULL);
+    bool CommentRemove(BCFIndex index);
+
 public:
     BimSnippet& GetBimSnippet() { return m_BimSnippet; }
 

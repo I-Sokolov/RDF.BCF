@@ -1,6 +1,7 @@
 #pragma once
 
-struct BCFProject;
+#include "bcfTypes.h"
+#include "Log.h"
 
 /// <summary>
 /// 
@@ -70,6 +71,40 @@ struct OwningList : public std::vector<Item*>
             delete item;
         }
     }
+
+    Item* Get(BCFIndex index, Log& log)
+    {
+        if (index < this->size()) {
+            return (*this)[index];
+        }
+        else {
+            log.add(Log::Level::error, "Index is out of range", "Index %d is out of topics range [0..%d]", (int)index, (int)(this->size()));
+            return NULL;
+        }
+    }
+
+    bool Remove(BCFIndex index, Log& log)
+    {
+        auto N = this->size();
+
+        if (index < N) {
+
+            if ((*this)[index])
+                delete (*this)[index];
+
+            for (auto i = index; i < N-1; i++) {
+                (*this)[i] = (*this)[i + 1];
+            }
+            this->resize(N - 1);
+
+            return true;
+        }
+        else {
+            log.add(Log::Level::error, "Index is out of range", "Index %d is out of topics range [0..%d]", (int)index, (int)(this->size()));
+            return false;
+        }
+    }
+
 };
 
 
