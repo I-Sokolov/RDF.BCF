@@ -11,6 +11,17 @@ namespace RDF.BCF
     public class Interop
     {
         private const string DLL = "bcfEngine.dll";
+        /// <summary>
+        /// 
+        /// </summary>
+
+        private static string PtrToString(IntPtr ptr)
+        {
+            var str = Marshal.PtrToStringUTF8(ptr);
+            if (str == null)
+                str = "";
+            return str;
+        }
 
         /// <summary>
         /// BCF file version
@@ -220,16 +231,49 @@ namespace RDF.BCF
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool TopicSetIndex(IntPtr project, UInt16 topic, int val);
 
+        [DllImport(DLL, EntryPoint = "bcfCommentsCount")]
+        public static extern UInt16 CommentsCount(IntPtr project, UInt16 topic);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private static string PtrToString(IntPtr ptr)
-        {
-            var str = Marshal.PtrToStringUTF8(ptr);
-            if (str == null)
-                str = "";
-            return str;
-        }
+        [DllImport(DLL, EntryPoint = "bcfCommentCreate")]
+        public static extern UInt16 CommentCreate(IntPtr project, UInt16 topic, string? guid = null);
+
+        [DllImport(DLL, EntryPoint = "bcfCommentRemove")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool CommentRemove(IntPtr project, UInt16 topic, UInt16 comment);
+
+        [DllImport(DLL, EntryPoint = "bcfCommentGetGuid")]
+        private static extern UInt16 CommentGetGuid_(IntPtr project, UInt16 topic, UInt16 comment);
+        public static string CommentGetGuid(IntPtr project, UInt16 topic, UInt16 comment) { return PtrToString(CommentGetGuid_(project, topic, comment)); }
+
+        [DllImport(DLL, EntryPoint = "bcfCommentGetDate")]
+        private static extern UInt16 CommentGetDate_(IntPtr project, UInt16 topic, UInt16 comment);
+        public static string CommentGetDate(IntPtr project, UInt16 topic, UInt16 comment) { return PtrToString(CommentGetDate_(project, topic, comment)); }
+
+        [DllImport(DLL, EntryPoint = "bcfCommentGetAuthor")]
+        private static extern UInt16 CommentGetAuthor_(IntPtr project, UInt16 topic, UInt16 comment);
+        public static string CommentGetAuthor(IntPtr project, UInt16 topic, UInt16 comment) { return PtrToString(CommentGetAuthor_(project, topic, comment)); }
+
+        [DllImport(DLL, EntryPoint = "bcfCommentGetModifiedDate")]
+        private static extern UInt16 CommentGetModifiedDate_(IntPtr project, UInt16 topic, UInt16 comment);
+        public static string CommentGetModifiedDate(IntPtr project, UInt16 topic, UInt16 comment) { return PtrToString(CommentGetModifiedDate_(project, topic, comment)); }
+
+        [DllImport(DLL, EntryPoint = "bcfCommentGetModifiedAuthor")]
+        private static extern UInt16 CommentGetModifiedAuthor_(IntPtr project, UInt16 topic, UInt16 comment);
+        public static string CommentGetModifiedAuthor(IntPtr project, UInt16 topic, UInt16 comment) { return PtrToString(CommentGetModifiedAuthor_(project, topic, comment)); }
+
+        [DllImport(DLL, EntryPoint = "bcfCommentGetComment")]
+        private static extern UInt16 CommentGetComment_(IntPtr project, UInt16 topic, UInt16 comment);
+        public static string CommentGetComment(IntPtr project, UInt16 topic, UInt16 comment) { return PtrToString(CommentGetComment_(project, topic, comment)); }
+
+        [DllImport(DLL, EntryPoint = "bcfCommentGetViewPoint")]
+        public static extern UInt16 CommentGetViewPoint(IntPtr project, UInt16 topic, UInt16 comment);
+
+        [DllImport(DLL, EntryPoint = "bcfCommentSetComment")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool CommentSetComment(IntPtr project, UInt16 topic, UInt16 comment, string value);
+
+        [DllImport(DLL, EntryPoint = "bcfCommentSetViewPoint")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool CommentSetViewPoint(IntPtr project, UInt16 topic, UInt16 comment, UInt16 value);
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RDF.BCF
 {
-    public class Viewpoint
+    public class ViewPoint
     {
         /// <summary>
         /// 
@@ -109,7 +109,7 @@ namespace RDF.BCF
         Topic m_topic;
         Guid m_guid;
 
-        internal Viewpoint(Project project, Topic topic, Guid? guid = null)
+        internal ViewPoint(Project project, Topic topic, Guid? guid = null)
         {
             m_project = project;
             m_topic = topic;

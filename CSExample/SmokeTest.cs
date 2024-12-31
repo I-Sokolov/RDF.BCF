@@ -147,7 +147,7 @@ namespace CSExample
             // new topic create
             // 
             Console.WriteLine("Expected error - author not set");
-            topic = topics.TopicCreate("Topic Type", "Topic Title", "Topic Status");
+            topic = topics.CreateTopic("Topic Type", "Topic Title", "Topic Status");
             ASSERT(topic == null);
             Console.WriteLine(bcf.ErrorsGet());
 
@@ -155,7 +155,7 @@ namespace CSExample
             bcf.SetEditor("John Smith", false);
 
             Console.WriteLine("Expected error - author unknown");
-            topic = topics.TopicCreate("Topic Type", "Topic Title", "Topic Status");
+            topic = topics.CreateTopic("Topic Type", "Topic Title", "Topic Status");
             ASSERT(topic == null);
             Console.WriteLine(bcf.ErrorsGet());
 
@@ -165,7 +165,7 @@ namespace CSExample
             //
             bcf.SetEditor("John Smith", true);
 
-            topic = topics.TopicCreate("Topic Type", "Topic Title", "Topic Status");
+            topic = topics.CreateTopic("Topic Type", "Topic Title", "Topic Status");
             ASSERT(topic != null);
 
             if (topic != null)
@@ -185,7 +185,7 @@ namespace CSExample
             //
             if (topic != null)
             {
-                topics.TopicRemove(topic);
+                topics.RemoveTopic(topic);
             }
 
             items = topics.Items;
@@ -209,8 +209,8 @@ namespace CSExample
 
         static private void SetTopicAttributes(RDF.BCF.Project bcf, bool newFile)
         {
-            var topic = bcf.Topics.TopicCreate("Type1", "Title1", "Status1");
-            bcf.Topics.TopicCreate("Type1", "Title1", "Status1", "myGuid");
+            var topic = bcf.Topics.CreateTopic("Type1", "Title1", "Status1");
+            bcf.Topics.CreateTopic("Type1", "Title1", "Status1", "myGuid");
             ASSERT(topic != null);
             if (topic != null)
             {

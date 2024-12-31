@@ -39,21 +39,26 @@ namespace RDF.BCF
         /// <summary>
         /// The topic comments
         /// </summary>
-        //public Comments Comments { get { return m_comments; } }
+        public Comments Comments { get { return m_comments; } }
 
         //public Viewpoints Viewpoints { get { return m_viewpoints; } }
 
         public UInt16 Handle { get { return m_handle; }  }
 
+        public Project Project { get { return m_project; } }
+
         #region IMPLEMENTATION
         ///////////////////////////////////////////////////////////////////////////////////////////
         Project m_project;
         UInt16 m_handle;
+        Comments m_comments;
         
         internal Topic(Project project, UInt16 handle) 
         {
             m_project = project;
             m_handle = handle;
+
+            m_comments = new Comments(this);
         }
 
         #endregion IMPLEMENTATION

@@ -18,7 +18,7 @@ namespace RDF.BCF
         /// Creates new topic.
         /// Caller can assign GUID or it will generated automatically, GUID never changes after creation
         /// </summary>
-        public Topic? TopicCreate (string type, string title, string status, string? guid = null) 
+        public Topic? CreateTopic (string type, string title, string status, string? guid = null) 
         { 
             var ntopic = Interop.TopicCreate(m_project.Handle, type, title, status, guid); 
             if (ntopic != Interop.ERR_IND)
@@ -31,7 +31,7 @@ namespace RDF.BCF
         /// <summary>
         /// 
         /// </summary>
-        public bool TopicRemove (Topic topic)
+        public bool RemoveTopic (Topic topic)
         {
             return Interop.TopicRemove(m_project.Handle, topic.Handle);
         }

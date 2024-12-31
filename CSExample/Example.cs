@@ -26,7 +26,7 @@ namespace CSExample
                 bcfData.SetEditor("user@company.org", true);
 
                 //
-                var topic = bcfData.Topics.TopicCreate("Topic Type", "Topic Title", "Topic Status");
+                var topic = bcfData.Topics.CreateTopic("Topic Type", "Topic Title", "Topic Status");
                 if (topic == null)
                 {
                     Console.WriteLine(bcfData.ErrorsGet());

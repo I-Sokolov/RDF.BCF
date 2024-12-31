@@ -11,11 +11,27 @@ namespace RDF.BCF
         /// <summary>
         /// The comment text, must not be empty if provided
         /// </summary>
-        public string? Text {  get; set; }
+        public string Text 
+        { 
+            get { return Interop.CommentGetComment(m_topic.Project.Handle, m_topic.Handle, Handle); } 
+            set { Interop.CommentSetComment(m_topic.Project.Handle, m_topic.Handle, Handle, value); } 
+        }
 
-        /// <summary>
-        /// Reference to the viewpoint
-        /// </summary>
-        public Viewpoint? Viewpoint { get; set; }
+        public UInt16 Handle { get { return m_handle; } }
+
+        public Topic Topic { get { return m_topic; } }
+
+        #region IMPLEMENTATION
+        ///////////////////////////////////////////////////////////////////////////////////////////
+        Topic m_topic;
+        UInt16 m_handle;
+
+        internal Comment(Topic topic, UInt16 handle)
+        {
+            m_topic = topic;
+            m_handle = handle;
+        }
+
+        #endregion IMPLEMENTATION
     }
 }
