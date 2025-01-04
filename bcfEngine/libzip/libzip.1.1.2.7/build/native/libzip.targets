@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" InitialTargets="libzip_init">
+  <PropertyGroup Label="Default initializers for properties">
+    <Linkage-libzip Condition="'$(Linkage-libzip)' == ''">dynamic</Linkage-libzip>
+    <CallingConvention-libzip Condition="'$(CallingConvention-libzip)' == ''">cdecl</CallingConvention-libzip>
+  </PropertyGroup>
+  <ItemDefinitionGroup Label="Win32 and v140 and Debug" Condition="'$(Platform.ToLower())' == 'win32' And ( $(PlatformToolset.ToLower().IndexOf('v140')) &gt; -1 Or '$(PlatformToolset.ToLower())' == 'windowskernelmodedriver8.0' Or '$(PlatformToolset.ToLower())' == 'windowsapplicationfordrivers8.0' Or '$(PlatformToolset.ToLower())' == 'windowsusermodedriver8.0' ) And ( $(Configuration.ToLower().IndexOf('debug')) &gt; -1 )">
+    <Link>
+      <AdditionalDependencies>$(MSBuildThisFileDirectory)../..//build/native/lib/Win32\v140\Debug\zip.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Label="Win32 and v140 and Release" Condition="'$(Platform.ToLower())' == 'win32' And ( $(PlatformToolset.ToLower().IndexOf('v140')) &gt; -1 Or '$(PlatformToolset.ToLower())' == 'windowskernelmodedriver8.0' Or '$(PlatformToolset.ToLower())' == 'windowsapplicationfordrivers8.0' Or '$(PlatformToolset.ToLower())' == 'windowsusermodedriver8.0' ) And ( $(Configuration.ToLower().IndexOf('debug')) == -1 )">
+    <Link>
+      <AdditionalDependencies>$(MSBuildThisFileDirectory)../..//build/native/lib/Win32\v140\Release\zip.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Label="x64 and v140 and Debug" Condition="'$(Platform.ToLower())' == 'x64' And ( $(PlatformToolset.ToLower().IndexOf('v140')) &gt; -1 Or '$(PlatformToolset.ToLower())' == 'windowskernelmodedriver8.0' Or '$(PlatformToolset.ToLower())' == 'windowsapplicationfordrivers8.0' Or '$(PlatformToolset.ToLower())' == 'windowsusermodedriver8.0' ) And ( $(Configuration.ToLower().IndexOf('debug')) &gt; -1 )">
+    <Link>
+      <AdditionalDependencies>$(MSBuildThisFileDirectory)../..//build/native/lib/x64\v140\Debug\zip.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Label="x64 and v140 and Release" Condition="'$(Platform.ToLower())' == 'x64' And ( $(PlatformToolset.ToLower().IndexOf('v140')) &gt; -1 Or '$(PlatformToolset.ToLower())' == 'windowskernelmodedriver8.0' Or '$(PlatformToolset.ToLower())' == 'windowsapplicationfordrivers8.0' Or '$(PlatformToolset.ToLower())' == 'windowsusermodedriver8.0' ) And ( $(Configuration.ToLower().IndexOf('debug')) == -1 )">
+    <Link>
+      <AdditionalDependencies>$(MSBuildThisFileDirectory)../..//build/native/lib/x64\v140\Release\zip.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)../..//build/native/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)../..//build/native/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)\default-propertiesui.xml" />
+  </ItemGroup>
+  <UsingTask TaskName="libzip_Contains" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" TaskFactory="CodeTaskFactory">
+    <ParameterGroup>
+      <Text Output="false" ParameterType="System.String" />
+      <Library Output="false" Required="true" ParameterType="System.String" />
+      <Value Output="false" Required="true" ParameterType="System.String" />
+      <Result Output="true" ParameterType="System.String" />
+    </ParameterGroup>
+    <Task>
+      <Code>Result = ((Text ?? "").Split(';').Contains(Library) ) ? Value : String.Empty;</Code>
+    </Task>
+  </UsingTask>
+  <Target Name="libzip_init">
+    <libzip_Contains Text="Linkage-dynamic" Library="libzip" Value="dynamic" Condition="'$(Linkage-libzip)'==''">
+      <Output TaskParameter="Result" PropertyName="Linkage-libzip" />
+    </libzip_Contains>
+    <libzip_Contains Text="Linkage-static" Library="libzip" Value="static" Condition="'$(Linkage-libzip)'==''">
+      <Output TaskParameter="Result" PropertyName="Linkage-libzip" />
+    </libzip_Contains>
+    <libzip_Contains Text="Linkage-ltcg" Library="libzip" Value="ltcg" Condition="'$(Linkage-libzip)'==''">
+      <Output TaskParameter="Result" PropertyName="Linkage-libzip" />
+    </libzip_Contains>
+    <libzip_Contains Text="Linkage-sxs" Library="libzip" Value="sxs" Condition="'$(Linkage-libzip)'==''">
+      <Output TaskParameter="Result" PropertyName="Linkage-libzip" />
+    </libzip_Contains>
+    <libzip_Contains Text="CallingConvention-cdecl" Library="libzip" Value="cdecl" Condition="'$(CallingConvention-libzip)'==''">
+      <Output TaskParameter="Result" PropertyName="CallingConvention-libzip" />
+    </libzip_Contains>
+    <libzip_Contains Text="CallingConvention-stdcall" Library="libzip" Value="stdcall" Condition="'$(CallingConvention-libzip)'==''">
+      <Output TaskParameter="Result" PropertyName="CallingConvention-libzip" />
+    </libzip_Contains>
+    <libzip_Contains Text="CallingConvention-fastcall" Library="libzip" Value="fastcall" Condition="'$(CallingConvention-libzip)'==''">
+      <Output TaskParameter="Result" PropertyName="CallingConvention-libzip" />
+    </libzip_Contains>
+    <libzip_Contains Text="CallingConvention-thiscall" Library="libzip" Value="thiscall" Condition="'$(CallingConvention-libzip)'==''">
+      <Output TaskParameter="Result" PropertyName="CallingConvention-libzip" />
+    </libzip_Contains>
+    <libzip_Contains Text="CallingConvention-clrcall" Library="libzip" Value="clrcall" Condition="'$(CallingConvention-libzip)'==''">
+      <Output TaskParameter="Result" PropertyName="CallingConvention-libzip" />
+    </libzip_Contains>
+  </Target>
+</Project>

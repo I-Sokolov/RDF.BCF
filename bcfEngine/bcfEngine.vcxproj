@@ -55,11 +55,6 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
-  <ImportGroup Label="Shared">
-    <Import Project="..\..\packages\libzip.redist.1.1.2.7\build\native\libzip.redist.targets" Condition="Exists('..\..\packages\libzip.redist.1.1.2.7\build\native\libzip.redist.targets')" />
-    <Import Project="..\..\packages\libzip.1.1.2.7\build\native\libzip.targets" Condition="Exists('..\..\packages\libzip.1.1.2.7\build\native\libzip.targets')" />
-    <Import Project="..\..\packages\zlib-msvc-x64.1.2.11.8900\build\native\zlib-msvc-x64.targets" Condition="Exists('..\..\packages\zlib-msvc-x64.1.2.11.8900\build\native\zlib-msvc-x64.targets')" />
-  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -97,18 +92,18 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)packages\libzip.1.1.2.7\build\native\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)libzip\libzip.1.1.2.7\build\native\include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(SolutionDir)packages\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\Release</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)libzip\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\Release</AdditionalLibraryDirectories>
       <AdditionalDependencies>zip.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>InstallZipLib.bat "$(SolutionDir)" $(Platform) "$(OutputPath)"</Command>
+      <Command>InstallZipLib.bat "$(ProjectDir)" $(Platform) "$(OutputPath)"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Install libzip</Message>
@@ -124,7 +119,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)packages\libzip.1.1.2.7\build\native\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)libzip\libzip.1.1.2.7\build\native\include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -133,11 +128,11 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(SolutionDir)packages\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\Release</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)libzip\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\Release</AdditionalLibraryDirectories>
       <AdditionalDependencies>zip.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>InstallZipLib.bat "$(SolutionDir)" $(Platform) "$(OutputPath)"</Command>
+      <Command>InstallZipLib.bat "$(ProjectDir)" $(Platform) "$(OutputPath)"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Install libzip</Message>
@@ -151,18 +146,18 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)packages\libzip.1.1.2.7\build\native\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)libzip\libzip.1.1.2.7\build\native\include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(SolutionDir)packages\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\Release</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)libzip\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\Release</AdditionalLibraryDirectories>
       <AdditionalDependencies>zip.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>InstallZipLib.bat "$(SolutionDir)" $(Platform) "$(OutputPath)"</Command>
+      <Command>InstallZipLib.bat "$(ProjectDir)" $(Platform) "$(OutputPath)"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Install libzip</Message>
@@ -178,7 +173,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)packages\libzip.1.1.2.7\build\native\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)libzip\libzip.1.1.2.7\build\native\include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -187,11 +182,11 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(SolutionDir)packages\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\Release</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)libzip\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\Release</AdditionalLibraryDirectories>
       <AdditionalDependencies>zip.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>InstallZipLib.bat "$(SolutionDir)" $(Platform) "$(OutputPath)"</Command>
+      <Command>InstallZipLib.bat "$(ProjectDir)" $(Platform) "$(OutputPath)"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Install libzip</Message>
@@ -271,15 +266,11 @@
   <ItemGroup>
     <None Include="..\rdf.bcf\bimfile.cs" />
     <None Include="InstallZipLib.bat" />
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\libzip.redist.1.1.2.7\build\native\libzip.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\libzip.redist.1.1.2.7\build\native\libzip.redist.targets'))" />
-    <Error Condition="!Exists('..\..\packages\libzip.1.1.2.7\build\native\libzip.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\libzip.1.1.2.7\build\native\libzip.targets'))" />
-    <Error Condition="!Exists('..\..\packages\zlib-msvc-x64.1.2.11.8900\build\native\zlib-msvc-x64.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\zlib-msvc-x64.1.2.11.8900\build\native\zlib-msvc-x64.targets'))" />
   </Target>
 </Project>
