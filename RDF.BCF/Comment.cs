@@ -23,6 +23,11 @@ namespace RDF.BCF
         public string ModifiedAuthor { get { return Interop.CommentGetModifiedAuthor(m_handle)  ; } }
         public ViewPoint? ViewPoint { get { return GetViewPoint(); } set { SetViewPoint(value); } }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Remove() { return Interop.CommentRemove(m_handle); }
+
         #region IMPLEMENTATION
         ///////////////////////////////////////////////////////////////////////////////////////////
         Topic m_topic;

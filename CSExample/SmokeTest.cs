@@ -200,10 +200,7 @@ namespace CSExample
             //
             // remove
             //
-            if (topic != null)
-            {
-                topic.Remove();
-            }
+            topic.Remove();
 
             items = bcf.Topics;
             ASSERT(items.Count() == 1);
@@ -323,7 +320,17 @@ namespace CSExample
         static void SetCommentVPAttributes(Project bcf, bool newFile)
         {
             var topic = bcf.CreateTopic("Type", "Title", "New");
+            ASSERT(topic.Comments.Count == 0);
+
             var comment = topic.CreateComment();
+
+            ASSERT(topic.Comments.Count == 1);
+
+            var comment2 = topic.CreateComment();
+            ASSERT(topic.Comments.Count == 2);
+            comment2.Remove();
+            ASSERT(topic.Comments.Count == 1);
+
 
             comment.Text = "Text comment";
         }

@@ -6,6 +6,50 @@
 #include "BCFComment.h"
 
 /// <summary>
+/// Macros to implement put/get attributes and iterate/remove objects
+/// </summary>
+
+typedef const char* tStr;
+typedef int           tInt;
+typedef BCFViewPoint* tViewPoint;
+
+#define OBJ_GET_ATTR(VAL, OBJ, ATTR)                                                \
+RDFBCF_EXPORT t##VAL bcf##OBJ##Get##ATTR (BCF##OBJ* obj)                            \
+{                                                                                   \
+    if (obj) {                                                                      \
+       return obj->Get##ATTR ();                                                    \
+    }                                                                               \
+    return 0;                                                                       \
+}
+
+#define OBJ_SET_ATTR(VAL, OBJ, ATTR)                                                \
+RDFBCF_EXPORT bool bcf  ##OBJ##Set##ATTR (BCF##OBJ* obj, t##VAL val)                \
+{                                                                                   \
+    if (obj) {                                                                      \
+        return obj->Set##ATTR (val);                                                \
+    }                                                                               \
+    return false;                                                                   \
+}
+
+#define OBJ_ITERATE(OBJ, CONTAINER)                                                     \
+RDFBCF_EXPORT BCF##OBJ* bcf##OBJ##Iterate(BCF##CONTAINER* container, BCF##OBJ* prev)    \
+{                                                                                       \
+    if (container) {                                                                    \
+        return container->##OBJ##Iterate(prev);                                         \
+    }                                                                                   \
+    return NULL;                                                                        \
+}                                                                                       \
+                                                                                        \
+RDFBCF_EXPORT bool bcf##OBJ##Remove(BCF##OBJ* obj)                                      \
+{                                                                                       \
+    if (obj) {                                                                          \
+        return obj->Remove();                                                           \
+    }                                                                                   \
+    return false;                                                                       \
+}
+
+
+/// <summary>
 /// 
 /// </summary>
 RDFBCF_EXPORT BCFProject* bcfProjectCreate(const char* projectId)
@@ -139,17 +183,7 @@ RDFBCF_EXPORT bool bcfEnumerationElementRemove(BCFProject* project, BCFEnumerati
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT BCFTopic* bcfTopicIterate(BCFProject* project, BCFTopic* prev)
-{
-    if (project) {
-        return project->TopicIterate(prev);
-    }
-    return NULL;
-}
-
-/// <summary>
-/// 
-/// </summary>
+OBJ_ITERATE(Topic, Project)
 RDFBCF_EXPORT BCFTopic* bcfTopicCreate(BCFProject* project, const char* type, const char* title, const char* status, const char* guid)
 {
     if (project) {
@@ -157,44 +191,6 @@ RDFBCF_EXPORT BCFTopic* bcfTopicCreate(BCFProject* project, const char* type, co
     }
     return NULL;
 }
-
-/// <summary>
-/// 
-/// </summary>
-RDFBCF_EXPORT bool bcfTopicRemove(BCFTopic* topic)
-{
-    if (topic) {
-        return topic->Remove();
-    }
-    return false;
-}
-
-/// <summary>
-/// 
-/// </summary>
-
-typedef const char*   tStr;
-typedef int           tInt;
-typedef BCFViewPoint* tViewPoint;
-
-#define OBJ_GET_ATTR(VAL, OBJ, ATTR)                                                \
-RDFBCF_EXPORT t##VAL bcf##OBJ##Get##ATTR (BCF##OBJ* obj)                            \
-{                                                                                   \
-    if (obj) {                                                                      \
-       return obj->Get##ATTR ();                                                    \
-    }                                                                               \
-    return 0;                                                                       \
-}
-
-#define OBJ_SET_ATTR(VAL, OBJ, ATTR)                                                \
-RDFBCF_EXPORT bool bcf  ##OBJ##Set##ATTR (BCF##OBJ* obj, t##VAL val)                \
-{                                                                                   \
-    if (obj) {                                                                      \
-        return obj->Set##ATTR (val);                                                \
-    }                                                                               \
-    return false;                                                                   \
-}
-
 
 /// <summary>
 /// 
@@ -229,35 +225,13 @@ OBJ_SET_ATTR(Int, Topic, Index)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT BCFComment* bcfCommentIterate(BCFTopic* topic, BCFComment* prev)
-{
-    if (topic) {
-        return topic->CommentIterate(prev);
-    }
-    return NULL;
-}
-
-/// <summary>
-/// 
-/// </summary>
+OBJ_ITERATE(Comment, Topic)
 RDFBCF_EXPORT BCFComment* bcfCommentCreate(BCFTopic* topic, const char* guid)
 {
     if (topic) {
         return topic->CommentCreate(guid);
     }
     return 0;
-}
-
-
-/// <summary>
-/// 
-/// </summary>
-RDFBCF_EXPORT bool bcfCommentRemove(BCFComment* comment)
-{
-    if (comment) {
-        return comment->Remove();
-    }
-    return false;
 }
 
 /// <summary>
