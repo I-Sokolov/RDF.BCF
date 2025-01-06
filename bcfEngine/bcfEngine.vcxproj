@@ -270,7 +270,6 @@
     <ClCompile Include="XMLparser\_xml.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\rdf.bcf\bimfile.cs" />
     <None Include="InstallZipLib.bat" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -52,14 +52,12 @@ namespace RDF.BCF
         /// <summary>
         /// 
         /// </summary>
-        public Comment? CreateComment(string? guid = null)
+        public Comment CreateComment(string? guid = null)
         {
             IntPtr commentHandle = Interop.CommentCreate(m_handle, guid);
-            if (commentHandle != IntPtr.Zero)
-            {
-                return new Comment(this, commentHandle);
-            }
-            return null;
+            if (commentHandle == IntPtr.Zero)
+                throw new ApplicationException("Fail to create comment: " + Interop.ErrorsGet(m_project.Handle));
+            return new Comment(this, commentHandle);
         }
 
         /// <summary>
@@ -73,7 +71,9 @@ namespace RDF.BCF
         public ViewPoint? CreateViewPoint(string? guid = null)
         {
             /*IntPtr viewPointHandle = Interop.ViewPointCreate(m_handle, guid);
-            if (viewPointHandle != IntPtr.Zero)
+                      if (commentHandle == IntPtr.Zero)
+                throw new ApplicationException("Fail to create comment: " + Interop.ErrorsGet(m_project.Handle));
+  if (viewPointHandle != IntPtr.Zero)
             {
                 return new ViewPoint(this, viewPointHandle);
             }*/

@@ -28,6 +28,9 @@ namespace CSExample
             Console.WriteLine("TEST Topics");
             Topics();
 
+            Console.WriteLine("TEST Comments and ViewPoint");
+            CommentsVP();
+
             Console.WriteLine("TESTS PASSED");
         }
 
@@ -143,19 +146,35 @@ namespace CSExample
 
             //
             // new topic create
-            // 
-            Console.WriteLine("Expected error - author not set");
-            topic = bcf.CreateTopic("Topic Type", "Topic Title", "Topic Status");
-            ASSERT(topic == null);
-            Console.WriteLine(bcf.ErrorsGet());
+            //
+            Console.WriteLine("Expected exception - author not set");
+            bool ex = false;
+            try
+            {
+                topic = bcf.CreateTopic("Topic Type", "Topic Title", "Topic Status");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                ex = true;
+            }
+            ASSERT(ex);
 
             //
             bcf.SetAuthor("John Smith", false);
 
-            Console.WriteLine("Expected error - author unknown");
-            topic = bcf.CreateTopic("Topic Type", "Topic Title", "Topic Status");
-            ASSERT(topic == null);
-            Console.WriteLine(bcf.ErrorsGet());
+            Console.WriteLine("Expected exception - author unknown");
+            ex = false;
+            try
+            {
+                topic = bcf.CreateTopic("Topic Type", "Topic Title", "Topic Status");
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                ex = true;
+            }
+            ASSERT(ex);
 
             items = bcf.Topics;
             ASSERT(items.Count() == 1);
@@ -203,6 +222,8 @@ namespace CSExample
                 SetTopicAttributes(bcf, true);
                 GetTopicAttributes(bcf, true);
             }
+
+            //TODO - save, read, modify
         }
 
         static private void SetTopicAttributes(RDF.BCF.Project bcf, bool newFile)
@@ -272,8 +293,59 @@ namespace CSExample
 
                 ASSERT(topic.CreationDate.Length > 0);
                 ASSERT(topic.CreationAuthor == "Smoke-tester");
-                ASSERT(topic.ModifiedDate.Length == 0);
-                ASSERT(topic.ModifiedAuthor.Length == 0);
+                if (newFile)
+                {
+                    ASSERT(topic.ModifiedDate.Length == 0);
+                    ASSERT(topic.ModifiedAuthor.Length == 0);
+                }
+                else
+                {
+                    ASSERT(topic.ModifiedDate.Length > 0);
+                    ASSERT(topic.ModifiedAuthor == "Smoke-Editor");
+                }
+            }
+        }
+
+        static void CommentsVP()
+        {
+            using (var bcf = new RDF.BCF.Project())
+            {
+                bool ok = bcf.SetAuthor("Smoke-tester", true);
+                ASSERT(ok);
+
+                SetCommentVPAttributes(bcf, true);
+                GetCommentVPAttributes(bcf, true);
+            }
+
+            //TODO - save, read, modify
+        }
+
+        static void SetCommentVPAttributes(Project bcf, bool newFile)
+        {
+            var topic = bcf.CreateTopic("Type", "Title", "New");
+            var comment = topic.CreateComment();
+
+            comment.Text = "Text comment";
+        }
+
+        static void GetCommentVPAttributes(Project bcf, bool newFile)
+        {
+            var topic = bcf.Topics[0];
+            var comment = topic.Comments[0];
+
+            ASSERT(comment.Text == "Text comment");
+            ASSERT(comment.ViewPoint == null);
+            ASSERT(comment.Date.Length == 28);
+            ASSERT(comment.Author == "Smoke-tester");
+            if (newFile)
+            {
+                ASSERT(comment.ModifiedDate.Length==0);
+                ASSERT(comment.ModifiedAuthor.Length==0);
+            }
+            else
+            {
+                ASSERT(comment.ModifiedDate.Length == 28);
+                ASSERT(comment.ModifiedAuthor == "Smoke-Editor");
             }
         }
     }

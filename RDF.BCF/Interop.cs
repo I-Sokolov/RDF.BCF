@@ -249,7 +249,7 @@ namespace RDF.BCF
 
         [DllImport(DLL, EntryPoint = "bcfCommentGetGuid")]
         private static extern IntPtr CommentGetGuid_(IntPtr comment);
-        public static string CommentGetGuid(IntPtr project, UInt16 topic, UInt16 comment) { return PtrToString(CommentGetGuid_(comment)); }
+        public static string CommentGetGuid(IntPtr comment) { return PtrToString(CommentGetGuid_(comment)); }
 
         [DllImport(DLL, EntryPoint = "bcfCommentGetDate")]
         private static extern IntPtr CommentGetDate_(IntPtr comment);

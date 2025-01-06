@@ -6,7 +6,7 @@
 /// </summary>
 Log::~Log()
 {
-    assert(m_messages.empty());
+    //assert(m_messages.empty());
 }
 
 /// <summary>

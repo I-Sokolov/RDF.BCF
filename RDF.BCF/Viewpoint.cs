@@ -108,6 +108,8 @@ namespace RDF.BCF
         Topic m_topic;
         IntPtr m_handle;
 
+        internal IntPtr Handle { get { return m_handle; } }
+
         internal ViewPoint(Topic topic, IntPtr handle)
         {
             m_topic = topic;

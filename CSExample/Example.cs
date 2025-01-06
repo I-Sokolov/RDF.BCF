@@ -18,13 +18,10 @@ namespace CSExample
         {
             using (var bcfData = new RDF.BCF.Project())
             {
-                //
-                // create topic
-                //
-
-                //
                 bcfData.SetAuthor("user@company.org", true);
 
+                //
+                // create topic
                 //
                 var topic = bcfData.CreateTopic("Topic Type", "Topic Title", "Topic Status");
                 if (topic == null)
@@ -32,7 +29,6 @@ namespace CSExample
                     Console.WriteLine(bcfData.ErrorsGet());
                     return;
                 }
-                //.Add(title: "Topic1", topicType: "Test", topicStatus: "New");
 
                 topic.Description = "The wall need plaster layer";
 
@@ -41,7 +37,8 @@ namespace CSExample
                 //
                 // create comment with viewpoint
                 //
-                //var comment = topic.Comments.Add("Look here");
+                var comment = topic.CreateComment();
+                comment.Text = "Look here";
 
                 //var viewpoint = CreateViewpointExample(topic);
 
@@ -87,19 +84,10 @@ namespace CSExample
                     }
 
                     //
-                    /*
-                    Console.WriteLine("BIM file paths to load");
-                    foreach (var bim in topic.BIMFiles.Items)
+                    foreach (var comment in topic.Comments)
                     {
-                        Console.WriteLine(bim.Reference);
-                    }*/
-
-                    //
-                    /*
-                    foreach (var comment in topic.Comments.Items)
-                    {
-                        Console.WriteLine(comment.Text ?? "-no message-");
-                        var vp = comment.Viewpoint;
+                        Console.WriteLine(comment.Text);
+                        /*var vp = comment.Viewpoint;
                         if (vp != null)
                         {
                             if (vp.DefaultVisibility)
@@ -110,7 +98,15 @@ namespace CSExample
                             { 
                                 Console.WriteLine($"   {id}");
                             }
-                        }
+                        }*/
+                    }
+
+                    //
+                    /*
+                    Console.WriteLine("BIM file paths to load");
+                    foreach (var bim in topic.BIMFiles.Items)
+                    {
+                        Console.WriteLine(bim.Reference);
                     }*/
 
                 }

@@ -211,9 +211,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\rdf.bcf\bimfile.cs">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="InstallZipLib.bat" />
   </ItemGroup>
 </Project>

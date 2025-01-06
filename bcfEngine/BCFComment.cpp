@@ -43,10 +43,12 @@ void BCFComment::Read(_xml::_element& elem, const std::string& folder)
 /// </summary>
 BCFViewPoint* BCFComment::GetViewPoint()
 {
-    if (!m_Guid.empty()) {
-        return m_topic.ViewPointByGuid(m_Guid.c_str());
+    if (*m_Viewpoint.GetGuid()) {
+        return m_topic.ViewPointByGuid(m_Viewpoint.GetGuid());
     }
-    return NULL;
+    else {
+        return NULL;
+    }
 }
 
 /// <summary>
@@ -92,7 +94,7 @@ bool BCFComment::SetText(const char* value)
 /// </summary>
 bool BCFComment::UpdateAuthor()
 {
-    return __super::UpdateAuthor(m_readFromFile ? m_ModifiedAuthor : m_Author, m_readFromFile ? m_ModifiedAuthor : m_Date);
+    return __super::UpdateAuthor(m_readFromFile ? m_ModifiedAuthor : m_Author, m_readFromFile ? m_ModifiedDate : m_Date);
 }
 
 /// <summary>
