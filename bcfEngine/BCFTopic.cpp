@@ -76,10 +76,10 @@ void BCFTopic::Read_Topic(_xml::_element& elem, const std::string& folder)
         CHILD_GET_CONTENT(AssignedTo)
         CHILD_GET_CONTENT(Description)
         CHILD_GET_CONTENT(Stage)
-        CHILD_GET_LIST(DocumentReferences, BCFDocumentReference)
+        CHILD_GET_LIST(DocumentReferences, DocumentReference)
         CHILD_GET_LIST(RelatedTopics, RelatedTopic)
-        CHILD_GET_LIST(Comments, BCFComment)
-        CHILD_GET_LIST(Viewpoints, BCFViewPoint)
+        CHILD_GET_LIST(Comments, Comment)
+        CHILD_GET_LIST(Viewpoints, ViewPoint)
     CHILDREN_END
 }
 

@@ -90,7 +90,7 @@ void  BCFViewPoint::Read_Visibility(_xml::_element& elem, const std::string& fol
 
     CHILDREN_START
         CHILD_READ(ViewSetupHints)
-        CHILD_GET_LIST(Exceptions, BCFComponent)
+        CHILD_GET_LIST(Exceptions, Component)
     CHILDREN_END
 }
 
