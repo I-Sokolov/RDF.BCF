@@ -1,5 +1,6 @@
 #pragma once
 
+#include "bcfTypes.h"
 #include "XMLFile.h"
 #include "GuidStr.h"
 

@@ -2,10 +2,10 @@
 
 #include "bcfTypes.h"
 
-class Point
+struct XMLPoint
 {
 public:
-    Point(BCFProject& project) : m_project(project) {}
+    XMLPoint(BCFProject& project) : m_project(project) {}
 
     void Read(_xml::_element& elem, const std::string& folder);
 

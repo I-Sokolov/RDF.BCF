@@ -3,7 +3,7 @@
 #include "bcfTypes.h"
 #include "XMLFile.h"
 #include "ListOf.h"
-#include "Point.h"
+#include "XMLPoint.h"
 #include "GuidStr.h"
 
 struct BCFComponent;
@@ -22,6 +22,56 @@ public:
 public:
     const char* GetGuid() { return m_Guid.c_str(); }
 
+    const char* GetSnapshot();
+    bool        GetDefaultVisibility() { return StrToBool(m_DefaultVisibility); }
+    bool        GetSpaceVisible() { return StrToBool(m_SpacesVisible); }
+    bool        GetSpaceBoundariesVisible() { return StrToBool(m_SpaceBoundariesVisible); }
+    bool        GetOpeningsVisible() { return StrToBool(m_OpeningsVisible); }
+    BCFCamera   GetCameraType() { return m_cameraType; }
+    bool        GteCameraViewPoint(BCFPoint& pt) { return GetPoint(m_CameraViewPoint, pt); }
+    bool        GetCameraDirection(BCFPoint& pt) { return GetPoint(m_CameraDirection, pt); }
+    bool        GetCameraUpVector(BCFPoint& pt) { return GetPoint(m_CameraUpVector, pt); }
+    double      GetViewToWorldScale() { return atof(m_ViewToWorldScale.c_str()); }
+    double      GetFieldOfView() { return atof(m_FieldOfView.c_str()); }
+    double      GetAspectRatio() { return atof(m_AspectRatio.c_str()); }
+
+    bool        SetSnapshot(const char* pathFile, bool keepInternal);
+    bool        SetDefaultVisibility(bool val) { return BoolToStr(val, m_DefaultVisibility); }
+    bool        SetSpaceVisible(bool val) { return BoolToStr(val, m_SpacesVisible); }
+    bool        SetSpaceBoundariesVisible(bool val) { return BoolToStr(val, m_SpaceBoundariesVisible); }
+    bool        SetOpeningsVisible(bool val) { return BoolToStr(val, m_OpeningsVisible); }
+    bool        SetCameraType() { return m_cameraType; return true; }
+    bool        SteCameraViewPoint(BCFPoint& pt) { return SetPoint(pt, m_CameraViewPoint); }
+    bool        SetCameraDirection(BCFPoint& pt) { return SetPoint(pt, m_CameraDirection); }
+    bool        SetCameraUpVector(BCFPoint& pt) { return SetPoint(pt, m_CameraUpVector); }
+    double      SetViewToWorldScale() { return atof(m_ViewToWorldScale.c_str()); }
+    double      SetFieldOfView() { return atof(m_FieldOfView.c_str()); }
+    double      SetAspectRatio() { return atof(m_AspectRatio.c_str()); }
+
+    BCFComponent* SelectionAdd();
+    BCFComponent* SelectionIterate(BCFComponent* prev);
+    bool SelectionRemove(BCFComponent* component);
+
+    BCFComponent* ExceptionsAdd();
+    BCFComponent* ExceptionIterate(BCFComponent* prev);
+    bool ExceptionRemove(BCFComponent* component);
+
+    BCFColor* ColoringAdd();
+    BCFColor* ColoringIterate(BCFColor* prev);
+    bool ColoringRemove(BCFColor* coloring);
+
+    BCFLine* LineAdd();
+    BCFLine* LineIterate(BCFLine* prev);
+    bool LineRemove(BCFLine* line);
+
+    BCFClippingPlane* ClippingPlaneAdd();
+    BCFClippingPlane* ClippingPlaneIterate(BCFClippingPlane* prev);
+    bool ClippingPlaneRemove(BCFClippingPlane* component);
+
+    BCFBitmap* BitmapAdd();
+    BCFBitmap* BitmapIterate(BCFBitmap* prev);
+    bool BitmapRemove(BCFBitmap* line);
+
 private:
     //XMLFile implementation
     virtual const char* XMLFileName() override { return m_Viewpoint.c_str(); }
@@ -36,32 +86,33 @@ private:
 
 private:
     BCFTopic&                   m_topic;
+    std::string                 m_snapshotPath;
 
     GuidStr                     m_Guid;
 
     std::string                 m_Viewpoint; //name.bcfv
     std::string                 m_Snapshot;  //name.jpg
 
-    ListOf<BCFComponent>           m_Selection;
+    ListOf<BCFComponent>        m_Selection;
     
     std::string                 m_DefaultVisibility;
     std::string                 m_SpacesVisible;
     std::string                 m_SpaceBoundariesVisible;
     std::string                 m_OpeningsVisible;
-    ListOf<BCFComponent>           m_Exceptions;
+    ListOf<BCFComponent>        m_Exceptions;
     
-    ListOf<BCFColor>               m_Coloring;
+    ListOf<BCFColor>            m_Coloring;
 
     BCFCamera                   m_cameraType;
-    Point                       m_CameraViewPoint;
-    Point                       m_CameraDirection;
-    Point                       m_CameraUpVector;
+    XMLPoint                    m_CameraViewPoint;
+    XMLPoint                    m_CameraDirection;
+    XMLPoint                    m_CameraUpVector;
     std::string                 m_ViewToWorldScale;
     std::string                 m_FieldOfView;
     std::string                 m_AspectRatio;
 
-    ListOf<BCFLine>                m_Lines;
-    ListOf<BCFClippingPlane>       m_ClippingPlanes;
-    ListOf<BCFBitmap>              m_Bitmaps;
+    ListOf<BCFLine>             m_Lines;
+    ListOf<BCFClippingPlane>    m_ClippingPlanes;
+    ListOf<BCFBitmap>           m_Bitmaps;
 };
 

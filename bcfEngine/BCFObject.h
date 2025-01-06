@@ -1,13 +1,14 @@
 #pragma once
 
-#include "bcfTypes.h"
-
 class Log;
+struct BCFProject;
+struct XMLPoint;
+struct BCFPoint;
 
 /// <summary>
 /// 
 /// </summary>
-class BCFObject
+struct BCFObject
 {
 public:
     BCFObject(BCFProject& project) : m_project(project) {}
@@ -19,6 +20,13 @@ public:
 
 protected:
     bool IntToStr(int val, std::string& prop);
+
+    bool StrToBool(const std::string& prop) { return 0 == _stricmp(prop.c_str(), "true"); }
+    bool BoolToStr(bool val, std::string& prop) { prop.assign(val ? "true" : "false"); return true; }
+
+    bool GetPoint(const XMLPoint& xmlpt, BCFPoint& bcfpt);
+    bool SetPoint(const BCFPoint& bcfpt, XMLPoint& xmlpt);
+
     bool UpdateAuthor(std::string& author, std::string& date);
 
 private:

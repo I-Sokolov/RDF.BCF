@@ -1,12 +1,12 @@
 #include "pch.h"
-#include "Point.h"
+#include "XMLPoint.h"
 #include "XMLFile.h"
 #include "BCFProject.h"
 
 /// <summary>
 /// 
 /// </summary>
-void Point::Read(_xml::_element& elem, const std::string&)
+void XMLPoint::Read(_xml::_element& elem, const std::string&)
 {
     CHILDREN_START
         CHILD_GET_CONTENT(X)

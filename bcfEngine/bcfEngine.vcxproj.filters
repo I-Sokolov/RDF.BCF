@@ -111,7 +111,7 @@
     <ClInclude Include="BCFBitmap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Point.h">
+    <ClInclude Include="XMLPoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BCFComponent.h">
@@ -194,7 +194,7 @@
     <ClCompile Include="BCFViewPoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Point.cpp">
+    <ClCompile Include="XMLPoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BCFComponent.cpp">

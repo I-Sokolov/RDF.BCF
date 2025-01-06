@@ -1,7 +1,7 @@
 #pragma once
 
 struct BCFProject;
-class BCFObject;
+struct BCFObject;
 
 /// <summary>
 /// 

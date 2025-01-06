@@ -64,6 +64,14 @@ extern "C" {
         BCFCameraOrthogonal = 1
     };
 
+    /// <summary>
+    /// 
+    /// </summary>
+    struct BCFPoint
+    {
+        double x, y, z;
+    };
+
 #ifdef __cplusplus
 } //extern "C"
 #endif

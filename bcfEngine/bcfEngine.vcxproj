@@ -214,7 +214,7 @@
     <ClInclude Include="BCFLine.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Point.h" />
+    <ClInclude Include="XMLPoint.h" />
     <ClInclude Include="ProjectInfo.h" />
     <ClInclude Include="BCFTopic.h" />
     <ClInclude Include="ListOf.h" />
@@ -258,7 +258,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Point.cpp" />
+    <ClCompile Include="XMLPoint.cpp" />
     <ClCompile Include="ProjectInfo.cpp" />
     <ClCompile Include="BCFTopic.cpp" />
     <ClCompile Include="Version.cpp" />

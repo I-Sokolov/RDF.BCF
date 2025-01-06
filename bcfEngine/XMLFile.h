@@ -1,5 +1,6 @@
 #pragma once
 
+#include "bcfTypes.h"
 #include "BCFObject.h"
 #include "ListOf.h"
 #include "Log.h"
