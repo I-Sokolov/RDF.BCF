@@ -43,17 +43,17 @@ bool BCFObject::IntToStr(int val, std::string& prop)
 /// </summary>
 bool BCFObject::UpdateAuthor(std::string& author, std::string& date)
 {
-    const char* editor = Project().GetEditor();
-    if (!*editor) {
-        Project().log().add(Log::Level::error, "Configuration", "Current editor is not set");
+    const char* user = Project().GetAuthor();
+    if (!*user) {
+        Project().log().add(Log::Level::error, "Author is not set");
         return false;
     }
 
-    if (!Project().GetExtensions().CheckElement(BCFUsers, editor)) {
+    if (!Project().GetExtensions().CheckElement(BCFUsers, user)) {
         return false;
     }
 
-    author.assign(editor);
+    author.assign(user);
     date.assign(GetCurrentDate());
 
     return true;

@@ -24,8 +24,8 @@ public:
     bool Read(const char* bcfFilePath);
     bool Write(const char* bcfFilePath, BCFVersion version);
 
-    bool SetEditor(const char* user, bool autoExtentSchema) { m_editor = user; m_autoExtentSchema = autoExtentSchema; return true; }
-    const char* GetEditor() { return m_editor.c_str(); }
+    bool SetAuthor(const char* user, bool autoExtentSchema) { m_author = user; m_autoExtentSchema = autoExtentSchema; return true; }
+    const char* GetAuthor() { return m_author.c_str(); }
     bool GetAutoExtentSchema() { return m_autoExtentSchema; }
 
     const char* ProjectId() { return m_projectInfo.m_ProjectId.c_str(); }
@@ -50,7 +50,7 @@ private:
     ProjectInfo m_projectInfo;
     Extensions  m_extensions;
 
-    std::string m_editor;
+    std::string m_author;
     bool        m_autoExtentSchema;
 
     ListGuid<BCFTopic>  m_topics;

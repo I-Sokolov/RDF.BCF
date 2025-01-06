@@ -50,9 +50,10 @@ bool ListOfProjectObjects::Remove(BCFObject* item)
 /// </summary>
 void ListOfProjectObjects::Clean(Items& items)
 {
-    for (auto item : m_items) {
+    for (auto item : items) {
         delete item;
     }
+    items.clear();
 }
 
 /// <summary>

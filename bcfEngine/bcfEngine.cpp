@@ -60,10 +60,10 @@ RDFBCF_EXPORT bool bcfFileWrite(BCFProject* project, const char* bcfFilePath, BC
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT bool bcfSetEditor(BCFProject* project, const char* user, bool autoExtent)
+RDFBCF_EXPORT bool bcfSetAuthor(BCFProject* project, const char* user, bool autoExtent)
 {
     if (project) {
-        return project->SetEditor(user, autoExtent);
+        return project->SetAuthor(user, autoExtent);
     }
     return false;
 }

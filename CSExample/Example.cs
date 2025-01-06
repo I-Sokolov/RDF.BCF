@@ -23,7 +23,7 @@ namespace CSExample
                 //
 
                 //
-                bcfData.SetEditor("user@company.org", true);
+                bcfData.SetAuthor("user@company.org", true);
 
                 //
                 var topic = bcfData.CreateTopic("Topic Type", "Topic Title", "Topic Status");

@@ -150,7 +150,7 @@ namespace CSExample
             Console.WriteLine(bcf.ErrorsGet());
 
             //
-            bcf.SetEditor("John Smith", false);
+            bcf.SetAuthor("John Smith", false);
 
             Console.WriteLine("Expected error - author unknown");
             topic = bcf.CreateTopic("Topic Type", "Topic Title", "Topic Status");
@@ -161,7 +161,7 @@ namespace CSExample
             ASSERT(items.Count() == 1);
 
             //
-            bcf.SetEditor("John Smith", true);
+            bcf.SetAuthor("John Smith", true);
 
             topic = bcf.CreateTopic("Topic Type", "Topic Title", "Topic Status");
             ASSERT(topic != null);
@@ -197,7 +197,7 @@ namespace CSExample
         {
             using (var bcf = new RDF.BCF.Project())
             {
-                bool ok = bcf.SetEditor("Smoke-tester", true);
+                bool ok = bcf.SetAuthor("Smoke-tester", true);
                 ASSERT(ok);
 
                 SetTopicAttributes(bcf, true);
