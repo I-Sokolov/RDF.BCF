@@ -1,7 +1,6 @@
 #pragma once
 
-struct BCFProject;
-
+#include "bcfTypes.h"
 
 class Point
 {

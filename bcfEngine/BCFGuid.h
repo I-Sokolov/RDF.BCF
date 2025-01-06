@@ -1,38 +1,11 @@
 #pragma once
 
-#include "bcfTypes.h"
-#include "Log.h"
-
-class Topic;
+class BCFProject;
 
 /// <summary>
 /// 
 /// </summary>
-struct BCFObject
-{
-public:
-    BCFObject(BCFProject& project) : m_project(project) {}
-
-    BCFProject& Project() { return m_project; }
-    Log& log();
-
-protected:
-    bool SetIntVal(std::string& prop, int val);
-
-    bool UpdateAuthor(std::string& author, std::string& date);
-
-private:
-    static std::string GetCurrentDate() { return GetCurrentTime(); }
-    static std::string GetCurrentTime();
-
-protected:
-    BCFProject& m_project;
-};
-
-/// <summary>
-/// 
-/// </summary>
-struct BCFGuid : public BCFObject
+struct BCFGuid
 {
 public:
     BCFGuid(BCFProject& project, const char* guid);
@@ -45,6 +18,7 @@ public:
     const char* c_str() { return value.c_str(); }
 
 private:
+    BCFProject& m_project;
     std::string value;
 };
 
@@ -55,7 +29,7 @@ private:
 struct GuidReference : public BCFObject
 {
 public:
-    GuidReference(Topic& topic);
+    GuidReference(BCFTopic& topic);
 
     void Read(_xml::_element& elem, const std::string&);
 
@@ -70,24 +44,26 @@ private:
 /// 
 /// </summary>
 template <class Item>
-struct OwningList : public std::vector<Item*>
+struct OwningList 
 {
+public:
     ~OwningList()
     {
-        for (auto item : *this) {
-            delete item;
-        }
+        Clean(m_items);
+        Clean(m_removed);
     }
 
-    Item* Get(BCFIndex index, Log& log)
+    Item* 
+
+    Item* GetNext(Item* prev, Log& log)
     {
-        if (index < this->size()) {
-            return (*this)[index];
+        auto it = m_items.begin();
+
+        if (prev) {
+            it = GetNexIterator(prev);
         }
-        else {
-            log.add(Log::Level::error, "Index is out of range", "Index %d is out of topics range [0..%d]", (int)index, (int)(this->size()));
-            return NULL;
-        }
+
+        return (it == m_items.end()) ? NULL : *it;
     }
 
     bool Remove(BCFIndex index, Log& log)
@@ -112,6 +88,32 @@ struct OwningList : public std::vector<Item*>
         }
     }
 
+private:
+    typedef std::list<Item*> Items;
+    typedef Items::iterator Iterator;
+
+private:
+    void Clean(Items& items)
+    {
+        for (auto item : m_items) {
+            delete item;
+        }
+    }
+
+    Iterator GetNexIterator(Item* item)
+    {        
+        for (auto it = m_items.begin(); it != m_items.end(); it++) {
+            if (*it == item) {
+                return ++it;
+            }
+        }
+        log.add(Log::Level::error, "Item is not from list", "Item is not found in the list");
+        return m_items.end();
+    }
+
+private:
+    Items m_items;
+    Items m_removed;
 };
 
 

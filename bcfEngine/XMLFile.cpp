@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "BCFProject.h"
+#include "BCFTopic.h"
 #include "XMLFile.h"
 #include "FileSystem.h"
 
@@ -49,4 +50,20 @@ bool XMLFile::WriteFile(const std::string& bcfFolder)
     }
 
     return ok;
+}
+
+/// <summary>
+/// 
+/// </summary>
+XMLText::XMLText(BCFTopic& topic)
+    : BCFObject(topic.Project())
+{
+}
+
+/// <summary>
+/// 
+/// </summary>
+void XMLText::Read(_xml::_element& elem, const std::string&) 
+{ 
+    m_str.assign(elem.getContent()); 
 }

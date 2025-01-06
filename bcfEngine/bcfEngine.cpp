@@ -2,7 +2,8 @@
 
 #include "bcfEngine.h"
 #include "BCFProject.h"
-#include "Topic.h"
+#include "BCFTopic.h"
+#include "BCFComment.h"
 
 /// <summary>
 /// 
@@ -138,32 +139,32 @@ RDFBCF_EXPORT bool bcfEnumerationElementRemove(BCFProject* project, BCFEnumerati
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT BCFIndex bcfTopicsCount(BCFProject* project)
+RDFBCF_EXPORT BCFTopic* bcfTopicIterate(BCFProject* project, BCFTopic* prev)
 {
     if (project) {
-        return project->TopicsCount();
+        return project->TopicIterate(prev);
     }
-    return 0;
+    return NULL;
 }
 
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT BCFIndex bcfTopicCreate(BCFProject* project, const char* type, const char* title, const char* status, const char* guid)
+RDFBCF_EXPORT BCFTopic* bcfTopicCreate(BCFProject* project, const char* type, const char* title, const char* status, const char* guid)
 {
     if (project) {
         return project->TopicCreate(type, title, status, guid);
     }
-    return BCFIndex_ERROR;
+    return NULL;
 }
 
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT bool bcfTopicRemove(BCFProject* project, BCFIndex topic)
+RDFBCF_EXPORT bool bcfTopicRemove(BCFTopic* topic)
 {
-    if (project) {
-        return project->TopicRemove(topic);
+    if (topic) {
+        return topic->Remove();
     }
     return false;
 }
@@ -173,12 +174,10 @@ RDFBCF_EXPORT bool bcfTopicRemove(BCFProject* project, BCFIndex topic)
 /// </summary>
 
 #define TOPIC_GET_ATTR(ATTR)                                                        \
-RDFBCF_EXPORT const char* bcfTopicGet##ATTR (BCFProject* project, BCFIndex topic)   \
+RDFBCF_EXPORT const char* bcfTopicGet##ATTR (BCFTopic* topic)                       \
 {                                                                                   \
-    if (project) {                                                                  \
-        if (auto t = project->TopicGet(topic)) {                                    \
-            return t->Get##ATTR ();                                                 \
-        }                                                                           \
+    if (topic) {                                                                    \
+       return topic->Get##ATTR ();                                                  \
     }                                                                               \
     return NULL;                                                                    \
 }
@@ -198,12 +197,10 @@ TOPIC_GET_ATTR(AssignedTo)
 TOPIC_GET_ATTR(Description)
 TOPIC_GET_ATTR(Stage)
 
-RDFBCF_EXPORT int         bcfTopicGetIndex(BCFProject* project, BCFIndex topic)
+RDFBCF_EXPORT int         bcfTopicGetIndex(BCFTopic* topic)
 {
-    if (project) {
-        if (auto t = project->TopicGet(topic)) {
-            return t->GetIndex();
-        }
+    if (topic) {
+        return topic->GetIndex();
     }
     return 0;
 }
@@ -213,12 +210,10 @@ RDFBCF_EXPORT int         bcfTopicGetIndex(BCFProject* project, BCFIndex topic)
 /// 
 /// </summary>
 #define TOPIC_SET_ATTR(ATTR)                                                        \
-RDFBCF_EXPORT bool bcfTopicSet##ATTR (BCFProject* project, BCFIndex topic, const char* val)\
+RDFBCF_EXPORT bool bcfTopicSet##ATTR (BCFTopic* topic, const char* val)             \
 {                                                                                   \
-    if (project) {                                                                  \
-        if (auto t = project->TopicGet(topic)) {                                    \
-            return t->Set##ATTR (val);                                              \
-        }                                                                           \
+    if (topic) {                                                                    \
+        return topic->Set##ATTR (val);                                              \
     }                                                                               \
     return false;                                                                   \
 }
@@ -233,12 +228,10 @@ TOPIC_SET_ATTR(AssignedTo)
 TOPIC_SET_ATTR(Description)
 TOPIC_SET_ATTR(Stage)
 
-RDFBCF_EXPORT bool bcfTopicSetIndex(BCFProject* project, BCFIndex topic, int val)
+RDFBCF_EXPORT bool bcfTopicSetIndex(BCFTopic* topic, int val)
 {
-    if (project) {
-        if (auto t = project->TopicGet(topic)) {
-            return t->SetIndex(val);
-        }
+    if (topic) {
+        return topic->SetIndex(val);
     }
     return false;
 }
@@ -246,40 +239,21 @@ RDFBCF_EXPORT bool bcfTopicSetIndex(BCFProject* project, BCFIndex topic, int val
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT BCFIndex bcfCommentsCount(BCFProject* project, BCFIndex topic)
+RDFBCF_EXPORT BCFComment* bcfCommentIterate(BCFTopic* topic, BCFComment* prev)
 {
-    if (project) {
-        if (auto tp = project->TopicGet(topic)) {
-            return tp->CommentsCount();
-        }
+    if (topic) {
+        return topic->CommentIterate(prev);
     }
-    return 0;
+    return NULL;
 }
 
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT const char* bcfCommentGuid(BCFProject* project, BCFIndex topic, BCFIndex comment)
+RDFBCF_EXPORT BCFComment* bcfCommentCreate(BCFTopic* topic, const char* guid)
 {
-    if (project) {
-        if (auto tp = project->TopicGet(topic)) {
-            if (auto cmnt = tp->CommentGet(comment)) {
-                return cmnt->GetGuid();
-            }
-        }
-    }
-    return 0;
-}
-
-/// <summary>
-/// 
-/// </summary>
-RDFBCF_EXPORT BCFIndex bcfCommentCreate(BCFProject* project, BCFIndex topic, const char* guid)
-{
-    if (project) {
-        if (auto tp = project->TopicGet(topic)) {
-            return tp->CommentCreate(guid);
-        }
+    if (topic) {
+        return topic->CommentCreate(guid);
     }
     return 0;
 }
@@ -288,28 +262,22 @@ RDFBCF_EXPORT BCFIndex bcfCommentCreate(BCFProject* project, BCFIndex topic, con
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT bool bcfCommentRemove(BCFProject* project, BCFIndex topic, BCFIndex comment)
+RDFBCF_EXPORT bool bcfCommentRemove(BCFComment* comment)
 {
-    if (project) {
-        if (auto tp = project->TopicGet(topic)) {
-            tp->CommentRemove(comment);
-        }
+    if (comment) {
+        return comment->Remove();
     }
-    return 0;
+    return false;
 }
 
 /// <summary>
 ///
 /// </summary>
 #define COMMENT_GET_ATTR(ATTR)                                                      \
-RDFBCF_EXPORT const char* bcfCommentGet##ATTR (BCFProject* project, BCFIndex topic, BCFIndex comment) \
+RDFBCF_EXPORT const char* bcfCommentGet##ATTR (BCFComment*  comment)                \
 {                                                                                   \
-    if (project) {                                                                  \
-        if (auto t = project->TopicGet(topic)) {                                    \
-            if (auto c = t->CommentGet(comment)) {                                  \
-                return c->Get##ATTR();                                              \
-            }                                                                       \
-        }                                                                           \
+    if (comment) {                                                                  \
+        return comment->Get##ATTR();                                                \
     }                                                                               \
     return NULL;                                                                    \
 }
@@ -320,50 +288,34 @@ COMMENT_GET_ATTR(Date           )
 COMMENT_GET_ATTR(Author         )
 COMMENT_GET_ATTR(ModifiedDate   )
 COMMENT_GET_ATTR(ModifiedAuthor )
-COMMENT_GET_ATTR(Comment        )
+COMMENT_GET_ATTR(Text           )
 
 /// <summary>
 ///
 /// </summary>
-RDFBCF_EXPORT BCFIndex bcfCommentGetViewPoint(BCFProject* project, BCFIndex topic, BCFIndex comment)
+RDFBCF_EXPORT BCFViewPoint* bcfCommentGetViewPoint(BCFComment* comment)
 {
-    if (project) {
-        if (auto tp = project->TopicGet(topic)) {
-            if (auto cmnt = tp->CommentGet(comment)) {
-                if (auto vp = cmnt->GetViewPoint()) {
-                    return vp->GetIndex();
-                }
-            }
-        }
+    if (comment) {
+        return comment->GetViewPoint();
     }
-    return BCFIndex_ERROR;
+    return NULL;
 }
 
 /// <summary>
 ///
 /// </summary>
-RDFBCF_EXPORT bool bcfCommentSetComment(BCFProject* project, BCFIndex topic, BCFIndex comment, const char* text)
+RDFBCF_EXPORT bool bcfCommentSetText(BCFComment* comment, const char* text)
 {
-    if (project) {
-        if (auto tp = project->TopicGet(topic)) {
-            if (auto cmnt = tp->CommentGet(comment)) {
-                return cmnt->SetComment(text);
-            }
-        }
+    if (comment) {
+        return comment->SetText(text);
     }
     return false;
 }
 
-RDFBCF_EXPORT bool bcfCommentSetViewPoint(BCFProject* project, BCFIndex topic, BCFIndex comment, BCFIndex viewPoint)
+RDFBCF_EXPORT bool bcfCommentSetViewPoint(BCFComment* comment, BCFViewPoint* viewPoint)
 {
-    if (project) {
-        if (auto tp = project->TopicGet(topic)) {
-            if (auto cmnt = tp->CommentGet(comment)) {
-                if (auto vp = tp->ViewPointGet(viewPoint)) {
-                    return cmnt->SetViewPoint(vp);
-                }
-            }
-        }
+    if (comment) {
+        return comment->SetViewPoint(viewPoint);
     }
     return false;
 }

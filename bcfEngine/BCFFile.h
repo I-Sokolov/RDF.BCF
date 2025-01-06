@@ -1,19 +1,18 @@
 #pragma once
 
+#include "BCFObject.h"
 struct BCFProject;
-class  Topic;
+struct BCFTopic;
 
-class BIMFile
+struct BCFFile : public BCFObject
 {
 public:
-    BIMFile (Topic& topic) : m_topic(topic) {}
+    BCFFile(BCFTopic& topic);
 
     void Read(_xml::_element& elem, const std::string& folder);
 
-    BCFProject& Project();
-
 private:
-    Topic& m_topic;
+    BCFTopic& m_topic;
 
     std::string m_IsExternal;
     std::string m_Filename;

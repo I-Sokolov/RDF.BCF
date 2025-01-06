@@ -1,19 +1,17 @@
 #pragma once
 
-struct BCFProject;
-class ViewPoint;
+#include "BCFObject.h"
+struct BCFViewPoint;
 
-class Component
+struct BCFComponent : public BCFObject
 {
 public:
-    Component(ViewPoint& viewPoint);
+    BCFComponent(BCFViewPoint& viewPoint);
 
     void Read(_xml::_element& elem, const std::string& folder);
 
-    BCFProject& Project();
-
 private:
-    ViewPoint& m_viewPoint;
+    BCFViewPoint& m_viewPoint;
 
     std::string m_IfcGuid;
     std::string m_OriginatingSystem;

@@ -1,10 +1,9 @@
 #pragma once
 
+#include "BCFObject.h"
+#include "ListOf.h"
 #include "Log.h"
-#include "GUIDable.h"
 
-struct BCFProject;
-class Topic;
 
 /// <summary>
 /// base class for XML serialized data block
@@ -27,11 +26,15 @@ protected:
 /// <summary>
 /// XML element content text
 /// </summary>
-class XMLText : public std::string
+class XMLText : public BCFObject
 {
 public:
-    XMLText(Topic&) {}
-    void Read(_xml::_element& elem, const std::string&) { assign(elem.getContent()); }    
+    XMLText(BCFTopic&);
+    
+    void Read(_xml::_element& elem, const std::string&);
+
+private:
+    std::string m_str;
 };
 
 /// <summary>
@@ -102,7 +105,7 @@ enum class UnknownNames : bool
 /// 
 /// </summary>
 template <class TReadable, class TContainer>
-void AddToList(OwningList<TReadable>& list, TContainer& container, _xml::_element& elem, const std::string& folder)
+void AddToList(ListOf<TReadable>& list, TContainer& container, _xml::_element& elem, const std::string& folder)
 {
     auto item = new TReadable(container);
     item->Read(elem, folder);
@@ -113,12 +116,12 @@ void AddToList(OwningList<TReadable>& list, TContainer& container, _xml::_elemen
 /// 
 /// </summary>
 template <class TReadable, class TContainer> 
-void ReadList(OwningList<TReadable>& list, TContainer& container, _xml::_element& elem, const std::string& folder, const char* childName, Log& log)
+void ReadList(ListOf<TReadable>& list, TContainer& container, _xml::_element& elem, const std::string& folder, const char* childName, Log& log)
 {
     if (!childName) {
         auto item = new TReadable(container);
         item->Read(elem, folder);
-        list.push_back(item);
+        list.Add(item);
     }
     else {
         for (auto child : elem.children()) {
@@ -127,7 +130,7 @@ void ReadList(OwningList<TReadable>& list, TContainer& container, _xml::_element
                 if (tag == childName) {
                     auto item = new TReadable(container);
                     item->Read(*child, folder);
-                    list.push_back(item);
+                    list.Add(item);
                 }
                 else {
                     log.add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str());

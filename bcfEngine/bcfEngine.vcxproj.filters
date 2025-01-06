@@ -81,46 +81,55 @@
     <ClInclude Include="XMLFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Topic.h">
+    <ClInclude Include="BCFTopic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GUIDable.h">
+    <ClInclude Include="GuidStr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BIMFile.h">
+    <ClInclude Include="BCFFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Comment.h">
+    <ClInclude Include="BCFComment.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ViewPoint.h">
+    <ClInclude Include="BCFViewPoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BimSnippet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DocumentReference.h">
+    <ClInclude Include="BCFDocumentReference.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Line.h">
+    <ClInclude Include="BCFLine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ClippingPlane.h">
+    <ClInclude Include="BCFClippingPlane.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Bitmap.h">
+    <ClInclude Include="BCFBitmap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Point.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Component.h">
+    <ClInclude Include="BCFComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Color.h">
+    <ClInclude Include="BCFColor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="bcfTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BCFObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GuidReference.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ListOf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -170,25 +179,34 @@
     <ClCompile Include="XMLFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Topic.cpp">
+    <ClCompile Include="BCFTopic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GUIDable.cpp">
+    <ClCompile Include="GuidStr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BIMFile.cpp">
+    <ClCompile Include="BCFFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Comment.cpp">
+    <ClCompile Include="BCFComment.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ViewPoint.cpp">
+    <ClCompile Include="BCFViewPoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Point.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Component.cpp">
+    <ClCompile Include="BCFComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BCFObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GuidReference.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ListOf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

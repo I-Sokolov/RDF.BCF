@@ -1,17 +1,28 @@
 #include "pch.h"
 #include "bcfTypes.h"
-#include "Topic.h"
+#include "BCFTopic.h"
 #include "BCFProject.h"
+#include "BCFViewPoint.h"
+#include "BCFComment.h"
+#include "BCFFile.h"
+#include "BCFDocumentReference.h"
 #include "FileSystem.h"
 
 /// <summary>
 /// 
 /// </summary>
-Topic::Topic(BCFProject& project, const char* guid)
+BCFTopic::BCFTopic(BCFProject& project, const char* guid)
     : XMLFile(project)
     , m_Guid(project, guid)
     , m_BimSnippet(project)
     , m_bReadFromFile (false)
+    , m_Files(project)
+    , m_ReferenceLinks(project)
+    , m_Labels(project)
+    , m_DocumentReferences(project)
+    , m_RelatedTopics(project)
+    , m_Comments(project)
+    , m_Viewpoints(project)
 {
 }
 
@@ -19,7 +30,7 @@ Topic::Topic(BCFProject& project, const char* guid)
 /// <summary>
 /// 
 /// </summary>
-void Topic::ReadRoot(_xml::_element& elem, const std::string& folder)
+void BCFTopic::ReadRoot(_xml::_element& elem, const std::string& folder)
 {
     CHILDREN_START
         CHILD_READ(Header)
@@ -30,7 +41,7 @@ void Topic::ReadRoot(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-void Topic::Read_Header(_xml::_element& elem, const std::string& folder)
+void BCFTopic::Read_Header(_xml::_element& elem, const std::string& folder)
 {
     CHILDREN_START
         CHILD_GET_LIST(Files, File)
@@ -40,7 +51,7 @@ void Topic::Read_Header(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-void Topic::Read_Topic(_xml::_element& elem, const std::string& folder)
+void BCFTopic::Read_Topic(_xml::_element& elem, const std::string& folder)
 {
     m_bReadFromFile = true;
 
@@ -65,17 +76,17 @@ void Topic::Read_Topic(_xml::_element& elem, const std::string& folder)
         CHILD_GET_CONTENT(AssignedTo)
         CHILD_GET_CONTENT(Description)
         CHILD_GET_CONTENT(Stage)
-        CHILD_GET_LIST(DocumentReferences, DocumentReference)
+        CHILD_GET_LIST(DocumentReferences, BCFDocumentReference)
         CHILD_GET_LIST(RelatedTopics, RelatedTopic)
-        CHILD_GET_LIST(Comments, Comment)
-        CHILD_GET_LIST(Viewpoints, ViewPoint)
+        CHILD_GET_LIST(Comments, BCFComment)
+        CHILD_GET_LIST(Viewpoints, BCFViewPoint)
     CHILDREN_END
 }
 
 /// <summary>
 /// 
 /// </summary>
-bool Topic::SetServerAssignedId(const char* val) 
+bool BCFTopic::SetServerAssignedId(const char* val) 
 {
     if (UpdateAuthor()) {
         m_ServerAssignedId.assign(val);
@@ -87,7 +98,7 @@ bool Topic::SetServerAssignedId(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool Topic::SetTopicStatus(const char* val)
+bool BCFTopic::SetTopicStatus(const char* val)
 {
     if (Project().GetExtensions().CheckElement(BCFTopicStatuses, val)) {
         if (UpdateAuthor()) {
@@ -101,7 +112,7 @@ bool Topic::SetTopicStatus(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool Topic::SetTopicType(const char* val)
+bool BCFTopic::SetTopicType(const char* val)
 {
     if (Project().GetExtensions().CheckElement(BCFTopicTypes, val)) {
         if (UpdateAuthor()) {
@@ -115,7 +126,7 @@ bool Topic::SetTopicType(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool Topic::SetTitle(const char* val)
+bool BCFTopic::SetTitle(const char* val)
 {
     if (UpdateAuthor()) {
         m_Title.assign(val);
@@ -127,7 +138,7 @@ bool Topic::SetTitle(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool Topic::SetPriority(const char* val)
+bool BCFTopic::SetPriority(const char* val)
 {
     if (Project().GetExtensions().CheckElement(BCFPriorities, val)) {
         if (UpdateAuthor()) {
@@ -141,10 +152,10 @@ bool Topic::SetPriority(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool Topic::SetIndex(int val)
+bool BCFTopic::SetIndex(int val)
 {
     if (UpdateAuthor()) {
-        return SetIntVal(m_Index, val);
+        return IntToStr(val, m_Index);
     }
     return false;
 }
@@ -152,7 +163,7 @@ bool Topic::SetIndex(int val)
 /// <summary>
 /// 
 /// </summary>
-bool Topic::SetDueDate(const char* val)
+bool BCFTopic::SetDueDate(const char* val)
 {
     if (UpdateAuthor()) {
         m_DueDate.assign(val);
@@ -164,7 +175,7 @@ bool Topic::SetDueDate(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool Topic::SetAssignedTo(const char* val)
+bool BCFTopic::SetAssignedTo(const char* val)
 {
     if (Project().GetExtensions().CheckElement(BCFUsers, val)) {
         if (UpdateAuthor()) {
@@ -178,7 +189,7 @@ bool Topic::SetAssignedTo(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool Topic::SetDescription(const char* val)
+bool BCFTopic::SetDescription(const char* val)
 {
     if (UpdateAuthor()) {
         m_Description.assign(val);
@@ -190,7 +201,7 @@ bool Topic::SetDescription(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool Topic::SetStage(const char* val)
+bool BCFTopic::SetStage(const char* val)
 {
     if (Project().GetExtensions().CheckElement(BCFStages, val)) {
         if (UpdateAuthor()) {
@@ -204,7 +215,7 @@ bool Topic::SetStage(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool Topic::UpdateAuthor()
+bool BCFTopic::UpdateAuthor()
 {
     return __super::UpdateAuthor(m_bReadFromFile ? m_ModifiedAuthor : m_CreationAuthor, m_bReadFromFile ? m_ModifiedAuthor : m_CreationDate);
 }
@@ -212,39 +223,50 @@ bool Topic::UpdateAuthor()
 /// <summary>
 /// 
 /// </summary>
-BCFIndex Topic::ViewPointCreate(const char* guid)
+bool BCFTopic::Remove(void)
 {
-    auto viewPoint = new ViewPoint(*this, guid ? guid : "");
+    return m_project.TopicRemove(this);
+}
+
+/// <summary>
+/// 
+/// </summary>
+BCFViewPoint* BCFTopic::ViewPointCreate(const char* guid)
+{
+    auto viewPoint = new BCFViewPoint(*this, guid ? guid : "");
 
     if (viewPoint) {
-        /*
-        bool ok = topic->SetTopicType(type);
-        ok = ok && topic->SetTitle(title);
-        ok = ok && topic->SetTopicStatus(status);
-
-        if (!ok) {
-            delete topic;
-            topic = NULL;
-        }
-        */
-    }
-
-    if (viewPoint) {
-        m_Viewpoints.push_back(viewPoint);
-        return (BCFIndex)m_Comments.size() - 1;
+        m_Viewpoints.Add(viewPoint);
+        return viewPoint;
     }
     else {
-        return BCFIndex_ERROR;
+        return NULL;
     }
 }
 
 /// <summary>
 /// 
 /// </summary>
-ViewPoint* Topic::ViewPointByGuid(const char* guid)
+BCFViewPoint* BCFTopic::ViewPointIterate(BCFViewPoint* prev)
+{
+    return m_Viewpoints.GetNext(prev);
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFTopic::ViewPointRemove(BCFViewPoint* viewPoint)
+{
+    return m_Viewpoints.Remove(viewPoint);
+}
+
+/// <summary>
+/// 
+/// </summary>
+BCFViewPoint* BCFTopic::ViewPointByGuid(const char* guid)
 {
     if (guid && *guid) {
-        for (auto vp : m_Viewpoints) {
+        for (auto vp : m_Viewpoints.Items()) {
             if (vp && 0 == strcmp(vp->GetGuid(), guid)) {
                 return vp;
             }
@@ -262,28 +284,31 @@ ViewPoint* Topic::ViewPointByGuid(const char* guid)
 /// <summary>
 /// 
 /// </summary>
-BCFIndex Topic::CommentCreate(const char* guid)
+BCFComment* BCFTopic::CommentCreate(const char* guid)
 {
-    auto topic = new Comment(*this, guid ? guid : "");
+    auto comment = new BCFComment(*this, guid ? guid : "");
 
-    if (topic) {
-        /*
-        bool ok = topic->SetTopicType(type);
-        ok = ok && topic->SetTitle(title);
-        ok = ok && topic->SetTopicStatus(status);
-
-        if (!ok) {
-            delete topic;
-            topic = NULL;
-        }
-        */
-    }
-
-    if (topic) {
-        m_Comments.push_back(topic);
-        return (BCFIndex)m_Comments.size() - 1;
+    if (comment) {
+        m_Comments.Add(comment);
+        return comment;
     }
     else {
-        return BCFIndex_ERROR;
+        return NULL;
     }
+}
+
+/// <summary>
+/// 
+/// </summary>
+BCFComment* BCFTopic::CommentIterate(BCFComment* prev)
+{
+    return m_Comments.GetNext(prev);
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool        BCFTopic::CommentRemove(BCFComment* comment)
+{
+    return m_Comments.Remove(comment);
 }

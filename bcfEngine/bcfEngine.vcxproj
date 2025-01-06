@@ -195,28 +195,31 @@
   <ItemGroup>
     <ClInclude Include="Archivator.h" />
     <ClInclude Include="bcfEngine.h" />
+    <ClInclude Include="BCFObject.h" />
     <ClInclude Include="BCFProject.h" />
     <ClInclude Include="bcfTypes.h" />
-    <ClInclude Include="BIMFile.h" />
+    <ClInclude Include="BCFFile.h" />
     <ClInclude Include="BimSnippet.h" />
-    <ClInclude Include="Bitmap.h" />
-    <ClInclude Include="ClippingPlane.h" />
-    <ClInclude Include="Color.h" />
-    <ClInclude Include="Comment.h" />
-    <ClInclude Include="Component.h" />
-    <ClInclude Include="DocumentReference.h" />
+    <ClInclude Include="BCFBitmap.h" />
+    <ClInclude Include="BCFClippingPlane.h" />
+    <ClInclude Include="BCFColor.h" />
+    <ClInclude Include="BCFComment.h" />
+    <ClInclude Include="BCFComponent.h" />
+    <ClInclude Include="BCFDocumentReference.h" />
     <ClInclude Include="Extensions.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="GUIDable.h" />
-    <ClInclude Include="Line.h" />
+    <ClInclude Include="GuidStr.h" />
+    <ClInclude Include="GuidReference.h" />
+    <ClInclude Include="BCFLine.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="ProjectInfo.h" />
-    <ClInclude Include="Topic.h" />
+    <ClInclude Include="BCFTopic.h" />
+    <ClInclude Include="ListOf.h" />
     <ClInclude Include="Version.h" />
-    <ClInclude Include="ViewPoint.h" />
+    <ClInclude Include="BCFViewPoint.h" />
     <ClInclude Include="XMLFile.h" />
     <ClInclude Include="XMLparser\_errors.h" />
     <ClInclude Include="XMLparser\_io.h" />
@@ -237,14 +240,17 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="bcfEngine.cpp" />
+    <ClCompile Include="GuidReference.cpp" />
+    <ClCompile Include="ListOf.cpp" />
+    <ClCompile Include="BCFObject.cpp" />
     <ClCompile Include="BCFProject.cpp" />
-    <ClCompile Include="BIMFile.cpp" />
-    <ClCompile Include="Comment.cpp" />
-    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="BCFFile.cpp" />
+    <ClCompile Include="BCFComment.cpp" />
+    <ClCompile Include="BCFComponent.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Extensions.cpp" />
     <ClCompile Include="FileSystem.cpp" />
-    <ClCompile Include="GUIDable.cpp" />
+    <ClCompile Include="GuidStr.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -254,9 +260,9 @@
     </ClCompile>
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="ProjectInfo.cpp" />
-    <ClCompile Include="Topic.cpp" />
+    <ClCompile Include="BCFTopic.cpp" />
     <ClCompile Include="Version.cpp" />
-    <ClCompile Include="ViewPoint.cpp" />
+    <ClCompile Include="BCFViewPoint.cpp" />
     <ClCompile Include="XMLFile.cpp" />
     <ClCompile Include="XMLparser\_net.cpp" />
     <ClCompile Include="XMLparser\_reader.cpp" />

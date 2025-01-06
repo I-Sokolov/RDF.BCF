@@ -1,24 +1,25 @@
 #pragma once
 
+#include "bcfTypes.h"
 #include "XMLFile.h"
-#include "GUIDable.h"
+#include "ListOf.h"
 #include "Point.h"
-#include "Line.h"
-#include "ClippingPlane.h"
-#include "Bitmap.h"
-#include "Component.h"
-#include "Color.h"
+#include "GuidStr.h"
 
-class ViewPoint : public XMLFile
+struct BCFComponent;
+struct BCFColor;
+struct BCFLine;
+struct BCFClippingPlane;
+struct BCFBitmap;
+
+struct BCFViewPoint : public XMLFile
 {
 public:
-    ViewPoint(Topic& topic, const char* guid = NULL);
+    BCFViewPoint(BCFTopic& topic, const char* guid = NULL);
 
     void Read(_xml::_element& elem, const std::string& folder);
 
 public:
-    BCFIndex GetIndex();
-
     const char* GetGuid() { return m_Guid.c_str(); }
 
 private:
@@ -34,22 +35,22 @@ private:
     void Read_OrthogonalCamera(_xml::_element& elem, const std::string& folder);
 
 private:
-    Topic&      m_topic;
+    BCFTopic&                   m_topic;
 
-    BCFGuid     m_Guid;
+    GuidStr                     m_Guid;
 
-    std::string m_Viewpoint; //name.bcfv
-    std::string m_Snapshot;  //name.jpg
+    std::string                 m_Viewpoint; //name.bcfv
+    std::string                 m_Snapshot;  //name.jpg
 
-    OwningList<Component>       m_Selection;
+    ListOf<BCFComponent>           m_Selection;
     
     std::string                 m_DefaultVisibility;
     std::string                 m_SpacesVisible;
     std::string                 m_SpaceBoundariesVisible;
     std::string                 m_OpeningsVisible;
-    OwningList<Component>       m_Exceptions;
+    ListOf<BCFComponent>           m_Exceptions;
     
-    OwningList<Color>           m_Coloring;
+    ListOf<BCFColor>               m_Coloring;
 
     BCFCamera                   m_cameraType;
     Point                       m_CameraViewPoint;
@@ -59,8 +60,8 @@ private:
     std::string                 m_FieldOfView;
     std::string                 m_AspectRatio;
 
-    OwningList<Line>            m_Lines;
-    OwningList<ClippingPlane>   m_ClippingPlanes;
-    OwningList<Bitmap>          m_Bitmaps;
+    ListOf<BCFLine>                m_Lines;
+    ListOf<BCFClippingPlane>       m_ClippingPlanes;
+    ListOf<BCFBitmap>              m_Bitmaps;
 };
 

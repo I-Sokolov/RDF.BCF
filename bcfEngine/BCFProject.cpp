@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "BCFProject.h"
-
+#include "BCFTopic.h"
 #include "Archivator.h"
 #include "FileSystem.h"
 
@@ -13,6 +13,7 @@ BCFProject::BCFProject(const char* projectId)
     , m_projectInfo(*this, projectId)
     , m_extensions (*this)
     , m_autoExtentSchema(true)
+    , m_topics(*this)
 {
 }
 
@@ -82,7 +83,7 @@ bool BCFProject::Write(const char* bcfFilePath, BCFVersion version)
     return ok;
 }
 
-void push_back(Topic* topic);
+void push_back(BCFTopic* topic);
 
 /// <summary>
 /// 
@@ -94,8 +95,8 @@ bool BCFProject::ReadTopics(const std::string& bcfFolder)
 
     for (auto& elem : elems) {
         if (ok && elem.folder) {
-            auto topic = new Topic(*this, elem.name.c_str());
-            m_topics.push_back(topic);
+            auto topic = new BCFTopic(*this, elem.name.c_str());
+            m_topics.Add(topic);
 
             std::string topicFolder(bcfFolder);
             FileSystem::AddPath(topicFolder, elem.name.c_str());
@@ -113,7 +114,7 @@ bool BCFProject::WriteTopics(const std::string& bcfFolder)
 {
     bool ok = true;
 
-    for (auto topic : m_topics) {
+    for (auto topic : m_topics.Items()) {
         ok = ok && topic->WriteFile(bcfFolder);
     }
 
@@ -123,9 +124,9 @@ bool BCFProject::WriteTopics(const std::string& bcfFolder)
 /// <summary>
 /// 
 /// </summary>
-BCFIndex BCFProject::TopicCreate(const char* type, const char* title, const char* status, const char* guid)
+BCFTopic* BCFProject::TopicCreate(const char* type, const char* title, const char* status, const char* guid)
 {
-    auto topic = new Topic(*this, guid ? guid : "");
+    auto topic = new BCFTopic(*this, guid ? guid : "");
 
     if (topic) {
 
@@ -140,11 +141,26 @@ BCFIndex BCFProject::TopicCreate(const char* type, const char* title, const char
     }
 
     if (topic) {
-        m_topics.push_back(topic);
-        return (BCFIndex)m_topics.size() - 1;
+        m_topics.Add(topic);
+        return topic;
     }
     else {
-        return BCFIndex_ERROR;
+        return NULL;
     }
 }
 
+/// <summary>
+/// 
+/// </summary>
+bool BCFProject::TopicRemove(BCFTopic* topic)
+{ 
+    return m_topics.Remove(topic); 
+}
+
+/// <summary>
+/// 
+/// </summary>
+BCFTopic* BCFProject::TopicIterate(BCFTopic* prev)
+{ 
+    return m_topics.GetNext(prev); 
+}

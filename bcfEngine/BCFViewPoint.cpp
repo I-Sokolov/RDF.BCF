@@ -1,13 +1,17 @@
 #include "pch.h"
-#include "bcfTypes.h"
-#include "ViewPoint.h"
+#include "BCFViewPoint.h"
 #include "BCFProject.h"
-
+#include "BCFTopic.h"
+#include "BCFColor.h"
+#include "BCFLine.h"
+#include "BCFClippingPlane.h"
+#include "BCFBitmap.h"
+#include "BCFComponent.h"
 
 /// <summary>
 /// 
 /// </summary>
-ViewPoint::ViewPoint(Topic& topic, const char* guid)
+BCFViewPoint::BCFViewPoint(BCFTopic& topic, const char* guid)
     : XMLFile(topic.Project())
     , m_topic(topic)
     , m_Guid(topic.Project(), guid)
@@ -15,13 +19,19 @@ ViewPoint::ViewPoint(Topic& topic, const char* guid)
     , m_CameraViewPoint(topic.Project())
     , m_CameraDirection(topic.Project())
     , m_CameraUpVector(topic.Project())
+    , m_Selection(topic.Project())
+    , m_Exceptions(topic.Project())
+    , m_Coloring(topic.Project())
+    , m_Lines(topic.Project())
+    , m_ClippingPlanes(topic.Project())
+    , m_Bitmaps(topic.Project())
 {
 }
 
 /// <summary>
 /// 
 /// </summary>
-void ViewPoint::Read(_xml::_element& elem, const std::string& folder)
+void BCFViewPoint::Read(_xml::_element& elem, const std::string& folder)
 {
     ATTRS_START
         ATTR_GET(Guid)
@@ -40,7 +50,7 @@ void ViewPoint::Read(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-void ViewPoint::ReadRoot(_xml::_element& elem, const std::string& folder)
+void BCFViewPoint::ReadRoot(_xml::_element& elem, const std::string& folder)
 {
     ATTRS_START
         ATTR_GET(Guid)
@@ -50,9 +60,9 @@ void ViewPoint::ReadRoot(_xml::_element& elem, const std::string& folder)
         CHILD_READ(Components)
         CHILD_READ(PerspectiveCamera)
         CHILD_READ(OrthogonalCamera)
-        CHILD_GET_LIST(Lines, Line)
-        CHILD_GET_LIST(ClippingPlanes, ClippingPlane)
-        CHILD_GET_LIST(Bitmaps, Bitmap)
+        CHILD_GET_LIST(Lines, BCFLine)
+        CHILD_GET_LIST(ClippingPlanes, BCFClippingPlane)
+        CHILD_GET_LIST(Bitmaps, BCFBitmap)
     CHILDREN_END
 }
 
@@ -60,19 +70,19 @@ void ViewPoint::ReadRoot(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-void  ViewPoint::Read_Components(_xml::_element& elem, const std::string& folder)
+void  BCFViewPoint::Read_Components(_xml::_element& elem, const std::string& folder)
 {
     CHILDREN_START
-        CHILD_GET_LIST(Selection, Component)
+        CHILD_GET_LIST(Selection, BCFComponent)
         CHILD_READ(Visibility)
-        CHILD_GET_LIST(Coloring, Color)
+        CHILD_GET_LIST(Coloring, BCFColor)
     CHILDREN_END
 }
 
 /// <summary>
 /// 
 /// </summary>
-void  ViewPoint::Read_Visibility(_xml::_element& elem, const std::string& folder)
+void  BCFViewPoint::Read_Visibility(_xml::_element& elem, const std::string& folder)
 {
     ATTRS_START
         ATTR_GET(DefaultVisibility)
@@ -80,14 +90,14 @@ void  ViewPoint::Read_Visibility(_xml::_element& elem, const std::string& folder
 
     CHILDREN_START
         CHILD_READ(ViewSetupHints)
-        CHILD_GET_LIST(Exceptions, Component)
+        CHILD_GET_LIST(Exceptions, BCFComponent)
     CHILDREN_END
 }
 
 /// <summary>
 /// 
 /// </summary>
-void  ViewPoint::Read_ViewSetupHints(_xml::_element& elem, const std::string& folder)
+void  BCFViewPoint::Read_ViewSetupHints(_xml::_element& elem, const std::string& folder)
 {
     ATTRS_START
         ATTR_GET(SpacesVisible)
@@ -99,7 +109,7 @@ void  ViewPoint::Read_ViewSetupHints(_xml::_element& elem, const std::string& fo
 /// <summary>
 /// 
 /// </summary>
-void  ViewPoint::Read_PerspectiveCamera(_xml::_element& elem, const std::string& folder)
+void  BCFViewPoint::Read_PerspectiveCamera(_xml::_element& elem, const std::string& folder)
 {
     m_cameraType = BCFCameraPerspective;
 
@@ -115,7 +125,7 @@ void  ViewPoint::Read_PerspectiveCamera(_xml::_element& elem, const std::string&
 /// <summary>
 /// 
 /// </summary>
-void  ViewPoint::Read_OrthogonalCamera(_xml::_element& elem, const std::string& folder)
+void  BCFViewPoint::Read_OrthogonalCamera(_xml::_element& elem, const std::string& folder)
 {
     m_cameraType = BCFCameraOrthogonal;
 
@@ -128,7 +138,8 @@ void  ViewPoint::Read_OrthogonalCamera(_xml::_element& elem, const std::string& 
     CHILDREN_END
 }
 
-BCFIndex ViewPoint::GetIndex()
+#if 0
+BCFIndex BCFViewPoint::GetIndex()
 {
     BCFIndex N = m_topic.ViewPointsCount();
     for (BCFIndex i = 0; i < N; i++) {
@@ -141,4 +152,4 @@ BCFIndex ViewPoint::GetIndex()
     log().add(Log::Level::error, "Out of range", "ViewPoint %s is not from topic %s", GetGuid(), m_topic.GetGuid());
     return BCFIndex_ERROR;
 }
-
+#endif

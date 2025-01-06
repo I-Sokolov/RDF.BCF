@@ -20,6 +20,16 @@ extern "C" {
     /// 
     /// </summary>
     struct BCFProject;
+    struct BCFTopic;
+    struct BCFViewPoint;
+    struct BCFComment;
+    struct BCFFile;
+    struct BCFDocumentReference;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    typedef uint16_t BCFIndex;
 
     /// <summary>
     /// 
@@ -29,12 +39,6 @@ extern "C" {
         BCFVerNotSupported = 0,
         BCFVer_2_1 = 21,
         BCFVer_3_0 = 30
-    };
-
-    enum BCFCamera
-    {
-        BCFCameraPerspective = 0,
-        BCFCameraOrthogonal = 1
     };
 
     /// <summary>
@@ -51,21 +55,14 @@ extern "C" {
         BCFStages           = 7
     };
 
-    struct BCFTopicAttributes
+    /// <summary>
+    /// 
+    /// </summary>
+    enum BCFCamera
     {
-
+        BCFCameraPerspective = 0,
+        BCFCameraOrthogonal = 1
     };
-
-    /// <summary>
-    /// 
-    /// </summary>
-    typedef uint16_t BCFIndex;
-
-    /// <summary>
-    /// 
-    /// </summary>
-    #define BCFIndex_ERROR ((uint16_t)-1)
-
 
 #ifdef __cplusplus
 } //extern "C"

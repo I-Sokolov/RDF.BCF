@@ -1,19 +1,16 @@
 #pragma once
 
-struct BCFProject;
-
-#include "GUIDable.h"
 #include "XMLFile.h"
-#include "BIMFile.h"
-#include "Comment.h"
-#include "ViewPoint.h"
-#include "BimSnippet.h"
-#include "DocumentReference.h"
+#include "GuidStr.h"
 
-class Topic : public XMLFile
+#include "BimSnippet.h"
+struct GuidReference;
+
+struct BCFTopic : public XMLFile
 {
 public:
-    Topic(BCFProject& project, const char* guid);
+    BCFTopic(BCFProject& project, const char* guid);
+    ~BCFTopic() {}
 
 public:
     const char* GetGuid() { return m_Guid.c_str(); }
@@ -43,16 +40,16 @@ public:
     bool SetDescription(const char* val);
     bool SetStage(const char* val);
 
-    BCFIndex ViewPointsCount() { return (BCFIndex)m_Viewpoints.size(); }
-    ViewPoint* ViewPointGet(BCFIndex index) { return m_Viewpoints.Get(index, log()); }
-    BCFIndex ViewPointCreate(const char* guid = NULL);
-    bool ViewPointRemove(BCFIndex index) { return m_Viewpoints.Remove(index, log()); }
-    ViewPoint* ViewPointByGuid(const char* guid);
+    bool Remove(void);
 
-    BCFIndex CommentsCount() { return (BCFIndex)m_Comments.size(); }
-    Comment* CommentGet(BCFIndex index) { return m_Comments.Get(index, log()); }
-    BCFIndex CommentCreate(const char* guid = NULL);
-    bool CommentRemove(BCFIndex index) { return m_Comments.Remove(index, log()); }
+    BCFViewPoint* ViewPointCreate(const char* guid = NULL);
+    BCFViewPoint* ViewPointIterate(BCFViewPoint* prev);
+    BCFViewPoint* ViewPointByGuid(const char* guid);
+    bool          ViewPointRemove(BCFViewPoint* viewPoint);
+
+    BCFComment* CommentCreate(const char* guid = NULL);
+    BCFComment* CommentIterate(BCFComment* prev);
+    bool        CommentRemove(BCFComment* comment);
 
 public:
     BimSnippet& GetBimSnippet() { return m_BimSnippet; }
@@ -69,16 +66,16 @@ private:
     bool UpdateAuthor();
 
 private:
-    BCFGuid                         m_Guid;
-    OwningList<BIMFile>             m_Files;
+    GuidStr                         m_Guid;
+    ListOf<BCFFile>                 m_Files;
     std::string                     m_ServerAssignedId;
     std::string                     m_TopicStatus;
     std::string                     m_TopicType;
     std::string                     m_Title;
-    OwningList<XMLText>             m_ReferenceLinks;
+    ListOf<XMLText>                 m_ReferenceLinks;
     std::string                     m_Priority;
     std::string                     m_Index;
-    OwningList<XMLText>             m_Labels;
+    ListOf<XMLText>                 m_Labels;
     std::string                     m_CreationDate;
     std::string                     m_CreationAuthor;
     std::string                     m_ModifiedDate;
@@ -88,10 +85,10 @@ private:
     std::string                     m_Description;
     std::string                     m_Stage;
     BimSnippet                      m_BimSnippet;
-    GuidList<DocumentReference>     m_DocumentReferences;
-    GuidList<GuidReference>         m_RelatedTopics;
-    GuidList<Comment>               m_Comments;
-    GuidList<ViewPoint>             m_Viewpoints;
+    ListGuid<BCFDocumentReference>     m_DocumentReferences;
+    ListGuid<GuidReference>         m_RelatedTopics;
+    ListGuid<BCFComment>               m_Comments;
+    ListGuid<BCFViewPoint>             m_Viewpoints;
 
 private:
     bool                            m_bReadFromFile;

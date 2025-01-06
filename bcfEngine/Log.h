@@ -13,7 +13,7 @@ public:
     Log() {}
     ~Log();
 
-    void add(Level level, const char* code, const char* detailsFormat, ...);
+    void add(Level level, const char* code, const char* detailsFormat = NULL, ...);
 
     const char* get(bool clean);
 

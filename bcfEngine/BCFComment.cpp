@@ -1,17 +1,18 @@
 #include "pch.h"
-#include "Comment.h"
-#include "Topic.h"
+#include "BCFComment.h"
+#include "BCFTopic.h"
 #include "BCFProject.h"
+#include "BCFViewPoint.h"
 
 /// <summary>
 /// 
 /// </summary>
-Comment::Comment(Topic& topic, const char* guid)
+BCFComment::BCFComment(BCFTopic& topic, const char* guid)
     : BCFObject(topic.Project())
     , m_topic(topic)
     , m_Guid(topic.Project(), guid)
     , m_Viewpoint(topic)
-    , m_bReadFromFile(false)
+    , m_readFromFile(false)
 {
 }
 
@@ -19,9 +20,9 @@ Comment::Comment(Topic& topic, const char* guid)
 /// <summary>
 /// 
 /// </summary>
-void Comment::Read(_xml::_element& elem, const std::string& folder)
+void BCFComment::Read(_xml::_element& elem, const std::string& folder)
 {
-    m_bReadFromFile = true;
+    m_readFromFile = true;
 
     ATTRS_START
         ATTR_GET(Guid)
@@ -40,7 +41,7 @@ void Comment::Read(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-ViewPoint* Comment::GetViewPoint()
+BCFViewPoint* BCFComment::GetViewPoint()
 {
     if (!m_Guid.empty()) {
         return m_topic.ViewPointByGuid(m_Guid.c_str());
@@ -51,7 +52,7 @@ ViewPoint* Comment::GetViewPoint()
 /// <summary>
 /// 
 /// </summary>
-bool Comment::SetViewPoint(ViewPoint* viewPoint)
+bool BCFComment::SetViewPoint(BCFViewPoint* viewPoint)
 {
     if (!UpdateAuthor()) {
         return false;
@@ -76,7 +77,7 @@ bool Comment::SetViewPoint(ViewPoint* viewPoint)
 /// <summary>
 /// 
 /// </summary>
-bool Comment::SetComment(const char* value)
+bool BCFComment::SetText(const char* value)
 {
     if (!UpdateAuthor()) {
         return false;
@@ -89,7 +90,15 @@ bool Comment::SetComment(const char* value)
 /// <summary>
 /// 
 /// </summary>
-bool Comment::UpdateAuthor()
+bool BCFComment::UpdateAuthor()
 {
-    return __super::UpdateAuthor(m_bReadFromFile ? m_ModifiedAuthor : m_Author, m_bReadFromFile ? m_ModifiedAuthor : m_Date);
+    return __super::UpdateAuthor(m_readFromFile ? m_ModifiedAuthor : m_Author, m_readFromFile ? m_ModifiedAuthor : m_Date);
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFComment::Remove()
+{
+    return m_topic.CommentRemove(this);
 }

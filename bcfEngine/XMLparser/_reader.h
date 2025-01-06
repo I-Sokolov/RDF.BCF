@@ -13,7 +13,7 @@
 using namespace std;
 
 // ********************************************************************************************
-const char LF					= '\n'; // Line Feed
+const char LF					= '\n'; // BCFLine Feed
 const char CR					= '\r'; // Carriage Return
 const char TAB					= '\t';
 const char SPACE				= ' ';

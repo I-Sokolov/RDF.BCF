@@ -1,28 +1,21 @@
 #include "pch.h"
-#include "Point.h"
-#include "XMLFile.h"
+#include "BCFComponent.h"
+#include "BCFViewPoint.h"
 #include "BCFProject.h"
 
 /// <summary>
 /// 
 /// </summary>
-Component::Component(ViewPoint& viewPoint)
-    : m_viewPoint (viewPoint)
+BCFComponent::BCFComponent(BCFViewPoint& viewPoint)
+    : BCFObject(viewPoint.Project())
+    , m_viewPoint (viewPoint)
 {
 }
 
 /// <summary>
 /// 
 /// </summary>
-BCFProject& Component::Project()
-{
-    return m_viewPoint.Project();
-}
-
-/// <summary>
-/// 
-/// </summary>
-void Component::Read(_xml::_element& elem, const std::string&)
+void BCFComponent::Read(_xml::_element& elem, const std::string&)
 {
     ATTRS_START
         ATTR_GET(IfcGuid)

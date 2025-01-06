@@ -1,20 +1,23 @@
 #include "pch.h"
-#include "BIMFile.h"
+#include "BCFFile.h"
 #include "XMLFile.h"
 #include "BCFProject.h"
+#include "BCFTopic.h"
 
 /// <summary>
 /// 
 /// </summary>
-BCFProject& BIMFile::Project()
+BCFFile::BCFFile(BCFTopic& topic) 
+    : BCFObject(topic.Project())
+    , m_topic(topic) 
 {
-    return m_topic.Project();
 }
 
+
 /// <summary>
 /// 
 /// </summary>
-void BIMFile::Read(_xml::_element& elem, const std::string&)
+void BCFFile::Read(_xml::_element& elem, const std::string&)
 {
     ATTRS_START
         ATTR_GET(IsExternal)

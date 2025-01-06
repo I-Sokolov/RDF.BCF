@@ -1,11 +1,12 @@
 #pragma once
 
-#include "bcfEngine.h"
+#include "bcfTypes.h"
 #include "Log.h"
 #include "Version.h"
 #include "ProjectInfo.h"
 #include "Extensions.h"
-#include "Topic.h"
+
+struct BCFTopic;
 
 struct BCFProject
 {
@@ -33,10 +34,9 @@ public:
 
     Extensions& GetExtensions() { return m_extensions; }
 
-    BCFIndex TopicsCount() { return (BCFIndex) m_topics.size(); }
-    Topic* TopicGet(BCFIndex index) { return m_topics.Get(index, m_log); }
-    BCFIndex TopicCreate(const char* type, const char* title, const char* status, const char* guid = NULL);
-    bool TopicRemove(BCFIndex index) { return m_topics.Remove(index, m_log); }
+    BCFTopic* TopicCreate(const char* type, const char* title, const char* status, const char* guid = NULL);
+    bool TopicRemove(BCFTopic* topic);
+    BCFTopic* TopicIterate(BCFTopic* prev);
 
 private:
     bool ReadTopics(const std::string& bcfFolder);
@@ -53,6 +53,6 @@ private:
     std::string m_editor;
     bool        m_autoExtentSchema;
 
-    GuidList<Topic>  m_topics;
+    ListGuid<BCFTopic>  m_topics;
 };
 
