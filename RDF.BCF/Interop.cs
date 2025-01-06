@@ -49,7 +49,7 @@ namespace RDF.BCF
         public const UInt16 ERR_IND = UInt16.MaxValue;
 
         [DllImport(DLL, EntryPoint = "bcfProjectCreate")]
-        public static extern IntPtr ProjectCreate(string? projectId = null);
+        public static extern IntPtr ProjectCreate([param: MarshalAs(UnmanagedType.LPUTF8Str)] string? projectId = null);
 
         [DllImport(DLL, EntryPoint = "bcfProjectDelete")]
         public static extern void ProjectDelete(IntPtr project);
@@ -64,15 +64,15 @@ namespace RDF.BCF
 
         [DllImport(DLL, EntryPoint = "bcfFileRead")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool FileRead(IntPtr project, string filePath);
+        public static extern bool FileRead(IntPtr project, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string filePath);
 
         [DllImport(DLL, EntryPoint = "bcfFileWrite")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool FileWrite(IntPtr project, string filePath, Version version);
+        public static extern bool FileWrite(IntPtr project, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string filePath, Version version);
 
         [DllImport(DLL, EntryPoint = "bcfSetAuthor")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool SetAuthor(IntPtr project, string user, [param: MarshalAs(UnmanagedType.U1)] bool autoExtent);
+        public static extern bool SetAuthor(IntPtr project, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string user, [param: MarshalAs(UnmanagedType.U1)] bool autoExtent);
 
         [DllImport(DLL, EntryPoint = "bcfProjectIdGet")]
         private static extern IntPtr ProjectIdGet_(IntPtr project);
@@ -92,7 +92,7 @@ namespace RDF.BCF
 
         [DllImport(DLL, EntryPoint = "bcfProjectNameSet")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool ProjectNameSet(IntPtr project, string name);
+        public static extern bool ProjectNameSet(IntPtr project, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string name);
 
         [DllImport(DLL, EntryPoint = "bcfEnumerationElementGet")]
         private static extern IntPtr EnumerationElementGet_(IntPtr project, BCFEnumeration extension, UInt16 index);
@@ -104,11 +104,11 @@ namespace RDF.BCF
 
         [DllImport(DLL, EntryPoint = "bcfEnumerationElementAdd")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool EnumerationElementAdd(IntPtr project, BCFEnumeration enumeration, string element);
+        public static extern bool EnumerationElementAdd(IntPtr project, BCFEnumeration enumeration, [param:MarshalAs(UnmanagedType.LPUTF8Str)] string element);
 
         [DllImport(DLL, EntryPoint = "bcfEnumerationElementRemove")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool EnumerationElementRemove(IntPtr project, BCFEnumeration enumeration, string element);
+        public static extern bool EnumerationElementRemove(IntPtr project, BCFEnumeration enumeration, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string element);
 
         [DllImport(DLL, EntryPoint = "bcfTopicIterate")]
         public static extern IntPtr TopicsIterate(IntPtr project, IntPtr prev);
@@ -123,7 +123,13 @@ namespace RDF.BCF
         }
 
         [DllImport(DLL, EntryPoint = "bcfTopicCreate")]
-        public static extern IntPtr TopicCreate(IntPtr project, string type, string title, string status, string? guid);
+        public static extern IntPtr TopicCreate(
+            IntPtr project, 
+            [param: MarshalAs(UnmanagedType.LPUTF8Str)] string type, 
+            [param: MarshalAs(UnmanagedType.LPUTF8Str)] string title, 
+            [param: MarshalAs(UnmanagedType.LPUTF8Str)] string status,
+            [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? guid
+            );
 
         [DllImport(DLL, EntryPoint = "bcfTopicRemove")]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -193,39 +199,39 @@ namespace RDF.BCF
         /// </summary>
         [DllImport(DLL, EntryPoint = "bcfTopicSetServerAssignedId")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool TopicSetServerAssignedId(IntPtr topic, string val);
+        public static extern bool TopicSetServerAssignedId(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
 
         [DllImport(DLL, EntryPoint = "bcfTopicSetTopicType")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool TopicSetTopicType(IntPtr topic, string val);
+        public static extern bool TopicSetTopicType(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
 
         [DllImport(DLL, EntryPoint = "bcfTopicSetTitle")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool TopicSetTitle(IntPtr topic, string val);
+        public static extern bool TopicSetTitle(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
 
         [DllImport(DLL, EntryPoint = "bcfTopicSetTopicStatus")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool TopicSetTopicStatus(IntPtr topic, string val);
+        public static extern bool TopicSetTopicStatus(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
 
         [DllImport(DLL, EntryPoint = "bcfTopicSetPriority")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool TopicSetPriority(IntPtr topic, string val);
+        public static extern bool TopicSetPriority(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
 
         [DllImport(DLL, EntryPoint = "bcfTopicSetDueDate")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool TopicSetDueDate(IntPtr topic, string val);
+        public static extern bool TopicSetDueDate(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
 
         [DllImport(DLL, EntryPoint = "bcfTopicSetAssignedTo")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool TopicSetAssignedTo(IntPtr topic, string val);
+        public static extern bool TopicSetAssignedTo(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
 
         [DllImport(DLL, EntryPoint = "bcfTopicSetDescription")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool TopicSetDescription(IntPtr topic, string val);
+        public static extern bool TopicSetDescription(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
 
         [DllImport(DLL, EntryPoint = "bcfTopicSetStage")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool TopicSetStage(IntPtr topic, string val);
+        public static extern bool TopicSetStage(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
 
         [DllImport(DLL, EntryPoint = "bcfTopicSetIndex")]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -235,7 +241,7 @@ namespace RDF.BCF
         public static extern IntPtr CommentIterate(IntPtr topic, IntPtr prev);
 
         [DllImport(DLL, EntryPoint = "bcfCommentCreate")]
-        public static extern IntPtr CommentCreate(IntPtr topic, string? guid = null);
+        public static extern IntPtr CommentCreate(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? guid = null);
 
         [DllImport(DLL, EntryPoint = "bcfCommentRemove")]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -270,7 +276,7 @@ namespace RDF.BCF
 
         [DllImport(DLL, EntryPoint = "bcfCommentSetText")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool CommentSetText(IntPtr comment, string value);
+        public static extern bool CommentSetText(IntPtr comment, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string value);
 
         [DllImport(DLL, EntryPoint = "bcfCommentSetViewPoint")]
         [return: MarshalAs(UnmanagedType.U1)]

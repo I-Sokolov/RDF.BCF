@@ -75,7 +75,7 @@ namespace CSExample
         {
             using (var bcf = new RDF.BCF.Project())
             {
-                var res = bcf.FileRead("..\\TestCases\\User assignment.bcf");
+                var res = bcf.FileRead("..\\TestCases\\кИрилица.bcf");
                 ASSERT(res);
 
                 var guid = bcf.ProjectId;
@@ -95,7 +95,7 @@ namespace CSExample
 
             //
             //
-            var users = new string[] { "a.b@mail.com", "b " }; // Китайский 好 text" };
+            var users = new string[] { "a.b@mail.com", "b Китайский 好 text" };
 
             using (var bcf = new RDF.BCF.Project())
             {
