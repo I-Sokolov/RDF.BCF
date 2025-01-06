@@ -173,68 +173,58 @@ RDFBCF_EXPORT bool bcfTopicRemove(BCFTopic* topic)
 /// 
 /// </summary>
 
-#define TOPIC_GET_ATTR(ATTR)                                                        \
-RDFBCF_EXPORT const char* bcfTopicGet##ATTR (BCFTopic* topic)                       \
+typedef const char*   tStr;
+typedef int           tInt;
+typedef BCFViewPoint* tViewPoint;
+
+#define OBJ_GET_ATTR(VAL, OBJ, ATTR)                                                \
+RDFBCF_EXPORT t##VAL bcf##OBJ##Get##ATTR (BCF##OBJ* obj)                            \
 {                                                                                   \
-    if (topic) {                                                                    \
-       return topic->Get##ATTR ();                                                  \
+    if (obj) {                                                                      \
+       return obj->Get##ATTR ();                                                    \
     }                                                                               \
-    return NULL;                                                                    \
+    return 0;                                                                       \
 }
 
-TOPIC_GET_ATTR(Guid)
-TOPIC_GET_ATTR(ServerAssignedId)
-TOPIC_GET_ATTR(TopicStatus)
-TOPIC_GET_ATTR(TopicType)
-TOPIC_GET_ATTR(Title)
-TOPIC_GET_ATTR(Priority)
-TOPIC_GET_ATTR(CreationDate)
-TOPIC_GET_ATTR(CreationAuthor)
-TOPIC_GET_ATTR(ModifiedDate)
-TOPIC_GET_ATTR(ModifiedAuthor)
-TOPIC_GET_ATTR(DueDate)
-TOPIC_GET_ATTR(AssignedTo)
-TOPIC_GET_ATTR(Description)
-TOPIC_GET_ATTR(Stage)
-
-RDFBCF_EXPORT int         bcfTopicGetIndex(BCFTopic* topic)
-{
-    if (topic) {
-        return topic->GetIndex();
-    }
-    return 0;
+#define OBJ_SET_ATTR(VAL, OBJ, ATTR)                                                \
+RDFBCF_EXPORT bool bcf  ##OBJ##Set##ATTR (BCF##OBJ* obj, t##VAL val)                \
+{                                                                                   \
+    if (obj) {                                                                      \
+        return obj->Set##ATTR (val);                                                \
+    }                                                                               \
+    return false;                                                                   \
 }
 
 
 /// <summary>
 /// 
 /// </summary>
-#define TOPIC_SET_ATTR(ATTR)                                                        \
-RDFBCF_EXPORT bool bcfTopicSet##ATTR (BCFTopic* topic, const char* val)             \
-{                                                                                   \
-    if (topic) {                                                                    \
-        return topic->Set##ATTR (val);                                              \
-    }                                                                               \
-    return false;                                                                   \
-}
+OBJ_GET_ATTR(Str, Topic, Guid)
+OBJ_GET_ATTR(Str, Topic, ServerAssignedId)
+OBJ_GET_ATTR(Str, Topic, TopicStatus)
+OBJ_GET_ATTR(Str, Topic, TopicType)
+OBJ_GET_ATTR(Str, Topic, Title)
+OBJ_GET_ATTR(Str, Topic, Priority)
+OBJ_GET_ATTR(Str, Topic, CreationDate)
+OBJ_GET_ATTR(Str, Topic, CreationAuthor)
+OBJ_GET_ATTR(Str, Topic, ModifiedDate)
+OBJ_GET_ATTR(Str, Topic, ModifiedAuthor)
+OBJ_GET_ATTR(Str, Topic, DueDate)
+OBJ_GET_ATTR(Str, Topic, AssignedTo)
+OBJ_GET_ATTR(Str, Topic, Description)
+OBJ_GET_ATTR(Str, Topic, Stage)
+OBJ_GET_ATTR(Int, Topic, Index)
 
-TOPIC_SET_ATTR(ServerAssignedId)
-TOPIC_SET_ATTR(TopicStatus)
-TOPIC_SET_ATTR(TopicType)
-TOPIC_SET_ATTR(Title)
-TOPIC_SET_ATTR(Priority)
-TOPIC_SET_ATTR(DueDate)
-TOPIC_SET_ATTR(AssignedTo)
-TOPIC_SET_ATTR(Description)
-TOPIC_SET_ATTR(Stage)
-
-RDFBCF_EXPORT bool bcfTopicSetIndex(BCFTopic* topic, int val)
-{
-    if (topic) {
-        return topic->SetIndex(val);
-    }
-    return false;
-}
+OBJ_SET_ATTR(Str, Topic, ServerAssignedId)
+OBJ_SET_ATTR(Str, Topic, TopicStatus)
+OBJ_SET_ATTR(Str, Topic, TopicType)
+OBJ_SET_ATTR(Str, Topic, Title)
+OBJ_SET_ATTR(Str, Topic, Priority)
+OBJ_SET_ATTR(Str, Topic, DueDate)
+OBJ_SET_ATTR(Str, Topic, AssignedTo)
+OBJ_SET_ATTR(Str, Topic, Description)
+OBJ_SET_ATTR(Str, Topic, Stage)
+OBJ_SET_ATTR(Int, Topic, Index)
 
 /// <summary>
 /// 
@@ -273,49 +263,14 @@ RDFBCF_EXPORT bool bcfCommentRemove(BCFComment* comment)
 /// <summary>
 ///
 /// </summary>
-#define COMMENT_GET_ATTR(ATTR)                                                      \
-RDFBCF_EXPORT const char* bcfCommentGet##ATTR (BCFComment*  comment)                \
-{                                                                                   \
-    if (comment) {                                                                  \
-        return comment->Get##ATTR();                                                \
-    }                                                                               \
-    return NULL;                                                                    \
-}
 
+OBJ_GET_ATTR(Str, Comment, Guid           )
+OBJ_GET_ATTR(Str, Comment, Date           )
+OBJ_GET_ATTR(Str, Comment, Author         )
+OBJ_GET_ATTR(Str, Comment, ModifiedDate   )
+OBJ_GET_ATTR(Str, Comment, ModifiedAuthor )
+OBJ_GET_ATTR(Str, Comment, Text           )
+OBJ_GET_ATTR(ViewPoint, Comment, ViewPoint)
 
-COMMENT_GET_ATTR(Guid           )
-COMMENT_GET_ATTR(Date           )
-COMMENT_GET_ATTR(Author         )
-COMMENT_GET_ATTR(ModifiedDate   )
-COMMENT_GET_ATTR(ModifiedAuthor )
-COMMENT_GET_ATTR(Text           )
-
-/// <summary>
-///
-/// </summary>
-RDFBCF_EXPORT BCFViewPoint* bcfCommentGetViewPoint(BCFComment* comment)
-{
-    if (comment) {
-        return comment->GetViewPoint();
-    }
-    return NULL;
-}
-
-/// <summary>
-///
-/// </summary>
-RDFBCF_EXPORT bool bcfCommentSetText(BCFComment* comment, const char* text)
-{
-    if (comment) {
-        return comment->SetText(text);
-    }
-    return false;
-}
-
-RDFBCF_EXPORT bool bcfCommentSetViewPoint(BCFComment* comment, BCFViewPoint* viewPoint)
-{
-    if (comment) {
-        return comment->SetViewPoint(viewPoint);
-    }
-    return false;
-}
+OBJ_SET_ATTR(Str,       Comment, Text)
+OBJ_SET_ATTR(ViewPoint, Comment, ViewPoint)

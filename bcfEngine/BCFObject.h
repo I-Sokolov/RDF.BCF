@@ -21,6 +21,8 @@ public:
 protected:
     bool IntToStr(int val, std::string& prop);
 
+    bool RealToStr(double val, std::string& prop);
+
     bool StrToBool(const std::string& prop) { return 0 == _stricmp(prop.c_str(), "true"); }
     bool BoolToStr(bool val, std::string& prop) { prop.assign(val ? "true" : "false"); return true; }
 

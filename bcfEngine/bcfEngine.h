@@ -134,6 +134,86 @@ extern "C" {
     RDFBCF_EXPORT bool bcfCommentSetText        (BCFComment* comment, const char* text);
     RDFBCF_EXPORT bool bcfCommentSetViewPoint   (BCFComment* comment, BCFViewPoint* viewPoint);
 
+    /// <summary>
+    ///
+    /// </summary>
+    RDFBCF_EXPORT BCFViewPoint* bcfViewPointIterate(BCFTopic* topic, BCFViewPoint* prev);
+    RDFBCF_EXPORT BCFViewPoint* bcfViewPointCreate(BCFTopic* topic, const char* guid);
+    RDFBCF_EXPORT bool bcfViewPointRemove(BCFViewPoint* viewPoint);
+
+    /// <summary>
+    ///
+    /// </summary>
+    RDFBCF_EXPORT const char* bcfViewPointGetGuid(BCFViewPoint* viewPoint);
+    RDFBCF_EXPORT const char* bcfViewPointGetSnapshot(BCFViewPoint* viewPoint);
+    RDFBCF_EXPORT bool        bcfViewPointGetDefaultVisibility(BCFViewPoint* viewPoint);
+    RDFBCF_EXPORT bool        bcfViewPointGetSpaceVisible(BCFViewPoint* viewPoint);
+    RDFBCF_EXPORT bool        bcfViewPointGetSpaceBoundariesVisible(BCFViewPoint* viewPoint);
+    RDFBCF_EXPORT bool        bcfViewPointGetOpeningsVisible(BCFViewPoint* viewPoint);
+    RDFBCF_EXPORT BCFCamera   bcfViewPointGetCameraType(BCFViewPoint* viewPoint);
+    RDFBCF_EXPORT bool        bcfViewPointGteCameraViewPoint(BCFViewPoint* viewPoint, BCFPoint* retPt);
+    RDFBCF_EXPORT bool        bcfViewPointGetCameraDirection(BCFViewPoint* viewPoint, BCFPoint* retPt);
+    RDFBCF_EXPORT bool        bcfViewPointGetCameraUpVector(BCFViewPoint* viewPoint, BCFPoint* retPt);
+    RDFBCF_EXPORT double      bcfViewPointGetViewToWorldScale(BCFViewPoint* viewPoint);
+    RDFBCF_EXPORT double      bcfViewPointGetFieldOfView(BCFViewPoint* viewPoint);
+    RDFBCF_EXPORT double      bcfViewPointGetAspectRatio(BCFViewPoint* viewPoint);
+
+    RDFBCF_EXPORT bool        bcfViewPointSetSnapshot(BCFViewPoint* viewPoint, const char* filePath, bool keepInternal);
+    RDFBCF_EXPORT bool        bcfViewPointSetDefaultVisibility(BCFViewPoint* viewPoint, bool val);
+    RDFBCF_EXPORT bool        bcfViewPointSetSpaceVisible(BCFViewPoint* viewPoint, bool val);
+    RDFBCF_EXPORT bool        bcfViewPointSetSpaceBoundariesVisible(BCFViewPoint* viewPoint, bool val);
+    RDFBCF_EXPORT bool        bcfViewPointSetOpeningsVisible(BCFViewPoint* viewPoint, bool val);
+    RDFBCF_EXPORT bool        bcfViewPointSetCameraType(BCFViewPoint* viewPoint, BCFCamera val);
+    RDFBCF_EXPORT bool        bcfViewPointSetCameraViewPoint(BCFViewPoint* viewPoint, BCFPoint* pt);
+    RDFBCF_EXPORT bool        bcfViewPointSetCameraDirection(BCFViewPoint* viewPoint, BCFPoint* pt);
+    RDFBCF_EXPORT bool        bcfViewPointSetCameraUpVector(BCFViewPoint* viewPoint, BCFPoint* pt);
+    RDFBCF_EXPORT double      bcfViewPointSetViewToWorldScale(BCFViewPoint* viewPoint, double val);
+    RDFBCF_EXPORT double      bcfViewPointSetFieldOfView(BCFViewPoint* viewPoint, double val);
+    RDFBCF_EXPORT double      bcfViewPointSetAspectRatio(BCFViewPoint* viewPoint, double val);
+
+    /// <summary>
+    ///
+    /// </summary>
+    RDFBCF_EXPORT BCFComponent* bcfViewPointSelectionAdd();
+    RDFBCF_EXPORT BCFComponent* bcfViewPointSelectionIterate(BCFComponent* prev);
+    RDFBCF_EXPORT bool bcfViewPointSelectionRemove(BCFComponent* component);
+
+    /// <summary>
+    ///
+    /// </summary>
+    RDFBCF_EXPORT BCFComponent* bcfViewPointExceptionsAdd();
+    RDFBCF_EXPORT BCFComponent* bcfViewPointExceptionIterate(BCFComponent* prev);
+    RDFBCF_EXPORT bool bcfViewPointExceptionRemove(BCFComponent* component);
+
+    /// <summary>
+    ///
+    /// </summary>
+    RDFBCF_EXPORT BCFColor* bcfViewPointColoringAdd();
+    RDFBCF_EXPORT BCFColor* bcfViewPointColoringIterate(BCFColor* prev);
+    RDFBCF_EXPORT bool bcfViewPointColoringRemove(BCFColor* coloring);
+
+    /// <summary>
+    ///
+    /// </summary>
+    RDFBCF_EXPORT BCFLine* bcfViewPointLineAdd();
+    RDFBCF_EXPORT BCFLine* bcfViewPointLineIterate(BCFLine* prev);
+    RDFBCF_EXPORT bool bcfViewPointLineRemove(BCFLine* line);
+
+    /// <summary>
+    ///
+    /// </summary>
+    RDFBCF_EXPORT BCFClippingPlane* bcfViewPointClippingPlaneAdd();
+    RDFBCF_EXPORT BCFClippingPlane* bcfViewPointClippingPlaneIterate(BCFClippingPlane* prev);
+    RDFBCF_EXPORT bool bcfViewPointClippingPlaneRemove(BCFClippingPlane* component);
+
+    /// <summary>
+    ///
+    /// </summary>
+    RDFBCF_EXPORT BCFBitmap* bcfViewPointBitmapAdd();
+    RDFBCF_EXPORT BCFBitmap* bcfViewPointBitmapIterate(BCFBitmap* prev);
+    RDFBCF_EXPORT bool bcfViewPointBitmapRemove(BCFBitmap* line);
+
+
 #ifdef __cplusplus
 } //extern "C"
 #endif

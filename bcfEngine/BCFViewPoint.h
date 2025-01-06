@@ -44,9 +44,9 @@ public:
     bool        SteCameraViewPoint(BCFPoint& pt) { return SetPoint(pt, m_CameraViewPoint); }
     bool        SetCameraDirection(BCFPoint& pt) { return SetPoint(pt, m_CameraDirection); }
     bool        SetCameraUpVector(BCFPoint& pt) { return SetPoint(pt, m_CameraUpVector); }
-    double      SetViewToWorldScale() { return atof(m_ViewToWorldScale.c_str()); }
-    double      SetFieldOfView() { return atof(m_FieldOfView.c_str()); }
-    double      SetAspectRatio() { return atof(m_AspectRatio.c_str()); }
+    bool        SetViewToWorldScale(double val) { return RealToStr(val,m_ViewToWorldScale); }
+    bool        SetFieldOfView(double val) { return RealToStr (val, m_FieldOfView); }
+    bool        SetAspectRatio(double val) { return RealToStr (val, m_AspectRatio); }
 
     BCFComponent* SelectionAdd();
     BCFComponent* SelectionIterate(BCFComponent* prev);

@@ -14,6 +14,8 @@
 
 #ifdef __cplusplus
 extern "C" {
+#else
+    typedef unsigned char bool;
 #endif
 
     /// <summary>
@@ -25,6 +27,11 @@ extern "C" {
     struct BCFComment;
     struct BCFFile;
     struct BCFDocumentReference;
+    struct BCFComponent;
+    struct BCFColor;
+    struct BCFLine;
+    struct BCFClippingPlane;
+    struct BCFBitmap;
 
     /// <summary>
     /// 
