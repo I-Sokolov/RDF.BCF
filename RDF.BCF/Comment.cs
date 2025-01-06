@@ -11,22 +11,14 @@ namespace RDF.BCF
         /// <summary>
         /// The comment text, must not be empty if provided
         /// </summary>
-        public string Text 
-        { 
-            get { return Interop.CommentGetComment(m_topic.Project.Handle, m_topic.Handle, Handle); } 
-            set { Interop.CommentSetComment(m_topic.Project.Handle, m_topic.Handle, Handle, value); } 
-        }
-
-        public UInt16 Handle { get { return m_handle; } }
-
-        public Topic Topic { get { return m_topic; } }
+        public string Text { get { return Interop.CommentGetText(m_handle); } set { Interop.CommentSetText(m_handle, value); } }
 
         #region IMPLEMENTATION
         ///////////////////////////////////////////////////////////////////////////////////////////
         Topic m_topic;
-        UInt16 m_handle;
+        IntPtr m_handle;
 
-        internal Comment(Topic topic, UInt16 handle)
+        internal Comment(Topic topic, IntPtr handle)
         {
             m_topic = topic;
             m_handle = handle;

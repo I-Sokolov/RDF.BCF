@@ -25,7 +25,7 @@ namespace RDF.BCF
         /// <summary>
         /// Read-only persistent viewpoint identifier
         /// </summary>
-        public Guid Guid { get { return m_guid; } }
+        //public Guid Guid { get { return m_guid; } }
 
         /// <summary>
         /// When true, all components should be visible unless listed in the exceptions
@@ -37,7 +37,7 @@ namespace RDF.BCF
         /// <summary>
         /// A list of IfcGuids of components to hide when DefaultVisibility=true or to show when DefaultVisibility=false
         /// </summary>
-        public IEnumerable<string> Exceptions { get; set; }
+        //public IEnumerable<string> Exceptions { get; set; }
 
         /// <summary>
         /// Same as DefaultVisibility but restricted to spaces only
@@ -105,25 +105,13 @@ namespace RDF.BCF
 
         #region IMPLEMENTATION
         ///////////////////////////////////////////////////////////////////////////////////////////
-        Project m_project;
         Topic m_topic;
-        Guid m_guid;
+        IntPtr m_handle;
 
-        internal ViewPoint(Project project, Topic topic, Guid? guid = null)
+        internal ViewPoint(Topic topic, IntPtr handle)
         {
-            m_project = project;
             m_topic = topic;
-
-            if (guid == null)
-            {
-                m_guid = Guid.NewGuid();
-            }
-            else
-            {
-                m_guid = guid.Value;
-            }
-
-            Exceptions = new List<string>();
+            m_handle = handle;  
         }
 
         #endregion IMPLEMENTATION

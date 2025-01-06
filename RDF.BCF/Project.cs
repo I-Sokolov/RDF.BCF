@@ -8,14 +8,7 @@
         public Project(string? projectId = null)
         {
             m_handle = BCF.Interop.ProjectCreate(projectId);
-            m_topics = new Topics(this);
-            m_extensions = new Extensions(this);
         }
-
-        /// <summary>
-        /// Native handler of BCF project to use in Native.* calls
-        /// </summary>
-        public IntPtr Handle { get { return m_handle; } }
 
         /// <summary>
         /// Get errors since last call of ClearErrors or since project creation
@@ -71,20 +64,47 @@
         /// <summary>
         /// BCF data are mainly list of topics, enumerate or modify topics with the property
         /// </summary>
-        public Topics Topics { get { return m_topics; } }
+        public List<Topic> Topics { get { return GetTopics(); } }
+
+        /// <summary>
+        /// Creates new topic.
+        /// Caller can assign GUID or it will generated automatically, GUID never changes after creation
+        /// </summary>
+        public Topic? CreateTopic(string type, string title, string status, string? guid = null)
+        {
+            IntPtr topicHandle = Interop.TopicCreate(m_handle, type, title, status, guid);
+            if (topicHandle != IntPtr.Zero)
+            {
+                return new Topic(this, topicHandle);
+            }
+            return null;
+        }
 
         /// <summary> 
         /// Manage BCF schema extensions
         /// </summary>
-        public Extensions Extensions { get {return m_extensions;} }
+        public Extensions Extensions { get {return new Extensions(this);} }
 
 
         #region IMPLEMENTATION
         ///////////////////////////////////////////////////////////////////////////////////////////
         ///
         private IntPtr m_handle = IntPtr.Zero;
-        private Extensions m_extensions;
-        private Topics m_topics;
+
+        internal IntPtr Handle { get { return m_handle; } } 
+
+        private List<Topic> GetTopics()
+        {
+            var ret = new List<Topic>();
+
+            IntPtr topicHandle = IntPtr.Zero;
+            while ((topicHandle = RDF.BCF.Interop.TopicsIterate(m_handle, topicHandle)) != IntPtr.Zero)
+            {
+                ret.Add (new Topic(this, topicHandle));
+            }
+
+            return ret;
+        }
 
         ~Project()
         {
@@ -109,7 +129,6 @@
                 m_handle = IntPtr.Zero;
             }
         }
-
 
         void IDisposable.Dispose()
         {

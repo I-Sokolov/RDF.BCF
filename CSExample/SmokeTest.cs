@@ -135,9 +135,7 @@ namespace CSExample
 
         static private void TestTopics(RDF.BCF.Project bcf)
         {
-            RDF.BCF.Topics topics = bcf.Topics;
-
-            var items = topics.Items;
+            var items = bcf.Topics;
             ASSERT(items.Count() == 1);
 
             var topic = items.First();
@@ -147,7 +145,7 @@ namespace CSExample
             // new topic create
             // 
             Console.WriteLine("Expected error - author not set");
-            topic = topics.CreateTopic("Topic Type", "Topic Title", "Topic Status");
+            topic = bcf.CreateTopic("Topic Type", "Topic Title", "Topic Status");
             ASSERT(topic == null);
             Console.WriteLine(bcf.ErrorsGet());
 
@@ -155,17 +153,17 @@ namespace CSExample
             bcf.SetEditor("John Smith", false);
 
             Console.WriteLine("Expected error - author unknown");
-            topic = topics.CreateTopic("Topic Type", "Topic Title", "Topic Status");
+            topic = bcf.CreateTopic("Topic Type", "Topic Title", "Topic Status");
             ASSERT(topic == null);
             Console.WriteLine(bcf.ErrorsGet());
 
-            items = topics.Items;
+            items = bcf.Topics;
             ASSERT(items.Count() == 1);
 
             //
             bcf.SetEditor("John Smith", true);
 
-            topic = topics.CreateTopic("Topic Type", "Topic Title", "Topic Status");
+            topic = bcf.CreateTopic("Topic Type", "Topic Title", "Topic Status");
             ASSERT(topic != null);
 
             if (topic != null)
@@ -176,7 +174,7 @@ namespace CSExample
                 Console.WriteLine(stat);
             }
 
-            items = topics.Items;
+            items = bcf.Topics;
             ASSERT(items.Count() == 2);
             topic = items.First();
 
@@ -185,10 +183,10 @@ namespace CSExample
             //
             if (topic != null)
             {
-                topics.RemoveTopic(topic);
+                topic.Remove();
             }
 
-            items = topics.Items;
+            items = bcf.Topics;
             ASSERT(items.Count() == 1);
 
             topic = items.First();
@@ -209,8 +207,8 @@ namespace CSExample
 
         static private void SetTopicAttributes(RDF.BCF.Project bcf, bool newFile)
         {
-            var topic = bcf.Topics.CreateTopic("Type1", "Title1", "Status1");
-            bcf.Topics.CreateTopic("Type1", "Title1", "Status1", "myGuid");
+            var topic = bcf.CreateTopic("Type1", "Title1", "Status1");
+            bcf.CreateTopic("Type1", "Title1", "Status1", "myGuid");
             ASSERT(topic != null);
             if (topic != null)
             {
@@ -231,9 +229,9 @@ namespace CSExample
 
         static private void GetTopicAttributes(RDF.BCF.Project bcf, bool newFile)
         {
-            ASSERT(bcf.Topics.Items.Count() == 2);
+            ASSERT(bcf.Topics.Count() == 2);
 
-            var topic = bcf.Topics.Items[1];
+            var topic = bcf.Topics[1];
             ASSERT(topic != null);
             if (topic != null)
             {
@@ -255,7 +253,7 @@ namespace CSExample
                 ASSERT(topic.ModifiedAuthor.Length == 0);
             }
 
-            topic = bcf.Topics.Items[0];
+            topic = bcf.Topics[0];
             ASSERT(topic != null);
             if (topic != null)
             {

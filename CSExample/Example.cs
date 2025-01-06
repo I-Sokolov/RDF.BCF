@@ -26,7 +26,7 @@ namespace CSExample
                 bcfData.SetEditor("user@company.org", true);
 
                 //
-                var topic = bcfData.Topics.CreateTopic("Topic Type", "Topic Title", "Topic Status");
+                var topic = bcfData.CreateTopic("Topic Type", "Topic Title", "Topic Status");
                 if (topic == null)
                 {
                     Console.WriteLine(bcfData.ErrorsGet());
@@ -77,7 +77,7 @@ namespace CSExample
 
                 WorkWithSchemaExtensionsExample(bcfData);
 
-                foreach (var topic in bcfData.Topics.Items)
+                foreach (var topic in bcfData.Topics)
                 {
                     //
                     Console.WriteLine($"Topic {topic.Title} {topic.TopicType} {topic.TopicStatus}");
