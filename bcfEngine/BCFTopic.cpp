@@ -263,6 +263,46 @@ bool BCFTopic::ViewPointRemove(BCFViewPoint* viewPoint)
 /// <summary>
 /// 
 /// </summary>
+BCFFile* BCFTopic::FileAdd(const char* filePath, bool isExternal)
+{
+    auto file = new BCFFile(*this);
+
+    if (file && filePath && *filePath) {
+        file->SetReference(filePath);
+        file->SetFilename(filePath);
+        file->SetIsExternal(isExternal);
+    }
+
+    if (file) {
+        m_Files.Add(file);
+        return file;
+    }
+    else {
+        return NULL;
+    }
+
+}
+
+/// <summary>
+/// 
+/// </summary>
+BCFFile* BCFTopic::FileIterate(BCFFile* prev)
+{
+    return m_Files.GetNext(prev);
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool     BCFTopic::FileRemove(BCFFile* file)
+{
+    return m_Files.Remove(file);
+}
+
+
+/// <summary>
+/// 
+/// </summary>
 BCFViewPoint* BCFTopic::ViewPointByGuid(const char* guid)
 {
     if (guid && *guid) {

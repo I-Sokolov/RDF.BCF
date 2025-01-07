@@ -58,7 +58,7 @@ namespace RDF.BCF
 
         public struct BCFPoint
         {
-            public double x,y,z;
+            public double x, y, z;
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace RDF.BCF
 
         public static string ErrorsGet(IntPtr project, bool cleanLog = true)
         {
-            return PtrToString (ErrorsGet_(project, cleanLog));
+            return PtrToString(ErrorsGet_(project, cleanLog));
         }
 
         [DllImport(DLL, EntryPoint = "bcfFileRead")]
@@ -100,7 +100,7 @@ namespace RDF.BCF
 
         public static string ProjectIdGet(IntPtr project)
         {
-            return PtrToString (ProjectIdGet_(project));
+            return PtrToString(ProjectIdGet_(project));
         }
 
         [DllImport(DLL, EntryPoint = "bcfProjectNameGet")]
@@ -125,7 +125,7 @@ namespace RDF.BCF
 
         [DllImport(DLL, EntryPoint = "bcfEnumerationElementAdd")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool EnumerationElementAdd(IntPtr project, BCFEnumeration enumeration, [param:MarshalAs(UnmanagedType.LPUTF8Str)] string element);
+        public static extern bool EnumerationElementAdd(IntPtr project, BCFEnumeration enumeration, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string element);
 
         [DllImport(DLL, EntryPoint = "bcfEnumerationElementRemove")]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -145,9 +145,9 @@ namespace RDF.BCF
 
         [DllImport(DLL, EntryPoint = "bcfTopicAdd")]
         public static extern IntPtr TopicAdd(
-            IntPtr project, 
-            [param: MarshalAs(UnmanagedType.LPUTF8Str)] string type, 
-            [param: MarshalAs(UnmanagedType.LPUTF8Str)] string title, 
+            IntPtr project,
+            [param: MarshalAs(UnmanagedType.LPUTF8Str)] string type,
+            [param: MarshalAs(UnmanagedType.LPUTF8Str)] string title,
             [param: MarshalAs(UnmanagedType.LPUTF8Str)] string status,
             [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? guid
             );
@@ -161,8 +161,8 @@ namespace RDF.BCF
         /// </summary>
         /// <returns></returns>
         [DllImport(DLL, EntryPoint = "bcfTopicGetServerAssignedId")]
-        private static extern IntPtr TopicGetServerAssignedId_(IntPtr topic);        
-        public static string TopicGetServerAssignedId (IntPtr topic) { return PtrToString (TopicGetServerAssignedId_(topic)); }
+        private static extern IntPtr TopicGetServerAssignedId_(IntPtr topic);
+        public static string TopicGetServerAssignedId(IntPtr topic) { return PtrToString(TopicGetServerAssignedId_(topic)); }
 
         [DllImport(DLL, EntryPoint = "bcfTopicGetTopicStatus")]
         private static extern IntPtr TopicGetTopicStatus_(IntPtr topic);
@@ -258,6 +258,61 @@ namespace RDF.BCF
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool TopicSetIndex(IntPtr topic, int val);
 
+        [DllImport(DLL, EntryPoint = "bcfFileIterate")]
+        public static extern IntPtr FileIterate(IntPtr topic, IntPtr prev);
+
+        [DllImport(DLL, EntryPoint = "bcfFileAdd")]
+        public static extern IntPtr FileAdd(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? filePath, [param: MarshalAs(UnmanagedType.U1)] bool isExternal = true);
+
+        [DllImport(DLL, EntryPoint = "bcfFileRemove")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool FileRemove(IntPtr file);
+
+        [DllImport(DLL, EntryPoint = "bcfFileGetIsExternal")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool FileGetIsExternal(IntPtr file);
+        [DllImport(DLL, EntryPoint = "bcfFileGetFilename")]
+        private static extern IntPtr _FileGetFilename(IntPtr file);
+        public static string FileGetFilename(IntPtr file) { return PtrToString(_FileGetFilename(file)); }
+
+        [DllImport(DLL, EntryPoint = "bcfFileGetDate")]
+        private static extern IntPtr _FileGetDate(IntPtr file);
+        public static string FileGetDate(IntPtr file) { return PtrToString(_FileGetDate(file)); }
+
+        [DllImport(DLL, EntryPoint = "bcfFileGetReference")]
+        private static extern IntPtr _FileGetReference(IntPtr file);
+        public static string FileGetReference(IntPtr file) { return PtrToString(_FileGetReference(file)); }
+
+        [DllImport(DLL, EntryPoint = "bcfFileGetIfcProject")]
+        private static extern IntPtr _FileGetIfcProject(IntPtr file);
+        public static string FileGetIfcProject(IntPtr file) { return PtrToString(_FileGetIfcProject(file)); }
+
+        [DllImport(DLL, EntryPoint = "bcfFileGetIfcSpatialStructureElement")]
+        private static extern IntPtr _FileGetIfcSpatialStructureElement(IntPtr file); public static string FileGetIfcSpatialStructureElement(IntPtr file) { return PtrToString(_FileGetIfcSpatialStructureElement(file)); }
+
+        [DllImport(DLL, EntryPoint = "bcfFileSetIsExternal")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool FileSetIsExternal(IntPtr file, bool val);
+
+        [DllImport(DLL, EntryPoint = "bcfFileSetFilename")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool FileSetFilename(IntPtr file, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
+        [DllImport(DLL, EntryPoint = "bcfFileSetDate")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool FileSetDate(IntPtr file, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
+
+        [DllImport(DLL, EntryPoint = "bcfFileSetReference")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool FileSetReference(IntPtr file, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
+
+        [DllImport(DLL, EntryPoint = "bcfFileSetIfcProject")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool FileSetIfcProject(IntPtr file, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
+
+        [DllImport(DLL, EntryPoint = "bcfFileSetIfcSpatialStructureElement")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool FileSetIfcSpatialStructureElement(IntPtr file, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
+
         [DllImport(DLL, EntryPoint = "bcfCommentIterate")]
         public static extern IntPtr CommentIterate(IntPtr topic, IntPtr prev);
 
@@ -313,100 +368,100 @@ namespace RDF.BCF
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ViewPointRemove(IntPtr comment);
 
-        [DllImport(DLL, EntryPoint = "bcfViewPointGetGuid")] 
-        private static extern IntPtr ViewPointGetGuid_ (IntPtr viewPoint);
+        [DllImport(DLL, EntryPoint = "bcfViewPointGetGuid")]
+        private static extern IntPtr ViewPointGetGuid_(IntPtr viewPoint);
 
         public static string ViewPointGetGuild(IntPtr viewPoint) { return PtrToString(ViewPointGetGuid_(viewPoint)); }
 
-        [DllImport(DLL, EntryPoint = "bcfViewPointGetSnapshot")] 
-        private static extern IntPtr ViewPointGetSnapshot_ (IntPtr viewPoint);
+        [DllImport(DLL, EntryPoint = "bcfViewPointGetSnapshot")]
+        private static extern IntPtr ViewPointGetSnapshot_(IntPtr viewPoint);
 
-        public static string ViewPointGetSnapshot(IntPtr viewPoint) { return PtrToString (ViewPointGetSnapshot_(viewPoint)); }
+        public static string ViewPointGetSnapshot(IntPtr viewPoint) { return PtrToString(ViewPointGetSnapshot_(viewPoint)); }
 
         [DllImport(DLL, EntryPoint = "bcfViewPointGetDefaultVisibility")]
-        [return: MarshalAs(UnmanagedType.U1)] 
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ViewPointGetDefaultVisibility(IntPtr viewPoint);
-        
+
         [DllImport(DLL, EntryPoint = "bcfViewPointGetSpaceVisible")]
-        [return: MarshalAs(UnmanagedType.U1)] 
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ViewPointGetSpaceVisible(IntPtr viewPoint);
-        
+
         [DllImport(DLL, EntryPoint = "bcfViewPointGetSpaceBoundariesVisible")]
-        [return: MarshalAs(UnmanagedType.U1)] 
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ViewPointGetSpaceBoundariesVisible(IntPtr viewPoint);
-        
+
         [DllImport(DLL, EntryPoint = "bcfViewPointGetOpeningsVisible")]
-        [return: MarshalAs(UnmanagedType.U1)] 
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ViewPointGetOpeningsVisible(IntPtr viewPoint);
-        
-        [DllImport(DLL, EntryPoint = "bcfViewPointGetCameraType")] 
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointGetCameraType")]
         public static extern BCFCamera ViewPointGetCameraType(IntPtr viewPoint);
-        
+
         [DllImport(DLL, EntryPoint = "bcfViewPointGetCameraViewPoint")]
-        [return: MarshalAs(UnmanagedType.U1)] 
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ViewPointGetCameraViewPoint(IntPtr viewPoint, out BCFPoint retPt);
-        
+
         [DllImport(DLL, EntryPoint = "bcfViewPointGetCameraDirection")]
-        [return: MarshalAs(UnmanagedType.U1)] 
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ViewPointGetCameraDirection(IntPtr viewPoint, out BCFPoint retPt);
-        
+
         [DllImport(DLL, EntryPoint = "bcfViewPointGetCameraUpVector")]
-        [return: MarshalAs(UnmanagedType.U1)] 
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ViewPointGetCameraUpVector(IntPtr viewPoint, out BCFPoint retPt);
-        
-        [DllImport(DLL, EntryPoint = "bcfViewPointGetViewToWorldScale")] 
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointGetViewToWorldScale")]
         public static extern double ViewPointGetViewToWorldScale(IntPtr viewPoint);
-        
-        [DllImport(DLL, EntryPoint = "bcfViewPointGetFieldOfView")] 
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointGetFieldOfView")]
         public static extern double ViewPointGetFieldOfView(IntPtr viewPoint);
 
-        [DllImport(DLL, EntryPoint = "bcfViewPointGetAspectRatio")] 
+        [DllImport(DLL, EntryPoint = "bcfViewPointGetAspectRatio")]
         public static extern double ViewPointGetAspectRatio(IntPtr viewPoint);
 
         [DllImport(DLL, EntryPoint = "bcfViewPointSetSnapshot")]
-        [return: MarshalAs(UnmanagedType.U1)] 
-        public static extern bool ViewPointSetSnapshot(IntPtr viewPoint, string filePath);
-        
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool ViewPointSetSnapshot(IntPtr viewPoint, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string filePath);
+
         [DllImport(DLL, EntryPoint = "bcfViewPointSetDefaultVisibility")]
-        [return: MarshalAs(UnmanagedType.U1)] 
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ViewPointSetDefaultVisibility(IntPtr viewPoint, bool val);
-        
-        [DllImport(DLL, EntryPoint = "bcfViewPointSetSpaceVisible")] 
-        [return: MarshalAs(UnmanagedType.U1)] 
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointSetSpaceVisible")]
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ViewPointSetSpaceVisible(IntPtr viewPoint, bool val);
-        
+
         [DllImport(DLL, EntryPoint = "bcfViewPointSetSpaceBoundariesVisible")]
-        [return: MarshalAs(UnmanagedType.U1)] 
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ViewPointSetSpaceBoundariesVisible(IntPtr viewPoint, bool val);
-        
-        [DllImport(DLL, EntryPoint = "bcfViewPointSetOpeningsVisible")] 
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointSetOpeningsVisible")]
         [return: MarshalAs(UnmanagedType.U1)] public static extern bool ViewPointSetOpeningsVisible(IntPtr viewPoint, bool val);
-        
-        [DllImport(DLL, EntryPoint = "bcfViewPointSetCameraType")] 
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointSetCameraType")]
         [return: MarshalAs(UnmanagedType.U1)] public static extern bool ViewPointSetCameraType(IntPtr viewPoint, BCFCamera val);
-        
-        [DllImport(DLL, EntryPoint = "bcfViewPointSetCameraViewPoint")] 
-        [return: MarshalAs(UnmanagedType.U1)] 
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointSetCameraViewPoint")]
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ViewPointSetCameraViewPoint(IntPtr viewPoint, BCFPoint pt);
-        
-        [DllImport(DLL, EntryPoint = "bcfViewPointSetCameraDirection")] 
-        [return: MarshalAs(UnmanagedType.U1)] 
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointSetCameraDirection")]
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ViewPointSetCameraDirection(IntPtr viewPoint, BCFPoint pt);
-        
-        [DllImport(DLL, EntryPoint = "bcfViewPointSetCameraUpVector")] 
-        [return: MarshalAs(UnmanagedType.U1)] 
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointSetCameraUpVector")]
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ViewPointSetCameraUpVector(IntPtr viewPoint, BCFPoint pt);
-        
-        [DllImport(DLL, EntryPoint = "bcfViewPointSetViewToWorldScale")] 
-        [return: MarshalAs(UnmanagedType.U1)] 
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointSetViewToWorldScale")]
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ViewPointSetViewToWorldScale(IntPtr viewPoint, double val);
-        
-        [DllImport(DLL, EntryPoint = "bcfViewPointSetFieldOfView")] 
-        [return: MarshalAs(UnmanagedType.U1)] 
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointSetFieldOfView")]
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ViewPointSetFieldOfView(IntPtr viewPoint, double val);
-        
-        [DllImport(DLL, EntryPoint = "bcfViewPointSetAspectRatio")] 
-        [return: MarshalAs(UnmanagedType.U1)] 
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointSetAspectRatio")]
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ViewPointSetAspectRatio(IntPtr viewPoint, double val);
 
     }

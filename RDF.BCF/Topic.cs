@@ -42,6 +42,19 @@ namespace RDF.BCF
         /// <summary>
         /// 
         /// </summary>
+        public List<BIMFile> Files { get { return GetFiles(); } }
+
+        public BIMFile AddFile(string? filePath, bool isExternal = true)
+        {
+            IntPtr fileHandle = Interop.FileAdd(m_handle, filePath, isExternal);
+            if (fileHandle == IntPtr.Zero)
+                throw new ApplicationException("Fail to add file: " + Interop.ErrorsGet(m_project.Handle));
+            return new BIMFile(this, fileHandle);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public List<ViewPoint> ViewPoints { get { return GetViewPoints(); } }
 
         public ViewPoint AddViewPoint(string? guid = null)
@@ -83,7 +96,21 @@ namespace RDF.BCF
             m_project = project;
             m_handle = handle;
         }
-        
+
+        private List<BIMFile> GetFiles()
+        {
+            var ret = new List<BIMFile>();
+
+            IntPtr handle = IntPtr.Zero;
+
+            while ((handle = Interop.FileIterate(m_handle, handle)) != IntPtr.Zero)
+            {
+                ret.Add(new BIMFile(this, handle));
+            }
+
+            return ret;
+        }
+
         private List<Comment> GetComments()
         {
             var ret = new List<Comment>();

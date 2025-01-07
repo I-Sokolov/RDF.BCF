@@ -23,6 +23,7 @@ extern "C" {
     /// </summary>
     struct BCFProject;
     struct BCFTopic;
+    struct BCFFile;
     struct BCFViewPoint;
     struct BCFComment;
     struct BCFFile;

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "BCFObject.h"
-struct BCFProject;
 struct BCFTopic;
 
 struct BCFFile : public BCFObject
@@ -11,6 +10,24 @@ public:
 
     void Read(_xml::_element& elem, const std::string& folder);
 
+    bool Remove(void);
+
+public:
+    bool        GetIsExternal                   () { return StrToBool (m_IsExternal); }
+    const char* GetFilename                     () { return m_Filename.c_str(); }
+    const char* GetDate                         () { return m_Date.c_str(); }
+    const char* GetReference                    () { return m_Reference.c_str(); }
+    const char* GetIfcProject                   () { return m_IfcProject.c_str(); }
+    const char* GetIfcSpatialStructureElement   () { return m_IfcSpatialStructureElement.c_str(); }
+
+    bool SetIsExternal                   (bool        val) { return BoolToStr(val, m_IsExternal);}
+    bool SetFilename                     (const char* val) { m_Filename.assign(val); return true;}
+    bool SetDate                         (const char* val) { m_Date.assign(val); return true;}
+    bool SetReference                    (const char* val) { m_Reference.assign(val); return true;}
+    bool SetIfcProject                   (const char* val) { m_IfcProject.assign(val); return true;}
+    bool SetIfcSpatialStructureElement   (const char* val) { m_IfcSpatialStructureElement.assign(val); return true;}
+
+
 private:
     BCFTopic& m_topic;
 
@@ -18,5 +35,7 @@ private:
     std::string m_Filename;
     std::string m_Date;
     std::string m_Reference;
+    std::string m_IfcProject;
+    std::string m_IfcSpatialStructureElement;
 };
 

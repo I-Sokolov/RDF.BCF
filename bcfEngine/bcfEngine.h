@@ -111,28 +111,28 @@ extern "C" {
     RDFBCF_EXPORT bool bcfTopicSetIndex                     (BCFTopic* topic, int val);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    RDFBCF_EXPORT BCFComment* bcfCommentIterate (BCFTopic* topic, BCFComment* prev);
-    RDFBCF_EXPORT BCFComment* bcfCommentAdd  (BCFTopic* topic, const char* guid);
-    RDFBCF_EXPORT bool bcfCommentRemove         (BCFComment* comment);
+    RDFBCF_EXPORT BCFFile* bcfFileIterate(BCFTopic* topic, BCFFile* prev);
+    RDFBCF_EXPORT BCFFile* bcfFileAdd(BCFTopic* topic, const char* filePath, bool isExternal);
+    RDFBCF_EXPORT bool bcfFileRemove(BCFFile* file);
 
     /// <summary>
     ///
     /// </summary>
-    RDFBCF_EXPORT const char*   bcfCommentGetGuid             (BCFComment* comment);
-    RDFBCF_EXPORT const char*   bcfCommentGetDate             (BCFComment* comment);
-    RDFBCF_EXPORT const char*   bcfCommentGetAuthor           (BCFComment* comment);
-    RDFBCF_EXPORT const char*   bcfCommentGetModifiedDate     (BCFComment* comment);
-    RDFBCF_EXPORT const char*   bcfCommentGetModifiedAuthor   (BCFComment* comment);
-    RDFBCF_EXPORT const char*   bcfCommentGetText             (BCFComment* comment);
-    RDFBCF_EXPORT BCFViewPoint* bcfCommentGetViewPoint        (BCFComment* comment);
+    RDFBCF_EXPORT bool        bcfFileGetIsExternal                   (BCFFile* file);
+    RDFBCF_EXPORT const char* bcfFileGetFilename                     (BCFFile* file);
+    RDFBCF_EXPORT const char* bcfFileGetDate                         (BCFFile* file);
+    RDFBCF_EXPORT const char* bcfFileGetReference                    (BCFFile* file);
+    RDFBCF_EXPORT const char* bcfFileGetIfcProject                   (BCFFile* file);
+    RDFBCF_EXPORT const char* bcfFileGetIfcSpatialStructureElement   (BCFFile* file);
 
-    /// <summary>
-    ///
-    /// </summary>
-    RDFBCF_EXPORT bool bcfCommentSetText        (BCFComment* comment, const char* text);
-    RDFBCF_EXPORT bool bcfCommentSetViewPoint   (BCFComment* comment, BCFViewPoint* viewPoint);
+    RDFBCF_EXPORT bool bcfFileSetIsExternal                   (BCFFile* file, bool        val);
+    RDFBCF_EXPORT bool bcfFileSetFilename                     (BCFFile* file, const char* val);
+    RDFBCF_EXPORT bool bcfFileSetDate                         (BCFFile* file, const char* val);
+    RDFBCF_EXPORT bool bcfFileSetReference                    (BCFFile* file, const char* val);
+    RDFBCF_EXPORT bool bcfFileSetIfcProject                   (BCFFile* file, const char* val);
+    RDFBCF_EXPORT bool bcfFileSetIfcSpatialStructureElement   (BCFFile* file, const char* val);
 
     /// <summary>
     ///
@@ -170,6 +170,30 @@ extern "C" {
     RDFBCF_EXPORT bool        bcfViewPointSetViewToWorldScale(BCFViewPoint* viewPoint, double val);
     RDFBCF_EXPORT bool        bcfViewPointSetFieldOfView(BCFViewPoint* viewPoint, double val);
     RDFBCF_EXPORT bool        bcfViewPointSetAspectRatio(BCFViewPoint* viewPoint, double val);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    RDFBCF_EXPORT BCFComment* bcfCommentIterate (BCFTopic* topic, BCFComment* prev);
+    RDFBCF_EXPORT BCFComment* bcfCommentAdd  (BCFTopic* topic, const char* guid);
+    RDFBCF_EXPORT bool bcfCommentRemove         (BCFComment* comment);
+
+    /// <summary>
+    ///
+    /// </summary>
+    RDFBCF_EXPORT const char*   bcfCommentGetGuid             (BCFComment* comment);
+    RDFBCF_EXPORT const char*   bcfCommentGetDate             (BCFComment* comment);
+    RDFBCF_EXPORT const char*   bcfCommentGetAuthor           (BCFComment* comment);
+    RDFBCF_EXPORT const char*   bcfCommentGetModifiedDate     (BCFComment* comment);
+    RDFBCF_EXPORT const char*   bcfCommentGetModifiedAuthor   (BCFComment* comment);
+    RDFBCF_EXPORT const char*   bcfCommentGetText             (BCFComment* comment);
+    RDFBCF_EXPORT BCFViewPoint* bcfCommentGetViewPoint        (BCFComment* comment);
+
+    /// <summary>
+    ///
+    /// </summary>
+    RDFBCF_EXPORT bool bcfCommentSetText        (BCFComment* comment, const char* text);
+    RDFBCF_EXPORT bool bcfCommentSetViewPoint   (BCFComment* comment, BCFViewPoint* viewPoint);
 
     /// <summary>
     ///

@@ -322,7 +322,8 @@ namespace CSExample
             var topic = bcf.AddTopic("Type", "Title", "New");
             ASSERT(topic.Comments.Count == 0);
 
-            var viewpoint = SetViewPoints(topic);
+            SetFiles(topic);
+            SetViewPoints(topic);
 
             var comment = topic.AddComment();
 
@@ -335,18 +336,20 @@ namespace CSExample
 
 
             comment.Text = "Text comment";
+            comment.ViewPoint = topic.ViewPoints[0];
         }
 
         static void GetCommentVPAttributes(Project bcf, bool newFile)
         {
             var topic = bcf.Topics[0];
 
+            CheckFiles(topic);
             CheckViewPoints(topic);
 
             var comment = topic.Comments[0];
 
             ASSERT(comment.Text == "Text comment");
-            ASSERT(comment.ViewPoint == null);
+            ASSERT(comment.ViewPoint!=null && comment.ViewPoint.Guid == "ID-2");
             ASSERT(comment.Date.Length == 28);
             ASSERT(comment.Author == "Smoke-tester");
             if (newFile)
@@ -361,6 +364,51 @@ namespace CSExample
             }
         }
 
+        static void SetFiles(Topic topic)
+        {
+            ASSERT(topic.Files.Count == 0);
+
+            for (int i = 0; i < 5; i++)
+            {
+                RDF.BCF.BIMFile file;
+                if (i < 2)
+                {
+                    file = topic.AddFile($"File{i}", i % 2 == 0);
+                }
+                else
+                {
+                    file = topic.AddFile(null);
+                    file.Filename = $"File{i}";
+                    file.Reference = file.Filename;
+                    file.IsExternal = (i % 2 == 0);
+                }
+
+                file.Date=$"Date-{i}";
+                file.IfcProject=$"Project-{i}";
+                file.IfcSpatialStructureElement = $"SPA-{i}";
+            }
+
+            ASSERT(topic.Files.Count == 5);
+
+            topic.Files[4].Remove();
+            ASSERT(topic.Files.Count == 4);
+        }
+
+        static void CheckFiles(Topic topic)
+        {
+            ASSERT(topic.Files.Count == 4);
+
+            for (int i = 0; i < 4; i++)
+            {
+                var file = topic.Files[i];
+                ASSERT(file.Filename == $"File{i}");
+                ASSERT(file.Reference == file.Filename);
+                ASSERT(file.IsExternal== (i % 2 == 0));                
+                ASSERT(file.Date == $"Date-{i}");
+                ASSERT(file.IfcProject == $"Project-{i}");
+                ASSERT(file.IfcSpatialStructureElement == $"SPA-{i}");
+            }
+        }
         static ViewPoint SetViewPoints(Topic topic)
         {
             ASSERT(topic.ViewPoints.Count == 0);

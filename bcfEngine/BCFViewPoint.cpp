@@ -7,6 +7,7 @@
 #include "BCFClippingPlane.h"
 #include "BCFBitmap.h"
 #include "BCFComponent.h"
+#include "FileSystem.h"
 
 /// <summary>
 /// 
@@ -44,6 +45,13 @@ void BCFViewPoint::Read(_xml::_element& elem, const std::string& folder)
 
     if (!ReadFile(folder)) {
         throw std::exception();
+    }
+
+    //
+    if (!m_Snapshot.empty()) {
+        std::string filePath(folder);
+        FileSystem::AddPath(filePath, m_Snapshot.c_str());
+        std::swap(m_Snapshot, filePath);
     }
 }
 

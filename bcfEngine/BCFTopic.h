@@ -43,6 +43,10 @@ public:
 
     bool Remove(void);
 
+    BCFFile* FileAdd(const char* filePath, bool isExternal = true);
+    BCFFile* FileIterate(BCFFile* prev);
+    bool     FileRemove(BCFFile* file);
+
     BCFViewPoint* ViewPointAdd(const char* guid = NULL);
     BCFViewPoint* ViewPointIterate(BCFViewPoint* prev);
     BCFViewPoint* ViewPointByGuid(const char* guid);

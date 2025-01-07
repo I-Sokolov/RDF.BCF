@@ -5,6 +5,7 @@
 #include "BCFTopic.h"
 #include "BCFComment.h"
 #include "BCFViewPoint.h"
+#include "BCFFile.h"
 
 /// <summary>
 /// Macros to implement put/get attributes and iterate/remove objects
@@ -238,6 +239,36 @@ OBJ_SET_ATTR(Str, Topic, AssignedTo)
 OBJ_SET_ATTR(Str, Topic, Description)
 OBJ_SET_ATTR(Str, Topic, Stage)
 OBJ_SET_ATTR(Int, Topic, Index)
+
+/// <summary>
+/// 
+/// </summary>
+OBJ_ITERATE(File, Topic)
+RDFBCF_EXPORT BCFFile* bcfFileAdd(BCFTopic* topic, const char* filePath, bool isExternal)
+{
+    if (topic) {
+        return topic->FileAdd(filePath, isExternal);
+    }
+    return 0;
+}
+
+/// <summary>
+/// 
+/// </summary>
+OBJ_GET_ATTR(Bool,File, IsExternal                   )
+OBJ_GET_ATTR(Str, File, Filename                     )
+OBJ_GET_ATTR(Str, File, Date                         )
+OBJ_GET_ATTR(Str, File, Reference                    )
+OBJ_GET_ATTR(Str, File, IfcProject                   )
+OBJ_GET_ATTR(Str, File, IfcSpatialStructureElement   )
+
+OBJ_SET_ATTR(Bool,File, IsExternal                   )
+OBJ_SET_ATTR(Str, File, Filename                     )
+OBJ_SET_ATTR(Str, File, Date                         )
+OBJ_SET_ATTR(Str, File, Reference                    )
+OBJ_SET_ATTR(Str, File, IfcProject                   )
+OBJ_SET_ATTR(Str, File, IfcSpatialStructureElement   )
+
 
 /// <summary>
 /// 
