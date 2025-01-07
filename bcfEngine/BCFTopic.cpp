@@ -231,7 +231,7 @@ bool BCFTopic::Remove(void)
 /// <summary>
 /// 
 /// </summary>
-BCFViewPoint* BCFTopic::ViewPointCreate(const char* guid)
+BCFViewPoint* BCFTopic::ViewPointAdd(const char* guid)
 {
     auto viewPoint = new BCFViewPoint(*this, guid ? guid : "");
 
@@ -284,7 +284,7 @@ BCFViewPoint* BCFTopic::ViewPointByGuid(const char* guid)
 /// <summary>
 /// 
 /// </summary>
-BCFComment* BCFTopic::CommentCreate(const char* guid)
+BCFComment* BCFTopic::CommentAdd(const char* guid)
 {
     auto comment = new BCFComment(*this, guid ? guid : "");
 

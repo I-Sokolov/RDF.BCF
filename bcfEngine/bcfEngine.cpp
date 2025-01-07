@@ -201,10 +201,10 @@ RDFBCF_EXPORT bool bcfEnumerationElementRemove(BCFProject* project, BCFEnumerati
 /// 
 /// </summary>
 OBJ_ITERATE(Topic, Project)
-RDFBCF_EXPORT BCFTopic* bcfTopicCreate(BCFProject* project, const char* type, const char* title, const char* status, const char* guid)
+RDFBCF_EXPORT BCFTopic* bcfTopicAdd(BCFProject* project, const char* type, const char* title, const char* status, const char* guid)
 {
     if (project) {
-        return project->TopicCreate(type, title, status, guid);
+        return project->TopicAdd(type, title, status, guid);
     }
     return NULL;
 }
@@ -243,10 +243,10 @@ OBJ_SET_ATTR(Int, Topic, Index)
 /// 
 /// </summary>
 OBJ_ITERATE(Comment, Topic)
-RDFBCF_EXPORT BCFComment* bcfCommentCreate(BCFTopic* topic, const char* guid)
+RDFBCF_EXPORT BCFComment* bcfCommentAdd(BCFTopic* topic, const char* guid)
 {
     if (topic) {
-        return topic->CommentCreate(guid);
+        return topic->CommentAdd(guid);
     }
     return 0;
 }
@@ -270,10 +270,10 @@ OBJ_SET_ATTR(ViewPoint, Comment, ViewPoint)
 /// 
 /// </summary>
 OBJ_ITERATE(ViewPoint, Topic)
-RDFBCF_EXPORT BCFViewPoint* bcfViewPointCreate(BCFTopic* topic, const char* guid)
+RDFBCF_EXPORT BCFViewPoint* bcfViewPointAdd(BCFTopic* topic, const char* guid)
 {
     if (topic) {
-        return topic->ViewPointCreate(guid);
+        return topic->ViewPointAdd(guid);
     }
     return 0;
 }

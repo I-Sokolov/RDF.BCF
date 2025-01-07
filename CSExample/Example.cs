@@ -23,7 +23,7 @@ namespace CSExample
                 //
                 // create topic
                 //
-                var topic = bcfData.CreateTopic("Topic Type", "Topic Title", "Topic Status");
+                var topic = bcfData.AddTopic("Topic Type", "Topic Title", "Topic Status");
                 if (topic == null)
                 {
                     Console.WriteLine(bcfData.ErrorsGet());
@@ -37,7 +37,7 @@ namespace CSExample
                 //
                 // create comment with viewpoint
                 //
-                var comment = topic.CreateComment();
+                var comment = topic.AddComment();
                 comment.Text = "Look here";
 
                 //var viewpoint = CreateViewpointExample(topic);

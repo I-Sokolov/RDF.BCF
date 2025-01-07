@@ -44,9 +44,9 @@ namespace RDF.BCF
         /// </summary>
         public List<ViewPoint> ViewPoints { get { return GetViewPoints(); } }
 
-        public ViewPoint CreateViewPoint(string? guid = null)
+        public ViewPoint AddViewPoint(string? guid = null)
         {
-            IntPtr vpHandle = Interop.ViewPointCreate(m_handle, guid);
+            IntPtr vpHandle = Interop.ViewPointAdd(m_handle, guid);
             if (vpHandle == IntPtr.Zero)
                 throw new ApplicationException("Fail to create view point: " + Interop.ErrorsGet(m_project.Handle));
             return new ViewPoint(this, vpHandle);
@@ -60,9 +60,9 @@ namespace RDF.BCF
         /// <summary>
         /// 
         /// </summary>
-        public Comment CreateComment(string? guid = null)
+        public Comment AddComment(string? guid = null)
         {
-            IntPtr commentHandle = Interop.CommentCreate(m_handle, guid);
+            IntPtr commentHandle = Interop.CommentAdd(m_handle, guid);
             if (commentHandle == IntPtr.Zero)
                 throw new ApplicationException("Fail to create comment: " + Interop.ErrorsGet(m_project.Handle));
             return new Comment(this, commentHandle);

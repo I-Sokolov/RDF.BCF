@@ -143,8 +143,8 @@ namespace RDF.BCF
             return PtrToString(ptr);
         }
 
-        [DllImport(DLL, EntryPoint = "bcfTopicCreate")]
-        public static extern IntPtr TopicCreate(
+        [DllImport(DLL, EntryPoint = "bcfTopicAdd")]
+        public static extern IntPtr TopicAdd(
             IntPtr project, 
             [param: MarshalAs(UnmanagedType.LPUTF8Str)] string type, 
             [param: MarshalAs(UnmanagedType.LPUTF8Str)] string title, 
@@ -261,8 +261,8 @@ namespace RDF.BCF
         [DllImport(DLL, EntryPoint = "bcfCommentIterate")]
         public static extern IntPtr CommentIterate(IntPtr topic, IntPtr prev);
 
-        [DllImport(DLL, EntryPoint = "bcfCommentCreate")]
-        public static extern IntPtr CommentCreate(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? guid = null);
+        [DllImport(DLL, EntryPoint = "bcfCommentAdd")]
+        public static extern IntPtr CommentAdd(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? guid = null);
 
         [DllImport(DLL, EntryPoint = "bcfCommentRemove")]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -306,8 +306,8 @@ namespace RDF.BCF
         [DllImport(DLL, EntryPoint = "bcfViewPointIterate")]
         public static extern IntPtr ViewPointIterate(IntPtr topic, IntPtr prev);
 
-        [DllImport(DLL, EntryPoint = "bcfViewPointCreate")]
-        public static extern IntPtr ViewPointCreate(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? guid = null);
+        [DllImport(DLL, EntryPoint = "bcfViewPointAdd")]
+        public static extern IntPtr ViewPointAdd(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? guid = null);
 
         [DllImport(DLL, EntryPoint = "bcfViewPointRemove")]
         [return: MarshalAs(UnmanagedType.U1)]

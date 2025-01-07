@@ -43,12 +43,12 @@ public:
 
     bool Remove(void);
 
-    BCFViewPoint* ViewPointCreate(const char* guid = NULL);
+    BCFViewPoint* ViewPointAdd(const char* guid = NULL);
     BCFViewPoint* ViewPointIterate(BCFViewPoint* prev);
     BCFViewPoint* ViewPointByGuid(const char* guid);
     bool          ViewPointRemove(BCFViewPoint* viewPoint);
 
-    BCFComment* CommentCreate(const char* guid = NULL);
+    BCFComment* CommentAdd(const char* guid = NULL);
     BCFComment* CommentIterate(BCFComment* prev);
     bool        CommentRemove(BCFComment* comment);
 
@@ -86,10 +86,10 @@ private:
     std::string                     m_Description;
     std::string                     m_Stage;
     BimSnippet                      m_BimSnippet;
-    ListGuid<BCFDocumentReference>     m_DocumentReferences;
+    ListGuid<BCFDocumentReference>  m_DocumentReferences;
     ListGuid<GuidReference>         m_RelatedTopics;
-    ListGuid<BCFComment>               m_Comments;
-    ListGuid<BCFViewPoint>             m_Viewpoints;
+    ListGuid<BCFComment>            m_Comments;
+    ListGuid<BCFViewPoint>          m_Viewpoints;
 
 private:
     bool                            m_bReadFromFile;

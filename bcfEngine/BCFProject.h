@@ -34,7 +34,7 @@ public:
 
     Extensions& GetExtensions() { return m_extensions; }
 
-    BCFTopic* TopicCreate(const char* type, const char* title, const char* status, const char* guid = NULL);
+    BCFTopic* TopicAdd(const char* type, const char* title, const char* status, const char* guid = NULL);
     bool TopicRemove(BCFTopic* topic);
     BCFTopic* TopicIterate(BCFTopic* prev);
 

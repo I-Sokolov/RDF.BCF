@@ -74,7 +74,7 @@ extern "C" {
     /// 
     /// </summary>
     RDFBCF_EXPORT BCFTopic* bcfTopicIterate(BCFProject* project, BCFTopic* prev);
-    RDFBCF_EXPORT BCFTopic* bcfTopicCreate(BCFProject* project, const char* type, const char* title, const char* status, const char* guid);
+    RDFBCF_EXPORT BCFTopic* bcfTopicAdd(BCFProject* project, const char* type, const char* title, const char* status, const char* guid);
     RDFBCF_EXPORT bool bcfTopicRemove(BCFTopic* topic);
 
     /// <summary>
@@ -114,7 +114,7 @@ extern "C" {
     /// 
     /// </summary>
     RDFBCF_EXPORT BCFComment* bcfCommentIterate (BCFTopic* topic, BCFComment* prev);
-    RDFBCF_EXPORT BCFComment* bcfCommentCreate  (BCFTopic* topic, const char* guid);
+    RDFBCF_EXPORT BCFComment* bcfCommentAdd  (BCFTopic* topic, const char* guid);
     RDFBCF_EXPORT bool bcfCommentRemove         (BCFComment* comment);
 
     /// <summary>
@@ -138,7 +138,7 @@ extern "C" {
     ///
     /// </summary>
     RDFBCF_EXPORT BCFViewPoint* bcfViewPointIterate(BCFTopic* topic, BCFViewPoint* prev);
-    RDFBCF_EXPORT BCFViewPoint* bcfViewPointCreate(BCFTopic* topic, const char* guid);
+    RDFBCF_EXPORT BCFViewPoint* bcfViewPointAdd(BCFTopic* topic, const char* guid);
     RDFBCF_EXPORT bool bcfViewPointRemove(BCFViewPoint* viewPoint);
 
     /// <summary>

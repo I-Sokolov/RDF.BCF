@@ -151,7 +151,7 @@ namespace CSExample
             bool ex = false;
             try
             {
-                topic = bcf.CreateTopic("Topic Type", "Topic Title", "Topic Status");
+                topic = bcf.AddTopic("Topic Type", "Topic Title", "Topic Status");
             }
             catch (Exception e)
             {
@@ -167,7 +167,7 @@ namespace CSExample
             ex = false;
             try
             {
-                topic = bcf.CreateTopic("Topic Type", "Topic Title", "Topic Status");
+                topic = bcf.AddTopic("Topic Type", "Topic Title", "Topic Status");
             }
             catch(Exception e)
             {
@@ -182,7 +182,7 @@ namespace CSExample
             //
             bcf.SetAuthor("John Smith", true);
 
-            topic = bcf.CreateTopic("Topic Type", "Topic Title", "Topic Status");
+            topic = bcf.AddTopic("Topic Type", "Topic Title", "Topic Status");
             ASSERT(topic != null);
 
             if (topic != null)
@@ -225,8 +225,8 @@ namespace CSExample
 
         static private void SetTopicAttributes(RDF.BCF.Project bcf, bool newFile)
         {
-            var topic = bcf.CreateTopic("Type1", "Title1", "Status1");
-            bcf.CreateTopic("Type1", "Title1", "Status1", "myGuid");
+            var topic = bcf.AddTopic("Type1", "Title1", "Status1");
+            bcf.AddTopic("Type1", "Title1", "Status1", "myGuid");
             ASSERT(topic != null);
             if (topic != null)
             {
@@ -319,16 +319,16 @@ namespace CSExample
 
         static void SetCommentVPAttributes(Project bcf, bool newFile)
         {
-            var topic = bcf.CreateTopic("Type", "Title", "New");
+            var topic = bcf.AddTopic("Type", "Title", "New");
             ASSERT(topic.Comments.Count == 0);
 
             var viewpoint = SetViewPoints(topic);
 
-            var comment = topic.CreateComment();
+            var comment = topic.AddComment();
 
             ASSERT(topic.Comments.Count == 1);
 
-            var comment2 = topic.CreateComment();
+            var comment2 = topic.AddComment();
             ASSERT(topic.Comments.Count == 2);
             comment2.Remove();
             ASSERT(topic.Comments.Count == 1);
@@ -365,13 +365,13 @@ namespace CSExample
         {
             ASSERT(topic.ViewPoints.Count == 0);
 
-            topic.CreateViewPoint();
+            topic.AddViewPoint();
             ASSERT(topic.ViewPoints[0].Guid.Length > 0);
             ASSERT(topic.ViewPoints[0].Snapshot.Length == 0);
 
             for (int i = 2; i < 4; i++)
             {
-                var vp = topic.CreateViewPoint($"ID-{i}");
+                var vp = topic.AddViewPoint($"ID-{i}");
 
                 vp.DefaultVisibility = (i == 0);
                 vp.SpaceVisible = (i != 0);

@@ -124,7 +124,7 @@ bool BCFProject::WriteTopics(const std::string& bcfFolder)
 /// <summary>
 /// 
 /// </summary>
-BCFTopic* BCFProject::TopicCreate(const char* type, const char* title, const char* status, const char* guid)
+BCFTopic* BCFProject::TopicAdd(const char* type, const char* title, const char* status, const char* guid)
 {
     auto topic = new BCFTopic(*this, guid ? guid : "");
 

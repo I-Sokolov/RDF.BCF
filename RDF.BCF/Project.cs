@@ -70,9 +70,9 @@
         /// Creates new topic.
         /// Caller can assign GUID or it will generated automatically, GUID never changes after creation
         /// </summary>
-        public Topic CreateTopic(string type, string title, string status, string? guid = null)
+        public Topic AddTopic(string type, string title, string status, string? guid = null)
         {
-            IntPtr topicHandle = Interop.TopicCreate(m_handle, type, title, status, guid);
+            IntPtr topicHandle = Interop.TopicAdd(m_handle, type, title, status, guid);
             if (topicHandle == IntPtr.Zero)
                 throw new ApplicationException("Fail to create topic: " + Interop.ErrorsGet(Handle));
             return new Topic(this, topicHandle);
