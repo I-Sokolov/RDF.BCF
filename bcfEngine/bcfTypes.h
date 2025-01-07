@@ -76,7 +76,7 @@ extern "C" {
     /// </summary>
     struct BCFPoint
     {
-        double x, y, z;
+        double xyz[3];
     };
 
 #ifdef __cplusplus

@@ -146,3 +146,20 @@ bool BCFViewPoint::Remove()
 {
     return m_topic.ViewPointRemove(this);
 }
+
+/// <summary>
+/// 
+/// </summary>
+const char* BCFViewPoint::GetSnapshot()
+{
+    return "TODO";
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFViewPoint::SetSnapshot(const char* pathFile)
+{
+    //TODO
+    return false;
+}

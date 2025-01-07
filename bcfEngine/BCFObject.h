@@ -27,7 +27,7 @@ protected:
     bool BoolToStr(bool val, std::string& prop) { prop.assign(val ? "true" : "false"); return true; }
 
     bool GetPoint(const XMLPoint& xmlpt, BCFPoint& bcfpt);
-    bool SetPoint(const BCFPoint& bcfpt, XMLPoint& xmlpt);
+    bool SetPoint(const BCFPoint* bcfpt, XMLPoint& xmlpt);
 
     bool UpdateAuthor(std::string& author, std::string& date);
 

@@ -28,22 +28,22 @@ public:
     bool        GetSpaceBoundariesVisible() { return StrToBool(m_SpaceBoundariesVisible); }
     bool        GetOpeningsVisible() { return StrToBool(m_OpeningsVisible); }
     BCFCamera   GetCameraType() { return m_cameraType; }
-    bool        GteCameraViewPoint(BCFPoint& pt) { return GetPoint(m_CameraViewPoint, pt); }
+    bool        GetCameraViewPoint(BCFPoint& pt) { return GetPoint(m_CameraViewPoint, pt); }
     bool        GetCameraDirection(BCFPoint& pt) { return GetPoint(m_CameraDirection, pt); }
     bool        GetCameraUpVector(BCFPoint& pt) { return GetPoint(m_CameraUpVector, pt); }
     double      GetViewToWorldScale() { return atof(m_ViewToWorldScale.c_str()); }
     double      GetFieldOfView() { return atof(m_FieldOfView.c_str()); }
     double      GetAspectRatio() { return atof(m_AspectRatio.c_str()); }
 
-    bool        SetSnapshot(const char* pathFile, bool keepInternal);
+    bool        SetSnapshot(const char* pathFile);
     bool        SetDefaultVisibility(bool val) { return BoolToStr(val, m_DefaultVisibility); }
     bool        SetSpaceVisible(bool val) { return BoolToStr(val, m_SpacesVisible); }
     bool        SetSpaceBoundariesVisible(bool val) { return BoolToStr(val, m_SpaceBoundariesVisible); }
     bool        SetOpeningsVisible(bool val) { return BoolToStr(val, m_OpeningsVisible); }
-    bool        SetCameraType() { return m_cameraType; return true; }
-    bool        SteCameraViewPoint(BCFPoint& pt) { return SetPoint(pt, m_CameraViewPoint); }
-    bool        SetCameraDirection(BCFPoint& pt) { return SetPoint(pt, m_CameraDirection); }
-    bool        SetCameraUpVector(BCFPoint& pt) { return SetPoint(pt, m_CameraUpVector); }
+    bool        SetCameraType(BCFCamera val) { m_cameraType = val; return true; }
+    bool        SetCameraViewPoint(BCFPoint* pt) { return SetPoint(pt, m_CameraViewPoint); }
+    bool        SetCameraDirection(BCFPoint* pt) { return SetPoint(pt, m_CameraDirection); }
+    bool        SetCameraUpVector(BCFPoint* pt) { return SetPoint(pt, m_CameraUpVector); }
     bool        SetViewToWorldScale(double val) { return RealToStr(val,m_ViewToWorldScale); }
     bool        SetFieldOfView(double val) { return RealToStr (val, m_FieldOfView); }
     bool        SetAspectRatio(double val) { return RealToStr (val, m_AspectRatio); }

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "BCFObject.h"
 #include "BCFProject.h"
+#include "XMLPoint.h"
 
 /// <summary>
 /// 
@@ -36,6 +37,46 @@ bool BCFObject::IntToStr(int val, std::string& prop)
     sprintf(sz, "%d", val);
     prop.assign(sz);
     return true;
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFObject::RealToStr(double val, std::string& prop)
+{
+    char sz[80];
+    sprintf(sz, "%g", val);
+    prop.assign(sz);
+    return true;
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFObject::GetPoint(const XMLPoint& xmlpt, BCFPoint& bcfpt)
+{
+    for (int i = 0; i < 3; i++) {
+        bcfpt.xyz[i] = atof(xmlpt.XYZ[i].c_str());
+    }
+
+    return true;
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFObject::SetPoint(const BCFPoint* bcfpt, XMLPoint& xmlpt)
+{
+    if (bcfpt) {
+        for (int i = 0; i < 3; i++) {
+            RealToStr(bcfpt->xyz[i], xmlpt.XYZ[i]);
+        }
+        return true;
+    }
+    else {
+        m_project.log().add(Log::Level::error, "NULL argument");
+        return false;
+    }
 }
 
 /// <summary>

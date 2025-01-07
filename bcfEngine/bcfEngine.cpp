@@ -10,18 +10,26 @@
 /// Macros to implement put/get attributes and iterate/remove objects
 /// </summary>
 
-typedef const char* tStr;
-typedef int           tInt;
-typedef BCFViewPoint* tViewPoint;
-
-#define OBJ_GET_ATTR(VAL, OBJ, ATTR)                                                \
+#define OBJ_GET_ATTR_R(VAL, OBJ, ATTR, errVal)                                      \
 RDFBCF_EXPORT t##VAL bcf##OBJ##Get##ATTR (BCF##OBJ* obj)                            \
 {                                                                                   \
     if (obj) {                                                                      \
        return obj->Get##ATTR ();                                                    \
     }                                                                               \
-    return 0;                                                                       \
+    return errVal;                                                                  \
 }
+
+#define OBJ_GET_ATTR(VAL, OBJ, ATTR)    OBJ_GET_ATTR_R(VAL, OBJ, ATTR, 0)                                             
+
+#define OBJ_GET_ATTR_PT(OBJ, ATTR)                                                  \
+RDFBCF_EXPORT bool bcf##OBJ##Get##ATTR(BCF##OBJ* obj, BCFPoint* retPt)              \
+{                                                                                   \
+    if (obj && retPt) {                                                             \
+        return obj->Get##ATTR(*retPt);                                              \
+    }                                                                               \
+    return false;                                                                   \
+}
+
 
 #define OBJ_SET_ATTR(VAL, OBJ, ATTR)                                                \
 RDFBCF_EXPORT bool bcf  ##OBJ##Set##ATTR (BCF##OBJ* obj, t##VAL val)                \
@@ -49,6 +57,14 @@ RDFBCF_EXPORT bool bcf##OBJ##Remove(BCF##OBJ* obj)                              
     return false;                                                                       \
 }
 
+//to use in macros
+typedef const char*   tStr;
+typedef int           tInt;
+typedef double        tReal;
+typedef bool          tBool;
+typedef BCFViewPoint* tViewPoint;
+typedef BCFCamera     tCamera;
+typedef BCFPoint* tPoint;
 
 /// <summary>
 /// 
@@ -261,3 +277,37 @@ RDFBCF_EXPORT BCFViewPoint* bcfViewPointCreate(BCFTopic* topic, const char* guid
     }
     return 0;
 }
+
+/// <summary>
+///
+/// </summary>
+OBJ_GET_ATTR (Str,  ViewPoint, Guid)
+OBJ_GET_ATTR (Str,  ViewPoint, Snapshot)
+OBJ_GET_ATTR (Bool, ViewPoint, DefaultVisibility)
+OBJ_GET_ATTR (Bool, ViewPoint, SpaceVisible)
+OBJ_GET_ATTR (Bool, ViewPoint, SpaceBoundariesVisible)
+OBJ_GET_ATTR (Bool, ViewPoint, OpeningsVisible)
+OBJ_GET_ATTR (Real, ViewPoint, ViewToWorldScale)
+OBJ_GET_ATTR (Real, ViewPoint, FieldOfView)
+OBJ_GET_ATTR (Real, ViewPoint, AspectRatio)
+OBJ_GET_ATTR_R(Camera, ViewPoint, CameraType, BCFCameraOrthogonal)
+OBJ_GET_ATTR_PT(ViewPoint, CameraViewPoint)
+OBJ_GET_ATTR_PT(ViewPoint, CameraDirection)
+OBJ_GET_ATTR_PT(ViewPoint, CameraUpVector)
+
+/// <summary>
+///
+/// </summary>
+OBJ_SET_ATTR(Str,    ViewPoint, Snapshot)
+OBJ_SET_ATTR(Bool,   ViewPoint, DefaultVisibility)
+OBJ_SET_ATTR(Bool,   ViewPoint, SpaceVisible)
+OBJ_SET_ATTR(Bool,   ViewPoint, SpaceBoundariesVisible)
+OBJ_SET_ATTR(Bool,   ViewPoint, OpeningsVisible)
+OBJ_SET_ATTR(Camera, ViewPoint, CameraType)
+OBJ_SET_ATTR(Point,  ViewPoint, CameraViewPoint)
+OBJ_SET_ATTR(Point,  ViewPoint, CameraDirection)
+OBJ_SET_ATTR(Point,  ViewPoint, CameraUpVector)
+OBJ_SET_ATTR(Real,   ViewPoint, ViewToWorldScale)
+OBJ_SET_ATTR(Real,   ViewPoint, FieldOfView)
+OBJ_SET_ATTR(Real,   ViewPoint, AspectRatio)
+

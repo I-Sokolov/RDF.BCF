@@ -151,14 +151,14 @@ extern "C" {
     RDFBCF_EXPORT bool        bcfViewPointGetSpaceBoundariesVisible(BCFViewPoint* viewPoint);
     RDFBCF_EXPORT bool        bcfViewPointGetOpeningsVisible(BCFViewPoint* viewPoint);
     RDFBCF_EXPORT BCFCamera   bcfViewPointGetCameraType(BCFViewPoint* viewPoint);
-    RDFBCF_EXPORT bool        bcfViewPointGteCameraViewPoint(BCFViewPoint* viewPoint, BCFPoint* retPt);
+    RDFBCF_EXPORT bool        bcfViewPointGetCameraViewPoint(BCFViewPoint* viewPoint, BCFPoint* retPt);
     RDFBCF_EXPORT bool        bcfViewPointGetCameraDirection(BCFViewPoint* viewPoint, BCFPoint* retPt);
     RDFBCF_EXPORT bool        bcfViewPointGetCameraUpVector(BCFViewPoint* viewPoint, BCFPoint* retPt);
     RDFBCF_EXPORT double      bcfViewPointGetViewToWorldScale(BCFViewPoint* viewPoint);
     RDFBCF_EXPORT double      bcfViewPointGetFieldOfView(BCFViewPoint* viewPoint);
     RDFBCF_EXPORT double      bcfViewPointGetAspectRatio(BCFViewPoint* viewPoint);
 
-    RDFBCF_EXPORT bool        bcfViewPointSetSnapshot(BCFViewPoint* viewPoint, const char* filePath, bool keepInternal);
+    RDFBCF_EXPORT bool        bcfViewPointSetSnapshot(BCFViewPoint* viewPoint, const char* filePath);
     RDFBCF_EXPORT bool        bcfViewPointSetDefaultVisibility(BCFViewPoint* viewPoint, bool val);
     RDFBCF_EXPORT bool        bcfViewPointSetSpaceVisible(BCFViewPoint* viewPoint, bool val);
     RDFBCF_EXPORT bool        bcfViewPointSetSpaceBoundariesVisible(BCFViewPoint* viewPoint, bool val);
@@ -167,9 +167,9 @@ extern "C" {
     RDFBCF_EXPORT bool        bcfViewPointSetCameraViewPoint(BCFViewPoint* viewPoint, BCFPoint* pt);
     RDFBCF_EXPORT bool        bcfViewPointSetCameraDirection(BCFViewPoint* viewPoint, BCFPoint* pt);
     RDFBCF_EXPORT bool        bcfViewPointSetCameraUpVector(BCFViewPoint* viewPoint, BCFPoint* pt);
-    RDFBCF_EXPORT double      bcfViewPointSetViewToWorldScale(BCFViewPoint* viewPoint, double val);
-    RDFBCF_EXPORT double      bcfViewPointSetFieldOfView(BCFViewPoint* viewPoint, double val);
-    RDFBCF_EXPORT double      bcfViewPointSetAspectRatio(BCFViewPoint* viewPoint, double val);
+    RDFBCF_EXPORT bool        bcfViewPointSetViewToWorldScale(BCFViewPoint* viewPoint, double val);
+    RDFBCF_EXPORT bool        bcfViewPointSetFieldOfView(BCFViewPoint* viewPoint, double val);
+    RDFBCF_EXPORT bool        bcfViewPointSetAspectRatio(BCFViewPoint* viewPoint, double val);
 
     /// <summary>
     ///
