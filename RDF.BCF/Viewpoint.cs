@@ -9,20 +9,6 @@ namespace RDF.BCF
     public class ViewPoint
     {
         /// <summary>
-        /// 
-        /// </summary>
-        public enum Camera 
-        {
-            Perspective,
-            Orthogonal
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public struct Point  {  public double x; public double y; public double z; }
-
-        /// <summary>
         /// Read-only persistent viewpoint identifier
         /// </summary>
         //public Guid Guid { get { return m_guid; } }
@@ -57,22 +43,22 @@ namespace RDF.BCF
         /// <summary>
         /// 
         /// </summary>
-        public Camera CameraType { get; set; }
+        //public Camera CameraType { get; set; }
 
         /// <summary>
         /// Camera location
         /// </summary>
-        public Point CameraViewPoint {  get; set; }
+        //public Point CameraViewPoint {  get; set; }
 
         /// <summary>
         /// Camera direction
         /// </summary>
-        public Point CameraDirection { get; set; }
+        //public Point CameraDirection { get; set; }
 
         /// <summary>
         /// Camera up vector
         /// </summary>
-        public Point CameraUpVector {  get; set; }
+        //public Point CameraUpVector {  get; set; }
 
         /// <summary>
         /// For perspective camera: FieldOfView - The entire vertical field of view angle of the camera, expressed in degrees. Valid range 0 to 180 exclusive.
@@ -102,6 +88,14 @@ namespace RDF.BCF
         /// File path to viewpoint snapshot (png or jpeg)
         /// </summary>
         public string? Snapshot { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Remove()
+        {
+            return Interop.ViewPointRemove(m_handle); 
+        }
 
         #region IMPLEMENTATION
         ///////////////////////////////////////////////////////////////////////////////////////////

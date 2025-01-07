@@ -40,9 +40,17 @@ namespace RDF.BCF
         }
 
         /// <summary>
-        /// BIM files, associated with the topic
+        /// 
         /// </summary>
-        //public BIMFiles BIMFiles { get { return m_topicFiles; } }
+        public List<ViewPoint> ViewPoints { get { return GetViewPoints(); } }
+
+        public ViewPoint CreateViewPoint(string? guid = null)
+        {
+            IntPtr vpHandle = Interop.ViewPointCreate(m_handle, guid);
+            if (vpHandle == IntPtr.Zero)
+                throw new ApplicationException("Fail to create view point: " + Interop.ErrorsGet(m_project.Handle));
+            return new ViewPoint(this, vpHandle);
+        }
 
         /// <summary>
         /// The topic comments
@@ -60,27 +68,6 @@ namespace RDF.BCF
             return new Comment(this, commentHandle);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        //public List<ViewPoint> ViewPoints { get { return GetViewPoints(); } }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public ViewPoint? CreateViewPoint(string? guid = null)
-        {
-            /*IntPtr viewPointHandle = Interop.ViewPointCreate(m_handle, guid);
-                      if (commentHandle == IntPtr.Zero)
-                throw new ApplicationException("Fail to create comment: " + Interop.ErrorsGet(m_project.Handle));
-  if (viewPointHandle != IntPtr.Zero)
-            {
-                return new ViewPoint(this, viewPointHandle);
-            }*/
-            return null;
-
-        }
-
         #region IMPLEMENTATION
         ///////////////////////////////////////////////////////////////////////////////////////////
         Project m_project;
@@ -91,7 +78,7 @@ namespace RDF.BCF
             m_project = project;
             m_handle = handle;
         }
-
+        
         private List<Comment> GetComments()
         {
             var ret = new List<Comment>();
@@ -105,7 +92,7 @@ namespace RDF.BCF
 
             return ret;
         }
-        /*
+
         private List<ViewPoint> GetViewPoints()
         {
             var ret = new List<ViewPoint>();
@@ -119,7 +106,7 @@ namespace RDF.BCF
 
             return ret;
         }
-        */
+
         #endregion IMPLEMENTATION
     }
 }

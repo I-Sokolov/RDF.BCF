@@ -72,6 +72,8 @@ public:
     BCFBitmap* BitmapIterate(BCFBitmap* prev);
     bool BitmapRemove(BCFBitmap* line);
 
+    bool Remove();
+
 private:
     //XMLFile implementation
     virtual const char* XMLFileName() override { return m_Viewpoint.c_str(); }

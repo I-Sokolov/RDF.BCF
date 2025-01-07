@@ -281,5 +281,15 @@ namespace RDF.BCF
         [DllImport(DLL, EntryPoint = "bcfCommentSetViewPoint")]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool CommentSetViewPoint(IntPtr comment, IntPtr viewPoint);
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointIterate")]
+        public static extern IntPtr ViewPointIterate(IntPtr topic, IntPtr prev);
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointCreate")]
+        public static extern IntPtr ViewPointCreate(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? guid = null);
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointRemove")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool ViewPointRemove(IntPtr comment);
     }
 }

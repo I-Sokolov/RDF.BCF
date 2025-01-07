@@ -4,6 +4,7 @@
 #include "BCFProject.h"
 #include "BCFTopic.h"
 #include "BCFComment.h"
+#include "BCFViewPoint.h"
 
 /// <summary>
 /// Macros to implement put/get attributes and iterate/remove objects
@@ -248,3 +249,15 @@ OBJ_GET_ATTR(ViewPoint, Comment, ViewPoint)
 
 OBJ_SET_ATTR(Str,       Comment, Text)
 OBJ_SET_ATTR(ViewPoint, Comment, ViewPoint)
+
+/// <summary>
+/// 
+/// </summary>
+OBJ_ITERATE(ViewPoint, Topic)
+RDFBCF_EXPORT BCFViewPoint* bcfViewPointCreate(BCFTopic* topic, const char* guid)
+{
+    if (topic) {
+        return topic->ViewPointCreate(guid);
+    }
+    return 0;
+}

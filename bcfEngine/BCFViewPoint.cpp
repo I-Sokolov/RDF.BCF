@@ -138,18 +138,11 @@ void  BCFViewPoint::Read_OrthogonalCamera(_xml::_element& elem, const std::strin
     CHILDREN_END
 }
 
-#if 0
-BCFIndex BCFViewPoint::GetIndex()
-{
-    BCFIndex N = m_topic.ViewPointsCount();
-    for (BCFIndex i = 0; i < N; i++) {
-        auto vp = m_topic.ViewPointGet(i);
-        if (vp == this) {
-            return i;
-        }
-    }
 
-    log().add(Log::Level::error, "Out of range", "ViewPoint %s is not from topic %s", GetGuid(), m_topic.GetGuid());
-    return BCFIndex_ERROR;
+/// <summary>
+/// 
+/// </summary>
+bool BCFViewPoint::Remove()
+{
+    return m_topic.ViewPointRemove(this);
 }
-#endif

@@ -322,6 +322,8 @@ namespace CSExample
             var topic = bcf.CreateTopic("Type", "Title", "New");
             ASSERT(topic.Comments.Count == 0);
 
+            var viewpoint = SetViewPoints(topic);
+
             var comment = topic.CreateComment();
 
             ASSERT(topic.Comments.Count == 1);
@@ -338,6 +340,9 @@ namespace CSExample
         static void GetCommentVPAttributes(Project bcf, bool newFile)
         {
             var topic = bcf.Topics[0];
+
+            GetViewPoints(topic);
+
             var comment = topic.Comments[0];
 
             ASSERT(comment.Text == "Text comment");
@@ -354,6 +359,27 @@ namespace CSExample
                 ASSERT(comment.ModifiedDate.Length == 28);
                 ASSERT(comment.ModifiedAuthor == "Smoke-Editor");
             }
+        }
+
+        static ViewPoint SetViewPoints (Topic topic)
+        {
+            ASSERT(topic.ViewPoints.Count == 0);
+
+            topic.CreateViewPoint();
+            topic.CreateViewPoint();
+            var vp = topic.CreateViewPoint();
+
+            ASSERT(topic.ViewPoints.Count == 3);
+
+            ASSERT(vp.Remove());
+            ASSERT(topic.ViewPoints.Count == 2);
+
+            return topic.ViewPoints[0];
+        }
+
+        static void GetViewPoints(Topic topic)
+        {
+            ASSERT(topic.ViewPoints.Count == 2);
         }
     }
 }
