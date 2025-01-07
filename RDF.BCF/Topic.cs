@@ -68,6 +68,11 @@ namespace RDF.BCF
             return new Comment(this, commentHandle);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public Project Project { get { return m_project; } }
+
         #region IMPLEMENTATION
         ///////////////////////////////////////////////////////////////////////////////////////////
         Project m_project;

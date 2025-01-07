@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -46,8 +47,28 @@ namespace RDF.BCF
             Stages = 7
         };
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public enum BCFCamera
+        {
+            Perspective = 0,
+            Orthogonal = 1
+        };
+
+        public struct BCFPoint
+        {
+            public double x,y,z;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public const UInt16 ERR_IND = UInt16.MaxValue;
 
+        /// <summary>
+        /// 
+        /// </summary>
         [DllImport(DLL, EntryPoint = "bcfProjectCreate")]
         public static extern IntPtr ProjectCreate([param: MarshalAs(UnmanagedType.LPUTF8Str)] string? projectId = null);
 
@@ -291,5 +312,102 @@ namespace RDF.BCF
         [DllImport(DLL, EntryPoint = "bcfViewPointRemove")]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ViewPointRemove(IntPtr comment);
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointGetGuid")] 
+        private static extern IntPtr ViewPointGetGuid_ (IntPtr viewPoint);
+
+        public static string ViewPointGetGuild(IntPtr viewPoint) { return PtrToString(ViewPointGetGuid_(viewPoint)); }
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointGetSnapshot")] 
+        private static extern IntPtr ViewPointGetSnapshot_ (IntPtr viewPoint);
+
+        public static string ViewPointGetSnapshot(IntPtr viewPoint) { return PtrToString (ViewPointGetSnapshot_(viewPoint)); }
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointGetDefaultVisibility")]
+        [return: MarshalAs(UnmanagedType.U1)] 
+        public static extern bool ViewPointGetDefaultVisibility(IntPtr viewPoint);
+        
+        [DllImport(DLL, EntryPoint = "bcfViewPointGetSpaceVisible")]
+        [return: MarshalAs(UnmanagedType.U1)] 
+        public static extern bool ViewPointGetSpaceVisible(IntPtr viewPoint);
+        
+        [DllImport(DLL, EntryPoint = "bcfViewPointGetSpaceBoundariesVisible")]
+        [return: MarshalAs(UnmanagedType.U1)] 
+        public static extern bool ViewPointGetSpaceBoundariesVisible(IntPtr viewPoint);
+        
+        [DllImport(DLL, EntryPoint = "bcfViewPointGetOpeningsVisible")]
+        [return: MarshalAs(UnmanagedType.U1)] 
+        public static extern bool ViewPointGetOpeningsVisible(IntPtr viewPoint);
+        
+        [DllImport(DLL, EntryPoint = "bcfViewPointGetCameraType")] 
+        public static extern BCFCamera ViewPointGetCameraType(IntPtr viewPoint);
+        
+        [DllImport(DLL, EntryPoint = "bcfViewPointGetCameraViewPoint")]
+        [return: MarshalAs(UnmanagedType.U1)] 
+        public static extern bool ViewPointGetCameraViewPoint(IntPtr viewPoint, out BCFPoint retPt);
+        
+        [DllImport(DLL, EntryPoint = "bcfViewPointGetCameraDirection")]
+        [return: MarshalAs(UnmanagedType.U1)] 
+        public static extern bool ViewPointGetCameraDirection(IntPtr viewPoint, out BCFPoint retPt);
+        
+        [DllImport(DLL, EntryPoint = "bcfViewPointGetCameraUpVector")]
+        [return: MarshalAs(UnmanagedType.U1)] 
+        public static extern bool ViewPointGetCameraUpVector(IntPtr viewPoint, out BCFPoint retPt);
+        
+        [DllImport(DLL, EntryPoint = "bcfViewPointGetViewToWorldScale")] 
+        public static extern double ViewPointGetViewToWorldScale(IntPtr viewPoint);
+        
+        [DllImport(DLL, EntryPoint = "bcfViewPointGetFieldOfView")] 
+        public static extern double ViewPointGetFieldOfView(IntPtr viewPoint);
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointGetAspectRatio")] 
+        public static extern double ViewPointGetAspectRatio(IntPtr viewPoint);
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointSetSnapshot")]
+        [return: MarshalAs(UnmanagedType.U1)] 
+        public static extern bool ViewPointSetSnapshot(IntPtr viewPoint, string filePath);
+        
+        [DllImport(DLL, EntryPoint = "bcfViewPointSetDefaultVisibility")]
+        [return: MarshalAs(UnmanagedType.U1)] 
+        public static extern bool ViewPointSetDefaultVisibility(IntPtr viewPoint, bool val);
+        
+        [DllImport(DLL, EntryPoint = "bcfViewPointSetSpaceVisible")] 
+        [return: MarshalAs(UnmanagedType.U1)] 
+        public static extern bool ViewPointSetSpaceVisible(IntPtr viewPoint, bool val);
+        
+        [DllImport(DLL, EntryPoint = "bcfViewPointSetSpaceBoundariesVisible")]
+        [return: MarshalAs(UnmanagedType.U1)] 
+        public static extern bool ViewPointSetSpaceBoundariesVisible(IntPtr viewPoint, bool val);
+        
+        [DllImport(DLL, EntryPoint = "bcfViewPointSetOpeningsVisible")] 
+        [return: MarshalAs(UnmanagedType.U1)] public static extern bool ViewPointSetOpeningsVisible(IntPtr viewPoint, bool val);
+        
+        [DllImport(DLL, EntryPoint = "bcfViewPointSetCameraType")] 
+        [return: MarshalAs(UnmanagedType.U1)] public static extern bool ViewPointSetCameraType(IntPtr viewPoint, BCFCamera val);
+        
+        [DllImport(DLL, EntryPoint = "bcfViewPointSetCameraViewPoint")] 
+        [return: MarshalAs(UnmanagedType.U1)] 
+        public static extern bool ViewPointSetCameraViewPoint(IntPtr viewPoint, BCFPoint pt);
+        
+        [DllImport(DLL, EntryPoint = "bcfViewPointSetCameraDirection")] 
+        [return: MarshalAs(UnmanagedType.U1)] 
+        public static extern bool ViewPointSetCameraDirection(IntPtr viewPoint, BCFPoint pt);
+        
+        [DllImport(DLL, EntryPoint = "bcfViewPointSetCameraUpVector")] 
+        [return: MarshalAs(UnmanagedType.U1)] 
+        public static extern bool ViewPointSetCameraUpVector(IntPtr viewPoint, BCFPoint pt);
+        
+        [DllImport(DLL, EntryPoint = "bcfViewPointSetViewToWorldScale")] 
+        [return: MarshalAs(UnmanagedType.U1)] 
+        public static extern bool ViewPointSetViewToWorldScale(IntPtr viewPoint, double val);
+        
+        [DllImport(DLL, EntryPoint = "bcfViewPointSetFieldOfView")] 
+        [return: MarshalAs(UnmanagedType.U1)] 
+        public static extern bool ViewPointSetFieldOfView(IntPtr viewPoint, double val);
+        
+        [DllImport(DLL, EntryPoint = "bcfViewPointSetAspectRatio")] 
+        [return: MarshalAs(UnmanagedType.U1)] 
+        public static extern bool ViewPointSetAspectRatio(IntPtr viewPoint, double val);
+
     }
 }

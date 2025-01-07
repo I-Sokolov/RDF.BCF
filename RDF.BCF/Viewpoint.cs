@@ -9,92 +9,39 @@ namespace RDF.BCF
     public class ViewPoint
     {
         /// <summary>
-        /// Read-only persistent viewpoint identifier
+        /// 
         /// </summary>
-        //public Guid Guid { get { return m_guid; } }
+        public string Guid { get { return Interop.ViewPointGetGuild(m_handle); } }
+        public bool DefaultVisibility { get { return Interop.ViewPointGetDefaultVisibility(m_handle); } set { Interop.ViewPointSetDefaultVisibility(m_handle, value); } }
+        public bool SpaceVisible { get { return Interop.ViewPointGetSpaceVisible(m_handle); } set { Interop.ViewPointSetSpaceVisible(m_handle, value); } }
+        public bool SpaceBoundariesVisible { get { return Interop.ViewPointGetSpaceBoundariesVisible(m_handle); } set { Interop.ViewPointSetSpaceBoundariesVisible(m_handle, value); } }
+        public bool OpeningsVisible { get { return Interop.ViewPointGetOpeningsVisible(m_handle); } set { Interop.ViewPointSetOpeningsVisible(m_handle, value); } }
+        public Interop.BCFCamera CameraType { get { return Interop.ViewPointGetCameraType(m_handle); } set { Interop.ViewPointSetCameraType(m_handle, value); } }
+        public double ViewToWorldScale { get { return Interop.ViewPointGetViewToWorldScale(m_handle); } set { Interop.ViewPointSetViewToWorldScale(m_handle, value); } }
+        public double FieldOfView { get { return Interop.ViewPointGetFieldOfView(m_handle); } set { Interop.ViewPointSetFieldOfView(m_handle, value); } }
+        public double AspectRatio { get { return Interop.ViewPointGetAspectRatio(m_handle); } set { Interop.ViewPointSetAspectRatio(m_handle, value); } }
+        public string Snapshot { get { return Interop.ViewPointGetSnapshot(m_handle); } set { Interop.ViewPointSetSnapshot(m_handle, value); } }
 
-        /// <summary>
-        /// When true, all components should be visible unless listed in the exceptions
-        /// When false all components should be invisible unless listed in the exceptions
-        /// Defaults to false
-        /// </summary>
-        public bool DefaultVisibility { get; set; }
-
-        /// <summary>
-        /// A list of IfcGuids of components to hide when DefaultVisibility=true or to show when DefaultVisibility=false
-        /// </summary>
-        //public IEnumerable<string> Exceptions { get; set; }
-
-        /// <summary>
-        /// Same as DefaultVisibility but restricted to spaces only
-        /// </summary>
-        public bool SpacesVisible { get; set; }
-
-        /// <summary>
-        /// Same as DefaultVisibility but restricted to space boundaries only
-        /// </summary>
-        public bool SpaceBoundariesVisible {  get; set; }
-
-        /// <summary>
-        /// Same as DefaultVisibility but restricted to openings only
-        /// </summary>
-        public bool OpeningsVisible { get; set; }
+        public Interop.BCFPoint GetCameraViewPoint() { Interop.BCFPoint point; if (!Interop.ViewPointGetCameraViewPoint(m_handle, out point)) throw new ApplicationException(Project.ErrorsGet()); return point; }
+        public bool SetCameraViewPoint(Interop.BCFPoint value) { return Interop.ViewPointSetCameraViewPoint(m_handle, value); }
         
+        public Interop.BCFPoint GetCameraDirection() { Interop.BCFPoint point; if (!Interop.ViewPointGetCameraDirection(m_handle, out point)) throw new ApplicationException(Project.ErrorsGet()); return point; } 
+        public bool SetCameraDirection (Interop.BCFPoint value) { return Interop.ViewPointSetCameraDirection(m_handle, value); }
+        
+        public Interop.BCFPoint GetCameraUpVector() { Interop.BCFPoint point; if (!Interop.ViewPointGetCameraUpVector(m_handle, out point)) throw new ApplicationException(Project.ErrorsGet()); return point; } 
+        public bool SetCameraUpVector (Interop.BCFPoint value) { return Interop.ViewPointSetCameraUpVector(m_handle, value); }
+
         /// <summary>
         /// 
         /// </summary>
-        //public Camera CameraType { get; set; }
-
-        /// <summary>
-        /// Camera location
-        /// </summary>
-        //public Point CameraViewPoint {  get; set; }
-
-        /// <summary>
-        /// Camera direction
-        /// </summary>
-        //public Point CameraDirection { get; set; }
-
-        /// <summary>
-        /// Camera up vector
-        /// </summary>
-        //public Point CameraUpVector {  get; set; }
-
-        /// <summary>
-        /// For perspective camera: FieldOfView - The entire vertical field of view angle of the camera, expressed in degrees. Valid range 0 to 180 exclusive.
-        /// For orthogonal camera: ViewToWorldScale - Vertical scaling from view to world  
-        /// </summary>
-        public double CameraRange { get; set; }
-
-        /// <summary>
-        /// Proportional relationship between the width and the height of the view(w/h). Assume 1.0 when reading previous BCF versions.
-        /// </summary>
-        public double AspectRatio { get; set; }
-
-        /// <summary>
-        /// Parameter for sorting
-        /// </summary>
-        public int Index { get; set; }
-
-        /// <summary>
-        /// Adds snapshot for the viewpoint.
-        /// png or jpeg file path.
-        /// The file will be copied to BCF data.
-        /// Passing null will remove snapshot
-        /// </summary>
-        public void AddSnapshot(string? filePath) { }
-
-        /// <summary>
-        /// File path to viewpoint snapshot (png or jpeg)
-        /// </summary>
-        public string? Snapshot { get; }
+        public Project Project { get { return m_topic.Project; } }
 
         /// <summary>
         /// 
         /// </summary>
         public bool Remove()
         {
-            return Interop.ViewPointRemove(m_handle); 
+            return Interop.ViewPointRemove(m_handle);
         }
 
         #region IMPLEMENTATION
@@ -107,7 +54,7 @@ namespace RDF.BCF
         internal ViewPoint(Topic topic, IntPtr handle)
         {
             m_topic = topic;
-            m_handle = handle;  
+            m_handle = handle;
         }
 
         #endregion IMPLEMENTATION

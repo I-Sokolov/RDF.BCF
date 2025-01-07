@@ -341,7 +341,7 @@ namespace CSExample
         {
             var topic = bcf.Topics[0];
 
-            GetViewPoints(topic);
+            CheckViewPoints(topic);
 
             var comment = topic.Comments[0];
 
@@ -361,25 +361,68 @@ namespace CSExample
             }
         }
 
-        static ViewPoint SetViewPoints (Topic topic)
+        static ViewPoint SetViewPoints(Topic topic)
         {
             ASSERT(topic.ViewPoints.Count == 0);
 
             topic.CreateViewPoint();
-            topic.CreateViewPoint();
-            var vp = topic.CreateViewPoint();
+            ASSERT(topic.ViewPoints[0].Guid.Length > 0);
+            ASSERT(topic.ViewPoints[0].Snapshot.Length == 0);
+
+            for (int i = 2; i < 4; i++)
+            {
+                var vp = topic.CreateViewPoint($"ID-{i}");
+
+                vp.DefaultVisibility = (i == 0);
+                vp.SpaceVisible = (i != 0);
+                vp.SpaceBoundariesVisible = (i == 0);
+                vp.OpeningsVisible = (i != 0);
+                vp.CameraType = (i == 0) ? Interop.BCFCamera.Perspective : Interop.BCFCamera.Orthogonal;
+                vp.SetCameraViewPoint(new Interop.BCFPoint() { x = i, y = i + .1, z = i + .2 });
+                vp.SetCameraDirection(new Interop.BCFPoint() { x = i + .3, y = i + .4, z = i + .5 });
+                vp.SetCameraUpVector(new Interop.BCFPoint() { x = i + .6, y = i + .7, z = i + .8 });
+                vp.ViewToWorldScale = i * 3;
+                vp.FieldOfView = i * 3.5;
+                vp.AspectRatio = i * 4;
+                vp.Snapshot = $"Snap {i}";
+            }
 
             ASSERT(topic.ViewPoints.Count == 3);
 
-            ASSERT(vp.Remove());
+            ASSERT(topic.ViewPoints[0].Remove());
             ASSERT(topic.ViewPoints.Count == 2);
 
             return topic.ViewPoints[0];
         }
 
-        static void GetViewPoints(Topic topic)
+        static bool EQ(Interop.BCFPoint pt1, Interop.BCFPoint pt2)
+        {
+            return pt1.x == pt2.x && pt1.y == pt2.y && pt1.z == pt2.z;
+        }
+
+        static void CheckViewPoints(Topic topic)
         {
             ASSERT(topic.ViewPoints.Count == 2);
+
+            for (int i = 2; i < 4; i++)
+            {
+                var vp = topic.ViewPoints[i - 2];
+
+                ASSERT(vp.Guid == $"ID-{i}");
+
+                ASSERT(vp.DefaultVisibility == (i == 0));
+                ASSERT(vp.SpaceVisible == (i != 0));
+                ASSERT(vp.SpaceBoundariesVisible == (i == 0));
+                ASSERT(vp.OpeningsVisible == (i != 0));
+                ASSERT(vp.CameraType == ((i == 0) ? Interop.BCFCamera.Perspective : Interop.BCFCamera.Orthogonal));
+                ASSERT(EQ(vp.GetCameraViewPoint(), new Interop.BCFPoint() { x = i, y = i + .1, z = i + .2 }));
+                ASSERT(EQ(vp.GetCameraDirection(), new Interop.BCFPoint() { x = i + .3, y = i + .4, z = i + .5 }));
+                ASSERT(EQ(vp.GetCameraUpVector(), new Interop.BCFPoint() { x = i + .6, y = i + .7, z = i + .8 }));
+                ASSERT(vp.ViewToWorldScale == i * 3);
+                ASSERT(vp.FieldOfView == i * 3.5);
+                ASSERT(vp.AspectRatio == i * 4);
+                ASSERT(vp.Snapshot == $"Snap {i}");
+            }
         }
     }
 }
