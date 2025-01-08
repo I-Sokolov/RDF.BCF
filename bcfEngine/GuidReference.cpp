@@ -22,3 +22,14 @@ void GuidReference::Read(_xml::_element& elem, const std::string& /*folder*/)
         ATTR_GET(Guid)
     ATTRS_END(UnknownNames::NotAllowed)
 }
+
+/// <summary>
+/// 
+/// </summary>
+void GuidReference::Write(_xml_writer& writer, const std::string&, const char* tag)
+{
+    XMLFile::Attributes attr;
+    ATTR_ADD(Guid);
+
+    writer.writeTag(tag, attr, "");
+}

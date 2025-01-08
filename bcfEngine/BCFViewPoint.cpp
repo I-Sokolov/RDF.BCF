@@ -58,6 +58,28 @@ void BCFViewPoint::Read(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
+void BCFViewPoint::Write(_xml_writer& writer, const std::string& folder, const char* /*tag*/)
+{
+    //TODO - write snapshot and viewdefinition file
+
+    Attributes attr;
+    ATTR_ADD(Guid);
+
+    WRITE_ELEM(ViewPoint);
+}
+
+/// <summary>
+/// 
+/// </summary>
+void BCFViewPoint::Write_ViewPoint(_xml_writer& writer, const std::string& folder)
+{
+    WRITE_CONTENT(Viewpoint);
+    WRITE_CONTENT(Snapshot);
+}
+
+/// <summary>
+/// 
+/// </summary>
 void BCFViewPoint::ReadRoot(_xml::_element& elem, const std::string& folder)
 {
     ATTRS_START

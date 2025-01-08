@@ -73,7 +73,6 @@ public: // Methods
 	void writeStartTag(const string& strTag, const vector<pair<string, string>>& vecAttributes)
 	{
 		VERIFY_STLOBJ_IS_NOT_EMPTY(strTag);
-		VERIFY_STLOBJ_IS_NOT_EMPTY(vecAttributes);
 
 		*getOutputStream() << "\n";
 		writeIndent();
@@ -108,7 +107,8 @@ public: // Methods
 	void writeTag(const string& strTag, const vector<pair<string, string>>& vecAttributes, const string& strValue)
 	{
 		writeStartTag(strTag, vecAttributes);
-		write(strValue);
+		if (!strValue.empty())
+			write(strValue);
 		writeEndTag(strTag, false);
 	}
 

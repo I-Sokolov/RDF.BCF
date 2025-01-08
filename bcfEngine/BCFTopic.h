@@ -62,11 +62,17 @@ public:
 private:
     //XMLFile implementation
     virtual const char* XMLFileName() override { return "markup.bcf"; }
+    virtual const char* XSDName() override { return "markup.xsd"; }
+    virtual const char* RootElemName() { return "Markup"; }
     virtual void ReadRoot(_xml::_element& elem, const std::string& folder) override;
+    virtual void WriteRoot(_xml_writer& writer, const std::string& folder) override;
 
 private:
     void Read_Header(_xml::_element& elem, const std::string& folder);
     void Read_Topic(_xml::_element& elem, const std::string& folder);
+
+    void Write_Header(_xml_writer& writer, const std::string& folder);
+    void Write_Topic(_xml_writer& writer, const std::string& folder);
 
     bool UpdateAuthor();
 

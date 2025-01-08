@@ -42,6 +42,33 @@ void BCFFile::Read(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
+void BCFFile::Write(_xml_writer& writer, const std::string& folder, const char* /*tag*/)
+{
+    if (!m_Reference.empty() && !GetIsExternal()) {
+        assert(!"copy file");
+    }
+
+    XMLFile::Attributes attr;
+    ATTR_ADD(IsExternal);
+    ATTR_ADD(IfcProject);
+    ATTR_ADD(IfcSpatialStructureElement);
+
+    WRITE_ELEM(File);
+}
+
+/// <summary>
+/// 
+/// </summary>
+void BCFFile::Write_File(_xml_writer& writer, const std::string& folder)
+{
+    WRITE_CONTENT(Filename);
+    WRITE_CONTENT(Date);
+    WRITE_CONTENT(Reference);
+}
+
+/// <summary>
+/// 
+/// </summary>
 bool BCFFile::Remove(void)
 {
     return m_topic.FileRemove(this);

@@ -41,11 +41,35 @@ void BCFTopic::ReadRoot(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
+void BCFTopic::WriteRoot(_xml_writer& writer, const std::string& folder)
+{
+    Attributes attr;
+
+    WRITE_ELEM(Header);
+
+    ATTR_ADD(Guid);
+    ATTR_ADD(ServerAssignedId);
+    ATTR_ADD(TopicStatus);
+    ATTR_ADD(TopicType);
+    WRITE_ELEM(Topic);
+}
+
+/// <summary>
+/// 
+/// </summary>
 void BCFTopic::Read_Header(_xml::_element& elem, const std::string& folder)
 {
     CHILDREN_START
         CHILD_GET_LIST(Files, File)
     CHILDREN_END
+}
+
+/// <summary>
+/// 
+/// </summary>
+void BCFTopic::Write_Header(_xml_writer& writer, const std::string& folder)
+{
+    WRITE_LIST(File)
 }
 
 /// <summary>
@@ -81,6 +105,27 @@ void BCFTopic::Read_Topic(_xml::_element& elem, const std::string& folder)
         CHILD_GET_LIST(Comments, Comment)
         CHILD_GET_LIST(Viewpoints, ViewPoint)
     CHILDREN_END
+}
+
+void BCFTopic::Write_Topic(_xml_writer& writer, const std::string& folder)
+{
+    WRITE_CONTENT(Title);
+    WRITE_LIST(ReferenceLink);
+    WRITE_CONTENT(Priority);
+    WRITE_CONTENT(Index);
+    WRITE_LIST(Label);
+    WRITE_CONTENT(CreationDate);
+    WRITE_CONTENT(CreationAuthor);
+    WRITE_CONTENT(ModifiedDate);
+    WRITE_CONTENT(ModifiedAuthor);
+    WRITE_CONTENT(DueDate);
+    WRITE_CONTENT(AssignedTo);
+    WRITE_CONTENT(Description);
+    WRITE_CONTENT(Stage);
+    WRITE_LIST(DocumentReference);
+    WRITE_LIST(RelatedTopic);
+    WRITE_LIST(Comment);
+    WRITE_LIST(Viewpoint);
 }
 
 /// <summary>

@@ -12,8 +12,6 @@ struct BCFComment : public BCFObject
 public:
     BCFComment(BCFTopic& topic, const char* guid = NULL);
 
-    void Read(_xml::_element& elem, const std::string& folder);
-
 public:
     const char* GetGuid() { return m_Guid.c_str(); }
     const char* GetDate() { return m_Date.c_str(); }
@@ -30,6 +28,13 @@ public:
 
 private:
     bool UpdateAuthor();
+
+public:
+    void Read(_xml::_element& elem, const std::string& folder);
+    void Write(_xml_writer& writer, const std::string& folder, const char* tag);
+
+private:
+    void Write_Comment(_xml_writer& writer, const std::string& folder);
 
 private:
     BCFTopic&                  m_topic;

@@ -41,6 +41,30 @@ void BCFComment::Read(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
+void BCFComment::Write(_xml_writer& writer, const std::string& folder, const char* /*tag*/)
+{
+    XMLFile::Attributes attr;
+    ATTR_ADD(Guid);
+
+    WRITE_ELEM(Comment);
+}
+
+/// <summary>
+/// 
+/// </summary>
+void BCFComment::Write_Comment(_xml_writer& writer, const std::string& folder)
+{
+    WRITE_CONTENT(Date);
+    WRITE_CONTENT(Author);
+    WRITE_CONTENT(Comment);
+    WRITE_CONTENT(ModifiedDate);
+    WRITE_CONTENT(ModifiedAuthor);
+    WRITE_MEMBER(Viewpoint);
+}
+
+/// <summary>
+/// 
+/// </summary>
 BCFViewPoint* BCFComment::GetViewPoint()
 {
     if (*m_Viewpoint.GetGuid()) {

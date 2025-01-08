@@ -8,10 +8,6 @@ struct BCFFile : public BCFObject
 public:
     BCFFile(BCFTopic& topic);
 
-    void Read(_xml::_element& elem, const std::string& folder);
-
-    bool Remove(void);
-
 public:
     bool        GetIsExternal                   () { return StrToBool (m_IsExternal); }
     const char* GetFilename                     () { return m_Filename.c_str(); }
@@ -27,6 +23,14 @@ public:
     bool SetIfcProject                   (const char* val) { m_IfcProject.assign(val); return true;}
     bool SetIfcSpatialStructureElement   (const char* val) { m_IfcSpatialStructureElement.assign(val); return true;}
 
+public:
+    bool Remove(void);
+
+    void Read(_xml::_element& elem, const std::string& folder);
+    void Write(_xml_writer& writer, const std::string& folder, const char* tag);
+
+private:
+    void Write_File(_xml_writer& writer, const std::string& folder);
 
 private:
     BCFTopic& m_topic;

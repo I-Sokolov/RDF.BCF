@@ -24,6 +24,7 @@
 #include <set>
 
 #include "XMLparser/_xml.h"
+#include "XMLparser/_xml_writer.h"
 
 typedef std::list<std::string> StringList;
 typedef std::set<std::string> StringSet;

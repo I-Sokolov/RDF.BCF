@@ -17,8 +17,6 @@ struct BCFViewPoint : public XMLFile
 public:
     BCFViewPoint(BCFTopic& topic, const char* guid = NULL);
 
-    void Read(_xml::_element& elem, const std::string& folder);
-
 public:
     const char* GetGuid() { return m_Guid.c_str(); }
 
@@ -74,6 +72,10 @@ public:
 
     bool Remove();
 
+public:
+    void Read(_xml::_element& elem, const std::string& folder);
+    void Write(_xml_writer& writer, const std::string& folder, const char* tag);
+
 private:
     //XMLFile implementation
     virtual const char* XMLFileName() override { return m_Viewpoint.c_str(); }
@@ -85,6 +87,8 @@ private:
     void Read_ViewSetupHints(_xml::_element& elem, const std::string& folder);
     void Read_PerspectiveCamera(_xml::_element& elem, const std::string& folder);
     void Read_OrthogonalCamera(_xml::_element& elem, const std::string& folder);
+
+    void Write_ViewPoint(_xml_writer& writer, const std::string& folder);
 
 private:
     BCFTopic&                   m_topic;

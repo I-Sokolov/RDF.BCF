@@ -157,7 +157,13 @@ bool BCFProject::WriteTopics(const std::string& bcfFolder)
     bool ok = true;
 
     for (auto topic : m_topics.Items()) {
-        ok = ok && topic->WriteFile(bcfFolder);
+
+        std::string topicFolder(bcfFolder);
+        FileSystem::AddPath(topicFolder, topic->GetGuid());
+
+        ok = ok && FileSystem::CreateDir(topicFolder.c_str(), log());
+
+        ok = ok && topic->WriteFile(topicFolder);
     }
 
     return ok;

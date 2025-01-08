@@ -41,8 +41,23 @@ bool XMLFile::WriteFile(const std::string& bcfFolder)
     FileSystem::AddPath(path, XMLFileName());
 
     try {
-        //_xml::_document doc(nullptr);
-        //doc.
+        _xml_writer xmlWriter(path.c_str());
+
+        xmlWriter.write("<?version=\"1.0\" encoding=\"utf-8\"?>");
+        xmlWriter.writeComment("RDF BCF engine build " __DATE__ ". http://rdf.bg.");
+
+        Attributes attr;
+        attr.Add("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        attr.Add("xsi:schemaLocation", XSDName());
+
+        xmlWriter.writeStartTag(RootElemName(), attr);
+        xmlWriter.indent()++;
+
+        WriteRoot(xmlWriter, path);
+
+        xmlWriter.indent()--;
+        xmlWriter.writeEndTag(RootElemName());
+
         ok = true;
     }
     catch (std::exception& ex) {
@@ -66,4 +81,12 @@ XMLText::XMLText(BCFTopic& topic)
 void XMLText::Read(_xml::_element& elem, const std::string&) 
 { 
     m_str.assign(elem.getContent()); 
+}
+
+/// <summary>
+/// 
+/// </summary>
+void XMLText::Write(_xml_writer& writer, const std::string&, const char* tag)
+{ 
+    writer.writeTag(tag, m_str); 
 }

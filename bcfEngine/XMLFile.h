@@ -12,6 +12,12 @@
 class XMLFile : public BCFObject
 {
 public:
+    struct Attributes : public vector<pair<string, string>>
+    {
+        void Add(const char* name, const char* value) { if (value && *value) push_back(Attributes::value_type(name, value)); }
+    };
+
+public:
     XMLFile(BCFProject& project) : BCFObject(project) {}
 
     bool ReadFile(const std::string& folder);
@@ -19,8 +25,10 @@ public:
 
 protected:
     virtual const char* XMLFileName() = NULL;
-    virtual void ReadRoot(_xml::_element& elem, const std::string& folder) = NULL;
-
+    virtual const char* XSDName() { return "unk.xsd"; }
+    virtual const char* RootElemName() { return "Unknonw"; }
+    virtual void ReadRoot(_xml::_element& elem, const std::string& folder) = NULL;    
+    virtual void WriteRoot(_xml_writer& writer, const std::string& folder) {}
 };
 
 
@@ -33,10 +41,44 @@ public:
     XMLText(BCFTopic&);
     
     void Read(_xml::_element& elem, const std::string&);
+    void Write(_xml_writer& writer, const std::string&, const char* tag);
 
 private:
     std::string m_str;
 };
+
+/// <summary>
+/// XML writing macros
+/// </summary>
+#define ATTR_ADD(name) attr.Add(#name,m_##name.c_str())
+
+#define WRITE_CONTENT(name)   if (!m_##name.empty()) writer.writeTag(#name, m_##name)
+
+#define WRITE_MEMBER(name)    m_##name.Write(writer, folder, #name)
+
+#define WRITE_ELEM(name)                        \
+    writer.writeStartTag(#name, attr);          \
+    writer.indent()++;                          \
+                                                \
+    Write_##name(writer, folder);               \
+                                                \
+    writer.indent()--;                          \
+    writer.writeEndTag(#name)
+
+#define WRITE_LIST_EX(list, elem)               \
+    if (!m_##list.Items().empty()) {            \
+        writer.writeStartTag(#list);            \
+        writer.indent()++;                      \
+                                                \
+        for (auto elem : m_##list.Items()) {    \
+            elem->Write(writer, folder, #elem); \
+        }                                       \
+                                                \
+        writer.indent()--;                      \
+        writer.writeEndTag(#list);              \
+    }
+
+#define WRITE_LIST(elem) WRITE_LIST_EX(##elem##s, elem)
 
 /// <summary>
 /// XML reading macros
