@@ -28,8 +28,10 @@ void GuidReference::Read(_xml::_element& elem, const std::string& /*folder*/)
 /// </summary>
 void GuidReference::Write(_xml_writer& writer, const std::string&, const char* tag)
 {
-    XMLFile::Attributes attr;
-    ATTR_ADD(Guid);
+    if (!m_Guid.empty()) {
+        XMLFile::Attributes attr;
+        ATTR_ADD(Guid);
 
-    writer.writeTag(tag, attr, "");
+        writer.writeTag(tag, attr, "");
+    }
 }

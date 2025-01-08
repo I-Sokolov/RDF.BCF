@@ -43,7 +43,7 @@ bool XMLFile::WriteFile(const std::string& bcfFolder)
     try {
         _xml_writer xmlWriter(path.c_str());
 
-        xmlWriter.write("<?version=\"1.0\" encoding=\"utf-8\"?>");
+        xmlWriter.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
         xmlWriter.writeComment("RDF BCF engine build " __DATE__ ". http://rdf.bg.");
 
         Attributes attr;

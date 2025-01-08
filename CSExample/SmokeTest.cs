@@ -350,7 +350,7 @@ namespace CSExample
 
             ASSERT(comment.Text == "Text comment");
             ASSERT(comment.ViewPoint!=null && comment.ViewPoint.Guid == "ID-2");
-            ASSERT(comment.Date.Length == 28);
+            ASSERT(comment.Date.Length == 29);
             ASSERT(comment.Author == "Smoke-tester");
             if (newFile)
             {
@@ -359,7 +359,7 @@ namespace CSExample
             }
             else
             {
-                ASSERT(comment.ModifiedDate.Length == 28);
+                ASSERT(comment.ModifiedDate.Length == 29);
                 ASSERT(comment.ModifiedAuthor == "Smoke-Editor");
             }
         }

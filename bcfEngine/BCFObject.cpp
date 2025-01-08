@@ -19,7 +19,11 @@ std::string BCFObject::GetCurrentTime()
     std::ostringstream oss;
     oss << std::put_time(&tm, "%FT%T.") << std::setfill('0') << std::setw(3) << ms.count() << std::put_time(&tm, "%z");
 
-    return oss.str();
+    auto str = oss.str();
+
+    str.insert(str.size()-2, 1, ':');
+
+    return str;
 }
 
 /// <summary>
