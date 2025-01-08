@@ -4,7 +4,6 @@
 #include "Archivator.h"
 #include "FileSystem.h"
 
-
 /// <summary>
 /// 
 /// </summary>
@@ -15,6 +14,7 @@ BCFProject::BCFProject(const char* projectId)
     , m_autoExtentSchema(true)
     , m_topics(*this)
 {
+    BCFObject::gObjectCounter++;
 }
 
 /// <summary>
@@ -22,6 +22,48 @@ BCFProject::BCFProject(const char* projectId)
 /// </summary>
 BCFProject::~BCFProject()
 {
+    CleanWorkingFolders();
+    BCFObject::gObjectCounter--;
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFProject::Delete(void)
+{
+    if (CleanWorkingFolders()) {
+        delete this;
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFProject::CleanWorkingFolders(bool keepLast)
+{
+    StringList keep;
+    if (keepLast && m_workingFolders.size()) {
+        keep.push_back(m_workingFolders.back());
+        m_workingFolders.pop_back();
+    }
+
+    bool ok = true;
+    for (auto& folder : m_workingFolders) {
+        bool removed = FileSystem::Remove(folder.c_str(), m_log);
+        if (!removed) {
+            keep.push_front(folder);
+            ok = false;
+        }
+    }
+
+    m_workingFolders.clear();
+    std::swap(m_workingFolders, keep);
+
+    return ok;
 }
 
 /// <summary>
@@ -33,7 +75,8 @@ bool BCFProject::Read(const char* bcfFilePath)
     bool ok = FileSystem::CreateTempDir(bcfFolder, m_log);
 
     if (ok) {
-        
+        m_workingFolders.push_back(bcfFolder);
+
         Archivator ar(m_log);
         ok = ar.Unpack(bcfFilePath, bcfFolder.c_str());
 
@@ -42,9 +85,6 @@ bool BCFProject::Read(const char* bcfFilePath)
         ok = ok && m_extensions.ReadFile(bcfFolder);
         
         ok = ok && ReadTopics(bcfFolder);
-
-        bool removed = FileSystem::Remove(bcfFolder.c_str(), m_log);
-        ok = ok && removed;
     }
 
     return ok;
@@ -65,6 +105,8 @@ bool BCFProject::Write(const char* bcfFilePath, BCFVersion version)
     bool ok = FileSystem::CreateTempDir(bcfFolder, m_log);
 
     if (ok) {
+        m_workingFolders.push_back(bcfFolder);
+
         ok = ok && WriteTopics(bcfFolder);
 
         ok = ok && m_version.WriteFile(bcfFolder);
@@ -75,15 +117,15 @@ bool BCFProject::Write(const char* bcfFilePath, BCFVersion version)
             Archivator ar(m_log);
             ok = ar.Pack(bcfFolder.c_str(), bcfFilePath);
         }
+    }
 
-        bool removed = FileSystem::Remove(bcfFolder.c_str(), m_log);
-        ok = ok && removed;
+    //on successfull write we can free old working folders
+    if (ok) {
+        ok = CleanWorkingFolders(true);
     }
 
     return ok;
 }
-
-void push_back(BCFTopic* topic);
 
 /// <summary>
 /// 

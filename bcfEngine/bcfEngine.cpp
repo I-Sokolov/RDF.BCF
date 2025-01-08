@@ -79,11 +79,12 @@ RDFBCF_EXPORT BCFProject* bcfProjectCreate(const char* projectId)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT void bcfProjectDelete(BCFProject* project)
+RDFBCF_EXPORT bool bcfProjectDelete(BCFProject* project)
 {
     if (project) {
-        delete project;
+        return project->Delete();
     }
+    return true;
 }
 
 /// <summary>

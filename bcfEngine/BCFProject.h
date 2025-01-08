@@ -16,11 +16,12 @@ private:
 
 public:
     BCFProject(const char* projectId = NULL);
+    bool Delete(void); //if failed you can still use it to request errors
+
+private:
     ~BCFProject();
 
 public:
-    Log& log() { return m_log; }
-
     bool Read(const char* bcfFilePath);
     bool Write(const char* bcfFilePath, BCFVersion version);
 
@@ -38,10 +39,13 @@ public:
     bool TopicRemove(BCFTopic* topic);
     BCFTopic* TopicIterate(BCFTopic* prev);
 
+public: //internal
+    Log& log() { return m_log; }
+
 private:
     bool ReadTopics(const std::string& bcfFolder);
     bool WriteTopics(const std::string& bcfFolder);
-
+    bool CleanWorkingFolders(bool keepLast = false);
 
 private:
     Log         m_log;
@@ -54,5 +58,7 @@ private:
     bool        m_autoExtentSchema;
 
     ListGuid<BCFTopic>  m_topics;
+
+    StringList  m_workingFolders;
 };
 

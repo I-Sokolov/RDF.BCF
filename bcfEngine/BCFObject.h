@@ -11,8 +11,11 @@ struct BCFPoint;
 struct BCFObject
 {
 public:
-    BCFObject(BCFProject& project) : m_project(project) {}
-    virtual ~BCFObject() {}
+    static long gObjectCounter;
+
+public:
+    BCFObject(BCFProject& project) : m_project(project) { gObjectCounter++; }
+    virtual ~BCFObject() { gObjectCounter--; }
    
 public:
     BCFProject& Project() { return m_project; }

@@ -18,7 +18,7 @@ extern "C" {
     /// <summary>
     /// 
     /// </summary>
-    RDFBCF_EXPORT void bcfProjectDelete(BCFProject* project);
+    RDFBCF_EXPORT bool bcfProjectDelete(BCFProject* project);
 
     /// <summary>
     /// 

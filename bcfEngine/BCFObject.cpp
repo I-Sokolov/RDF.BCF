@@ -3,6 +3,8 @@
 #include "BCFProject.h"
 #include "XMLPoint.h"
 
+long BCFObject::gObjectCounter = 0;
+
 /// <summary>
 /// 
 /// </summary>

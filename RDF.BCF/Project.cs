@@ -114,15 +114,14 @@
         {
             if (m_handle != IntPtr.Zero)
             {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects)
-                }
-
                 var remainedErrors = RDF.BCF.Interop.ErrorsGet(m_handle);
                 System.Diagnostics.Trace.Assert(remainedErrors.Length == 0);
 
-                RDF.BCF.Interop.ProjectDelete(m_handle);
+                if (!RDF.BCF.Interop.ProjectDelete(m_handle))
+                {
+                    var errors = RDF.BCF.Interop.ErrorsGet(m_handle);
+                    System.Diagnostics.Trace.Assert(false);
+                }
 
                 m_handle = IntPtr.Zero;
             }
