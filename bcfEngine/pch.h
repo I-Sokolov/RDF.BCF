@@ -13,14 +13,6 @@
 #define RDFBCF_EXPORT 
 #endif
 
-
-#define _CRT_SECURE_NO_WARNINGS
-
-//for XMLparser
-#define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
-#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
-#define _HAS_STD_BYTE 0
-
 // add headers that you want to pre-compile here
 #include "framework.h"
 

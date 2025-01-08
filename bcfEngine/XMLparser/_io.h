@@ -3,13 +3,18 @@
 #include "_errors.h"
 #include "_string.h"
 
-#include <experimental/filesystem>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <map>
 
+#ifdef _WINDOWS
+#include <experimental/filesystem>
 namespace fs = std::experimental::filesystem;
+#else
+#include <filesystem>
+namespace fs = std::filesystem;
+#endif
 
 // ************************************************************************************************
 namespace _io

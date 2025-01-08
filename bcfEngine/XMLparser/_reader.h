@@ -1,19 +1,17 @@
 #pragma once
 
 #include "_errors.h"
+#include "_io.h"
 
 #include <iostream>
 #include <fstream>
-
 #include <codecvt>
 #include <fcntl.h>
-#include <io.h>
-
 #include <string>
 using namespace std;
 
 // ********************************************************************************************
-const char LF					= '\n'; // BCFLine Feed
+const char LF					= '\n'; // Line Feed
 const char CR					= '\r'; // Carriage Return
 const char TAB					= '\t';
 const char SPACE				= ' ';
@@ -45,7 +43,7 @@ public: // Methods
 	_stream_reader();
 	virtual ~_stream_reader();
 
-	void init(istream* m_pStream);
+	void init(istream* pStream);
 
 	/// <summary>
 	/// https://cplusplus.com/reference/streambuf/basic_streambuf/snextc/
