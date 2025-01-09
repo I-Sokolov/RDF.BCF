@@ -244,14 +244,41 @@ namespace CSExample
                 bool ok = bcf.SetAuthor("Smoke-tester", true);
                 ASSERT(ok);
 
-                SetTopicAttributes(bcf, true);
+                SetTopicAttributes(bcf);
+
                 GetTopicAttributes(bcf, true);
+
+                ok = bcf.FileWrite("TopicsTest.bcf");
+                ASSERT(ok);
             }
 
-            //TODO - save, read, modify
-        }
+            using (var bcf = new RDF.BCF.Project())
+            {
+                var ok = bcf.FileRead("TopicsTest.bcf");
+                ASSERT(ok);
 
-        static private void SetTopicAttributes(RDF.BCF.Project bcf, bool newFile)
+                GetTopicAttributes(bcf, true);
+
+                bcf.SetAuthor("Smoke-Editor", true);
+
+                bcf.Topics[0].Title = "Modified title";
+
+                GetTopicAttributes(bcf, false);
+
+                ok = bcf.FileWrite("TopicsTest2.bcf");
+                ASSERT(ok);
+            }
+
+            using (var bcf = new RDF.BCF.Project())
+            {
+                var ok = bcf.FileRead("TopicsTest2.bcf");
+                ASSERT(ok);
+
+                GetTopicAttributes(bcf, false);
+            }
+        }
+        
+        static private void SetTopicAttributes(RDF.BCF.Project bcf)
         {
             var topic = bcf.AddTopic("Type1", "Title1", "Status1");
             bcf.AddTopic("Type1", "Title1", "Status1", "myGuid");
@@ -304,11 +331,9 @@ namespace CSExample
             if (topic != null)
             {
                 ASSERT(topic.TopicType == "TopicType");
-                ASSERT(topic.Title == "Title");
                 ASSERT(topic.TopicStatus == "Status");
                 ASSERT(topic.ServerAssignedId == "ServerAssignedId");
                 ASSERT(topic.TopicType == "TopicType");
-                ASSERT(topic.Title == "Title");
                 ASSERT(topic.Priority == "Priority");
                 ASSERT(topic.DueDate == "DueDate");
                 ASSERT(topic.AssignedTo == "AssignedTo");
@@ -320,11 +345,13 @@ namespace CSExample
                 ASSERT(topic.CreationAuthor == "Smoke-tester");
                 if (newFile)
                 {
+                    ASSERT(topic.Title == "Title");
                     ASSERT(topic.ModifiedDate.Length == 0);
                     ASSERT(topic.ModifiedAuthor.Length == 0);
                 }
                 else
                 {
+                    ASSERT(topic.Title == "Modified title");
                     ASSERT(topic.ModifiedDate.Length > 0);
                     ASSERT(topic.ModifiedAuthor == "Smoke-Editor");
                 }

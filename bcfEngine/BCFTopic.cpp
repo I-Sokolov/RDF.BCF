@@ -262,7 +262,7 @@ bool BCFTopic::SetStage(const char* val)
 /// </summary>
 bool BCFTopic::UpdateAuthor()
 {
-    return __super::UpdateAuthor(m_bReadFromFile ? m_ModifiedAuthor : m_CreationAuthor, m_bReadFromFile ? m_ModifiedAuthor : m_CreationDate);
+    return __super::UpdateAuthor(m_bReadFromFile ? m_ModifiedAuthor : m_CreationAuthor, m_bReadFromFile ? m_ModifiedDate : m_CreationDate);
 }
 
 /// <summary>
