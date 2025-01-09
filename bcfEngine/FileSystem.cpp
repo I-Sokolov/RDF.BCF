@@ -45,6 +45,38 @@ bool FileSystem::GetDirContent(const char* folderPath, DirList& elems, Log& log)
 /// <summary>
 /// 
 /// </summary>
+bool FileSystem::Exists(const char* path)
+{
+    return std::filesystem::exists(path);
+}
+
+//returns final path 
+std::string FileSystem::CopyFile(const char* path, const char* targetDir, Log& log)
+{
+    try {
+        std::filesystem::path src(path);
+
+        auto filename = src.filename();
+
+        std::filesystem::path dst(targetDir);
+        dst /= (filename);
+
+        if (!std::filesystem::copy_file(src, dst)) {
+            log.add(Log::Level::error, "File copy", "Can not copy file '%s' to '%s'", src.c_str(), dst.c_str());
+            return "";
+        }
+
+        return dst.string();
+    }
+    catch (std::exception& expt) {
+        log.add(Log::Level::error, "File copy", "Can not copy '%s' to '%s': %s", path, targetDir, expt.what());
+        return "";
+    }
+}
+
+/// <summary>
+/// 
+/// </summary>
 bool FileSystem::Remove(const char* path, Log& log)
 {
     try {

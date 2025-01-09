@@ -44,13 +44,17 @@ void BCFViewPoint::Read(_xml::_element& elem, const std::string& folder)
     CHILDREN_END
 
     if (!ReadFile(folder)) {
-        throw std::exception();
+        throw std::exception("Failed to read viewpoint");
     }
 
     //
     if (!m_Snapshot.empty()) {
         std::string filePath(folder);
         FileSystem::AddPath(filePath, m_Snapshot.c_str());
+        if (!FileSystem::Exists(filePath.c_str())) {
+            log().add(Log::Level::error, "File read", "Snaphot file does not exist: %s", m_Snapshot.c_str());
+            throw std::exception("Failed to read viewpoint");
+        }
         std::swap(m_Snapshot, filePath);
     }
 }
@@ -60,7 +64,12 @@ void BCFViewPoint::Read(_xml::_element& elem, const std::string& folder)
 /// </summary>
 void BCFViewPoint::Write(_xml_writer& writer, const std::string& folder, const char* /*tag*/)
 {
-    //TODO - write snapshot
+    if (!m_Snapshot.empty()) {
+        m_Snapshot = FileSystem::CopyFile(m_Snapshot.c_str(), folder.c_str(), log());
+        if (m_Snapshot.empty()) {
+            throw std::exception("Failed to save snapshot");
+        }
+    }
 
     if (!WriteFile(folder)) {
         throw std::exception();
