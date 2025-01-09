@@ -35,7 +35,7 @@ public: // Methods
 		m_pOutputStream = new wofstream(szOutputFile, std::ios::out | std::ios::app);
 
 		// UTF-8 locale
-		std::locale loc(std::locale(), new std::codecvt_utf8<wchar_t>);
+		std::locale loc(std::locale(), new std::codecvt_utf8<char>);
 		m_pOutputStream->imbue(loc);
 	}
 
@@ -46,8 +46,6 @@ public: // Methods
 
 	void write(const string& strText)
 	{
-		VERIFY_STLOBJ_IS_NOT_EMPTY(strText);
-
 		*getOutputStream() << strText.c_str();
 	}
 
@@ -107,8 +105,7 @@ public: // Methods
 	void writeTag(const string& strTag, const vector<pair<string, string>>& vecAttributes, const string& strValue)
 	{
 		writeStartTag(strTag, vecAttributes);
-		if (!strValue.empty())
-			write(strValue);
+		write(strValue);
 		writeEndTag(strTag, false);
 	}
 

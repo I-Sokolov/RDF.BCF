@@ -71,7 +71,7 @@ namespace CSExample
             }
         }
 
-        const string chinaUser = "My name"; // будет 好";
+        const string chinaUser = "My name будет 好";
 
         static void CheckExtensions(Project bcf)
         {
