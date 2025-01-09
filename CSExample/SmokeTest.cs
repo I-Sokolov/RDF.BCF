@@ -365,14 +365,41 @@ namespace CSExample
                 bool ok = bcf.SetAuthor("Smoke-tester", true);
                 ASSERT(ok);
 
-                SetCommentVPAttributes(bcf, true);
+                SetCommentVPAttributes(bcf);
                 GetCommentVPAttributes(bcf, true);
+
+                ok = bcf.FileWrite("TestCommentsVP.bcf");
+                ASSERT(ok);
             }
 
-            //TODO - save, read, modify
-        }
+            using (var bcf = new Project())
+            {
+                bool ok = bcf.FileRead("TestCommentsVP.bcf");
+                ASSERT(ok);
 
-        static void SetCommentVPAttributes(Project bcf, bool newFile)
+                GetCommentVPAttributes(bcf, true);
+
+                ok = bcf.SetAuthor("Smoke-Editor", true);
+                ASSERT(ok);
+
+                bcf.Topics[0].Comments[0].Text = "Modified text";
+
+                GetCommentVPAttributes(bcf, false);
+
+                ok = bcf.FileWrite("TestCommentsVP2.bcf");
+                ASSERT(ok);
+            }
+
+            using (var bcf = new Project())
+            {
+                bool ok = bcf.FileRead("TestCommentsVP2.bcf");
+                ASSERT(ok);
+
+                GetCommentVPAttributes(bcf, false);
+            }
+        }
+         
+        static void SetCommentVPAttributes(Project bcf)
         {
             var topic = bcf.AddTopic("Type", "Title", "New");
             ASSERT(topic.Comments.Count == 0);
@@ -403,38 +430,51 @@ namespace CSExample
 
             var comment = topic.Comments[0];
 
-            ASSERT(comment.Text == "Text comment");
             ASSERT(comment.ViewPoint!=null && comment.ViewPoint.Guid == "ID-2");
             ASSERT(comment.Date.Length == 29);
             ASSERT(comment.Author == "Smoke-tester");
             if (newFile)
             {
+                ASSERT(comment.Text == "Text comment");
                 ASSERT(comment.ModifiedDate.Length==0);
                 ASSERT(comment.ModifiedAuthor.Length==0);
             }
             else
             {
+                ASSERT(comment.Text == "Smoke-Editor");
                 ASSERT(comment.ModifiedDate.Length == 29);
                 ASSERT(comment.ModifiedAuthor == "Smoke-Editor");
             }
+        }
+
+        static string PathAIfc()
+        {
+            var cwd = System.IO.Directory.GetCurrentDirectory();
+            var filePath = Path.Combine(cwd, "..", "TestCases", "Architectural.ifc");
+            ASSERT(System.IO.File.Exists(filePath));
+            return filePath;
         }
 
         static void SetFiles(Topic topic)
         {
             ASSERT(topic.Files.Count == 0);
 
+
             for (int i = 0; i < 5; i++)
             {
+                bool isExternal = (i % 2 == 0);
+                var reference = isExternal ? $"File{i}" : PathAIfc();
+
                 RDF.BCF.BIMFile file;
                 if (i < 2)
                 {
-                    file = topic.AddFile($"File{i}", i % 2 == 0);
+                    file = topic.AddFile(reference, isExternal);
                 }
                 else
                 {
                     file = topic.AddFile(null);
-                    file.Filename = $"File{i}";
-                    file.Reference = file.Filename;
+                    file.Filename = reference;
+                    file.Reference = reference;
                     file.IsExternal = (i % 2 == 0);
                 }
 
@@ -455,10 +495,13 @@ namespace CSExample
 
             for (int i = 0; i < 4; i++)
             {
+                bool isExternal = (i % 2 == 0);
+                var reference = isExternal ? $"File{i}" : PathAIfc();
+
                 var file = topic.Files[i];
-                ASSERT(file.Filename == $"File{i}");
-                ASSERT(file.Reference == file.Filename);
-                ASSERT(file.IsExternal== (i % 2 == 0));                
+                ASSERT(file.Filename == reference);
+                ASSERT(file.Reference == reference);
+                ASSERT(file.IsExternal== isExternal);                
                 ASSERT(file.Date == $"Date-{i}");
                 ASSERT(file.IfcProject == $"Project-{i}");
                 ASSERT(file.IfcSpatialStructureElement == $"SPA-{i}");

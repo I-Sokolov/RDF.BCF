@@ -57,6 +57,10 @@ void BCFViewPoint::Read(_xml::_element& elem, const std::string& folder)
 void BCFViewPoint::Write(_xml_writer& writer, const std::string& folder, const char* /*tag*/)
 {
     m_Snapshot = CopyToRelative(m_Snapshot, folder, NULL);
+    
+    m_Viewpoint = m_Guid.c_str();
+    assert(!m_Viewpoint.empty());
+    m_Viewpoint.append(".bcfv");
 
     //
     if (!WriteFile(folder)) {

@@ -37,8 +37,11 @@ bool XMLFile::WriteFile(const std::string& bcfFolder)
 {
     bool ok = false;
 
+    const char* xmlname = XMLFileName();
+    assert(xmlname && *xmlname);
+
     std::string path(bcfFolder);
-    FileSystem::AddPath(path, XMLFileName());
+    FileSystem::AddPath(path, xmlname);
 
     try {
         _xml_writer xmlWriter(path.c_str());

@@ -130,26 +130,31 @@ std::string BCFObject::AbsolutePath(const std::string& relativePath, const std::
 /// </summary>
 std::string BCFObject::CopyToRelative(const std::string& absolutePath, const std::string& folder, const char* relativePath)
 {
-    if (!absolutePath.empty()) {
-        
+    if (absolutePath.empty())
+        return "";
+
+    auto filename = FileSystem::GetFileName(absolutePath.c_str(), log());
+    if (!filename.empty()) {
+
         std::string target(folder);
         if (relativePath && *relativePath) {
             FileSystem::AddPath(target, relativePath);
         }
 
-        auto filename = FileSystem::CopyFile(absolutePath.c_str(), folder.c_str(), log());
-        
-        if (filename.empty()) {
-            throw std::exception("Failed to save snapshot");
-        }
+        FileSystem::AddPath(target, filename.c_str());
 
-        std::string ret;
-        if (relativePath && *relativePath) {
-            ret.assign(relativePath);
-        }
-        FileSystem::AddPath(ret, filename.c_str());
+        if (FileSystem::Exists(target.c_str())
+            || FileSystem::CopyFile(absolutePath.c_str(), target.c_str(), log())
+            ) {
 
-        return ret;
+            std::string ret;
+            if (relativePath && *relativePath) {
+                ret.assign(relativePath);
+            }
+            FileSystem::AddPath(ret, filename.c_str());
+
+            return ret;
+        }
     }
-    return "";
+    throw std::exception("Failed to copy internal file to BCF package");
 }

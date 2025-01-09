@@ -14,3 +14,20 @@ void XMLPoint::Read(_xml::_element& elem, const std::string&)
         CHILD_GET_CONTENT(Z)
     CHILDREN_END
 }
+
+/// <summary>
+/// 
+/// </summary>
+void XMLPoint::Write(_xml_writer& writer, const std::string& folder, const char* tag) 
+{
+    writer.writeStartTag(tag);
+    writer.indent()++;
+
+    WRITE_CONTENT(X);
+    WRITE_CONTENT(Y);
+    WRITE_CONTENT(Z);
+
+    writer.indent()--;
+    writer.writeEndTag(tag);
+}
+

@@ -16,6 +16,8 @@ public:
 public:
     static void AddPath(std::string& path, const char* name, bool zippath = false);
 
+    static std::string GetFileName(const char* path, Log& log);
+
     //get directory list
     static bool GetDirContent(const char* folderPath, DirList& elems, Log& log);
 
@@ -25,8 +27,8 @@ public:
     //remove file of directory
     static bool Remove(const char* path, Log& log);
 
-    //returns file name (without path) if successfull, or "" on fail 
-    static std::string CopyFile(const char* path, const char* targetDir, Log& log);
+    // 
+    static bool CopyFile(const char* src, const char* dst, Log& log);
 
     //
     static bool CreateTempDir(std::string& pathName, Log& log);
