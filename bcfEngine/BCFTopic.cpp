@@ -41,7 +41,7 @@ void BCFTopic::ReadRoot(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-void BCFTopic::WriteRoot(_xml_writer& writer, const std::string& folder)
+void BCFTopic::WriteRootContent(_xml_writer& writer, const std::string& folder)
 {
     Attributes attr;
 

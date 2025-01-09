@@ -16,6 +16,18 @@ void Version::ReadRoot(_xml::_element& elem, const std::string& /*folder*/)
 /// <summary>
 /// 
 /// </summary>
+void Version::WriteRootElem(_xml_writer& writer, const std::string& folder, Attributes& attr)
+{
+    const char* rootName = RootElemName();
+    ATTR_ADD(VersionId);
+
+    writer.writeTag(rootName, attr, "");
+}
+
+
+/// <summary>
+/// 
+/// </summary>
 BCFVersion Version::Get()
 {
     if (m_VersionId == "3.0") {

@@ -28,7 +28,9 @@ protected:
     virtual const char* XSDName() { return "unk.xsd"; }
     virtual const char* RootElemName() { return "Unknonw"; }
     virtual void ReadRoot(_xml::_element& elem, const std::string& folder) = NULL;    
-    virtual void WriteRoot(_xml_writer& writer, const std::string& folder) {}
+    virtual void WriteRootElem(_xml_writer& writer, const std::string& folder, Attributes& attr);
+    virtual void WriteRootContent(_xml_writer& writer, const std::string& folder) {}
+
 };
 
 

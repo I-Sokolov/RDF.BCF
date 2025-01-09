@@ -50,13 +50,7 @@ bool XMLFile::WriteFile(const std::string& bcfFolder)
         attr.Add("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
         attr.Add("xsi:schemaLocation", XSDName());
 
-        xmlWriter.writeStartTag(RootElemName(), attr);
-        xmlWriter.indent()++;
-
-        WriteRoot(xmlWriter, path);
-
-        xmlWriter.indent()--;
-        xmlWriter.writeEndTag(RootElemName());
+        WriteRootElem(xmlWriter, bcfFolder, attr);
 
         ok = true;
     }
@@ -66,6 +60,24 @@ bool XMLFile::WriteFile(const std::string& bcfFolder)
 
     return ok;
 }
+
+/// <summary>
+/// 
+/// </summary>
+void XMLFile::WriteRootElem(_xml_writer& writer, const std::string& folder, Attributes& attr)
+{
+    const char* rootName = RootElemName();
+
+    writer.writeStartTag(rootName, attr);
+    writer.indent()++;
+
+    WriteRootContent(writer, folder);
+
+    writer.indent()--;
+    writer.writeEndTag(rootName);
+
+}
+
 
 /// <summary>
 /// 

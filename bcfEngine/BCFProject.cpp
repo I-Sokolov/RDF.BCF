@@ -110,7 +110,7 @@ bool BCFProject::Write(const char* bcfFilePath, BCFVersion version)
         ok = ok && WriteTopics(bcfFolder);
 
         ok = ok && m_version.WriteFile(bcfFolder);
-        ok = ok && m_version.WriteFile(bcfFolder);
+        ok = ok && m_projectInfo.WriteFile(bcfFolder);
         ok = ok && m_extensions.WriteFile(bcfFolder);
 
         if (ok) {
