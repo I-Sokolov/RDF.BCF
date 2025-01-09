@@ -67,7 +67,7 @@ bool XMLFile::WriteFile(const std::string& bcfFolder)
 void XMLFile::WriteRootElem(_xml_writer& writer, const std::string& folder, Attributes& attr)
 {
     const char* rootName = RootElemName();
-
+    
     writer.writeStartTag(rootName, attr);
     writer.indent()++;
 
@@ -75,7 +75,6 @@ void XMLFile::WriteRootElem(_xml_writer& writer, const std::string& folder, Attr
 
     writer.indent()--;
     writer.writeEndTag(rootName);
-
 }
 
 

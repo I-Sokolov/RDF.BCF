@@ -25,11 +25,11 @@ public:
 
 protected:
     virtual const char* XMLFileName() = NULL;
-    virtual const char* XSDName() { return "unk.xsd"; }
-    virtual const char* RootElemName() { return "Unknonw"; }
+    virtual const char* XSDName() = NULL;
+    virtual const char* RootElemName() = NULL;
     virtual void ReadRoot(_xml::_element& elem, const std::string& folder) = NULL;    
     virtual void WriteRootElem(_xml_writer& writer, const std::string& folder, Attributes& attr);
-    virtual void WriteRootContent(_xml_writer& writer, const std::string& folder) {}
+    virtual void WriteRootContent(_xml_writer& writer, const std::string& folder) = NULL;
 
 };
 
@@ -72,8 +72,8 @@ private:
         writer.writeStartTag(#list);            \
         writer.indent()++;                      \
                                                 \
-        for (auto elem : m_##list.Items()) {    \
-            elem->Write(writer, folder, #elem); \
+        for (auto item : m_##list.Items()) {    \
+            item->Write(writer, folder, #elem); \
         }                                       \
                                                 \
         writer.indent()--;                      \

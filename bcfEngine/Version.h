@@ -19,7 +19,7 @@ private:
     virtual const char* RootElemName() override { return "Version"; }
     virtual void ReadRoot(_xml::_element& elem, const std::string& folder) override;
     virtual void WriteRootElem(_xml_writer& writer, const std::string& folder, Attributes& attr) override;
-
+    virtual void WriteRootContent(_xml_writer& writer, const std::string& folder) override {}
 private:
     std::string m_VersionId;
 };

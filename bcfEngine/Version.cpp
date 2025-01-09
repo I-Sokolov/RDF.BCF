@@ -18,9 +18,9 @@ void Version::ReadRoot(_xml::_element& elem, const std::string& /*folder*/)
 /// </summary>
 void Version::WriteRootElem(_xml_writer& writer, const std::string& folder, Attributes& attr)
 {
-    const char* rootName = RootElemName();
     ATTR_ADD(VersionId);
 
+    const char* rootName = RootElemName();
     writer.writeTag(rootName, attr, "");
 }
 

@@ -79,7 +79,11 @@ public:
 private:
     //XMLFile implementation
     virtual const char* XMLFileName() override { return m_Viewpoint.c_str(); }
+    virtual const char* XSDName() override { return "visinfo.xsd"; }
+    virtual const char* RootElemName() override { return "VisualizationInfo"; }
     virtual void ReadRoot(_xml::_element& elem, const std::string& folder) override;
+    virtual void WriteRootElem(_xml_writer& writer, const std::string& folder, Attributes& attr) override;
+    virtual void WriteRootContent(_xml_writer& writer, const std::string& folder) override;
 
 private:
     void Read_Components(_xml::_element& elem, const std::string& folder);
@@ -89,6 +93,11 @@ private:
     void Read_OrthogonalCamera(_xml::_element& elem, const std::string& folder);
 
     void Write_ViewPoint(_xml_writer& writer, const std::string& folder);
+
+    void Write_Components(_xml_writer& writer, const std::string& folder);
+    void Write_Visibility(_xml_writer& writer, const std::string& folder);
+    void Write_PerspectiveCamera(_xml_writer& writer, const std::string& folder);
+    void Write_OrthogonalCamera(_xml_writer& writer, const std::string& folder);
 
 private:
     BCFTopic&                   m_topic;

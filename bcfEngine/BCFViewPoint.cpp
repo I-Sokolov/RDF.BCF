@@ -60,8 +60,11 @@ void BCFViewPoint::Read(_xml::_element& elem, const std::string& folder)
 /// </summary>
 void BCFViewPoint::Write(_xml_writer& writer, const std::string& folder, const char* /*tag*/)
 {
-    //TODO - write snapshot and viewdefinition file
+    //TODO - write snapshot
 
+    if (!WriteFile(folder)) {
+        throw std::exception();
+    }
     Attributes attr;
     ATTR_ADD(Guid);
 
@@ -90,12 +93,37 @@ void BCFViewPoint::ReadRoot(_xml::_element& elem, const std::string& folder)
         CHILD_READ(Components)
         CHILD_READ(PerspectiveCamera)
         CHILD_READ(OrthogonalCamera)
-        CHILD_GET_LIST(Lines, BCFLine)
-        CHILD_GET_LIST(ClippingPlanes, BCFClippingPlane)
-        CHILD_GET_LIST(Bitmaps, BCFBitmap)
+        CHILD_GET_LIST(Lines, Line)
+        CHILD_GET_LIST(ClippingPlanes, ClippingPlane)
+        CHILD_GET_LIST(Bitmaps, Bitmap)
     CHILDREN_END
 }
 
+/// <summary>
+/// 
+/// </summary>
+void BCFViewPoint::WriteRootElem(_xml_writer& writer, const std::string& folder, Attributes& attr)
+{
+    ATTR_ADD(Guid);
+    __super::WriteRootElem(writer, folder, attr);
+}
+
+void BCFViewPoint::WriteRootContent(_xml_writer& writer, const std::string& folder)
+{
+    Attributes attr;
+
+    WRITE_ELEM(Components);
+    if (m_cameraType == BCFCameraPerspective) {
+        WRITE_ELEM(PerspectiveCamera);
+    }
+    else {
+        WRITE_ELEM(OrthogonalCamera);
+    }
+    WRITE_LIST(Line);
+    WRITE_LIST(ClippingPlane);
+    WRITE_LIST(Bitmap);
+
+}
 
 /// <summary>
 /// 
@@ -103,10 +131,23 @@ void BCFViewPoint::ReadRoot(_xml::_element& elem, const std::string& folder)
 void  BCFViewPoint::Read_Components(_xml::_element& elem, const std::string& folder)
 {
     CHILDREN_START
-        CHILD_GET_LIST(Selection, BCFComponent)
+        CHILD_GET_LIST(Selection, Component)
+        CHILD_GET_LIST(Coloring, Color)
         CHILD_READ(Visibility)
-        CHILD_GET_LIST(Coloring, BCFColor)
     CHILDREN_END
+}
+
+/// <summary>
+/// 
+/// </summary>
+void  BCFViewPoint::Write_Components(_xml_writer& writer, const std::string& folder)
+{
+    WRITE_LIST_EX(Selection, Component);
+    WRITE_LIST_EX(Coloring, Color);
+
+    Attributes attr;
+    ATTR_ADD(DefaultVisibility);
+    WRITE_ELEM(Visibility);
 }
 
 /// <summary>
@@ -122,6 +163,20 @@ void  BCFViewPoint::Read_Visibility(_xml::_element& elem, const std::string& fol
         CHILD_READ(ViewSetupHints)
         CHILD_GET_LIST(Exceptions, Component)
     CHILDREN_END
+}
+
+/// <summary>
+/// 
+/// </summary>
+void BCFViewPoint::Write_Visibility(_xml_writer& writer, const std::string& folder)
+{
+    Attributes attr;
+    ATTR_ADD(SpacesVisible);
+    ATTR_ADD(SpaceBoundariesVisible);
+    ATTR_ADD(OpeningsVisible);
+    writer.writeTag("ViewSetupHints", attr, "");
+
+    WRITE_LIST_EX(Exceptions, Component);
 }
 
 /// <summary>
@@ -155,6 +210,18 @@ void  BCFViewPoint::Read_PerspectiveCamera(_xml::_element& elem, const std::stri
 /// <summary>
 /// 
 /// </summary>
+void BCFViewPoint::Write_PerspectiveCamera(_xml_writer& writer, const std::string& folder)
+{
+    WRITE_MEMBER(CameraViewPoint);
+    WRITE_MEMBER(CameraDirection);
+    WRITE_MEMBER(CameraUpVector);
+    WRITE_CONTENT(FieldOfView);
+    WRITE_CONTENT(AspectRatio);
+}
+
+/// <summary>
+/// 
+/// </summary>
 void  BCFViewPoint::Read_OrthogonalCamera(_xml::_element& elem, const std::string& folder)
 {
     m_cameraType = BCFCameraOrthogonal;
@@ -166,6 +233,18 @@ void  BCFViewPoint::Read_OrthogonalCamera(_xml::_element& elem, const std::strin
         CHILD_GET_CONTENT(ViewToWorldScale)
         CHILD_GET_CONTENT(AspectRatio)
     CHILDREN_END
+}
+
+/// <summary>
+/// 
+/// </summary>
+void BCFViewPoint::Write_OrthogonalCamera(_xml_writer& writer, const std::string& folder)
+{
+    WRITE_MEMBER(CameraViewPoint);
+    WRITE_MEMBER(CameraDirection);
+    WRITE_MEMBER(CameraUpVector);
+    WRITE_CONTENT(ViewToWorldScale);
+    WRITE_CONTENT(AspectRatio);
 }
 
 
