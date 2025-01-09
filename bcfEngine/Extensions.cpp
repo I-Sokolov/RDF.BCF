@@ -99,6 +99,22 @@ void Extensions::ReadRoot(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
+void Extensions::WriteRootContent(_xml_writer& writer, const std::string& folder)
+{
+    Attributes attr;
+
+        WRITE_ELEM(TopicTypes);
+        WRITE_ELEM(TopicStatuses);
+        WRITE_ELEM(Priorities);
+        WRITE_ELEM(TopicLabels);
+        WRITE_ELEM(Users);
+        WRITE_ELEM(SnippetTypes);
+        WRITE_ELEM(Stages);
+}
+
+/// <summary>
+/// 
+/// </summary>
 void Extensions::ReadEnumeration(_xml::_element& elem, const std::string& /*folder*/, BCFEnumeration enumeration)
 {
     auto list = GetList(enumeration);
@@ -113,6 +129,25 @@ void Extensions::ReadEnumeration(_xml::_element& elem, const std::string& /*fold
             list->insert(content);
         }
     }
+}
+
+/// <summary>
+/// 
+/// </summary>
+void Extensions::WriteEnumeration(_xml_writer& writer, const std::string& tag, BCFEnumeration enumeration)
+{
+    auto list = GetList(enumeration);
+    if (!list) {
+        assert(false);
+        throw std::exception("Invalid BCF enumeration in " __FUNCTION__);
+    }
+
+    for (auto& elem : *list) {
+        if (!elem.empty()) {
+            writer.writeTag(tag, elem);
+        }
+    }
+
 }
 
 /// <summary>
