@@ -35,3 +35,21 @@ void ProjectInfo::Read_Project(_xml::_element& elem, const std::string& /*folder
     CHILDREN_END
 }
 
+/// <summary>
+/// 
+/// </summary>
+void ProjectInfo::WriteRootContent(_xml_writer& writer, const std::string& folder)
+{
+    Attributes attr;
+    ATTR_ADD(ProjectId);
+
+    WRITE_ELEM(Project);
+}
+
+/// <summary>
+/// 
+/// </summary>
+void ProjectInfo::Write_Project(_xml_writer& writer, const std::string& folder)
+{
+    WRITE_CONTENT(Name);
+}
