@@ -71,6 +71,27 @@ namespace CSExample
             }
         }
 
+        const string chinaUser = "My name"; // будет 好";
+
+        static void CheckExtensions(Project bcf)
+        {
+            var guid = bcf.ProjectId;
+            ASSERT(guid == "de894a86-3a08-4ea0-b2d1-6c222b5602d1");
+
+            bcf.Name = "rename";
+            ASSERT(bcf.Name == "rename");
+
+            var users = bcf.Extensions.GetEnumeration(Interop.BCFEnumeration.Users);
+            ASSERT(users.Count() == 4);
+            ASSERT(users[3] == chinaUser);
+
+            var topics = bcf.Topics;
+            ASSERT(topics.Count() == 1);
+
+            var topic = topics.First();
+            ASSERT(topic.Guid != "7ad1a717-bf20-4c12-b511-cbd90370ddba");
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -81,24 +102,28 @@ namespace CSExample
                 var res = bcf.FileRead("..\\TestCases\\кИрилица.bcf");
                 ASSERT(res);
 
-                var guid = bcf.ProjectId;
-                ASSERT(guid == "de894a86-3a08-4ea0-b2d1-6c222b5602d1");
-
                 var name = bcf.Name;
                 ASSERT(name == "BCF 3.0 test cases");
 
-                bcf.Name = "rename";
-                ASSERT(bcf.Name == "rename");
-
-                var lst = bcf.Extensions.GetEnumeration(Interop.BCFEnumeration.Users);
-                ASSERT(lst.Count() == 3);
-
                 TestTopics(bcf);
+
+                CheckExtensions(bcf);
+
+                var ok = bcf.FileWrite("Кирилица.bcf");
+                ASSERT(ok);
+            }
+
+            using (var bcf = new Project())
+            {
+                var res = bcf.FileRead("Кирилица.bcf");
+                ASSERT(res);
+
+                CheckExtensions(bcf);
             }
 
             //
             //
-            var users = new string[] { "a.b@mail.com", "b Китайский 好 text" };
+            var users = new string[] { "a.b@mail.com", "b Китайский 好 text", "z3", "z4" };
 
             using (var bcf = new RDF.BCF.Project())
             {
@@ -118,11 +143,13 @@ namespace CSExample
                 res = bcf.Extensions.EnumerationElementAdd(Interop.BCFEnumeration.Users, users[0]);
                 ASSERT(res);
 
-                bcf.Extensions.EnumerationElementAdd(Interop.BCFEnumeration.Users, users[1]);
                 bcf.Extensions.EnumerationElementAdd(Interop.BCFEnumeration.Users, users[0]);
+                bcf.Extensions.EnumerationElementAdd(Interop.BCFEnumeration.Users, users[1]);
+                bcf.Extensions.EnumerationElementAdd(Interop.BCFEnumeration.Users, users[2]);
+                bcf.Extensions.EnumerationElementAdd(Interop.BCFEnumeration.Users, users[3]);
 
                 lst = bcf.Extensions.GetEnumeration(Interop.BCFEnumeration.Users);
-                ASSERT(lst.Count() == 2);
+                ASSERT(lst.Count() == 4);
                 int i = 0;
                 foreach (var u in lst)
                 {
@@ -132,7 +159,14 @@ namespace CSExample
                 bcf.Extensions.EnumerationElementRemove(Interop.BCFEnumeration.Users, users[1]);
                 bcf.Extensions.EnumerationElementRemove(Interop.BCFEnumeration.Users, users[0]);
                 lst = bcf.Extensions.GetEnumeration(Interop.BCFEnumeration.Users);
-                ASSERT(lst.Count() == 0);
+                ASSERT(lst.Count() == 2);
+                i = 2;
+                foreach (var u in lst)
+                {
+                    ASSERT(u == users[i++]);
+                }
+                var ok = bcf.FileWrite("TestExtensions.bcf");
+                ASSERT(ok);
             }
         }
 
@@ -161,7 +195,7 @@ namespace CSExample
             ASSERT(ex);
 
             //
-            bcf.SetAuthor("John Smith", false);
+            bcf.SetAuthor(chinaUser, false);
 
             Console.WriteLine("Expected exception - author unknown");
             ex = false;
@@ -180,7 +214,7 @@ namespace CSExample
             ASSERT(items.Count() == 1);
 
             //
-            bcf.SetAuthor("John Smith", true);
+            bcf.SetAuthor(chinaUser, true);
 
             topic = bcf.AddTopic("Topic Type", "Topic Title", "Topic Status");
             ASSERT(topic != null);
@@ -201,12 +235,6 @@ namespace CSExample
             // remove
             //
             topic.Remove();
-
-            items = bcf.Topics;
-            ASSERT(items.Count() == 1);
-
-            topic = items.First();
-            ASSERT(topic.Guid != "7ad1a717-bf20-4c12-b511-cbd90370ddba");
         }
 
         static private void Topics()

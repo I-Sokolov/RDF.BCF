@@ -11,7 +11,7 @@ namespace RDF.BCF
         /// <summary>
         /// Get elements of enumeration of given type
         /// </summary>
-        public IEnumerable<string> GetEnumeration(Interop.BCFEnumeration enumeration)
+        public List<string> GetEnumeration(Interop.BCFEnumeration enumeration)
         {
             var list = new List<string>();
             UInt16 index = 0;
