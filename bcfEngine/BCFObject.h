@@ -32,6 +32,9 @@ protected:
     bool GetPoint(const XMLPoint& xmlpt, BCFPoint& bcfpt);
     bool SetPoint(const BCFPoint* bcfpt, XMLPoint& xmlpt);
 
+    std::string AbsolutePath(const std::string& relativePath, const std::string& folder);
+    std::string CopyToRelative(const std::string& absolutePath, const std::string& folder, const char* relativePath);
+
     bool UpdateAuthor(std::string& author, std::string& date);
 
 private:

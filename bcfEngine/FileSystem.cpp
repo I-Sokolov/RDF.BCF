@@ -66,7 +66,7 @@ std::string FileSystem::CopyFile(const char* path, const char* targetDir, Log& l
             return "";
         }
 
-        return dst.string();
+        return filename.string();
     }
     catch (std::exception& expt) {
         log.add(Log::Level::error, "File copy", "Can not copy '%s' to '%s': %s", path, targetDir, expt.what());

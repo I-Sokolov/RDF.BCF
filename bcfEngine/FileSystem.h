@@ -25,7 +25,7 @@ public:
     //remove file of directory
     static bool Remove(const char* path, Log& log);
 
-    //returns final path 
+    //returns file name (without path) if successfull, or "" on fail 
     static std::string CopyFile(const char* path, const char* targetDir, Log& log);
 
     //

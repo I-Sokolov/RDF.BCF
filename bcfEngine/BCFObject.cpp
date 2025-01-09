@@ -2,6 +2,7 @@
 #include "BCFObject.h"
 #include "BCFProject.h"
 #include "XMLPoint.h"
+#include "FileSystem.h"
 
 long BCFObject::gObjectCounter = 0;
 
@@ -106,3 +107,49 @@ bool BCFObject::UpdateAuthor(std::string& author, std::string& date)
     return true;
 }
 
+/// <summary>
+/// 
+/// </summary>
+std::string BCFObject::AbsolutePath(const std::string& relativePath, const std::string& folder)
+{
+    if (!relativePath.empty()) {
+        std::string filePath(folder);
+        FileSystem::AddPath(filePath, relativePath.c_str());
+        if (!FileSystem::Exists(filePath.c_str())) {
+            log().add(Log::Level::error, "File read", "File does not exist: %s", filePath.c_str());
+            throw std::exception("Failed to read viewpoint");
+        }
+        return filePath;
+    }
+    return "";
+}
+
+
+/// <summary>
+/// 
+/// </summary>
+std::string BCFObject::CopyToRelative(const std::string& absolutePath, const std::string& folder, const char* relativePath)
+{
+    if (!absolutePath.empty()) {
+        
+        std::string target(folder);
+        if (relativePath && *relativePath) {
+            FileSystem::AddPath(target, relativePath);
+        }
+
+        auto filename = FileSystem::CopyFile(absolutePath.c_str(), folder.c_str(), log());
+        
+        if (filename.empty()) {
+            throw std::exception("Failed to save snapshot");
+        }
+
+        std::string ret;
+        if (relativePath && *relativePath) {
+            ret.assign(relativePath);
+        }
+        FileSystem::AddPath(ret, filename.c_str());
+
+        return ret;
+    }
+    return "";
+}

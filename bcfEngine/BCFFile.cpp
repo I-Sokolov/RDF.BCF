@@ -32,10 +32,9 @@ void BCFFile::Read(_xml::_element& elem, const std::string& folder)
         CHILD_GET_CONTENT(Reference)
     CHILDREN_END
 
-    if (!m_Reference.empty() && !GetIsExternal()) {
-        std::string filePath(folder);
-        FileSystem::AddPath(filePath, m_Reference.c_str());
-        std::swap(m_Reference, filePath);
+    //
+    if (!GetIsExternal()) {
+        m_Reference = AbsolutePath(m_Reference, folder);
     }
 }
 
@@ -44,8 +43,8 @@ void BCFFile::Read(_xml::_element& elem, const std::string& folder)
 /// </summary>
 void BCFFile::Write(_xml_writer& writer, const std::string& folder, const char* /*tag*/)
 {
-    if (!m_Reference.empty() && !GetIsExternal()) {
-        assert(!"copy file");
+    if (!GetIsExternal()) {
+        m_Reference = CopyToRelative(m_Reference, folder, "..");
     }
 
     XMLFile::Attributes attr;
@@ -54,6 +53,10 @@ void BCFFile::Write(_xml_writer& writer, const std::string& folder, const char* 
     ATTR_ADD(IfcSpatialStructureElement);
 
     WRITE_ELEM(File);
+
+    if (!GetIsExternal()) {
+        m_Reference = AbsolutePath(m_Reference, folder);
+    }
 }
 
 /// <summary>
