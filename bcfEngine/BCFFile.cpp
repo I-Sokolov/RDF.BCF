@@ -76,3 +76,33 @@ bool BCFFile::Remove(void)
 {
     return m_topic.FileRemove(this);
 }
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFFile::SetReference(const char* val)
+{ 
+    m_Reference.assign(val);
+    if (!m_Reference.empty()) {
+        UpdateFileInfo();
+    }
+    return true; 
+}
+
+/// <summary>
+/// 
+/// </summary>
+void BCFFile::UpdateFileInfo()
+{
+    if (!m_Reference.empty()) {
+
+        m_Filename = FileSystem::GetFileName(m_Reference.c_str(), log());
+
+        if (FileSystem::Exists(m_Reference.c_str())) {
+            auto tm = FileSystem::GetFileModificationTime(m_Reference.c_str(), log());
+            if (tm) {
+                m_Date = TimeToStr(tm);
+            }
+        }
+    }
+}

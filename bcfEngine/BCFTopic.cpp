@@ -313,9 +313,8 @@ BCFFile* BCFTopic::FileAdd(const char* filePath, bool isExternal)
     auto file = new BCFFile(*this);
 
     if (file && filePath && *filePath) {
-        file->SetReference(filePath);
-        file->SetFilename(filePath);
         file->SetIsExternal(isExternal);
+        file->SetReference(filePath);
     }
 
     if (file) {

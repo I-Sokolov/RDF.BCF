@@ -37,6 +37,8 @@ protected:
 
     bool UpdateAuthor(std::string& author, std::string& date);
 
+    static std::string TimeToStr(time_t tm);
+
 private:
     static std::string GetCurrentDate() { return GetCurrentTime(); }
     static std::string GetCurrentTime();

@@ -24,6 +24,9 @@ public:
     //check file or directory exists
     static bool Exists(const char* path);
 
+    //
+    static time_t GetFileModificationTime(const char* path, Log& log);
+
     //remove file of directory
     static bool Remove(const char* path, Log& log);
 

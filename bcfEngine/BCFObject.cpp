@@ -13,16 +13,22 @@ std::string BCFObject::GetCurrentTime()
 {
     auto now = std::chrono::system_clock::now();
     time_t now_time = std::chrono::system_clock::to_time_t(now);
+    return TimeToStr(now_time);
+}
 
-    std::tm tm = *std::gmtime(&now_time);
-    std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
+/// <summary>
+/// 
+/// </summary>
+std::string BCFObject::TimeToStr(time_t tm_)
+{
+    std::tm tm = *std::gmtime(&tm_);
 
     std::ostringstream oss;
-    oss << std::put_time(&tm, "%FT%T.") << std::setfill('0') << std::setw(3) << ms.count() << std::put_time(&tm, "%z");
+    oss << std::put_time(&tm, "%FT%T") << std::setfill('0') << std::put_time(&tm, "%z");
 
     auto str = oss.str();
 
-    str.insert(str.size()-2, 1, ':');
+    str.insert(str.size() - 2, 1, ':');
 
     return str;
 }

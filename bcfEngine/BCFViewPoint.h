@@ -20,7 +20,7 @@ public:
 public:
     const char* GetGuid() { return m_Guid.c_str(); }
 
-    const char* GetSnapshot() { return m_snapshotPath.c_str(); }
+    const char* GetSnapshot() { return m_Snapshot.c_str(); }
     bool        GetDefaultVisibility() { return StrToBool(m_DefaultVisibility); }
     bool        GetSpaceVisible() { return StrToBool(m_SpacesVisible); }
     bool        GetSpaceBoundariesVisible() { return StrToBool(m_SpaceBoundariesVisible); }
@@ -33,7 +33,7 @@ public:
     double      GetFieldOfView() { return atof(m_FieldOfView.c_str()); }
     double      GetAspectRatio() { return atof(m_AspectRatio.c_str()); }
 
-    bool        SetSnapshot(const char* pathFile) { m_snapshotPath.assign(pathFile); return true; }
+    bool        SetSnapshot(const char* pathFile) { m_Snapshot.assign(pathFile); return true; }
     bool        SetDefaultVisibility(bool val) { return BoolToStr(val, m_DefaultVisibility); }
     bool        SetSpaceVisible(bool val) { return BoolToStr(val, m_SpacesVisible); }
     bool        SetSpaceBoundariesVisible(bool val) { return BoolToStr(val, m_SpaceBoundariesVisible); }
@@ -101,7 +101,6 @@ private:
 
 private:
     BCFTopic&                   m_topic;
-    std::string                 m_snapshotPath;
 
     GuidStr                     m_Guid;
 

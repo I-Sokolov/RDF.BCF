@@ -185,3 +185,18 @@ bool FileSystem::CreateDir(const char* pathName, Log& log)
         return false;
     }
 }
+
+/// <summary>
+/// 
+/// </summary>
+time_t FileSystem::GetFileModificationTime(const char* path, Log& log)
+{
+    if (filesystem::exists(path)) {
+        struct stat result;
+        if (stat(path, &result) == 0) {
+            return result.st_mtime;
+        }
+    }
+    log.add(Log::Level::error, "File read", "Can not get modification time for file '%s'", path);
+    return 0;
+}

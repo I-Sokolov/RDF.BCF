@@ -29,7 +29,7 @@ namespace CSExample
             Topics();
 
             Console.WriteLine("TEST Comments and ViewPoint");
-            CommentsVP();
+            CommentAndViewPoints();
 
             Console.WriteLine("TESTS PASSED");
         }
@@ -358,15 +358,15 @@ namespace CSExample
             }
         }
 
-        static void CommentsVP()
+        static void CommentAndViewPoints()
         {
             using (var bcf = new RDF.BCF.Project())
             {
                 bool ok = bcf.SetAuthor("Smoke-tester", true);
                 ASSERT(ok);
 
-                SetCommentVPAttributes(bcf);
-                GetCommentVPAttributes(bcf, true);
+                SetCommentAndViewPoints(bcf);
+                CheckCommentAndViewPoints(bcf, false, false);
 
                 ok = bcf.FileWrite("TestCommentsVP.bcf");
                 ASSERT(ok);
@@ -377,14 +377,14 @@ namespace CSExample
                 bool ok = bcf.FileRead("TestCommentsVP.bcf");
                 ASSERT(ok);
 
-                GetCommentVPAttributes(bcf, true);
+                CheckCommentAndViewPoints(bcf, true, false);
 
                 ok = bcf.SetAuthor("Smoke-Editor", true);
                 ASSERT(ok);
 
                 bcf.Topics[0].Comments[0].Text = "Modified text";
 
-                GetCommentVPAttributes(bcf, false);
+                CheckCommentAndViewPoints(bcf, true, true);
 
                 ok = bcf.FileWrite("TestCommentsVP2.bcf");
                 ASSERT(ok);
@@ -395,11 +395,11 @@ namespace CSExample
                 bool ok = bcf.FileRead("TestCommentsVP2.bcf");
                 ASSERT(ok);
 
-                GetCommentVPAttributes(bcf, false);
+                CheckCommentAndViewPoints(bcf, true, true);
             }
         }
          
-        static void SetCommentVPAttributes(Project bcf)
+        static void SetCommentAndViewPoints(Project bcf)
         {
             var topic = bcf.AddTopic("Type", "Title", "New");
             ASSERT(topic.Comments.Count == 0);
@@ -421,19 +421,19 @@ namespace CSExample
             comment.ViewPoint = topic.ViewPoints[0];
         }
 
-        static void GetCommentVPAttributes(Project bcf, bool newFile)
+        static void CheckCommentAndViewPoints(Project bcf, bool read, bool modified)
         {
             var topic = bcf.Topics[0];
 
             CheckFiles(topic);
-            CheckViewPoints(topic);
+            CheckViewPoints(topic, read);
 
             var comment = topic.Comments[0];
 
-            ASSERT(comment.ViewPoint!=null && comment.ViewPoint.Guid == "ID-2");
-            ASSERT(comment.Date.Length == 29);
+            ASSERT(comment.ViewPoint!=null && comment.ViewPoint.Guid == "ID-0");
+            ASSERT(comment.Date.Length == 25);
             ASSERT(comment.Author == "Smoke-tester");
-            if (newFile)
+            if (!modified)
             {
                 ASSERT(comment.Text == "Text comment");
                 ASSERT(comment.ModifiedDate.Length==0);
@@ -441,16 +441,17 @@ namespace CSExample
             }
             else
             {
-                ASSERT(comment.Text == "Smoke-Editor");
-                ASSERT(comment.ModifiedDate.Length == 29);
+                ASSERT(comment.Text == "Modified text");
+                ASSERT(comment.ModifiedDate.Length == 25);
                 ASSERT(comment.ModifiedAuthor == "Smoke-Editor");
             }
         }
 
-        static string PathAIfc()
+        static string TestFile(string ext)
         {
             var cwd = System.IO.Directory.GetCurrentDirectory();
-            var filePath = Path.Combine(cwd, "..", "TestCases", "Architectural.ifc");
+            var filePath = Path.Combine(cwd, "..", "TestCases", "Architectural.");
+            filePath = filePath + ext;
             ASSERT(System.IO.File.Exists(filePath));
             return filePath;
         }
@@ -463,7 +464,7 @@ namespace CSExample
             for (int i = 0; i < 5; i++)
             {
                 bool isExternal = (i % 2 == 0);
-                var reference = isExternal ? $"File{i}" : PathAIfc();
+                var reference = isExternal ? $"File{i}" : TestFile("ifc");
 
                 RDF.BCF.BIMFile file;
                 if (i < 2)
@@ -473,12 +474,16 @@ namespace CSExample
                 else
                 {
                     file = topic.AddFile(null);
-                    file.Filename = reference;
                     file.Reference = reference;
                     file.IsExternal = (i % 2 == 0);
                 }
 
-                file.Date=$"Date-{i}";
+                if (i > 1)
+                {
+                    file.Filename = $"Name-{i}";
+                    file.Date = $"Date-{i}";
+                }
+
                 file.IfcProject=$"Project-{i}";
                 file.IfcSpatialStructureElement = $"SPA-{i}";
             }
@@ -496,18 +501,41 @@ namespace CSExample
             for (int i = 0; i < 4; i++)
             {
                 bool isExternal = (i % 2 == 0);
-                var reference = isExternal ? $"File{i}" : PathAIfc();
+                var reference = isExternal ? $"File{i}" : TestFile("ifc");
 
                 var file = topic.Files[i];
-                ASSERT(file.Filename == reference);
-                ASSERT(file.Reference == reference);
+                if (i > 1)
+                {
+                    ASSERT(file.Filename == $"Name-{i}");
+                    ASSERT(file.Date == $"Date-{i}");
+                }
+                else
+                {
+                    if (isExternal)
+                    {
+                        ASSERT(file.Filename == $"File{i}");
+                        ASSERT(file.Date.Length == 0);
+                    }
+                    else
+                    {
+                        ASSERT(file.Filename == "Architectural.ifc");
+                        ASSERT(file.Date.Length == 25);
+                    }
+                }
+                if (isExternal)
+                {
+                    ASSERT(file.Reference == reference);
+                }
+                else
+                {
+                    ASSERT(file.Reference.EndsWith("Architectural.ifc"));
+                }
                 ASSERT(file.IsExternal== isExternal);                
-                ASSERT(file.Date == $"Date-{i}");
                 ASSERT(file.IfcProject == $"Project-{i}");
                 ASSERT(file.IfcSpatialStructureElement == $"SPA-{i}");
             }
         }
-        static ViewPoint SetViewPoints(Topic topic)
+        static void SetViewPoints(Topic topic)
         {
             ASSERT(topic.ViewPoints.Count == 0);
 
@@ -515,30 +543,30 @@ namespace CSExample
             ASSERT(topic.ViewPoints[0].Guid.Length > 0);
             ASSERT(topic.ViewPoints[0].Snapshot.Length == 0);
 
-            for (int i = 2; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 var vp = topic.AddViewPoint($"ID-{i}");
 
-                vp.DefaultVisibility = (i == 0);
-                vp.SpaceVisible = (i != 0);
-                vp.SpaceBoundariesVisible = (i == 0);
-                vp.OpeningsVisible = (i != 0);
-                vp.CameraType = (i == 0) ? Interop.BCFCamera.Perspective : Interop.BCFCamera.Orthogonal;
+                bool b = (i % 2 == 0);
+
+                vp.DefaultVisibility = b;
+                vp.SpaceVisible = !b;
+                vp.SpaceBoundariesVisible = b;
+                vp.OpeningsVisible = !b;
+                vp.CameraType = b ? Interop.BCFCamera.Perspective : Interop.BCFCamera.Orthogonal;
                 vp.SetCameraViewPoint(new Interop.BCFPoint() { x = i, y = i + .1, z = i + .2 });
                 vp.SetCameraDirection(new Interop.BCFPoint() { x = i + .3, y = i + .4, z = i + .5 });
                 vp.SetCameraUpVector(new Interop.BCFPoint() { x = i + .6, y = i + .7, z = i + .8 });
                 vp.ViewToWorldScale = i * 3;
                 vp.FieldOfView = i * 3.5;
                 vp.AspectRatio = i * 4;
-                vp.Snapshot = $"Snap {i}";
+                vp.Snapshot = TestFile("png");
             }
 
-            ASSERT(topic.ViewPoints.Count == 3);
+            ASSERT(topic.ViewPoints.Count == 5);
 
             ASSERT(topic.ViewPoints[0].Remove());
-            ASSERT(topic.ViewPoints.Count == 2);
-
-            return topic.ViewPoints[0];
+            ASSERT(topic.ViewPoints.Count == 4);
         }
 
         static bool EQ(Interop.BCFPoint pt1, Interop.BCFPoint pt2)
@@ -546,28 +574,39 @@ namespace CSExample
             return pt1.x == pt2.x && pt1.y == pt2.y && pt1.z == pt2.z;
         }
 
-        static void CheckViewPoints(Topic topic)
+        static void CheckViewPoints(Topic topic, bool read)
         {
-            ASSERT(topic.ViewPoints.Count == 2);
+            ASSERT(topic.ViewPoints.Count == 4);
 
-            for (int i = 2; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
-                var vp = topic.ViewPoints[i - 2];
+                var vp = topic.ViewPoints[i];
 
                 ASSERT(vp.Guid == $"ID-{i}");
 
-                ASSERT(vp.DefaultVisibility == (i == 0));
-                ASSERT(vp.SpaceVisible == (i != 0));
-                ASSERT(vp.SpaceBoundariesVisible == (i == 0));
-                ASSERT(vp.OpeningsVisible == (i != 0));
-                ASSERT(vp.CameraType == ((i == 0) ? Interop.BCFCamera.Perspective : Interop.BCFCamera.Orthogonal));
+                bool b = (i % 2 == 0);
+
+                ASSERT(vp.DefaultVisibility == b);
+                ASSERT(vp.SpaceVisible == !b);
+                ASSERT(vp.SpaceBoundariesVisible == b);
+                ASSERT(vp.OpeningsVisible == !b);
+                if (b)
+                {
+                    ASSERT(vp.CameraType == Interop.BCFCamera.Perspective);
+                    ASSERT(vp.FieldOfView == i * 3.5);
+                    ASSERT(vp.ViewToWorldScale == (read ? 0 : i * 3));
+                }
+                else
+                {
+                    ASSERT(vp.CameraType == Interop.BCFCamera.Orthogonal);
+                    ASSERT(vp.FieldOfView == (read ? 0: i * 3.5));
+                }
                 ASSERT(EQ(vp.GetCameraViewPoint(), new Interop.BCFPoint() { x = i, y = i + .1, z = i + .2 }));
                 ASSERT(EQ(vp.GetCameraDirection(), new Interop.BCFPoint() { x = i + .3, y = i + .4, z = i + .5 }));
                 ASSERT(EQ(vp.GetCameraUpVector(), new Interop.BCFPoint() { x = i + .6, y = i + .7, z = i + .8 }));
-                ASSERT(vp.ViewToWorldScale == i * 3);
-                ASSERT(vp.FieldOfView == i * 3.5);
                 ASSERT(vp.AspectRatio == i * 4);
-                ASSERT(vp.Snapshot == $"Snap {i}");
+                ASSERT(vp.Snapshot.EndsWith("Architectural.png"));
+                ASSERT(Path.Exists(vp.Snapshot));
             }
         }
     }

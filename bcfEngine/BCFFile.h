@@ -19,7 +19,7 @@ public:
     bool SetIsExternal                   (bool        val) { return BoolToStr(val, m_IsExternal);}
     bool SetFilename                     (const char* val) { m_Filename.assign(val); return true;}
     bool SetDate                         (const char* val) { m_Date.assign(val); return true;}
-    bool SetReference                    (const char* val) { m_Reference.assign(val); return true;}
+    bool SetReference                    (const char* val);
     bool SetIfcProject                   (const char* val) { m_IfcProject.assign(val); return true;}
     bool SetIfcSpatialStructureElement   (const char* val) { m_IfcSpatialStructureElement.assign(val); return true;}
 
@@ -31,6 +31,9 @@ public:
 
 private:
     void Write_File(_xml_writer& writer, const std::string& folder);
+
+private:
+    void UpdateFileInfo();
 
 private:
     BCFTopic& m_topic;
