@@ -43,9 +43,9 @@ void BCFTopic::ReadRoot(_xml::_element& elem, const std::string& folder)
 /// </summary>
 void BCFTopic::WriteRootContent(_xml_writer& writer, const std::string& folder)
 {
-    REQUIRED(TopicType);
-    REQUIRED(TopicStatus);
-    REQUIRED(Title);
+    REQUIRED_PROP(TopicType);
+    REQUIRED_PROP(TopicStatus);
+    REQUIRED_PROP(Title);
 
     Attributes attr;
 

@@ -52,11 +52,16 @@ private:
 /// <summary>
 /// XML writing macros
 /// </summary>
-#define REQUIRED(prop)                                          \
-    if (m_##prop.empty()) {                                     \
-        log().add(Log::Level::error, "Missed property", #prop); \
-        throw std::exception();                                 \
+/// 
+#define REQUIRED(prop, condition)                                               \
+    if (!(condition)) {                                                         \
+        log().add(Log::Level::error, "Missed property or wrong value", #prop);  \
+        throw std::exception();                                                 \
     }
+
+#define REQUIRED_PROP(prop) REQUIRED(prop, !m_##prop.empty())
+
+
 
 #define ATTR_ADD(name) attr.Add(#name,m_##name.c_str())
 

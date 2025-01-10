@@ -216,6 +216,12 @@ void  BCFViewPoint::Read_PerspectiveCamera(_xml::_element& elem, const std::stri
 /// </summary>
 void BCFViewPoint::Write_PerspectiveCamera(_xml_writer& writer, const std::string& folder)
 {
+    REQUIRED(FieldOfView, m_CameraViewPoint.IsSet());
+    REQUIRED(FieldOfView, m_CameraDirection.IsSet());
+    REQUIRED(FieldOfView, m_CameraUpVector.IsSet());
+    REQUIRED(FieldOfView, GetFieldOfView() > 0 && GetFieldOfView() < 180);
+    REQUIRED(AspectRatio, GetAspectRatio() > 0);
+
     WRITE_MEMBER(CameraViewPoint);
     WRITE_MEMBER(CameraDirection);
     WRITE_MEMBER(CameraUpVector);
@@ -244,6 +250,12 @@ void  BCFViewPoint::Read_OrthogonalCamera(_xml::_element& elem, const std::strin
 /// </summary>
 void BCFViewPoint::Write_OrthogonalCamera(_xml_writer& writer, const std::string& folder)
 {
+    REQUIRED(FieldOfView, m_CameraViewPoint.IsSet());
+    REQUIRED(FieldOfView, m_CameraDirection.IsSet());
+    REQUIRED(FieldOfView, m_CameraUpVector.IsSet());
+    REQUIRED(AspectRatio, GetViewToWorldScale() != 0);
+    REQUIRED(AspectRatio, GetAspectRatio() > 0);
+
     WRITE_MEMBER(CameraViewPoint);
     WRITE_MEMBER(CameraDirection);
     WRITE_MEMBER(CameraUpVector);

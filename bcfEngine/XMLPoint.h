@@ -12,6 +12,8 @@ public:
 
     BCFProject& Project() { return m_project; }
 
+    bool IsSet() { return !m_X.empty() && !m_Y.empty() && !m_Z.empty(); }
+
     std::string XYZ[3];
 
 private:

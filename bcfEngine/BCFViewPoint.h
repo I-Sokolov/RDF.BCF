@@ -33,7 +33,7 @@ public:
     double      GetFieldOfView() { return atof(m_FieldOfView.c_str()); }
     double      GetAspectRatio() { return atof(m_AspectRatio.c_str()); }
 
-    bool        SetSnapshot(const char* pathFile) { m_Snapshot.assign(pathFile); return true; }
+    bool        SetSnapshot(const char* val) { UNNULL; VALIDATE(Snapshot, FilePath); m_Snapshot.assign(val); return true; }
     bool        SetDefaultVisibility(bool val) { return BoolToStr(val, m_DefaultVisibility); }
     bool        SetSpaceVisible(bool val) { return BoolToStr(val, m_SpacesVisible); }
     bool        SetSpaceBoundariesVisible(bool val) { return BoolToStr(val, m_SpaceBoundariesVisible); }
