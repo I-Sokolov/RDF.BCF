@@ -34,8 +34,15 @@ namespace CSExample
             Console.WriteLine("TEST Validarions");
             Validations();
 
+            Console.WriteLine("Dataset test");
+            SmokeTest_DataSet("W:\\DevArea\\buildingSMART\\BCF-XML\\Test Cases\\v3.0");
+
             Console.WriteLine("TESTS PASSED");
         }
+
+        [System.Runtime.InteropServices.DllImport("bcfEngine.dll", EntryPoint = "SmokeTest_DataSet")]
+
+        private static extern void SmokeTest_DataSet(string folder);
 
         /// <summary>
         /// 

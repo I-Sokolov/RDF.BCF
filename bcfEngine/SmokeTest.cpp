@@ -3,8 +3,17 @@
 #include "SmokeTest.h"
 #include "FileSystem.h"
 
+#include <filesystem>
+
+#include "BCFProject.h"
+
 #ifdef SMOKE_TEST
 
+#define ASSERT assert
+
+/// <summary>
+/// 
+/// </summary>
 extern void SmokeTest_ValidateXSD(const char* xsdName, const char* xmlFilePath)
 {
     std::string schemaFolder("..");
@@ -42,6 +51,39 @@ extern void SmokeTest_ValidateXSD(const char* xsdName, const char* xmlFilePath)
     if (exitCode != 0) {
         std::cerr << "XML file mismatch schema " << xmlFilePath << std::endl;
         exit(13);
+    }
+}
+
+/// <summary>
+/// 
+/// </summary>
+static void TestFromDataSet(const char* filepath)
+{
+    printf("\n\nTEST FILE %s\n", filepath);
+
+    BCFProject* bcf = new BCFProject();
+
+    auto ok = bcf->Read(filepath);
+    ASSERT(ok);
+
+    bcf->Delete();    
+}
+
+/// <summary>
+/// 
+/// </summary>
+RDFBCF_EXPORT void SmokeTest_DataSet(const char* folder)
+{
+    for (const auto& entry : std::filesystem::directory_iterator(folder)) {
+        if (entry.is_directory()) {
+            SmokeTest_DataSet(entry.path().string().c_str());
+        }
+        else {
+            auto ext = entry.path().extension();
+            if (ext.string() == ".bcf") {
+                TestFromDataSet(entry.path().string().c_str());
+            }
+        }
     }
 }
 
