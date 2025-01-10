@@ -52,6 +52,12 @@ private:
 /// <summary>
 /// XML writing macros
 /// </summary>
+#define REQUIRED(prop)                                          \
+    if (m_##prop.empty()) {                                     \
+        log().add(Log::Level::error, "Missed property", #prop); \
+        throw std::exception();                                 \
+    }
+
 #define ATTR_ADD(name) attr.Add(#name,m_##name.c_str())
 
 #define WRITE_CONTENT(name)   if (!m_##name.empty()) writer.writeTag(#name, m_##name)

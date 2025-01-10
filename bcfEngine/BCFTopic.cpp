@@ -43,6 +43,10 @@ void BCFTopic::ReadRoot(_xml::_element& elem, const std::string& folder)
 /// </summary>
 void BCFTopic::WriteRootContent(_xml_writer& writer, const std::string& folder)
 {
+    REQUIRED(TopicType);
+    REQUIRED(TopicStatus);
+    REQUIRED(Title);
+
     Attributes attr;
 
     WRITE_ELEM(Header);
@@ -133,6 +137,8 @@ void BCFTopic::Write_Topic(_xml_writer& writer, const std::string& folder)
 /// </summary>
 bool BCFTopic::SetServerAssignedId(const char* val) 
 {
+    UNNULL;
+
     if (UpdateAuthor()) {
         m_ServerAssignedId.assign(val);
         return true;
@@ -145,6 +151,8 @@ bool BCFTopic::SetServerAssignedId(const char* val)
 /// </summary>
 bool BCFTopic::SetTopicStatus(const char* val)
 {
+    UNNULL;
+
     if (Project().GetExtensions().CheckElement(BCFTopicStatuses, val)) {
         if (UpdateAuthor()) {
             m_TopicStatus.assign(val);
@@ -159,6 +167,8 @@ bool BCFTopic::SetTopicStatus(const char* val)
 /// </summary>
 bool BCFTopic::SetTopicType(const char* val)
 {
+    UNNULL;
+
     if (Project().GetExtensions().CheckElement(BCFTopicTypes, val)) {
         if (UpdateAuthor()) {
             m_TopicType.assign(val);
@@ -173,6 +183,8 @@ bool BCFTopic::SetTopicType(const char* val)
 /// </summary>
 bool BCFTopic::SetTitle(const char* val)
 {
+    UNNULL;
+
     if (UpdateAuthor()) {
         m_Title.assign(val);
         return true;
@@ -185,6 +197,8 @@ bool BCFTopic::SetTitle(const char* val)
 /// </summary>
 bool BCFTopic::SetPriority(const char* val)
 {
+    UNNULL;
+
     if (Project().GetExtensions().CheckElement(BCFPriorities, val)) {
         if (UpdateAuthor()) {
             m_Priority.assign(val);
@@ -210,6 +224,9 @@ bool BCFTopic::SetIndex(int val)
 /// </summary>
 bool BCFTopic::SetDueDate(const char* val)
 {
+    UNNULL;
+    VALIDATE(DueDate, DateTime);
+
     if (UpdateAuthor()) {
         m_DueDate.assign(val);
         return true;
@@ -222,6 +239,8 @@ bool BCFTopic::SetDueDate(const char* val)
 /// </summary>
 bool BCFTopic::SetAssignedTo(const char* val)
 {
+    UNNULL;
+
     if (Project().GetExtensions().CheckElement(BCFUsers, val)) {
         if (UpdateAuthor()) {
             m_AssignedTo.assign(val);
@@ -236,6 +255,8 @@ bool BCFTopic::SetAssignedTo(const char* val)
 /// </summary>
 bool BCFTopic::SetDescription(const char* val)
 {
+    UNNULL;
+
     if (UpdateAuthor()) {
         m_Description.assign(val);
         return true;
@@ -248,6 +269,8 @@ bool BCFTopic::SetDescription(const char* val)
 /// </summary>
 bool BCFTopic::SetStage(const char* val)
 {
+    UNNULL;
+
     if (Project().GetExtensions().CheckElement(BCFStages, val)) {
         if (UpdateAuthor()) {
             m_Stage.assign(val);

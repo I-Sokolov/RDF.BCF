@@ -43,9 +43,8 @@ void BCFComment::Read(_xml::_element& elem, const std::string& folder)
 /// </summary>
 void BCFComment::Write(_xml_writer& writer, const std::string& folder, const char* /*tag*/)
 {
-    if (m_Comment.empty() && !*m_Viewpoint.GetGuid()) {
-        log().add(Log::Level::error, "Invalid value", "Comment or Viewpoint is required for comment");
-        throw std::exception();
+    if (!*m_Viewpoint.GetGuid()) {
+        REQUIRED(Comment);
     }
 
     XMLFile::Attributes attr;

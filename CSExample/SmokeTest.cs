@@ -624,11 +624,24 @@ namespace CSExample
 
         static void Validations()
         {
-            using (var bcf = new Project())
+            using (var bcf = new Project("MyTset"))
             {
                 bcf.SetAuthor("me", true);
 
-                var topic = bcf.AddTopic("", "", "");
+                var topic = bcf.AddTopic("", "B", "C");
+
+                ASSERT(bcf.ErrorsGet().Length == 0);
+                var ok = bcf.FileWrite("Validation.bcf");
+                ASSERT(!ok);
+                var err = bcf.ErrorsGet();
+                ASSERT(err.Contains("Missed property"));
+                ASSERT(err.Contains("TopicType"));
+
+                topic.TopicType = "Type";
+                ok = bcf.FileWrite("Validation.bcf");
+                ASSERT(ok);
+
+                //
                 var file = topic.AddFile(null);
 
                 ASSERT(bcf.ErrorsGet().Length == 0);
@@ -645,6 +658,19 @@ namespace CSExample
                 ASSERT(file.IfcSpatialStructureElement.Length == 0);
                 ASSERT(bcf.ErrorsGet().Length != 0);
 
+                //
+                var comment = topic.AddComment();
+                ASSERT(bcf.ErrorsGet().Length == 0);
+
+                ok = bcf.FileWrite("Validation.bcf");
+                ASSERT(!ok);
+                err = bcf.ErrorsGet();
+                ASSERT(err.Contains("Missed property"));
+                ASSERT(err.Contains("Comment"));
+
+                comment.Text = "Text";
+                ok = bcf.FileWrite("Validation.bcf");
+                ASSERT(ok);
             }
         }
     }
