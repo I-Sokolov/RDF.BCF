@@ -132,6 +132,9 @@
     <ClInclude Include="ListOf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SmokeTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -207,6 +210,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ListOf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SmokeTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

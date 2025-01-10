@@ -3,6 +3,7 @@
 #include "BCFTopic.h"
 #include "XMLFile.h"
 #include "FileSystem.h"
+#include "SmokeTest.h"
 
 /// <summary>
 /// 
@@ -40,11 +41,11 @@ bool XMLFile::WriteFile(const std::string& bcfFolder)
     const char* xmlname = XMLFileName();
     assert(xmlname && *xmlname);
 
-    std::string path(bcfFolder);
-    FileSystem::AddPath(path, xmlname);
+    std::string xmlpath(bcfFolder);
+    FileSystem::AddPath(xmlpath, xmlname);
 
     try {
-        _xml_writer xmlWriter(path.c_str());
+        _xml_writer xmlWriter(xmlpath.c_str());
 
         xmlWriter.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
         xmlWriter.writeComment("RDF BCF engine build " __DATE__ ". http://rdf.bg.");
@@ -58,8 +59,12 @@ bool XMLFile::WriteFile(const std::string& bcfFolder)
         ok = true;
     }
     catch (std::exception& ex) {
-        m_project.log().add(Log::Level::error, "Write file error", "Failed to write %s file. %s", path.c_str(), ex.what());
+        m_project.log().add(Log::Level::error, "Write file error", "Failed to write %s file. %s", xmlpath.c_str(), ex.what());
     }
+
+#ifdef SMOKE_TEST
+    SmokeTest_ValidateXSD(XSDName(), xmlpath.c_str());
+#endif
 
     return ok;
 }
