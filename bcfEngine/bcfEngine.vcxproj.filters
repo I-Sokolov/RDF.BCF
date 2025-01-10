@@ -215,6 +215,9 @@
     <ClCompile Include="SmokeTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BCFDocumentReference.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="InstallZipLib.bat" />

@@ -66,6 +66,9 @@ static void TestFromDataSet(const char* filepath)
     auto ok = bcf->Read(filepath);
     ASSERT(ok);
 
+    ok = bcf->Write("Test.bcf", BCFVer_3_0);
+    ASSERT(ok);
+
     bcf->Delete();    
 }
 
