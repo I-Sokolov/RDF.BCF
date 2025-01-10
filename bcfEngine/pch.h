@@ -22,6 +22,7 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <regex>
 
 #include "XMLparser/_xml.h"
 #include "XMLparser/_xml_writer.h"

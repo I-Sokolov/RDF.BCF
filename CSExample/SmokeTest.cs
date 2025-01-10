@@ -31,6 +31,9 @@ namespace CSExample
             Console.WriteLine("TEST Comments and ViewPoint");
             CommentAndViewPoints();
 
+            Console.WriteLine("TEST Validarions");
+            Validations();
+
             Console.WriteLine("TESTS PASSED");
         }
 
@@ -125,7 +128,7 @@ namespace CSExample
             //
             var users = new string[] { "a.b@mail.com", "b Китайский 好 text", "z3", "z4" };
 
-            using (var bcf = new RDF.BCF.Project())
+            using (var bcf = new RDF.BCF.Project("MyProject"))
             {
                 var lst = bcf.Extensions.GetEnumeration(Interop.BCFEnumeration.Users);
                 ASSERT(lst.Count() == 0);
@@ -239,7 +242,7 @@ namespace CSExample
 
         static private void Topics()
         {
-            using (var bcf = new RDF.BCF.Project())
+            using (var bcf = new RDF.BCF.Project("MyProject"))
             {
                 bool ok = bcf.SetAuthor("Smoke-tester", true);
                 ASSERT(ok);
@@ -371,7 +374,7 @@ namespace CSExample
 
         static void CommentAndViewPoints()
         {
-            using (var bcf = new RDF.BCF.Project())
+            using (var bcf = new RDF.BCF.Project("MyProject"))
             {
                 bool ok = bcf.SetAuthor("Smoke-tester", true);
                 ASSERT(ok);
@@ -475,7 +478,7 @@ namespace CSExample
             for (int i = 0; i < 5; i++)
             {
                 bool isExternal = (i % 2 == 0);
-                var reference = isExternal ? $"File{i}" : TestFile("ifc");
+                var reference = TestFile("ifc");
 
                 RDF.BCF.BIMFile file;
                 if (i < 2)
@@ -517,7 +520,7 @@ namespace CSExample
             for (int i = 0; i < 4; i++)
             {
                 bool isExternal = (i % 2 == 0);
-                var reference = isExternal ? $"File{i}" : TestFile("ifc");
+                var reference = TestFile("ifc");
 
                 var file = topic.Files[i];
                 if (i > 1)
@@ -527,16 +530,8 @@ namespace CSExample
                 }
                 else
                 {
-                    if (isExternal)
-                    {
-                        ASSERT(file.Filename == $"File{i}");
-                        ASSERT(file.Date.Length == 0);
-                    }
-                    else
-                    {
-                        ASSERT(file.Filename == "Architectural.ifc");
-                        ASSERT(file.Date.Length == 25);
-                    }
+                    ASSERT(file.Filename == "Architectural.ifc");
+                    ASSERT(file.Date.Length == 25);
                 }
                 if (isExternal)
                 {
@@ -624,6 +619,32 @@ namespace CSExample
                 ASSERT(vp.AspectRatio == i * 4+0.1);
                 ASSERT(vp.Snapshot.EndsWith("Architectural.png"));
                 ASSERT(Path.Exists(vp.Snapshot));
+            }
+        }
+
+        static void Validations()
+        {
+            using (var bcf = new Project())
+            {
+                bcf.SetAuthor("me", true);
+
+                var topic = bcf.AddTopic("", "", "");
+                var file = topic.AddFile(null);
+
+                ASSERT(bcf.ErrorsGet().Length == 0);
+
+                file.Reference = "WrongPath";
+                ASSERT(file.Reference.Length == 0);
+                ASSERT(bcf.ErrorsGet().Length != 0);
+
+                file.Date = "WrongDate";
+                ASSERT(file.Date.Length == 0);
+                ASSERT(bcf.ErrorsGet().Length != 0);
+
+                file.IfcSpatialStructureElement = "wrongGUID";
+                ASSERT(file.IfcSpatialStructureElement.Length == 0);
+                ASSERT(bcf.ErrorsGet().Length != 0);
+
             }
         }
     }

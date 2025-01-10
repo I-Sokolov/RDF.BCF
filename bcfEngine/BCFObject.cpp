@@ -164,3 +164,48 @@ std::string BCFObject::CopyToRelative(const std::string& absolutePath, const std
     }
     throw std::exception("Failed to copy internal file to BCF package");
 }
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFObject::IsDateTimeValid (const char* str, const char* propName)
+{
+    std::regex dateReg(R"(^(\d{4}-\d{2}-\d{2})(T(\d{2}:\d{2}:\d{2})(\.\d+)?(Z|[\+\-]\d{2}:\d{2})?)?$)");
+
+    if (std::regex_match(str, dateReg)) {
+        return true;
+    }
+
+    log().add(Log::Level::error, "Ivalid value", "'%s' is not correct ISO 8601 date-time and can not be used as %s", str, propName);
+    return false;
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFObject::IsIfcGuidValid(const char* str, const char* propName)
+{
+    std::regex pattern("[0-9A-Za-z_$]{22}");
+   
+    if (std::regex_match(str, pattern)) {
+        return true;
+    }
+
+    log().add(Log::Level::error, "Ivalid value", "'%s' is not correct IfcGuid and can not be used as %s", str, propName);
+    return false;
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFObject::IsFilePathValid(const char* str, const char* propName)
+{
+    if (FileSystem::Exists(str)) {
+        return true;
+    }
+
+    log().add(Log::Level::error, "Ivalid value", "'%s' is not existing file and can not be used as %s", str, propName);
+    return false;
+}
+
+//color "[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?"

@@ -9,7 +9,7 @@ GuidStr::GuidStr(BCFProject& project, const char* guid)
     : m_project(project)
 {
     if (guid) {
-        if (*guid) {
+        if (*guid && IsGUIDValid(guid)) {
             value.assign(guid);
         }
         else {
@@ -21,9 +21,24 @@ GuidStr::GuidStr(BCFProject& project, const char* guid)
 /// <summary>
 /// 
 /// </summary>
+bool GuidStr::IsGUIDValid(const char* str)
+{
+    std::regex guidReg("[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}");
+
+    if (std::regex_match(str, guidReg)) {
+        return true;
+    }
+
+    m_project.log().add(Log::Level::error, "Ivalid value", "'%s' is not correct IfcGuid", str);
+    return false;
+}
+
+/// <summary>
+/// 
+/// </summary>
 void GuidStr::CreateNew()
 {
-    assert(empty());
+    assert(IsEmpty());
 
     std::ostringstream oss;
     for (int i = 0; i < 4; i++) {
@@ -55,7 +70,12 @@ void GuidStr::CreateNew()
 void GuidStr::assign(const std::string& s)
 { 
     if (value.empty()) {
-        value.assign(s);
+        if (IsGUIDValid(s.c_str())) {
+            value.assign(s);
+        }
+        else {
+            CreateNew();
+        }
     }
     else if (value!=s) {
         m_project.log().add(Log::Level::warning, "Inconsitent GUIDs",  "%s is aloso referenced as %s", value.c_str(), s.c_str());

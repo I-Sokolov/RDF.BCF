@@ -39,6 +39,10 @@ protected:
 
     static std::string TimeToStr(time_t tm);
 
+    bool IsDateTimeValid(const char* str, const char* propName);
+    bool IsIfcGuidValid(const char* str, const char* propName);
+    bool IsFilePathValid(const char* str, const char* propName);
+
 private:
     static std::string GetCurrentDate() { return GetCurrentTime(); }
     static std::string GetCurrentTime();
@@ -47,3 +51,5 @@ protected:
     BCFProject& m_project;
 };
 
+#define UNNULL                      {if(!val) val = "";}
+#define VALIDATE(Prop,Predicate)    {if (*val && !Is##Predicate##Valid(val, #Prop)) return false;}

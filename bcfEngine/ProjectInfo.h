@@ -9,7 +9,7 @@ public:
     ProjectInfo(BCFProject& project, const char* projectId);
 
 public:
-    GuidStr     m_ProjectId;
+    std::string m_ProjectId;
     std::string m_Name;
 
 private:

@@ -12,10 +12,13 @@ public:
 
     void CreateNew();
 
-    bool empty() const { return value.empty(); }
+    bool IsEmpty() const { return value.empty(); }
     void assign(const std::string& s);
 
     const char* c_str() { return value.c_str(); }
+
+private:
+    bool IsGUIDValid(const char* str);
 
 private:
     BCFProject& m_project;

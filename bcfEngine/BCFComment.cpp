@@ -43,6 +43,11 @@ void BCFComment::Read(_xml::_element& elem, const std::string& folder)
 /// </summary>
 void BCFComment::Write(_xml_writer& writer, const std::string& folder, const char* /*tag*/)
 {
+    if (m_Comment.empty() && !*m_Viewpoint.GetGuid()) {
+        log().add(Log::Level::error, "Invalid value", "Comment or Viewpoint is required for comment");
+        throw std::exception();
+    }
+
     XMLFile::Attributes attr;
     ATTR_ADD(Guid);
 
@@ -103,13 +108,15 @@ bool BCFComment::SetViewPoint(BCFViewPoint* viewPoint)
 /// <summary>
 /// 
 /// </summary>
-bool BCFComment::SetText(const char* value)
+bool BCFComment::SetText(const char* val)
 {
+    UNNULL;
+
     if (!UpdateAuthor()) {
         return false;
     }
 
-    m_Comment.assign(value);
+    m_Comment.assign(val);
     return true;
 }
 

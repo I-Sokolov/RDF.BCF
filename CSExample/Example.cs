@@ -16,7 +16,7 @@ namespace CSExample
 
         static void CreateExample()
         {
-            using (var bcfData = new RDF.BCF.Project())
+            using (var bcfData = new RDF.BCF.Project("MyProject"))
             {
                 bcfData.SetAuthor("user@company.org", true);
 
@@ -47,6 +47,12 @@ namespace CSExample
                 //
                 //
                 bcfData.FileWrite("MyTest.bcf");
+
+                var errors = bcfData.ErrorsGet();
+                if(errors.Length != 0)
+                {
+                    Console.WriteLine("Errors: " + errors);
+                }
             }
         }
 

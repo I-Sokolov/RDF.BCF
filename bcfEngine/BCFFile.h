@@ -17,11 +17,11 @@ public:
     const char* GetIfcSpatialStructureElement   () { return m_IfcSpatialStructureElement.c_str(); }
 
     bool SetIsExternal                   (bool        val) { return BoolToStr(val, m_IsExternal);}
-    bool SetFilename                     (const char* val) { m_Filename.assign(val); return true;}
-    bool SetDate                         (const char* val) { m_Date.assign(val); return true;}
+    bool SetFilename                     (const char* val) { UNNULL; m_Filename.assign(val); return true;}
+    bool SetDate                         (const char* val) { UNNULL; VALIDATE(Date, DateTime); m_Date.assign(val); return true;}
     bool SetReference                    (const char* val);
-    bool SetIfcProject                   (const char* val) { m_IfcProject.assign(val); return true;}
-    bool SetIfcSpatialStructureElement   (const char* val) { m_IfcSpatialStructureElement.assign(val); return true;}
+    bool SetIfcProject                   (const char* val) { UNNULL; VALIDATE(IfcProject, IfcGuid); m_IfcProject.assign(val); return true;}
+    bool SetIfcSpatialStructureElement   (const char* val) { UNNULL; VALIDATE(m_IfcSpatialStructureElement, IfcGuid); m_IfcSpatialStructureElement.assign(val); return true;}
 
 public:
     bool Remove(void);

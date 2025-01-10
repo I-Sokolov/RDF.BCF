@@ -312,9 +312,16 @@ BCFFile* BCFTopic::FileAdd(const char* filePath, bool isExternal)
 {
     auto file = new BCFFile(*this);
 
+    bool ok = true;
+
     if (file && filePath && *filePath) {
-        file->SetIsExternal(isExternal);
-        file->SetReference(filePath);
+        ok = ok && file->SetIsExternal(isExternal);
+        ok = ok && file->SetReference(filePath);
+    }
+
+    if (!ok) {
+        delete file;
+        file = NULL;
     }
 
     if (file) {

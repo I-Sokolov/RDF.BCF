@@ -82,6 +82,9 @@ bool BCFFile::Remove(void)
 /// </summary>
 bool BCFFile::SetReference(const char* val)
 { 
+    UNNULL;
+    VALIDATE(Reference, FilePath);
+
     m_Reference.assign(val);
     if (!m_Reference.empty()) {
         UpdateFileInfo();
