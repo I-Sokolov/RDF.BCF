@@ -32,9 +32,9 @@ void BCFComment::Read(_xml::_element& elem, const std::string& folder)
         CHILD_GET_CONTENT(Date)
         CHILD_GET_CONTENT(Author)
         CHILD_GET_CONTENT(Comment)
+        CHILD_READ_MEMBER(Viewpoint)
         CHILD_GET_CONTENT(ModifiedDate)
         CHILD_GET_CONTENT(ModifiedAuthor)
-        CHILD_READ_MEMBER(Viewpoint)
     CHILDREN_END
 }
 
@@ -57,9 +57,9 @@ void BCFComment::Write_Comment(_xml_writer& writer, const std::string& folder)
     WRITE_CONTENT(Date);
     WRITE_CONTENT(Author);
     WRITE_CONTENT(Comment);
+    WRITE_MEMBER(Viewpoint);
     WRITE_CONTENT(ModifiedDate);
     WRITE_CONTENT(ModifiedAuthor);
-    WRITE_MEMBER(Viewpoint);
 }
 
 /// <summary>

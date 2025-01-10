@@ -120,8 +120,8 @@ void BCFTopic::Write_Topic(_xml_writer& writer, const std::string& folder)
     WRITE_CONTENT(ModifiedAuthor);
     WRITE_CONTENT(DueDate);
     WRITE_CONTENT(AssignedTo);
-    WRITE_CONTENT(Description);
     WRITE_CONTENT(Stage);
+    WRITE_CONTENT(Description);
     WRITE_LIST(DocumentReference);
     WRITE_LIST(RelatedTopic);
     WRITE_LIST(Comment);

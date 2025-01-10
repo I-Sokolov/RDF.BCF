@@ -246,7 +246,7 @@ namespace CSExample
 
                 SetTopicAttributes(bcf);
 
-                GetTopicAttributes(bcf, true);
+                CheckTopicAttributes(bcf, true);
 
                 ok = bcf.FileWrite("TopicsTest.bcf");
                 ASSERT(ok);
@@ -257,13 +257,13 @@ namespace CSExample
                 var ok = bcf.FileRead("TopicsTest.bcf");
                 ASSERT(ok);
 
-                GetTopicAttributes(bcf, true);
+                CheckTopicAttributes(bcf, true);
 
                 bcf.SetAuthor("Smoke-Editor", true);
 
                 bcf.Topics[0].Title = "Modified title";
 
-                GetTopicAttributes(bcf, false);
+                CheckTopicAttributes(bcf, false);
 
                 ok = bcf.FileWrite("TopicsTest2.bcf");
                 ASSERT(ok);
@@ -274,14 +274,24 @@ namespace CSExample
                 var ok = bcf.FileRead("TopicsTest2.bcf");
                 ASSERT(ok);
 
-                GetTopicAttributes(bcf, false);
+                CheckTopicAttributes(bcf, false);
             }
         }
-        
+
+        static private string TestDate(int i)
+        {
+            return $"202{i}-01-10T12:03:53+04:00";
+        }
+
+        static private string TestGuid(int i)
+        {
+            return $"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa{i}";
+        }
+
         static private void SetTopicAttributes(RDF.BCF.Project bcf)
         {
             var topic = bcf.AddTopic("Type1", "Title1", "Status1");
-            bcf.AddTopic("Type1", "Title1", "Status1", "myGuid");
+            bcf.AddTopic("Type1", "Title1", "Status1", TestGuid(0));
             ASSERT(topic != null);
             if (topic != null)
             {
@@ -291,7 +301,7 @@ namespace CSExample
                 topic.ServerAssignedId = "ServerAssignedId";
                 topic.TopicType = "TopicType";
                 topic.Priority = "Priority";
-                topic.DueDate = "DueDate";
+                topic.DueDate = TestDate(0);
                 topic.AssignedTo = "AssignedTo";
                 topic.Description = "Description";
                 topic.Stage = "Stage";
@@ -300,7 +310,7 @@ namespace CSExample
 
         }
 
-        static private void GetTopicAttributes(RDF.BCF.Project bcf, bool newFile)
+        static private void CheckTopicAttributes(RDF.BCF.Project bcf, bool newFile)
         {
             ASSERT(bcf.Topics.Count() == 2);
 
@@ -308,6 +318,7 @@ namespace CSExample
             ASSERT(topic != null);
             if (topic != null)
             {
+                ASSERT(topic.Guid == TestGuid(0));
                 ASSERT(topic.TopicType == "Type1");
                 ASSERT(topic.Title == "Title1");
                 ASSERT(topic.TopicStatus == "Status1");
@@ -335,7 +346,7 @@ namespace CSExample
                 ASSERT(topic.ServerAssignedId == "ServerAssignedId");
                 ASSERT(topic.TopicType == "TopicType");
                 ASSERT(topic.Priority == "Priority");
-                ASSERT(topic.DueDate == "DueDate");
+                ASSERT(topic.DueDate == TestDate(0));
                 ASSERT(topic.AssignedTo == "AssignedTo");
                 ASSERT(topic.Description == "Description");
                 ASSERT(topic.Stage == "Stage");
@@ -430,7 +441,7 @@ namespace CSExample
 
             var comment = topic.Comments[0];
 
-            ASSERT(comment.ViewPoint!=null && comment.ViewPoint.Guid == "ID-0");
+            ASSERT(comment.ViewPoint!=null && comment.ViewPoint.Guid == TestGuid(0));
             ASSERT(comment.Date.Length == 25);
             ASSERT(comment.Author == "Smoke-tester");
             if (!modified)
@@ -481,17 +492,22 @@ namespace CSExample
                 if (i > 1)
                 {
                     file.Filename = $"Name-{i}";
-                    file.Date = $"Date-{i}";
+                    file.Date = TestDate(i);
                 }
 
-                file.IfcProject=$"Project-{i}";
-                file.IfcSpatialStructureElement = $"SPA-{i}";
+                file.IfcProject=TestIfcGuid(i+1);
+                file.IfcSpatialStructureElement = TestIfcGuid(i);
             }
 
             ASSERT(topic.Files.Count == 5);
 
             topic.Files[4].Remove();
             ASSERT(topic.Files.Count == 4);
+        }
+
+        static private string TestIfcGuid(int i)
+        {
+            return $"{i}{i}{i}{i}Uv4EX5LAhcVpDp2dUH";
         }
 
         static void CheckFiles(Topic topic)
@@ -507,7 +523,7 @@ namespace CSExample
                 if (i > 1)
                 {
                     ASSERT(file.Filename == $"Name-{i}");
-                    ASSERT(file.Date == $"Date-{i}");
+                    ASSERT(file.Date == TestDate(i));
                 }
                 else
                 {
@@ -530,9 +546,9 @@ namespace CSExample
                 {
                     ASSERT(file.Reference.EndsWith("Architectural.ifc"));
                 }
-                ASSERT(file.IsExternal== isExternal);                
-                ASSERT(file.IfcProject == $"Project-{i}");
-                ASSERT(file.IfcSpatialStructureElement == $"SPA-{i}");
+                ASSERT(file.IsExternal== isExternal);
+                ASSERT(file.IfcProject == TestIfcGuid(i+1));
+                ASSERT(file.IfcSpatialStructureElement == TestIfcGuid(i));
             }
         }
         static void SetViewPoints(Topic topic)
@@ -545,7 +561,7 @@ namespace CSExample
 
             for (int i = 0; i < 4; i++)
             {
-                var vp = topic.AddViewPoint($"ID-{i}");
+                var vp = topic.AddViewPoint(TestGuid(i));
 
                 bool b = (i % 2 == 0);
 
@@ -558,8 +574,8 @@ namespace CSExample
                 vp.SetCameraDirection(new Interop.BCFPoint() { x = i + .3, y = i + .4, z = i + .5 });
                 vp.SetCameraUpVector(new Interop.BCFPoint() { x = i + .6, y = i + .7, z = i + .8 });
                 vp.ViewToWorldScale = i * 3;
-                vp.FieldOfView = i * 3.5;
-                vp.AspectRatio = i * 4;
+                vp.FieldOfView = i * 3.5 + 0.1;
+                vp.AspectRatio = i * 4 + 0.1;
                 vp.Snapshot = TestFile("png");
             }
 
@@ -582,7 +598,7 @@ namespace CSExample
             {
                 var vp = topic.ViewPoints[i];
 
-                ASSERT(vp.Guid == $"ID-{i}");
+                ASSERT(vp.Guid == TestGuid(i));
 
                 bool b = (i % 2 == 0);
 
@@ -593,18 +609,19 @@ namespace CSExample
                 if (b)
                 {
                     ASSERT(vp.CameraType == Interop.BCFCamera.Perspective);
-                    ASSERT(vp.FieldOfView == i * 3.5);
+                    ASSERT(vp.FieldOfView == i * 3.5 + 0.1);
                     ASSERT(vp.ViewToWorldScale == (read ? 0 : i * 3));
                 }
                 else
                 {
                     ASSERT(vp.CameraType == Interop.BCFCamera.Orthogonal);
-                    ASSERT(vp.FieldOfView == (read ? 0: i * 3.5));
+                    ASSERT(vp.FieldOfView == (read ? 0 : i * 3.5 + 0.1));
+                    ASSERT(vp.ViewToWorldScale == i * 3);
                 }
                 ASSERT(EQ(vp.GetCameraViewPoint(), new Interop.BCFPoint() { x = i, y = i + .1, z = i + .2 }));
                 ASSERT(EQ(vp.GetCameraDirection(), new Interop.BCFPoint() { x = i + .3, y = i + .4, z = i + .5 }));
                 ASSERT(EQ(vp.GetCameraUpVector(), new Interop.BCFPoint() { x = i + .6, y = i + .7, z = i + .8 }));
-                ASSERT(vp.AspectRatio == i * 4);
+                ASSERT(vp.AspectRatio == i * 4+0.1);
                 ASSERT(vp.Snapshot.EndsWith("Architectural.png"));
                 ASSERT(Path.Exists(vp.Snapshot));
             }
