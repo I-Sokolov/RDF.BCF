@@ -60,3 +60,42 @@ void BCFDocumentReference::Write_DocumentReference(_xml_writer& writer, const st
 }
 
 
+/// <summary>
+/// 
+/// </summary>
+const char* BCFDocumentReference::GetUrlPath()
+{
+    if (!m_Url.empty()) {
+        return m_Url.c_str();
+    }
+    else if (!m_DocumentGuid.empty()) {
+        assert(!"TODO - local document");
+        return "";
+    }
+    else {
+        return "";
+    }
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFDocumentReference::SetUrlPath(const char* val)
+{
+    UNNULL;
+
+    if (!*val) {
+        m_DocumentGuid.clear();
+        m_Url.clear();
+        return true;
+    }
+    else if (IsURL(val)) {
+        m_DocumentGuid.clear();
+        m_Url.assign(val);
+        return true;
+    }
+    else {
+        assert(!"TODO - local document");
+        return false;
+    }
+}

@@ -13,6 +13,15 @@ public:
     void Read(_xml::_element& elem, const std::string& folder);
     void Write(_xml_writer& writer, const std::string& folder, const char* tag);
 
+public:
+    const char* GetGuid() { return m_Guid.c_str(); }
+    const char* GetUrlPath();
+    const char* GetDescription() { return m_Description.c_str(); }
+
+    bool SetUrlPath(const char* val);
+    bool SetDescription(const char* val) { UNNULL; m_Description.assign(val); return true; }
+
+
 private:
     void Write_DocumentReference(_xml_writer& writer, const std::string& folder);
 
