@@ -6,7 +6,6 @@
 #include "XMLPoint.h"
 #include "GuidStr.h"
 
-struct BCFComponent;
 struct BCFColor;
 struct BCFLine;
 struct BCFClippingPlane;
@@ -46,13 +45,13 @@ public:
     bool        SetFieldOfView(double val) { return RealToStr (val, m_FieldOfView); }
     bool        SetAspectRatio(double val) { return RealToStr (val, m_AspectRatio); }
 
-    BCFComponent* SelectionAdd();
+    BCFComponent* SelectionAdd(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL);
     BCFComponent* SelectionIterate(BCFComponent* prev);
     bool SelectionRemove(BCFComponent* component);
 
-    BCFComponent* ExceptionsAdd();
-    BCFComponent* ExceptionIterate(BCFComponent* prev);
-    bool ExceptionRemove(BCFComponent* component);
+    BCFComponent* ExceptionsAdd(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL);
+    BCFComponent* ExceptionsIterate(BCFComponent* prev);
+    bool ExceptionsRemove(BCFComponent* component);
 
     BCFColor* ColoringAdd();
     BCFColor* ColoringIterate(BCFColor* prev);
@@ -107,13 +106,13 @@ private:
     std::string                 m_Viewpoint; //name.bcfv
     std::string                 m_Snapshot;  //name.jpg
 
-    ListOf<BCFComponent>        m_Selection;
+    ListOfComponents            m_Selection;
     
     std::string                 m_DefaultVisibility;
     std::string                 m_SpacesVisible;
     std::string                 m_SpaceBoundariesVisible;
     std::string                 m_OpeningsVisible;
-    ListOf<BCFComponent>        m_Exceptions;
+    ListOfComponents            m_Exceptions;
     
     ListOf<BCFColor>            m_Coloring;
 

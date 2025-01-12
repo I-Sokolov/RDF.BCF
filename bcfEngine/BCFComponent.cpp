@@ -27,3 +27,22 @@ void BCFComponent::Read(_xml::_element& elem, const std::string&)
         CHILD_GET_CONTENT(AuthoringToolId)
     CHILDREN_END
 }
+
+/// <summary>
+/// 
+/// </summary>
+void BCFComponent::Write(_xml_writer& writer, const std::string& folder, const char* tag)
+{ 
+    if (m_IfcGuid.empty()) {
+        REQUIRED_PROP(AuthoringToolId);
+    }
+
+    XMLFile::Attributes attr;
+    ATTR_ADD(IfcGuid);
+
+    XMLFile::ElemTag _(writer, tag, attr);
+
+    WRITE_CONTENT(OriginatingSystem);
+    WRITE_CONTENT(AuthoringToolId);
+}
+

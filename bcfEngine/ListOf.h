@@ -2,6 +2,8 @@
 
 struct BCFProject;
 struct BCFObject;
+struct BCFComponent;
+struct BCFViewPoint;
 
 /// <summary>
 /// 
@@ -88,4 +90,15 @@ public:
             assert(false);
         }
     }
+};
+
+/// <summary>
+/// 
+/// </summary>
+class ListOfComponents : public ListOf<BCFComponent>
+{
+public:
+    ListOfComponents(BCFProject& project) : ListOf<BCFComponent>(project) {}
+
+    BCFComponent* Add(BCFViewPoint& viewPoint, const char* ifcGuid, const char* authoringToolId, const char* originatingSystem);
 };

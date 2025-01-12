@@ -273,3 +273,50 @@ bool BCFViewPoint::Remove()
 }
 
 
+/// <summary>
+/// 
+/// </summary>
+BCFComponent* BCFViewPoint::SelectionAdd(const char* ifcGuid, const char* authoringToolId, const char* originatingSystem)
+{
+    return m_Selection.Add(*this, ifcGuid, authoringToolId, originatingSystem);
+}
+
+/// <summary>
+/// 
+/// </summary>
+BCFComponent* BCFViewPoint::SelectionIterate(BCFComponent* prev)
+{
+    return m_Selection.GetNext(prev);
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFViewPoint::SelectionRemove(BCFComponent* component)
+{
+    return m_Selection.Remove(component);
+}
+
+/// <summary>
+/// 
+/// </summary>
+BCFComponent* BCFViewPoint::ExceptionsAdd(const char* ifcGuid, const char* authoringToolId, const char* originatingSystem)
+{
+    return m_Exceptions.Add(*this, ifcGuid, authoringToolId, originatingSystem);
+}
+
+/// <summary>
+/// 
+/// </summary>
+BCFComponent* BCFViewPoint::ExceptionsIterate(BCFComponent* prev)
+{
+    return m_Exceptions.GetNext(prev);
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFViewPoint::ExceptionsRemove(BCFComponent* component)
+{
+    return m_Exceptions.Remove(component);
+}

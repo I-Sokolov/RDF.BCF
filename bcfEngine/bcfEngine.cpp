@@ -6,6 +6,7 @@
 #include "BCFComment.h"
 #include "BCFViewPoint.h"
 #include "BCFFile.h"
+#include "BCFColor.h"
 
 /// <summary>
 /// Macros to implement put/get attributes and iterate/remove objects
@@ -48,8 +49,9 @@ RDFBCF_EXPORT BCF##OBJ* bcf##OBJ##Iterate(BCF##CONTAINER* container, BCF##OBJ* p
         return container->##OBJ##Iterate(prev);                                         \
     }                                                                                   \
     return NULL;                                                                        \
-}                                                                                       \
-                                                                                        \
+}                                                                                       
+   
+#define OBJ_REMOVE(OBJ)                                                                 \
 RDFBCF_EXPORT bool bcf##OBJ##Remove(BCF##OBJ* obj)                                      \
 {                                                                                       \
     if (obj) {                                                                          \
@@ -203,6 +205,7 @@ RDFBCF_EXPORT bool bcfEnumerationElementRemove(BCFProject* project, BCFEnumerati
 /// 
 /// </summary>
 OBJ_ITERATE(Topic, Project)
+OBJ_REMOVE(Topic)
 RDFBCF_EXPORT BCFTopic* bcfTopicAdd(BCFProject* project, const char* type, const char* title, const char* status, const char* guid)
 {
     if (project) {
@@ -245,6 +248,7 @@ OBJ_SET_ATTR(Int, Topic, Index)
 /// 
 /// </summary>
 OBJ_ITERATE(File, Topic)
+OBJ_REMOVE(File)
 RDFBCF_EXPORT BCFFile* bcfFileAdd(BCFTopic* topic, const char* filePath, bool isExternal)
 {
     if (topic) {
@@ -275,6 +279,7 @@ OBJ_SET_ATTR(Str, File, IfcSpatialStructureElement   )
 /// 
 /// </summary>
 OBJ_ITERATE(Comment, Topic)
+OBJ_REMOVE(Comment)
 RDFBCF_EXPORT BCFComment* bcfCommentAdd(BCFTopic* topic, const char* guid)
 {
     if (topic) {
@@ -302,6 +307,7 @@ OBJ_SET_ATTR(ViewPoint, Comment, ViewPoint)
 /// 
 /// </summary>
 OBJ_ITERATE(ViewPoint, Topic)
+OBJ_REMOVE(ViewPoint)
 RDFBCF_EXPORT BCFViewPoint* bcfViewPointAdd(BCFTopic* topic, const char* guid)
 {
     if (topic) {
@@ -342,4 +348,36 @@ OBJ_SET_ATTR(Point,  ViewPoint, CameraUpVector)
 OBJ_SET_ATTR(Real,   ViewPoint, ViewToWorldScale)
 OBJ_SET_ATTR(Real,   ViewPoint, FieldOfView)
 OBJ_SET_ATTR(Real,   ViewPoint, AspectRatio)
+
+/// <summary>
+/// 
+/// </summary>
+#define COMPONENT_LIST(Parent, List)                                                            \
+RDFBCF_EXPORT BCFComponent* bcf##Parent##List##Add(BCF##Parent* parent, const char* ifcGuid)    \
+{                                                                                               \
+    if (parent) {                                                                               \
+        parent->##List##Add(ifcGuid);                                                           \
+    }                                                                                           \
+    return NULL;                                                                                \
+}                                                                                               \
+RDFBCF_EXPORT BCFComponent* bcf##Parent##List##Iterate(BCF##Parent* parent, BCFComponent* prev) \
+{                                                                                               \
+    if (parent) {                                                                               \
+        parent->##List##Iterate(prev);                                                          \
+    }                                                                                           \
+    return NULL;                                                                                \
+}                                                                                               \
+RDFBCF_EXPORT bool bcf##Parent##List##Remove(BCF##Parent* parent, BCFComponent* component)      \
+{                                                                                               \
+    if (parent) {                                                                               \
+        return parent->##List##Remove(component);                                               \
+    }                                                                                           \
+    return false;                                                                               \
+}
+
+COMPONENT_LIST(ViewPoint, Selection)
+COMPONENT_LIST(ViewPoint, Exceptions)
+
+COMPONENT_LIST(Color, Component)
+
 

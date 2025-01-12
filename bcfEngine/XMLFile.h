@@ -17,6 +17,15 @@ public:
         void Add(const char* name, const char* value) { if (value && *value) push_back(Attributes::value_type(name, value)); }
     };
 
+    struct ElemTag
+    {
+        ElemTag(_xml_writer& writer, const char* tag, Attributes& attr) : m_writer(writer), m_tag(tag) { writer.writeStartTag(tag, attr); writer.indent()++; }
+        ~ElemTag() { m_writer.indent()--; m_writer.writeEndTag(m_tag); }
+    private:
+        _xml_writer& m_writer;
+        const char* m_tag;
+    };
+
 public:
     XMLFile(BCFProject& project) : BCFObject(project) {}
 

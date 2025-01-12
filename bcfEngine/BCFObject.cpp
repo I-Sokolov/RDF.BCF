@@ -209,3 +209,18 @@ bool BCFObject::IsFilePathValid(const char* str, const char* propName)
 }
 
 //color "[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?"
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFObject::IsURL(const char* path)
+{
+    if (!path) {
+        return false;
+    }
+
+    std::string data(path, 5);
+    std::transform(data.begin(), data.end(), data.begin(), [](unsigned char c) { return std::tolower(c); });
+
+    return data == "http:" || data == "ftp:";
+}

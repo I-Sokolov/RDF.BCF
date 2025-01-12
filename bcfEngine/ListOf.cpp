@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "ListOf.h"
 #include "BCFProject.h"
+#include "BCFComponent.h"
 
 /// <summary>
 /// 
@@ -79,4 +80,25 @@ void ListOfProjectObjects::LogDuplicatedGuid(const char* guid)
 }
 
 
+/// <summary>
+/// 
+/// </summary>
+BCFComponent* ListOfComponents::Add(BCFViewPoint& viewPoint, const char* ifcGuid, const char* authoringToolId, const char* originatingSystem)
+{
+    auto comp = new BCFComponent(viewPoint);
+
+    bool ok = true;
+    if (ifcGuid) ok = ok && comp->SetIfcGuid(ifcGuid);
+    if (authoringToolId) ok = ok && comp->SetAuthoringToolId(authoringToolId);
+    if (originatingSystem) ok = ok && comp->SetOriginatingSystem(originatingSystem);
+
+    if (ok) {
+        __super::Add(comp);
+        return comp;
+    }
+    else {
+        delete comp;
+        return NULL;
+    }
+}
 

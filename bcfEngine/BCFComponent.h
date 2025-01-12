@@ -9,7 +9,16 @@ public:
     BCFComponent(BCFViewPoint& viewPoint);
 
     void Read(_xml::_element& elem, const std::string& folder);
-    void Write(_xml_writer& writer, const std::string& folder, const char* tag) { assert(!"TODO"); }
+    void Write(_xml_writer& writer, const std::string& folder, const char* tag);
+
+public:
+    const char* GetIfcGuid() {return m_IfcGuid.c_str();}
+    const char* GetOriginatingSystem() {return m_OriginatingSystem.c_str();}
+    const char* GetAuthoringToolId() { return m_AuthoringToolId.c_str(); }
+
+    bool SetIfcGuid(const char* val) { UNNULL; VALIDATE(IfcGuid, IfcGuid); m_IfcGuid.assign(val); return true; }
+    bool SetOriginatingSystem(const char* val) { UNNULL; m_OriginatingSystem.assign(val); return true; }
+    bool SetAuthoringToolId(const char* val) { UNNULL; m_AuthoringToolId.assign(val); return true; }
 
 private:
     BCFViewPoint& m_viewPoint;

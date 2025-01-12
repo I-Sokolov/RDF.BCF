@@ -43,6 +43,8 @@ protected:
     bool IsIfcGuidValid(const char* str, const char* propName);
     bool IsFilePathValid(const char* str, const char* propName);
 
+    static bool IsURL(const char* path);
+
 private:
     static std::string GetCurrentDate() { return GetCurrentTime(); }
     static std::string GetCurrentTime();
