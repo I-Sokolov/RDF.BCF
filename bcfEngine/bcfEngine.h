@@ -212,6 +212,17 @@ extern "C" {
     /// <summary>
     ///
     /// </summary>
+    RDFBCF_EXPORT const char* bcfComponentGetIfcGuid(BCFComponent* component);
+    RDFBCF_EXPORT const char* bcfComponentGetOriginatingSystem(BCFComponent* component);
+    RDFBCF_EXPORT const char* bcfComponentGetAuthoringToolId(BCFComponent* component);
+
+    RDFBCF_EXPORT bool bcfComponentSetIfcGuid (BCFComponent* component, const char* value);
+    RDFBCF_EXPORT bool bcfComponentSetOriginatingSystem(BCFComponent* component, const char* value);
+    RDFBCF_EXPORT bool bcfComponentSetAuthoringToolId(BCFComponent* component, const char* value);
+
+    /// <summary>
+    ///
+    /// </summary>
     RDFBCF_EXPORT BCFColor* bcfViewPointColoringAdd();
     RDFBCF_EXPORT BCFColor* bcfViewPointColoringIterate(BCFColor* prev);
     RDFBCF_EXPORT bool bcfViewPointColoringRemove(BCFColor* color);
@@ -222,13 +233,6 @@ extern "C" {
     RDFBCF_EXPORT BCFComponent* bcfColorComponentAdd(BCFColor* color, const char* ifcGuid);
     RDFBCF_EXPORT BCFComponent* bcfColorComponentIterate(BCFColor* color, BCFComponent* prev);
     RDFBCF_EXPORT bool bcfColorComponetRemove(BCFColor* color, BCFComponent* component);
-
-    /// <summary>
-    ///
-    /// </summary>
-    RDFBCF_EXPORT BCFColor* bcfViewPointColoringAdd();
-    RDFBCF_EXPORT BCFColor* bcfViewPointColoringIterate(BCFColor* prev);
-    RDFBCF_EXPORT bool bcfViewPointColoringRemove(BCFColor* coloring);
 
     /// <summary>
     ///

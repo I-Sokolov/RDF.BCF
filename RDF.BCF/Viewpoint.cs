@@ -21,15 +21,38 @@ namespace RDF.BCF
         public double FieldOfView { get { return Interop.ViewPointGetFieldOfView(m_handle); } set { Interop.ViewPointSetFieldOfView(m_handle, value); } }
         public double AspectRatio { get { return Interop.ViewPointGetAspectRatio(m_handle); } set { Interop.ViewPointSetAspectRatio(m_handle, value); } }
         public string Snapshot { get { return Interop.ViewPointGetSnapshot(m_handle); } set { Interop.ViewPointSetSnapshot(m_handle, value); } }
-
         public Interop.BCFPoint GetCameraViewPoint() { Interop.BCFPoint point; if (!Interop.ViewPointGetCameraViewPoint(m_handle, out point)) throw new ApplicationException(Project.ErrorsGet()); return point; }
-        public bool SetCameraViewPoint(Interop.BCFPoint value) { return Interop.ViewPointSetCameraViewPoint(m_handle, value); }
-        
+        public bool SetCameraViewPoint(Interop.BCFPoint value) { return Interop.ViewPointSetCameraViewPoint(m_handle, value); }        
         public Interop.BCFPoint GetCameraDirection() { Interop.BCFPoint point; if (!Interop.ViewPointGetCameraDirection(m_handle, out point)) throw new ApplicationException(Project.ErrorsGet()); return point; } 
-        public bool SetCameraDirection (Interop.BCFPoint value) { return Interop.ViewPointSetCameraDirection(m_handle, value); }
-        
+        public bool SetCameraDirection (Interop.BCFPoint value) { return Interop.ViewPointSetCameraDirection(m_handle, value); }        
         public Interop.BCFPoint GetCameraUpVector() { Interop.BCFPoint point; if (!Interop.ViewPointGetCameraUpVector(m_handle, out point)) throw new ApplicationException(Project.ErrorsGet()); return point; } 
         public bool SetCameraUpVector (Interop.BCFPoint value) { return Interop.ViewPointSetCameraUpVector(m_handle, value); }
+
+        public List<Component> Selection { get { return GetSelection(); } }
+        public Component AddSelection(string? ifcGuid)
+        {
+            IntPtr handle = Interop.ViewPointSelectionAdd(m_handle, ifcGuid);
+            if (handle == IntPtr.Zero)
+                throw new ApplicationException("Fail to add selection: " + Interop.ErrorsGet(Project.Handle));
+            return new Component(Project, handle);
+        }
+        public bool RemoveSelection(Component component)
+        {
+            return Interop.ViewPointSelectionRemove(m_handle, component.Handle);
+        }
+
+        public List<Component> Exceptions { get { return GetExceptions(); } }
+        public Component AddException(string? ifcGuid)
+        {
+            IntPtr handle = Interop.ViewPointExceptionsAdd(m_handle, ifcGuid);
+            if (handle == IntPtr.Zero)
+                throw new ApplicationException("Fail to add exception: " + Interop.ErrorsGet(Project.Handle));
+            return new Component(Project, handle);
+        }
+        public bool RemoveException(Component component)
+        {
+            return Interop.ViewPointExceptionsRemove(m_handle, component.Handle);
+        }
 
         /// <summary>
         /// 
@@ -55,6 +78,32 @@ namespace RDF.BCF
         {
             m_topic = topic;
             m_handle = handle;
+        }
+
+        public List<Component> GetSelection()
+        {
+            var ret = new List<Component>();
+
+            IntPtr handle = IntPtr.Zero;
+            while ((handle = Interop.ViewPointSelectionIterate(m_handle, handle)) != IntPtr.Zero)
+            {
+                ret.Add(new Component(Project, handle));
+            }
+
+            return ret;
+        }
+
+        public List<Component> GetExceptions()
+        {
+            var ret = new List<Component>();
+
+            IntPtr handle = IntPtr.Zero;
+            while ((handle = Interop.ViewPointExceptionsIterate(m_handle, handle)) != IntPtr.Zero)
+            {
+                ret.Add(new Component(Project, handle));
+            }
+
+            return ret;
         }
 
         #endregion IMPLEMENTATION

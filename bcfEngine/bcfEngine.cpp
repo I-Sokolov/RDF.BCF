@@ -6,6 +6,7 @@
 #include "BCFComment.h"
 #include "BCFViewPoint.h"
 #include "BCFFile.h"
+#include "BCFComponent.h"
 #include "BCFColor.h"
 
 /// <summary>
@@ -380,4 +381,14 @@ COMPONENT_LIST(ViewPoint, Exceptions)
 
 COMPONENT_LIST(Color, Component)
 
+/// <summary>
+/// 
+/// </summary>
 
+OBJ_GET_ATTR(Str, Component, IfcGuid)
+OBJ_GET_ATTR(Str, Component, OriginatingSystem)
+OBJ_GET_ATTR(Str, Component, AuthoringToolId)
+
+OBJ_SET_ATTR(Str, Component, IfcGuid)
+OBJ_SET_ATTR(Str, Component, OriginatingSystem)
+OBJ_SET_ATTR(Str, Component, AuthoringToolId)

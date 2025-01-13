@@ -367,7 +367,7 @@ namespace RDF.BCF
 
         [DllImport(DLL, EntryPoint = "bcfViewPointRemove")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool ViewPointRemove(IntPtr comment);
+        public static extern bool ViewPointRemove(IntPtr viewPoint);
 
         [DllImport(DLL, EntryPoint = "bcfViewPointGetGuid")]
         private static extern IntPtr ViewPointGetGuid_(IntPtr viewPoint);
@@ -464,6 +464,47 @@ namespace RDF.BCF
         [DllImport(DLL, EntryPoint = "bcfViewPointSetAspectRatio")]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ViewPointSetAspectRatio(IntPtr viewPoint, double val);
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointSelectionIterate")]
+        public static extern IntPtr ViewPointSelectionIterate(IntPtr viewPoint, IntPtr prev);
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointSelectionAdd")]
+        public static extern IntPtr ViewPointSelectionAdd(IntPtr viewPoint, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? ifcGuid = null);
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointSelectionRemove")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool ViewPointSelectionRemove(IntPtr viewPoint, IntPtr component);
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointExceptionsIterate")]
+        public static extern IntPtr ViewPointExceptionsIterate(IntPtr viewPoint, IntPtr prev);
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointExceptionsAdd")]
+        public static extern IntPtr ViewPointExceptionsAdd(IntPtr viewPoint, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? ifcGuid = null);
+
+        [DllImport(DLL, EntryPoint = "bcfViewPointExceptionsRemove")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool ViewPointExceptionsRemove(IntPtr viewPoint, IntPtr component);
+
+        [DllImport(DLL, EntryPoint = "bcfComponentGetIfcGuid")]
+        private static extern IntPtr ComponentGetIfcGuid_(IntPtr component);
+        public static string ComponentGetIfcGuid(IntPtr component) { return PtrToString(ComponentGetIfcGuid_(component)); }
+
+        [DllImport(DLL, EntryPoint = "bcfComponentGetOriginatingSystem")]
+        private static extern IntPtr ComponentGetOriginatingSystem_(IntPtr component);
+        public static string ComponentGetOriginatingSystem(IntPtr component) { return PtrToString(ComponentGetOriginatingSystem_(component)); }
+
+        [DllImport(DLL, EntryPoint = "bcfComponentGetAuthoringToolId")]
+        private static extern IntPtr ComponentGetAuthoringToolId_(IntPtr component);
+        public static string ComponentGetAuthoringToolId(IntPtr component) { return PtrToString(ComponentGetAuthoringToolId_(component)); }
+
+        [DllImport(DLL, EntryPoint = "bcfComponentSetIfcGuid")]
+        public static extern bool ComponentSetIfcGuid(IntPtr component, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string value);
+
+        [DllImport(DLL, EntryPoint = "bcfComponentSetOriginatingSystem")]
+        public static extern bool ComponentSetOriginatingSystem(IntPtr component, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string value);
+
+        [DllImport(DLL, EntryPoint = "bcfComponentSetAuthoringToolId")]
+        public static extern bool ComponentSetAuthoringToolId(IntPtr component, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string value);
 
     }
 }
