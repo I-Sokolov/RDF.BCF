@@ -29,7 +29,7 @@ namespace RDF.BCF
         public bool SetCameraUpVector (Interop.BCFPoint value) { return Interop.ViewPointSetCameraUpVector(m_handle, value); }
 
         public List<Component> Selection { get { return GetSelection(); } }
-        public Component AddSelection(string? ifcGuid)
+        public Component AddSelection(string? ifcGuid = null)
         {
             IntPtr handle = Interop.ViewPointSelectionAdd(m_handle, ifcGuid);
             if (handle == IntPtr.Zero)
@@ -42,7 +42,7 @@ namespace RDF.BCF
         }
 
         public List<Component> Exceptions { get { return GetExceptions(); } }
-        public Component AddException(string? ifcGuid)
+        public Component AddException(string? ifcGuid = null)
         {
             IntPtr handle = Interop.ViewPointExceptionsAdd(m_handle, ifcGuid);
             if (handle == IntPtr.Zero)

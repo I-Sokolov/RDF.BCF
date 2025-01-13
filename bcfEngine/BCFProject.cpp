@@ -96,7 +96,7 @@ bool BCFProject::Read(const char* bcfFilePath)
 bool BCFProject::Write(const char* bcfFilePath, BCFVersion version)
 {
     if (m_projectInfo.m_ProjectId.empty()) {
-        log().add(Log::Level::error, "Ivalid value", "ProjectId must be set");
+        log().add(Log::Level::error, "Invalid value", "ProjectId must be set");
         return false;
     }
 

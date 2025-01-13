@@ -298,6 +298,11 @@ namespace CSExample
             return $"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa{i}";
         }
 
+        static private string TestIfcGuid(int i)
+        {
+            return $"{i}{i}aaaaaaaaaaaaaaaaaaaa";
+        }
+
         static private void SetTopicAttributes(RDF.BCF.Project bcf)
         {
             var topic = bcf.AddTopic("Type1", "Title1", "Status1");
@@ -515,11 +520,6 @@ namespace CSExample
             ASSERT(topic.Files.Count == 4);
         }
 
-        static private string TestIfcGuid(int i)
-        {
-            return $"{i}{i}{i}{i}Uv4EX5LAhcVpDp2dUH";
-        }
-
         static void CheckFiles(Topic topic)
         {
             ASSERT(topic.Files.Count == 4);
@@ -695,6 +695,22 @@ namespace CSExample
                 viewPoint.AspectRatio = 1;
 
                 ok = bcf.FileWrite("Validation.bcf");
+                ASSERT(ok);
+
+                //
+                var comp = viewPoint.AddSelection();
+                comp.IfcGuid = "wrong";
+                ASSERT(comp.IfcGuid.Length == 0);
+                ok = bcf.FileWrite("Validation.bcf");
+                err = bcf.ErrorsGet();
+                ASSERT(!ok);
+                ASSERT(err.Contains("Invalid value"));
+                ASSERT(err.Contains("Missed property"));
+                ASSERT(err.Contains("IfcGuid"));
+
+                comp.IfcGuid = TestIfcGuid(0);
+                ok = bcf.FileWrite("Validation.bcf");
+                err = bcf.ErrorsGet();
                 ASSERT(ok);
             }
         }

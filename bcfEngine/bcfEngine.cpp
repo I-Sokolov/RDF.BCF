@@ -357,14 +357,14 @@ OBJ_SET_ATTR(Real,   ViewPoint, AspectRatio)
 RDFBCF_EXPORT BCFComponent* bcf##Parent##List##Add(BCF##Parent* parent, const char* ifcGuid)    \
 {                                                                                               \
     if (parent) {                                                                               \
-        parent->##List##Add(ifcGuid);                                                           \
+        return parent->##List##Add(ifcGuid);                                                    \
     }                                                                                           \
     return NULL;                                                                                \
 }                                                                                               \
 RDFBCF_EXPORT BCFComponent* bcf##Parent##List##Iterate(BCF##Parent* parent, BCFComponent* prev) \
 {                                                                                               \
     if (parent) {                                                                               \
-        parent->##List##Iterate(prev);                                                          \
+        return parent->##List##Iterate(prev);                                                   \
     }                                                                                           \
     return NULL;                                                                                \
 }                                                                                               \

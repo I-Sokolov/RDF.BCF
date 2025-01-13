@@ -29,7 +29,7 @@ bool GuidStr::IsGUIDValid(const char* str)
         return true;
     }
 
-    m_project.log().add(Log::Level::error, "Ivalid value", "'%s' is not correct IfcGuid", str);
+    m_project.log().add(Log::Level::error, "Invalid value", "'%s' is not correct IfcGuid", str);
     return false;
 }
 

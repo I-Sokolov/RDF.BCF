@@ -176,7 +176,7 @@ bool BCFObject::IsDateTimeValid (const char* str, const char* propName)
         return true;
     }
 
-    log().add(Log::Level::error, "Ivalid value", "'%s' is not correct ISO 8601 date-time and can not be used as %s", str, propName);
+    log().add(Log::Level::error, "Invalid value", "'%s' is not correct ISO 8601 date-time and can not be used as %s", str, propName);
     return false;
 }
 
@@ -191,7 +191,7 @@ bool BCFObject::IsIfcGuidValid(const char* str, const char* propName)
         return true;
     }
 
-    log().add(Log::Level::error, "Ivalid value", "'%s' is not correct IfcGuid and can not be used as %s", str, propName);
+    log().add(Log::Level::error, "Invalid value", "'%s' is not correct IfcGuid and can not be used as %s", str, propName);
     return false;
 }
 
@@ -204,7 +204,7 @@ bool BCFObject::IsFilePathValid(const char* str, const char* propName)
         return true;
     }
 
-    log().add(Log::Level::error, "Ivalid value", "'%s' is not existing file and can not be used as %s", str, propName);
+    log().add(Log::Level::error, "Invalid value", "'%s' is not existing file and can not be used as %s", str, propName);
     return false;
 }
 

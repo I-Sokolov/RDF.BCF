@@ -33,8 +33,8 @@ void BCFComponent::Read(_xml::_element& elem, const std::string&)
 /// </summary>
 void BCFComponent::Write(_xml_writer& writer, const std::string& folder, const char* tag)
 { 
-    if (m_IfcGuid.empty()) {
-        REQUIRED_PROP(AuthoringToolId);
+    if (m_AuthoringToolId.empty()) {
+        REQUIRED_PROP(IfcGuid);
     }
 
     XMLFile::Attributes attr;
