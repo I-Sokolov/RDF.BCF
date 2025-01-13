@@ -572,9 +572,9 @@ namespace CSExample
                 vp.SpaceBoundariesVisible = b;
                 vp.OpeningsVisible = !b;
                 vp.CameraType = b ? Interop.BCFCamera.Perspective : Interop.BCFCamera.Orthogonal;
-                vp.SetCameraViewPoint(new Interop.BCFPoint() { x = i, y = i + .1, z = i + .2 });
-                vp.SetCameraDirection(new Interop.BCFPoint() { x = i + .3, y = i + .4, z = i + .5 });
-                vp.SetCameraUpVector(new Interop.BCFPoint() { x = i + .6, y = i + .7, z = i + .8 });
+                vp.SetCameraViewPoint(new Interop.BCFPoint(i, i + .1, i + .2));
+                vp.SetCameraDirection(new Interop.BCFPoint(i + .3, i + .4, i + .5 ));
+                vp.SetCameraUpVector(new Interop.BCFPoint(i + .6, i + .7, i + .8 ));
                 vp.ViewToWorldScale = i * 3;
                 vp.FieldOfView = i * 3.5 + 0.1;
                 vp.AspectRatio = i * 4 + 0.1;
@@ -589,7 +589,7 @@ namespace CSExample
 
         static bool EQ(Interop.BCFPoint pt1, Interop.BCFPoint pt2)
         {
-            return pt1.x == pt2.x && pt1.y == pt2.y && pt1.z == pt2.z;
+            return pt1.X == pt2.X && pt1.Y == pt2.Y && pt1.Z == pt2.Z;
         }
 
         static void CheckViewPoints(Topic topic, bool read)
@@ -620,9 +620,9 @@ namespace CSExample
                     ASSERT(vp.FieldOfView == (read ? 0 : i * 3.5 + 0.1));
                     ASSERT(vp.ViewToWorldScale == i * 3);
                 }
-                ASSERT(EQ(vp.GetCameraViewPoint(), new Interop.BCFPoint() { x = i, y = i + .1, z = i + .2 }));
-                ASSERT(EQ(vp.GetCameraDirection(), new Interop.BCFPoint() { x = i + .3, y = i + .4, z = i + .5 }));
-                ASSERT(EQ(vp.GetCameraUpVector(), new Interop.BCFPoint() { x = i + .6, y = i + .7, z = i + .8 }));
+                ASSERT(EQ(vp.GetCameraViewPoint(), new Interop.BCFPoint(i, i + .1, i + .2 )));
+                ASSERT(EQ(vp.GetCameraDirection(), new Interop.BCFPoint(i + .3, i + .4, i + .5 )));
+                ASSERT(EQ(vp.GetCameraUpVector(), new Interop.BCFPoint( i + .6, i + .7, i + .8 )));
                 ASSERT(vp.AspectRatio == i * 4+0.1);
                 ASSERT(vp.Snapshot.EndsWith("Architectural.png"));
                 ASSERT(Path.Exists(vp.Snapshot));
@@ -676,6 +676,24 @@ namespace CSExample
                 ASSERT(err.Contains("Comment"));
 
                 comment.Text = "Text";
+                ok = bcf.FileWrite("Validation.bcf");
+                ASSERT(ok);
+
+                //component
+                var viewPoint = topic.AddViewPoint();
+
+                ok = bcf.FileWrite("Validation.bcf");
+                err = bcf.ErrorsGet();
+                ASSERT(!ok);
+                ASSERT(err.Contains("Missed property"));
+                ASSERT(err.Contains("CameraViewPoint"));
+
+                viewPoint.SetCameraViewPoint(new Interop.BCFPoint(0, 0, 0));
+                viewPoint.SetCameraDirection(new Interop.BCFPoint(1, 1, 1));
+                viewPoint.SetCameraUpVector(new Interop.BCFPoint(0, 0, 1));
+                viewPoint.FieldOfView = 90;
+                viewPoint.AspectRatio = 1;
+
                 ok = bcf.FileWrite("Validation.bcf");
                 ASSERT(ok);
             }

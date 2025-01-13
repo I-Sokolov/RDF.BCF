@@ -58,7 +58,9 @@ namespace RDF.BCF
 
         public struct BCFPoint
         {
-            public double x, y, z;
+            public double X, Y, Z;
+
+            public BCFPoint(double x = 0, double y = 0, double z = 0) { X = x; Y = y; Z = z; }
         }
 
         /// <summary>
