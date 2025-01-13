@@ -786,6 +786,18 @@ namespace CSExample
                 ok = bcf.FileWrite("Validation.bcf");
                 err = bcf.ErrorsGet();
                 ASSERT(ok);
+
+                //
+                var docref = topic.AddDocumentRefernce("");
+                ok = bcf.FileWrite("Validation.bcf");
+                err = bcf.ErrorsGet();
+                ASSERT(!ok);
+                ASSERT(err.Contains("Missed property"));
+                ASSERT(err.Contains("Url"));
+
+                docref.UrlPath = "http://ss";
+                ok = bcf.FileWrite("Validation.bcf");
+                ASSERT(ok);
             }
         }
     }
