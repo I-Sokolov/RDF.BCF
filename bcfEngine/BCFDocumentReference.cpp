@@ -8,6 +8,7 @@
 /// </summary>
 BCFDocumentReference::BCFDocumentReference(BCFTopic& topic, const char* guid)
         : BCFObject(topic.Project()) 
+        , m_topic(topic)
         , m_Guid(topic.Project(), guid)
 {
 }
@@ -36,7 +37,7 @@ void BCFDocumentReference::Write(_xml_writer& writer, const std::string& folder,
 { 
     assert(0 == strcmp(tag, "DocumentReference"));
 
-    if (m_DocumentGuid.empty()) {
+    if (m_DocumentGuid.empty()) { //mutually exclusive
         REQUIRED_PROP(Url);
     }
     else {
@@ -98,4 +99,12 @@ bool BCFDocumentReference::SetUrlPath(const char* val)
         assert(!"TODO - local document");
         return false;
     }
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFDocumentReference::Remove()
+{
+    return m_topic.DocumentReferenceRemove(this);
 }

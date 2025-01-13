@@ -15,6 +15,10 @@ bool XMLFile::ReadFile(const std::string& bcfFolder)
     std::string path(bcfFolder);
     FileSystem::AddPath(path, XMLFileName());
 
+    if (!FileSystem::Exists(path.c_str())) {
+        return true; 
+    }
+
     try {
         _xml::_document doc(nullptr);
         doc.load(path.c_str());

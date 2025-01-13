@@ -21,11 +21,14 @@ public:
     bool SetUrlPath(const char* val);
     bool SetDescription(const char* val) { UNNULL; m_Description.assign(val); return true; }
 
+    bool Remove();
 
 private:
     void Write_DocumentReference(_xml_writer& writer, const std::string& folder);
 
 private:
+    BCFTopic&                  m_topic;
+
     GuidStr                    m_Guid;
     std::string                m_DocumentGuid;
     std::string                m_Url;

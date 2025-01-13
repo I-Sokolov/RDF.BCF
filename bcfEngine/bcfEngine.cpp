@@ -8,6 +8,7 @@
 #include "BCFFile.h"
 #include "BCFComponent.h"
 #include "BCFColor.h"
+#include "BCFDocumentReference.h"
 
 /// <summary>
 /// Macros to implement put/get attributes and iterate/remove objects
@@ -303,6 +304,26 @@ OBJ_GET_ATTR(ViewPoint, Comment, ViewPoint)
 
 OBJ_SET_ATTR(Str,       Comment, Text)
 OBJ_SET_ATTR(ViewPoint, Comment, ViewPoint)
+
+/// <summary>
+/// 
+/// </summary>
+OBJ_ITERATE(DocumentReference, Topic)
+OBJ_REMOVE(DocumentReference)
+RDFBCF_EXPORT BCFDocumentReference* bcfDocumentReferenceAdd(BCFTopic* topic, const char* urlPath, const char* guid)
+{
+    if (topic) {
+        return topic->DocumentReferenceAdd(urlPath, guid);
+    }
+    return 0;
+}
+
+OBJ_GET_ATTR(Str, DocumentReference, Guid)
+OBJ_GET_ATTR(Str, DocumentReference, UrlPath)
+OBJ_GET_ATTR(Str, DocumentReference, Description)
+
+OBJ_SET_ATTR(Str, DocumentReference, UrlPath)
+OBJ_SET_ATTR(Str, DocumentReference, Description)
 
 /// <summary>
 /// 

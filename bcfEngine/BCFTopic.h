@@ -56,6 +56,10 @@ public:
     BCFComment* CommentIterate(BCFComment* prev);
     bool        CommentRemove(BCFComment* comment);
 
+    BCFDocumentReference* DocumentReferenceAdd(const char* urlPath, const char* guid = NULL);
+    BCFDocumentReference* DocumentReferenceIterate(BCFDocumentReference* prev);
+    bool        DocumentReferenceRemove(BCFDocumentReference* documentReference);
+
 public:
     BimSnippet& GetBimSnippet() { return m_BimSnippet; }
 

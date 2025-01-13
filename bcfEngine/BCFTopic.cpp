@@ -400,7 +400,7 @@ BCFViewPoint* BCFTopic::ViewPointByGuid(const char* guid)
 /// </summary>
 BCFComment* BCFTopic::CommentAdd(const char* guid)
 {
-    auto comment = new BCFComment(*this, guid ? guid : "");
+    auto comment = new BCFComment(*this, guid ? guid : "");//"" forces generate guid
 
     if (comment) {
         m_Comments.Add(comment);
@@ -425,4 +425,42 @@ BCFComment* BCFTopic::CommentIterate(BCFComment* prev)
 bool        BCFTopic::CommentRemove(BCFComment* comment)
 {
     return m_Comments.Remove(comment);
+}
+
+/// <summary>
+/// 
+/// </summary>
+BCFDocumentReference* BCFTopic::DocumentReferenceAdd(const char* urlPath, const char* guid)
+{
+    auto ref = new BCFDocumentReference(*this, guid ? guid : "");
+
+    if (!ref->SetUrlPath(urlPath)){
+        delete ref;
+        ref = NULL;
+    }
+
+    if (ref) {
+        m_DocumentReferences.Add(ref);
+        return ref;
+    }
+    else {
+        return NULL;
+    }
+
+}
+
+/// <summary>
+/// 
+/// </summary>
+BCFDocumentReference* BCFTopic::DocumentReferenceIterate(BCFDocumentReference* prev)
+{
+    return m_DocumentReferences.GetNext(prev);
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool  BCFTopic::DocumentReferenceRemove(BCFDocumentReference* documentReference)
+{
+    return m_DocumentReferences.Remove(documentReference);
 }

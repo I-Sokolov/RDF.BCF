@@ -175,8 +175,8 @@ extern "C" {
     /// 
     /// </summary>
     RDFBCF_EXPORT BCFComment* bcfCommentIterate (BCFTopic* topic, BCFComment* prev);
-    RDFBCF_EXPORT BCFComment* bcfCommentAdd  (BCFTopic* topic, const char* guid);
-    RDFBCF_EXPORT bool bcfCommentRemove         (BCFComment* comment);
+    RDFBCF_EXPORT BCFComment* bcfCommentAdd     (BCFTopic* topic, const char* guid);
+    RDFBCF_EXPORT bool        bcfCommentRemove  (BCFComment* comment);
 
     /// <summary>
     ///
@@ -194,6 +194,24 @@ extern "C" {
     /// </summary>
     RDFBCF_EXPORT bool bcfCommentSetText        (BCFComment* comment, const char* text);
     RDFBCF_EXPORT bool bcfCommentSetViewPoint   (BCFComment* comment, BCFViewPoint* viewPoint);
+
+
+    /// <summary>
+    ///
+    /// </summary>
+    RDFBCF_EXPORT BCFDocumentReference* bcfDocumentReferenceIterate(BCFTopic* topic, BCFDocumentReference* prev);
+    RDFBCF_EXPORT BCFDocumentReference* bcfDocumentReferenceAdd(BCFTopic* topic, const char* urlPath, const char* guid);
+    RDFBCF_EXPORT bool                  bcfDocumentReferenceRemove(BCFDocumentReference* comment);
+
+    /// <summary>
+    ///
+    /// </summary>
+    RDFBCF_EXPORT const char* bcfDocumentReferenceGetGuid       (BCFDocumentReference* documentReferece);
+    RDFBCF_EXPORT const char* bcfDocumentReferenceGetUrlPath    (BCFDocumentReference* documentReferece);
+    RDFBCF_EXPORT const char* bcfDocumentReferenceGetDescription(BCFDocumentReference* documentReferece);
+
+    RDFBCF_EXPORT bool bcfDocumentReferenceSetUrlPath           (BCFDocumentReference* documentReferece, const char* value);
+    RDFBCF_EXPORT bool bcfDocumentReferenceSetDescription       (BCFDocumentReference* documentReferece, const char* value);
 
     /// <summary>
     ///
