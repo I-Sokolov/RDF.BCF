@@ -222,5 +222,5 @@ bool BCFObject::IsURL(const char* path)
     std::string data(path, 5);
     std::transform(data.begin(), data.end(), data.begin(), [](unsigned char c) { return std::tolower(c); });
 
-    return data == "http:" || data == "ftp:";
+    return data == "http:" || data == "ftp:/";
 }

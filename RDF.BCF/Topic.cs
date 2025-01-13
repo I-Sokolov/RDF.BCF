@@ -66,6 +66,28 @@ namespace RDF.BCF
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public List<DocumentReference> GetDocumentReferences()
+        {
+            var ret = new List<DocumentReference>();
+            IntPtr handle = IntPtr.Zero;
+            while ((handle = Interop.DocumentReferenceIterate(m_handle, handle)) != IntPtr.Zero)
+            {
+                ret.Add(new DocumentReference(this, handle));
+            }
+            return ret;
+        }
+
+        public DocumentReference AddDocumentRefernce(string urlPath, string? guid = null)
+        {
+            IntPtr vpHandle = Interop.DocumentReferenceAdd(m_handle, urlPath, guid);
+            if (vpHandle == IntPtr.Zero)
+                throw new ApplicationException("Fail to create document reference: " + Interop.ErrorsGet(m_project.Handle));
+            return new DocumentReference(this, vpHandle);
+        }
+
+        /// <summary>
         /// The topic comments
         /// </summary>
         public List<Comment> Comments { get { return GetComments(); } }

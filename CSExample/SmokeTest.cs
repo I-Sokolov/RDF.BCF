@@ -321,6 +321,23 @@ namespace CSExample
                 topic.Description = "Description";
                 topic.Stage = "Stage";
                 topic.Index = 7;
+
+                for (int j = 0; j < 4; j++)
+                {
+                    if (j % 2 == 0)
+                    {
+                        var reference = topic.AddDocumentRefernce("hTtp://lala", TestGuid(j));
+                        reference.Description = ($"Descr {j}");
+                    }
+                    else
+                    {
+                        var reference = topic.AddDocumentRefernce("ftp://ee");
+                        reference.UrlPath = "ftP://changed";
+                    }
+                }
+                ASSERT(topic.GetDocumentReferences().Count == 4);
+                ASSERT(topic.GetDocumentReferences()[3].Remove());
+                ASSERT(topic.GetDocumentReferences().Count == 3);
             }
 
         }
@@ -350,6 +367,7 @@ namespace CSExample
                 ASSERT(topic.CreationAuthor == "Smoke-tester");
                 ASSERT(topic.ModifiedDate.Length == 0);
                 ASSERT(topic.ModifiedAuthor.Length == 0);
+                ASSERT(topic.GetDocumentReferences().Count == 0);
             }
 
             topic = bcf.Topics[0];
@@ -380,6 +398,24 @@ namespace CSExample
                     ASSERT(topic.Title == "Modified title");
                     ASSERT(topic.ModifiedDate.Length > 0);
                     ASSERT(topic.ModifiedAuthor == "Smoke-Editor");
+                }
+
+                ASSERT(topic.GetDocumentReferences().Count == 3);
+                for (int j = 0; j < 3; j++)
+                {
+                    var reference = topic.GetDocumentReferences()[j];
+                    if (j % 2 == 0)
+                    {
+                        ASSERT(reference.UrlPath == "hTtp://lala"); 
+                        ASSERT(reference.Guid ==     TestGuid(j));
+                        ASSERT(reference.Description == ($"Descr {j}"));
+                    }
+                    else
+                    {
+                        ASSERT(reference.UrlPath == "ftP://changed");
+                        ASSERT(reference.Guid.Length > 0);
+                        ASSERT(reference.Description.Length == 0);
+                    }
                 }
             }
         }
@@ -602,6 +638,7 @@ namespace CSExample
 
             ASSERT(topic.ViewPoints[0].Remove());
             ASSERT(topic.ViewPoints.Count == 4);
+
         }
 
         static bool EQ(Interop.BCFPoint pt1, Interop.BCFPoint pt2)
