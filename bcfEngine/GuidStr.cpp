@@ -9,11 +9,11 @@ GuidStr::GuidStr(BCFProject& project, const char* guid)
     : m_project(project)
 {
     if (guid) {
-        if (*guid && IsGUIDValid(guid)) {
+        if (*guid && IsGUIDValid(guid, &project.log())) {
             value.assign(guid);
         }
         else {
-            CreateNew();
+            AssignNew();
         }
     }
 }
@@ -21,7 +21,7 @@ GuidStr::GuidStr(BCFProject& project, const char* guid)
 /// <summary>
 /// 
 /// </summary>
-bool GuidStr::IsGUIDValid(const char* str)
+bool GuidStr::IsGUIDValid(const char* str, Log* log)
 {
     std::regex guidReg("[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}");
 
@@ -29,17 +29,27 @@ bool GuidStr::IsGUIDValid(const char* str)
         return true;
     }
 
-    m_project.log().add(Log::Level::error, "Invalid value", "'%s' is not correct IfcGuid", str);
+    if (log) {
+        log->add(Log::Level::error, "Invalid value", "'%s' is not correct IfcGuid", str);
+    }
     return false;
 }
 
 /// <summary>
 /// 
 /// </summary>
-void GuidStr::CreateNew()
+void GuidStr::AssignNew()
 {
     assert(IsEmpty());
+    assign(New());
 
+}
+
+/// <summary>
+/// 
+/// </summary>
+std::string GuidStr::New()
+{
     std::ostringstream oss;
     for (int i = 0; i < 4; i++) {
         oss << std::hex << std::setw(2) << std::setfill('0') << rand() % 256;
@@ -61,7 +71,7 @@ void GuidStr::CreateNew()
         oss << std::hex << std::setw(2) << std::setfill('0') << rand() % 256;
     }
 
-    assign(oss.str());
+    return oss.str();
 }
 
 /// <summary>
@@ -70,11 +80,11 @@ void GuidStr::CreateNew()
 void GuidStr::assign(const std::string& s)
 { 
     if (value.empty()) {
-        if (IsGUIDValid(s.c_str())) {
+        if (IsGUIDValid(s.c_str(), &m_project.log())) {
             value.assign(s);
         }
         else {
-            CreateNew();
+            AssignNew();
         }
     }
     else if (value!=s) {

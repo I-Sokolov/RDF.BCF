@@ -1,6 +1,7 @@
 #pragma once
 
 struct BCFProject;
+class Log;
 
 /// <summary>
 /// 
@@ -8,17 +9,18 @@ struct BCFProject;
 struct GuidStr
 {
 public:
+    static bool IsGUIDValid(const char* str, Log* log);
+    static std::string New();
+
+public:
     GuidStr(BCFProject& project, const char* guid);
 
-    void CreateNew();
+    void AssignNew();
 
     bool IsEmpty() const { return value.empty(); }
     void assign(const std::string& s);
 
     const char* c_str() { return value.c_str(); }
-
-private:
-    bool IsGUIDValid(const char* str);
 
 private:
     BCFProject& m_project;

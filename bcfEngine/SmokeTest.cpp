@@ -79,7 +79,9 @@ RDFBCF_EXPORT void SmokeTest_DataSet(const char* folder)
 {
     for (const auto& entry : std::filesystem::directory_iterator(folder)) {
         if (entry.is_directory()) {
-            SmokeTest_DataSet(entry.path().string().c_str());
+            if (entry.path().filename() != "unzipped") {
+                SmokeTest_DataSet(entry.path().string().c_str());
+            }
         }
         else {
             auto ext = entry.path().extension();

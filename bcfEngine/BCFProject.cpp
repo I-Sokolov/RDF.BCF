@@ -96,8 +96,8 @@ bool BCFProject::Read(const char* bcfFilePath)
 bool BCFProject::Write(const char* bcfFilePath, BCFVersion version)
 {
     if (m_projectInfo.m_ProjectId.empty()) {
-        log().add(Log::Level::error, "Invalid value", "ProjectId must be set");
-        return false;
+        log().add(Log::Level::warning, "Invalid value", "ProjectId must be set");
+        m_projectInfo.m_ProjectId = GuidStr::New();
     }
 
     m_version.Set(version);
@@ -138,12 +138,14 @@ bool BCFProject::ReadTopics(const std::string& bcfFolder)
 
     for (auto& elem : elems) {
         if (ok && elem.folder) {
-            auto topic = new BCFTopic(*this, elem.name.c_str());
-            m_topics.Add(topic);
+            if (GuidStr::IsGUIDValid(elem.name.c_str(), NULL)) {
+                auto topic = new BCFTopic(*this, elem.name.c_str());
+                m_topics.Add(topic);
 
-            std::string topicFolder(bcfFolder);
-            FileSystem::AddPath(topicFolder, elem.name.c_str());
-            ok = ok && topic->ReadFile(topicFolder);
+                std::string topicFolder(bcfFolder);
+                FileSystem::AddPath(topicFolder, elem.name.c_str());
+                ok = ok && topic->ReadFile(topicFolder);
+            }
         }
     }
 
