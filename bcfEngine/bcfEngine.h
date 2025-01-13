@@ -206,8 +206,8 @@ extern "C" {
     ///
     /// </summary>
     RDFBCF_EXPORT BCFComponent* bcfViewPointExceptionsAdd(BCFViewPoint* viewPoint, const char* ifcGuid);
-    RDFBCF_EXPORT BCFComponent* bcfViewPointExceptionIterate(BCFViewPoint* viewPoint, BCFComponent* prev);
-    RDFBCF_EXPORT bool bcfViewPointExceptionRemove(BCFViewPoint* viewPoint, BCFComponent* component);
+    RDFBCF_EXPORT BCFComponent* bcfViewPointExceptionsIterate(BCFViewPoint* viewPoint, BCFComponent* prev);
+    RDFBCF_EXPORT bool bcfViewPointExceptionsRemove(BCFViewPoint* viewPoint, BCFComponent* component);
 
     /// <summary>
     ///

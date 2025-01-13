@@ -579,6 +579,23 @@ namespace CSExample
                 vp.FieldOfView = i * 3.5 + 0.1;
                 vp.AspectRatio = i * 4 + 0.1;
                 vp.Snapshot = TestFile("png");
+
+                for (int j = 0; j < 4; j++)
+                {
+                    var comp = vp.AddSelection(TestIfcGuid(i+j));
+                    comp.OriginatingSystem = "test";
+                    comp.AuthoringToolId = $"ID{i}";
+
+                    comp = vp.AddException();
+                    comp.IfcGuid = TestIfcGuid(j);
+                }
+
+                ASSERT(vp.Selection.Count == 4);
+                ASSERT(vp.Exceptions.Count == 4);
+                vp.RemoveSelection(vp.Selection[3]);
+                vp.RemoveException(vp.Exceptions[3]);
+                ASSERT(vp.Selection.Count == 3);
+                ASSERT(vp.Exceptions.Count == 3);
             }
 
             ASSERT(topic.ViewPoints.Count == 5);
@@ -626,6 +643,26 @@ namespace CSExample
                 ASSERT(vp.AspectRatio == i * 4+0.1);
                 ASSERT(vp.Snapshot.EndsWith("Architectural.png"));
                 ASSERT(Path.Exists(vp.Snapshot));
+
+                var selection = vp.GetSelection();
+                ASSERT(selection.Count == 3);
+
+                var expt = vp.GetExceptions();
+                ASSERT(expt.Count == 3);
+
+                for (int j = 0; j < 3; j++)
+                {
+                    var comp = selection[j];
+                    ASSERT(comp.IfcGuid == TestIfcGuid(i + j));
+                    ASSERT(comp.OriginatingSystem == "test");
+                    ASSERT(comp.AuthoringToolId == $"ID{i}");
+
+                    comp = expt[j];
+                    ASSERT(comp.IfcGuid == TestIfcGuid(j));
+                    ASSERT(comp.OriginatingSystem == "");
+                    ASSERT(comp.AuthoringToolId == "");
+                }
+
             }
         }
 
