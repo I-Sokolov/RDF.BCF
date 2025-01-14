@@ -10,7 +10,7 @@ struct BCFViewPoint;
 struct BCFComment : public BCFObject
 {
 public:
-    BCFComment(BCFTopic& topic, const char* guid = NULL);
+    BCFComment(BCFTopic& topic, ListOfBCFObjects* parentList, const char* guid = NULL);
 
 public:
     const char* GetGuid() { return m_Guid.c_str(); }

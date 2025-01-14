@@ -10,7 +10,7 @@ struct BCFTopic;
 struct GuidReference : public BCFObject
 {
 public:
-    GuidReference(BCFTopic& topic);
+    GuidReference(BCFTopic& topic, ListOfBCFObjects* parentList);
 
     void Read(_xml::_element& elem, const std::string&);
     void Write(_xml_writer& writer, const std::string&, const char* tag);

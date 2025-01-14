@@ -10,7 +10,7 @@ struct GuidReference;
 struct BCFTopic : public XMLFile
 {
 public:
-    BCFTopic(BCFProject& project, const char* guid);
+    BCFTopic(BCFProject& project, ListOfBCFObjects* parentList, const char* guid);
     ~BCFTopic() {}
 
 public:

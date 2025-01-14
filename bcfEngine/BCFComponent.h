@@ -6,7 +6,7 @@ struct BCFViewPoint;
 struct BCFComponent : public BCFObject
 {
 public:
-    BCFComponent(BCFViewPoint& viewPoint);
+    BCFComponent(BCFViewPoint& viewPoint, ListOfBCFObjects* parentList);
 
     void Read(_xml::_element& elem, const std::string& folder);
     void Write(_xml_writer& writer, const std::string& folder, const char* tag);
@@ -21,8 +21,6 @@ public:
     bool SetAuthoringToolId(const char* val) { UNNULL; m_AuthoringToolId.assign(val); return true; }
 
 private:
-    BCFViewPoint& m_viewPoint;
-
     std::string m_IfcGuid;
     std::string m_OriginatingSystem;
     std::string m_AuthoringToolId;

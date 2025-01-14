@@ -7,11 +7,11 @@
 /// <summary>
 /// 
 /// </summary>
-BCFComment::BCFComment(BCFTopic& topic, const char* guid)
-    : BCFObject(topic.Project())
+BCFComment::BCFComment(BCFTopic& topic, ListOfBCFObjects* parentList, const char* guid)
+    : BCFObject(topic.Project(), parentList)
     , m_topic(topic)
     , m_Guid(topic.Project(), guid)
-    , m_Viewpoint(topic)
+    , m_Viewpoint(topic, NULL)
     , m_readFromFile(false)
 {
 }

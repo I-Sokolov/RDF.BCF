@@ -27,7 +27,7 @@ public:
     };
 
 public:
-    XMLFile(BCFProject& project) : BCFObject(project) {}
+    XMLFile(BCFProject& project, ListOfBCFObjects* parentList) : BCFObject(project, parentList) {}
 
     bool ReadFile(const std::string& folder);
     bool WriteFile(const std::string& folder);
@@ -49,7 +49,7 @@ protected:
 class XMLText : public BCFObject
 {
 public:
-    XMLText(BCFTopic&);
+    XMLText(BCFTopic&, ListOfBCFObjects* parentList);
     
     void Read(_xml::_element& elem, const std::string&);
     void Write(_xml_writer& writer, const std::string&, const char* tag);
@@ -172,7 +172,7 @@ enum class UnknownNames : bool
 template <class TReadable, class TContainer>
 void AddToList(ListOf<TReadable>& list, TContainer& container, _xml::_element& elem, const std::string& folder)
 {
-    auto item = new TReadable(container);
+    auto item = new TReadable(container, &list);
     item->Read(elem, folder);
     list.push_back(item);
 }
@@ -184,7 +184,7 @@ template <class TReadable, class TContainer>
 void ReadList(ListOf<TReadable>& list, TContainer& container, _xml::_element& elem, const std::string& folder, const char* childName, Log& log)
 {
     if (!childName) {
-        auto item = new TReadable(container);
+        auto item = new TReadable(container, &list);
         item->Read(elem, folder);
         list.Add(item);
     }
@@ -193,7 +193,7 @@ void ReadList(ListOf<TReadable>& list, TContainer& container, _xml::_element& el
             if (child) {
                 auto& tag = child->getName();
                 if (tag == childName) {
-                    auto item = new TReadable(container);
+                    auto item = new TReadable(container, &list);
                     item->Read(*child, folder);
                     list.Add(item);
                 }

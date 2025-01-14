@@ -8,7 +8,7 @@ struct BCFTopic;
 struct BCFDocumentReference : public BCFObject
 {
 public:
-    BCFDocumentReference(BCFTopic& topic, const char* guid = NULL);
+    BCFDocumentReference(BCFTopic& topic, ListOfBCFObjects* parentList, const char* guid = NULL);
 
     void Read(_xml::_element& elem, const std::string& folder);
     void Write(_xml_writer& writer, const std::string& folder, const char* tag);

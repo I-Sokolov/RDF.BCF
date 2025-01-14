@@ -6,7 +6,7 @@
 /// <summary>
 /// 
 /// </summary>
-ListOfProjectObjects::~ListOfProjectObjects()
+ListOfBCFObjects::~ListOfBCFObjects()
 {
     Clean(m_items);
     Clean(m_removed);
@@ -15,7 +15,7 @@ ListOfProjectObjects::~ListOfProjectObjects()
 /// <summary>
 /// 
 /// </summary>
-BCFObject* ListOfProjectObjects::GetNext(BCFObject* prev)
+BCFObject* ListOfBCFObjects::GetNext(BCFObject* prev)
 {
     auto it = m_items.begin();
 
@@ -32,7 +32,7 @@ BCFObject* ListOfProjectObjects::GetNext(BCFObject* prev)
 /// <summary>
 /// 
 /// </summary>
-bool ListOfProjectObjects::Remove(BCFObject* item)
+bool ListOfBCFObjects::Remove(BCFObject* item)
 {
     auto it = Find(item);
 
@@ -49,7 +49,7 @@ bool ListOfProjectObjects::Remove(BCFObject* item)
 /// <summary>
 /// 
 /// </summary>
-void ListOfProjectObjects::Clean(Items& items)
+void ListOfBCFObjects::Clean(Items& items)
 {
     for (auto item : items) {
         delete item;
@@ -60,7 +60,7 @@ void ListOfProjectObjects::Clean(Items& items)
 /// <summary>
 /// 
 /// </summary>
-ListOfProjectObjects::Iterator ListOfProjectObjects::Find(BCFObject* item)
+ListOfBCFObjects::Iterator ListOfBCFObjects::Find(BCFObject* item)
 {
     for (auto it = m_items.begin(); it != m_items.end(); it++) {
         if (*it == item) {
@@ -74,7 +74,7 @@ ListOfProjectObjects::Iterator ListOfProjectObjects::Find(BCFObject* item)
 /// <summary>
 /// 
 /// </summary>
-void ListOfProjectObjects::LogDuplicatedGuid(const char* guid)
+void ListOfBCFObjects::LogDuplicatedGuid(const char* guid)
 {
     m_project.log().add(Log::Level::error, "Duplicated GUID");
 }
@@ -83,9 +83,9 @@ void ListOfProjectObjects::LogDuplicatedGuid(const char* guid)
 /// <summary>
 /// 
 /// </summary>
-BCFComponent* ListOfComponents::Add(BCFViewPoint& viewPoint, const char* ifcGuid, const char* authoringToolId, const char* originatingSystem)
+BCFComponent* ListOfBCFComponents::Add(BCFViewPoint& viewPoint, const char* ifcGuid, const char* authoringToolId, const char* originatingSystem)
 {
-    auto comp = new BCFComponent(viewPoint);
+    auto comp = new BCFComponent(viewPoint, this);
 
     bool ok = true;
     if (ifcGuid) ok = ok && comp->SetIfcGuid(ifcGuid);

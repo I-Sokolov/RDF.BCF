@@ -14,7 +14,7 @@ struct BCFBitmap;
 struct BCFViewPoint : public XMLFile
 {
 public:
-    BCFViewPoint(BCFTopic& topic, const char* guid = NULL);
+    BCFViewPoint(BCFTopic& topic, ListOfBCFObjects* parentList, const char* guid = NULL);
 
 public:
     const char* GetGuid() { return m_Guid.c_str(); }
@@ -106,13 +106,13 @@ private:
     std::string                 m_Viewpoint; //name.bcfv
     std::string                 m_Snapshot;  //name.jpg
 
-    ListOfComponents            m_Selection;
+    ListOfBCFComponents         m_Selection;
     
     std::string                 m_DefaultVisibility;
     std::string                 m_SpacesVisible;
     std::string                 m_SpaceBoundariesVisible;
     std::string                 m_OpeningsVisible;
-    ListOfComponents            m_Exceptions;
+    ListOfBCFComponents         m_Exceptions;
     
     ListOf<BCFColor>            m_Coloring;
 

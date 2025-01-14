@@ -139,8 +139,8 @@ bool BCFProject::ReadTopics(const std::string& bcfFolder)
     for (auto& elem : elems) {
         if (ok && elem.folder) {
             if (GuidStr::IsGUIDValid(elem.name.c_str(), NULL)) {
-                auto topic = new BCFTopic(*this, elem.name.c_str());
-                m_topics.Add(topic);
+                auto topic = new BCFTopic(*this, &m_topics, elem.name.c_str());
+                m_topics.Add(topic); 
 
                 std::string topicFolder(bcfFolder);
                 FileSystem::AddPath(topicFolder, elem.name.c_str());
@@ -177,7 +177,7 @@ bool BCFProject::WriteTopics(const std::string& bcfFolder)
 /// </summary>
 BCFTopic* BCFProject::TopicAdd(const char* type, const char* title, const char* status, const char* guid)
 {
-    auto topic = new BCFTopic(*this, guid ? guid : "");
+    auto topic = new BCFTopic(*this, &m_topics, guid ? guid : "");
 
     if (topic) {
 

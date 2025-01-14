@@ -8,8 +8,8 @@
 /// <summary>
 /// 
 /// </summary>
-BCFColor::BCFColor(BCFViewPoint& viewPoint) 
-    : BCFObject(viewPoint.Project()) 
+BCFColor::BCFColor(BCFViewPoint& viewPoint, ListOfBCFObjects* parentList)
+    : BCFObject(viewPoint.Project(), parentList) 
     , m_viewPoint(viewPoint)
     , m_Components(viewPoint.Project())
 { 

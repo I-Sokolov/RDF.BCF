@@ -4,6 +4,7 @@ class Log;
 struct BCFProject;
 struct XMLPoint;
 struct BCFPoint;
+class ListOfBCFObjects;
 
 /// <summary>
 /// 
@@ -14,7 +15,7 @@ public:
     static long gObjectCounter;
 
 public:
-    BCFObject(BCFProject& project) : m_project(project) { gObjectCounter++; }
+    BCFObject(BCFProject& project, ListOfBCFObjects* parentList) : m_project(project), m_parentList(parentList) { gObjectCounter++; }
     virtual ~BCFObject() { gObjectCounter--; }
    
 public:
@@ -50,7 +51,8 @@ private:
     static std::string GetCurrentTime();
 
 protected:
-    BCFProject& m_project;
+    BCFProject&         m_project;
+    ListOfBCFObjects*   m_parentList;
 };
 
 #define UNNULL                      {if(!val) val = "";}

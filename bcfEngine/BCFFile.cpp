@@ -8,8 +8,8 @@
 /// <summary>
 /// 
 /// </summary>
-BCFFile::BCFFile(BCFTopic& topic) 
-    : BCFObject(topic.Project())
+BCFFile::BCFFile(BCFTopic& topic, ListOfBCFObjects* parentList)
+    : BCFObject(topic.Project(), parentList)
     , m_topic(topic)
     , m_IsExternal("true")
 {

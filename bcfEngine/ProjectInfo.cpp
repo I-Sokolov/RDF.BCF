@@ -6,7 +6,7 @@
 /// 
 /// </summary>
 ProjectInfo::ProjectInfo(BCFProject& project, const char* projectId)
-    : XMLFile(project)
+    : XMLFile(project, NULL)
     , m_ProjectId(projectId ? projectId : "")
 {
 }

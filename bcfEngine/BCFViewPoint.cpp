@@ -12,8 +12,8 @@
 /// <summary>
 /// 
 /// </summary>
-BCFViewPoint::BCFViewPoint(BCFTopic& topic, const char* guid)
-    : XMLFile(topic.Project())
+BCFViewPoint::BCFViewPoint(BCFTopic& topic, ListOfBCFObjects* parentList, const char* guid)
+    : XMLFile(topic.Project(), parentList)
     , m_topic(topic)
     , m_Guid(topic.Project(), guid)
     , m_cameraType(BCFCameraPerspective)

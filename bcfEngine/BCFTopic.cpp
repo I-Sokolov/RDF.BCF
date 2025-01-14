@@ -11,8 +11,8 @@
 /// <summary>
 /// 
 /// </summary>
-BCFTopic::BCFTopic(BCFProject& project, const char* guid)
-    : XMLFile(project)
+BCFTopic::BCFTopic(BCFProject& project, ListOfBCFObjects* parentList, const char* guid)
+    : XMLFile(project, parentList)
     , m_Guid(project, guid)
     , m_BimSnippet(project)
     , m_bReadFromFile (false)
@@ -301,7 +301,7 @@ bool BCFTopic::Remove(void)
 /// </summary>
 BCFViewPoint* BCFTopic::ViewPointAdd(const char* guid)
 {
-    auto viewPoint = new BCFViewPoint(*this, guid ? guid : "");
+    auto viewPoint = new BCFViewPoint(*this, &m_Viewpoints, guid ? guid : "");
 
     if (viewPoint) {
         m_Viewpoints.Add(viewPoint);
@@ -333,7 +333,7 @@ bool BCFTopic::ViewPointRemove(BCFViewPoint* viewPoint)
 /// </summary>
 BCFFile* BCFTopic::FileAdd(const char* filePath, bool isExternal)
 {
-    auto file = new BCFFile(*this);
+    auto file = new BCFFile(*this, &m_Files);
 
     bool ok = true;
 
@@ -400,7 +400,7 @@ BCFViewPoint* BCFTopic::ViewPointByGuid(const char* guid)
 /// </summary>
 BCFComment* BCFTopic::CommentAdd(const char* guid)
 {
-    auto comment = new BCFComment(*this, guid ? guid : "");//"" forces generate guid
+    auto comment = new BCFComment(*this, &m_Comments, guid ? guid : "");//"" forces generate guid
 
     if (comment) {
         m_Comments.Add(comment);
@@ -432,7 +432,7 @@ bool        BCFTopic::CommentRemove(BCFComment* comment)
 /// </summary>
 BCFDocumentReference* BCFTopic::DocumentReferenceAdd(const char* urlPath, const char* guid)
 {
-    auto ref = new BCFDocumentReference(*this, guid ? guid : "");
+    auto ref = new BCFDocumentReference(*this, &m_DocumentReferences, guid ? guid : "");
 
     if (!ref->SetUrlPath(urlPath)){
         delete ref;

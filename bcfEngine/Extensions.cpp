@@ -7,7 +7,7 @@
 /// 
 /// </summary>
 Extensions::Extensions(BCFProject& project)
-    :XMLFile(project)
+    :XMLFile(project, NULL)
 {
     m_elements.resize(7);
 }

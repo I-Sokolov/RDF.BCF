@@ -6,7 +6,7 @@ struct BCFTopic;
 struct BCFFile : public BCFObject
 {
 public:
-    BCFFile(BCFTopic& topic);
+    BCFFile(BCFTopic& topic, ListOfBCFObjects* parentList);
 
 public:
     bool        GetIsExternal                   () { return StrToBool (m_IsExternal); }

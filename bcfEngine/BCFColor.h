@@ -6,9 +6,9 @@
 struct BCFColor : public BCFObject
 {
 public:
-    BCFColor(BCFViewPoint& viewPoint);
+    BCFColor(BCFViewPoint& viewPoint, ListOfBCFObjects* parentList);
 
-    void Read(_xml::_element & elem, const std::string& folder) {}
+    void Read(_xml::_element & elem, const std::string& folder) { assert(!"TODO"); }
     void Write(_xml_writer& writer, const std::string& folder, const char* tag) { assert(!"TODO"); }
 
 public:
@@ -18,7 +18,8 @@ public:
 
 private:
     BCFViewPoint&              m_viewPoint;
+
     std::string                m_Color;
-    ListOfComponents           m_Components;
+    ListOfBCFComponents        m_Components;
 };
 

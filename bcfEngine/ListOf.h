@@ -8,15 +8,15 @@ struct BCFViewPoint;
 /// <summary>
 /// 
 /// </summary>
-class ListOfProjectObjects
+class ListOfBCFObjects
 {
 public:
     bool Remove(BCFObject* item);
     void Add(BCFObject* item) { assert(item); if (item) m_items.push_back(item); }
 
 protected:
-    ListOfProjectObjects(BCFProject& project) : m_project(project) {}
-    ~ListOfProjectObjects();
+    ListOfBCFObjects(BCFProject& project) : m_project(project) {}
+    ~ListOfBCFObjects();
 
     BCFObject* GetNext(BCFObject* prev);
 
@@ -43,10 +43,10 @@ protected:
 /// 
 /// </summary>
 template <class Item>
-class ListOf : public ListOfProjectObjects
+class ListOf : public ListOfBCFObjects
 {
 public:
-    ListOf (BCFProject& project) : ListOfProjectObjects(project) {}
+    ListOf (BCFProject& project) : ListOfBCFObjects(project) {}
 
 public:
     Item* GetNext(Item* prev)
@@ -95,10 +95,10 @@ public:
 /// <summary>
 /// 
 /// </summary>
-class ListOfComponents : public ListOf<BCFComponent>
+class ListOfBCFComponents : public ListOf<BCFComponent>
 {
 public:
-    ListOfComponents(BCFProject& project) : ListOf<BCFComponent>(project) {}
+    ListOfBCFComponents(BCFProject& project) : ListOf<BCFComponent>(project) {}
 
     BCFComponent* Add(BCFViewPoint& viewPoint, const char* ifcGuid, const char* authoringToolId, const char* originatingSystem);
 };

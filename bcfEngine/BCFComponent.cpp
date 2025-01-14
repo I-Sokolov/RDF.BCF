@@ -6,9 +6,8 @@
 /// <summary>
 /// 
 /// </summary>
-BCFComponent::BCFComponent(BCFViewPoint& viewPoint)
-    : BCFObject(viewPoint.Project())
-    , m_viewPoint (viewPoint)
+BCFComponent::BCFComponent(BCFViewPoint& viewPoint, ListOfBCFObjects* parentList)
+    : BCFObject(viewPoint.Project(), parentList)
 {
 }
 
