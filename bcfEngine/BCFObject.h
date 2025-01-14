@@ -18,6 +18,8 @@ public:
     BCFObject(BCFProject& project, ListOfBCFObjects* parentList) : m_project(project), m_parentList(parentList) { gObjectCounter++; }
     virtual ~BCFObject() { gObjectCounter--; }
    
+    bool Remove();
+
 public:
     BCFProject& Project() { return m_project; }
     Log& log();

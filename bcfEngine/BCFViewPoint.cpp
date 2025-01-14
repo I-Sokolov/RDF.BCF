@@ -267,15 +267,6 @@ void BCFViewPoint::Write_OrthogonalCamera(_xml_writer& writer, const std::string
 /// <summary>
 /// 
 /// </summary>
-bool BCFViewPoint::Remove()
-{
-    return m_topic.ViewPointRemove(this);
-}
-
-
-/// <summary>
-/// 
-/// </summary>
 BCFComponent* BCFViewPoint::SelectionAdd(const char* ifcGuid, const char* authoringToolId, const char* originatingSystem)
 {
     return m_Selection.Add(*this, ifcGuid, authoringToolId, originatingSystem);
@@ -287,14 +278,6 @@ BCFComponent* BCFViewPoint::SelectionAdd(const char* ifcGuid, const char* author
 BCFComponent* BCFViewPoint::SelectionIterate(BCFComponent* prev)
 {
     return m_Selection.GetNext(prev);
-}
-
-/// <summary>
-/// 
-/// </summary>
-bool BCFViewPoint::SelectionRemove(BCFComponent* component)
-{
-    return m_Selection.Remove(component);
 }
 
 /// <summary>
@@ -313,10 +296,3 @@ BCFComponent* BCFViewPoint::ExceptionsIterate(BCFComponent* prev)
     return m_Exceptions.GetNext(prev);
 }
 
-/// <summary>
-/// 
-/// </summary>
-bool BCFViewPoint::ExceptionsRemove(BCFComponent* component)
-{
-    return m_Exceptions.Remove(component);
-}

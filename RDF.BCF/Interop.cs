@@ -475,7 +475,7 @@ namespace RDF.BCF
 
         [DllImport(DLL, EntryPoint = "bcfViewPointSelectionRemove")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool ViewPointSelectionRemove(IntPtr viewPoint, IntPtr component);
+        public static extern bool ViewPointSelectionRemove(IntPtr component);
 
         [DllImport(DLL, EntryPoint = "bcfViewPointExceptionsIterate")]
         public static extern IntPtr ViewPointExceptionsIterate(IntPtr viewPoint, IntPtr prev);
@@ -485,7 +485,7 @@ namespace RDF.BCF
 
         [DllImport(DLL, EntryPoint = "bcfViewPointExceptionsRemove")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool ViewPointExceptionsRemove(IntPtr viewPoint, IntPtr component);
+        public static extern bool ViewPointExceptionsRemove(IntPtr component);
 
         [DllImport(DLL, EntryPoint = "bcfComponentGetIfcGuid")]
         private static extern IntPtr ComponentGetIfcGuid_(IntPtr component);

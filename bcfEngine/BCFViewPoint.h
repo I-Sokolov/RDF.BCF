@@ -47,29 +47,21 @@ public:
 
     BCFComponent* SelectionAdd(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL);
     BCFComponent* SelectionIterate(BCFComponent* prev);
-    bool SelectionRemove(BCFComponent* component);
 
     BCFComponent* ExceptionsAdd(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL);
     BCFComponent* ExceptionsIterate(BCFComponent* prev);
-    bool ExceptionsRemove(BCFComponent* component);
 
     BCFColor* ColoringAdd();
     BCFColor* ColoringIterate(BCFColor* prev);
-    bool ColoringRemove(BCFColor* coloring);
 
     BCFLine* LineAdd();
     BCFLine* LineIterate(BCFLine* prev);
-    bool LineRemove(BCFLine* line);
 
     BCFClippingPlane* ClippingPlaneAdd();
     BCFClippingPlane* ClippingPlaneIterate(BCFClippingPlane* prev);
-    bool ClippingPlaneRemove(BCFClippingPlane* component);
 
     BCFBitmap* BitmapAdd();
     BCFBitmap* BitmapIterate(BCFBitmap* prev);
-    bool BitmapRemove(BCFBitmap* line);
-
-    bool Remove();
 
 public:
     void Read(_xml::_element& elem, const std::string& folder);

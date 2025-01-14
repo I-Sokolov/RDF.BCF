@@ -24,8 +24,6 @@ public:
     bool SetText(const char* value);
     bool SetViewPoint(BCFViewPoint* viewPoint);
 
-    bool Remove();
-
 private:
     bool UpdateAuthor();
 

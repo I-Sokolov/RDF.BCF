@@ -224,3 +224,17 @@ bool BCFObject::IsURL(const char* path)
 
     return data == "http:" || data == "ftp:/";
 }
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFObject::Remove()
+{
+    if (m_parentList) {
+        return m_parentList->Remove(this);
+    }
+    else {
+        assert(false);
+        return true;
+    }
+}

@@ -31,11 +31,4 @@ BCFComponent* BCFColor::ComponentIterate(BCFComponent* prev)
     return m_Components.GetNext(prev);
 }
 
-/// <summary>
-/// 
-/// </summary>
-bool BCFColor::ComponentRemove(BCFComponent* component)
-{
-    return m_Components.Remove(component);
-}
 

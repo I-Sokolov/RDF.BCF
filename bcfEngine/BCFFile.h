@@ -24,8 +24,6 @@ public:
     bool SetIfcSpatialStructureElement   (const char* val) { UNNULL; VALIDATE(m_IfcSpatialStructureElement, IfcGuid); m_IfcSpatialStructureElement.assign(val); return true;}
 
 public:
-    bool Remove(void);
-
     void Read(_xml::_element& elem, const std::string& folder);
     void Write(_xml_writer& writer, const std::string& folder, const char* tag);
 

@@ -203,14 +203,6 @@ BCFTopic* BCFProject::TopicAdd(const char* type, const char* title, const char* 
 /// <summary>
 /// 
 /// </summary>
-bool BCFProject::TopicRemove(BCFTopic* topic)
-{ 
-    return m_topics.Remove(topic); 
-}
-
-/// <summary>
-/// 
-/// </summary>
 BCFTopic* BCFProject::TopicIterate(BCFTopic* prev)
 { 
     return m_topics.GetNext(prev); 

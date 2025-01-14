@@ -291,14 +291,6 @@ bool BCFTopic::UpdateAuthor()
 /// <summary>
 /// 
 /// </summary>
-bool BCFTopic::Remove(void)
-{
-    return m_project.TopicRemove(this);
-}
-
-/// <summary>
-/// 
-/// </summary>
 BCFViewPoint* BCFTopic::ViewPointAdd(const char* guid)
 {
     auto viewPoint = new BCFViewPoint(*this, &m_Viewpoints, guid ? guid : "");
@@ -320,13 +312,6 @@ BCFViewPoint* BCFTopic::ViewPointIterate(BCFViewPoint* prev)
     return m_Viewpoints.GetNext(prev);
 }
 
-/// <summary>
-/// 
-/// </summary>
-bool BCFTopic::ViewPointRemove(BCFViewPoint* viewPoint)
-{
-    return m_Viewpoints.Remove(viewPoint);
-}
 
 /// <summary>
 /// 
@@ -363,14 +348,6 @@ BCFFile* BCFTopic::FileAdd(const char* filePath, bool isExternal)
 BCFFile* BCFTopic::FileIterate(BCFFile* prev)
 {
     return m_Files.GetNext(prev);
-}
-
-/// <summary>
-/// 
-/// </summary>
-bool     BCFTopic::FileRemove(BCFFile* file)
-{
-    return m_Files.Remove(file);
 }
 
 
@@ -422,14 +399,6 @@ BCFComment* BCFTopic::CommentIterate(BCFComment* prev)
 /// <summary>
 /// 
 /// </summary>
-bool        BCFTopic::CommentRemove(BCFComment* comment)
-{
-    return m_Comments.Remove(comment);
-}
-
-/// <summary>
-/// 
-/// </summary>
 BCFDocumentReference* BCFTopic::DocumentReferenceAdd(const char* urlPath, const char* guid)
 {
     auto ref = new BCFDocumentReference(*this, &m_DocumentReferences, guid ? guid : "");
@@ -457,10 +426,3 @@ BCFDocumentReference* BCFTopic::DocumentReferenceIterate(BCFDocumentReference* p
     return m_DocumentReferences.GetNext(prev);
 }
 
-/// <summary>
-/// 
-/// </summary>
-bool  BCFTopic::DocumentReferenceRemove(BCFDocumentReference* documentReference)
-{
-    return m_DocumentReferences.Remove(documentReference);
-}

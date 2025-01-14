@@ -38,7 +38,7 @@ namespace RDF.BCF
         }
         public bool RemoveSelection(Component component)
         {
-            return Interop.ViewPointSelectionRemove(m_handle, component.Handle);
+            return Interop.ViewPointSelectionRemove(component.Handle);
         }
 
         public List<Component> Exceptions { get { return GetExceptions(); } }
@@ -51,7 +51,7 @@ namespace RDF.BCF
         }
         public bool RemoveException(Component component)
         {
-            return Interop.ViewPointExceptionsRemove(m_handle, component.Handle);
+            return Interop.ViewPointExceptionsRemove(component.Handle);
         }
 
         /// <summary>

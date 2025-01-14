@@ -127,10 +127,3 @@ bool BCFComment::UpdateAuthor()
     return __super::UpdateAuthor(m_readFromFile ? m_ModifiedAuthor : m_Author, m_readFromFile ? m_ModifiedDate : m_Date);
 }
 
-/// <summary>
-/// 
-/// </summary>
-bool BCFComment::Remove()
-{
-    return m_topic.CommentRemove(this);
-}

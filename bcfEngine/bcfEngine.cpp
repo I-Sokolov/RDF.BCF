@@ -389,10 +389,10 @@ RDFBCF_EXPORT BCFComponent* bcf##Parent##List##Iterate(BCF##Parent* parent, BCFC
     }                                                                                           \
     return NULL;                                                                                \
 }                                                                                               \
-RDFBCF_EXPORT bool bcf##Parent##List##Remove(BCF##Parent* parent, BCFComponent* component)      \
+RDFBCF_EXPORT bool bcf##Parent##List##Remove(BCFComponent* component)                           \
 {                                                                                               \
-    if (parent) {                                                                               \
-        return parent->##List##Remove(component);                                               \
+    if (component) {                                                                            \
+        return component->Remove();                                                             \
     }                                                                                           \
     return false;                                                                               \
 }

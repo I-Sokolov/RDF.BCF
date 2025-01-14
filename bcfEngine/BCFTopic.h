@@ -41,24 +41,18 @@ public:
     bool SetDescription(const char* val);
     bool SetStage(const char* val);
 
-    bool Remove(void);
-
     BCFFile* FileAdd(const char* filePath, bool isExternal = true);
     BCFFile* FileIterate(BCFFile* prev);
-    bool     FileRemove(BCFFile* file);
 
     BCFViewPoint* ViewPointAdd(const char* guid = NULL);
     BCFViewPoint* ViewPointIterate(BCFViewPoint* prev);
     BCFViewPoint* ViewPointByGuid(const char* guid);
-    bool          ViewPointRemove(BCFViewPoint* viewPoint);
 
     BCFComment* CommentAdd(const char* guid = NULL);
     BCFComment* CommentIterate(BCFComment* prev);
-    bool        CommentRemove(BCFComment* comment);
 
     BCFDocumentReference* DocumentReferenceAdd(const char* urlPath, const char* guid = NULL);
     BCFDocumentReference* DocumentReferenceIterate(BCFDocumentReference* prev);
-    bool        DocumentReferenceRemove(BCFDocumentReference* documentReference);
 
 public:
     BimSnippet& GetBimSnippet() { return m_BimSnippet; }

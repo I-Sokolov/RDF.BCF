@@ -72,14 +72,6 @@ void BCFFile::Write_File(_xml_writer& writer, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-bool BCFFile::Remove(void)
-{
-    return m_topic.FileRemove(this);
-}
-
-/// <summary>
-/// 
-/// </summary>
 bool BCFFile::SetReference(const char* val)
 { 
     UNNULL;

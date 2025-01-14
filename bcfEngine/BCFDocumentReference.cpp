@@ -101,10 +101,3 @@ bool BCFDocumentReference::SetUrlPath(const char* val)
     }
 }
 
-/// <summary>
-/// 
-/// </summary>
-bool BCFDocumentReference::Remove()
-{
-    return m_topic.DocumentReferenceRemove(this);
-}

@@ -21,8 +21,6 @@ public:
     bool SetUrlPath(const char* val);
     bool SetDescription(const char* val) { UNNULL; m_Description.assign(val); return true; }
 
-    bool Remove();
-
 private:
     void Write_DocumentReference(_xml_writer& writer, const std::string& folder);
 
