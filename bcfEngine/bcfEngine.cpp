@@ -389,18 +389,21 @@ RDFBCF_EXPORT BCFComponent* bcf##Parent##List##Iterate(BCF##Parent* parent, BCFC
     }                                                                                           \
     return NULL;                                                                                \
 }                                                                                               \
-RDFBCF_EXPORT bool bcf##Parent##List##Remove(BCFComponent* component)                           \
-{                                                                                               \
-    if (component) {                                                                            \
-        return component->Remove();                                                             \
-    }                                                                                           \
-    return false;                                                                               \
-}
 
 COMPONENT_LIST(ViewPoint, Selection)
 COMPONENT_LIST(ViewPoint, Exceptions)
-
 COMPONENT_LIST(Color, Component)
+
+/// <summary>
+/// 
+/// </summary>
+RDFBCF_EXPORT bool bcfViewComponentRemove(BCFComponent* component)
+{
+    if (component) {
+        return component->Remove();
+    }
+    return false;
+}
 
 /// <summary>
 /// 

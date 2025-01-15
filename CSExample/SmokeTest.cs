@@ -628,8 +628,8 @@ namespace CSExample
 
                 ASSERT(vp.Selection.Count == 4);
                 ASSERT(vp.Exceptions.Count == 4);
-                vp.RemoveSelection(vp.Selection[3]);
-                vp.RemoveException(vp.Exceptions[3]);
+                ASSERT(vp.Selection[3].Remove());
+                ASSERT(vp.Exceptions[3].Remove());
                 ASSERT(vp.Selection.Count == 3);
                 ASSERT(vp.Exceptions.Count == 3);
             }

@@ -15,6 +15,11 @@ namespace RDF.BCF
         public string OriginatingSystem { get { return Interop.ComponentGetOriginatingSystem(m_handle); } set { Interop.ComponentSetOriginatingSystem(m_handle, value); } }
         public string AuthoringToolId { get { return Interop.ComponentGetAuthoringToolId(m_handle); } set { Interop.ComponentSetAuthoringToolId(m_handle, value); } }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Remove() { return Interop.ViewPointComponentRemove(m_handle); }
+
         #region IMPLEMENTATION
         ///////////////////////////////////////////////////////////////////////////////////////////
         Project m_project;

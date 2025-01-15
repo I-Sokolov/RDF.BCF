@@ -218,14 +218,17 @@ extern "C" {
     /// </summary>
     RDFBCF_EXPORT BCFComponent* bcfViewPointSelectionAdd(BCFViewPoint* viewPoint, const char* ifcGuid);
     RDFBCF_EXPORT BCFComponent* bcfViewPointSelectionIterate(BCFViewPoint* viewPoint, BCFComponent* prev);
-    RDFBCF_EXPORT bool bcfViewPointSelectionRemove(BCFComponent* component);
 
     /// <summary>
     ///
     /// </summary>
     RDFBCF_EXPORT BCFComponent* bcfViewPointExceptionsAdd(BCFViewPoint* viewPoint, const char* ifcGuid);
     RDFBCF_EXPORT BCFComponent* bcfViewPointExceptionsIterate(BCFViewPoint* viewPoint, BCFComponent* prev);
-    RDFBCF_EXPORT bool bcfViewPointExceptionsRemove(BCFComponent* component);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    RDFBCF_EXPORT bool bcfViewComponentRemove(BCFComponent* component);
 
     /// <summary>
     ///

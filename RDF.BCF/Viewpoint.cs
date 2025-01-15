@@ -36,10 +36,6 @@ namespace RDF.BCF
                 throw new ApplicationException("Fail to add selection: " + Interop.ErrorsGet(Project.Handle));
             return new Component(Project, handle);
         }
-        public bool RemoveSelection(Component component)
-        {
-            return Interop.ViewPointSelectionRemove(component.Handle);
-        }
 
         public List<Component> Exceptions { get { return GetExceptions(); } }
         public Component AddException(string? ifcGuid = null)
@@ -48,10 +44,6 @@ namespace RDF.BCF
             if (handle == IntPtr.Zero)
                 throw new ApplicationException("Fail to add exception: " + Interop.ErrorsGet(Project.Handle));
             return new Component(Project, handle);
-        }
-        public bool RemoveException(Component component)
-        {
-            return Interop.ViewPointExceptionsRemove(component.Handle);
         }
 
         /// <summary>
