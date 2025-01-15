@@ -79,7 +79,7 @@ public:
             for (auto it = this->Items().begin(); it != this->Items().end(); it++) {
                 if (0 == strcmp(item->GetGuid(), (*it)->GetGuid())) {
                     this->LogDuplicatedGuid(item->GetGuid());
-                    this->Remove(item);
+                    this->Remove(*it);
                     break;
                 }
             }

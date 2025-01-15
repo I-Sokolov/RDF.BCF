@@ -199,7 +199,7 @@
     <ClInclude Include="BCFProject.h" />
     <ClInclude Include="bcfTypes.h" />
     <ClInclude Include="BCFFile.h" />
-    <ClInclude Include="BimSnippet.h" />
+    <ClInclude Include="BCFBimSnippet.h" />
     <ClInclude Include="BCFBitmap.h" />
     <ClInclude Include="BCFClippingPlane.h" />
     <ClInclude Include="BCFColor.h" />
@@ -240,6 +240,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="BCFBimSnippet.cpp" />
     <ClCompile Include="BCFColor.cpp" />
     <ClCompile Include="BCFDocumentReference.cpp" />
     <ClCompile Include="bcfEngine.cpp" />

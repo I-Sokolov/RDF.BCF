@@ -6,6 +6,7 @@
 #include "BCFComment.h"
 #include "BCFFile.h"
 #include "BCFDocumentReference.h"
+#include "BCFBimSnippet.h"
 #include "FileSystem.h"
 
 /// <summary>
@@ -14,7 +15,7 @@
 BCFTopic::BCFTopic(BCFProject& project, ListOfBCFObjects* parentList, const char* guid)
     : XMLFile(project, parentList)
     , m_Guid(project, guid)
-    , m_BimSnippet(project)
+    , m_BimSnippets(project)
     , m_bReadFromFile (false)
     , m_Files(project)
     , m_ReferenceLinks(project)
@@ -108,6 +109,7 @@ void BCFTopic::Read_Topic(_xml::_element& elem, const std::string& folder)
         CHILD_GET_LIST(RelatedTopics, RelatedTopic)
         CHILD_GET_LIST(Comments, Comment)
         CHILD_GET_LIST(Viewpoints, ViewPoint)
+        CHILD_GET_LIST(BimSnippets, BimSnippet)
     CHILDREN_END
 }
 
@@ -130,6 +132,10 @@ void BCFTopic::Write_Topic(_xml_writer& writer, const std::string& folder)
     WRITE_LIST(RelatedTopic);
     WRITE_LIST(Comment);
     WRITE_LIST(Viewpoint);
+
+    if (!m_BimSnippets.Items().empty()) {
+       m_BimSnippets.Items().front()->Write(writer, folder, "BimSnippet");
+    }
 }
 
 /// <summary>
@@ -426,3 +432,20 @@ BCFDocumentReference* BCFTopic::DocumentReferenceIterate(BCFDocumentReference* p
     return m_DocumentReferences.GetNext(prev);
 }
 
+/// <summary>
+/// 
+/// </summary>
+BCFBimSnippet* BCFTopic::GetBimSnippet(bool forceCreate)
+{
+    if (forceCreate && m_BimSnippets.Items().empty()) {
+        auto snippet = new BCFBimSnippet(*this, &m_BimSnippets);
+        m_BimSnippets.Add(snippet);
+    }
+
+    if (m_BimSnippets.Items().empty()) {
+        return NULL;
+    }
+    else {
+        return m_BimSnippets.Items().front();
+    }
+}

@@ -33,6 +33,7 @@ extern "C" {
     struct BCFLine;
     struct BCFClippingPlane;
     struct BCFBitmap;
+    struct BCFBimSnippet;
 
     /// <summary>
     /// 

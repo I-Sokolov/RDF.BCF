@@ -122,7 +122,7 @@ enum class UnknownNames : bool
         } else
 
 #define ATTRS_END(onUnknownNames)           \
-        if ((bool)onUnknownNames) { Project().log().add(Log::Level::warning, "XML parsing", "Unknown attribute %s in " __FUNCTION__, attrName.c_str()); } } }
+        if ((bool)onUnknownNames) { Project().log().add(Log::Level::warning, "XML parsing", "Unknown attribute %s in " __FUNCTION__, attrName.c_str()); assert(!"TODO?"); } } }
 
 
 /// <summary>
@@ -163,7 +163,7 @@ enum class UnknownNames : bool
             } else
 
 #define CHILDREN_END \
-        { Project().log().add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str()); } } }
+        { Project().log().add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str()); assert(!"TODO?"); } } }
 
 
 /// <summary>

@@ -96,7 +96,7 @@
     <ClInclude Include="BCFViewPoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BimSnippet.h">
+    <ClInclude Include="BCFBimSnippet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BCFDocumentReference.h">
@@ -219,6 +219,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BCFColor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BCFBimSnippet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

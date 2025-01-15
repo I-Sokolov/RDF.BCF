@@ -4,7 +4,6 @@
 #include "XMLFile.h"
 #include "GuidStr.h"
 
-#include "BimSnippet.h"
 struct GuidReference;
 
 struct BCFTopic : public XMLFile
@@ -54,8 +53,7 @@ public:
     BCFDocumentReference* DocumentReferenceAdd(const char* urlPath, const char* guid = NULL);
     BCFDocumentReference* DocumentReferenceIterate(BCFDocumentReference* prev);
 
-public:
-    BimSnippet& GetBimSnippet() { return m_BimSnippet; }
+    BCFBimSnippet* GetBimSnippet(bool forceCreate);
 
 private:
     //XMLFile implementation
@@ -93,7 +91,7 @@ private:
     std::string                     m_AssignedTo;
     std::string                     m_Description;
     std::string                     m_Stage;
-    BimSnippet                      m_BimSnippet;
+    ListOf<BCFBimSnippet>           m_BimSnippets;
     ListGuid<BCFDocumentReference>  m_DocumentReferences;
     ListGuid<GuidReference>         m_RelatedTopics;
     ListGuid<BCFComment>            m_Comments;
