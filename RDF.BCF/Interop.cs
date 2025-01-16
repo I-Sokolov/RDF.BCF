@@ -261,6 +261,7 @@ namespace RDF.BCF
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool TopicSetIndex(IntPtr topic, int val);
 
+
         [DllImport(DLL, EntryPoint = "bcfFileIterate")]
         public static extern IntPtr FileIterate(IntPtr topic, IntPtr prev);
 
@@ -526,5 +527,43 @@ namespace RDF.BCF
         [DllImport(DLL, EntryPoint = "bcfDocumentReferenceSetDescription")]
         public static extern bool DocumentReferenceSetDescription(IntPtr documentReferece, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string value);
 
+        [DllImport(DLL, EntryPoint = "bcfTopicGetBimSnippet")]
+        public static extern IntPtr TopicGetBimSnippet(IntPtr topic, [param: MarshalAs(UnmanagedType.U1)] bool forceCreate);
+
+        [DllImport(DLL, EntryPoint = "bcfBimSnippetRemove")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool BimSnippetRemove(IntPtr comment);
+
+        [DllImport(DLL, EntryPoint = "bcfBimSnippetGetSnippetType")]
+        private static extern IntPtr _BimSnippetGetSnippetType(IntPtr snippet);
+        public static string BimSnippetGetSnippetType(IntPtr snippet) { return PtrToString(_BimSnippetGetSnippetType(snippet)); }
+
+        [DllImport(DLL, EntryPoint = "bcfBimSnippetGetReference")]
+        private static extern IntPtr _BimSnippetGetReference(IntPtr snippet);
+        public static string BimSnippetGetReference(IntPtr snippet) { return PtrToString(_BimSnippetGetReference(snippet)); }
+
+        [DllImport(DLL, EntryPoint = "bcfBimSnippetGetReferenceSchema")]
+        private static extern IntPtr _BimSnippetGetReferenceSchema(IntPtr snippet);
+        public static string BimSnippetGetReferenceSchema(IntPtr snippet) { return PtrToString(_BimSnippetGetReferenceSchema(snippet)); }
+
+        [DllImport(DLL, EntryPoint = "bcfBimSnippetGetIsExternal")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool BimSnippetGetIsExternal(IntPtr snippet);
+
+        [DllImport(DLL, EntryPoint = "bcfBimSnippetSetReference")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool BimSnippetSetReference(IntPtr snippet, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
+
+        [DllImport(DLL, EntryPoint = "bcfBimSnippetSetReferenceSchema")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool BimSnippetSetReferenceSchema(IntPtr snippet, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
+
+        [DllImport(DLL, EntryPoint = "bcfBimSnippetSetSnippetType")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool BimSnippetSetSnippetType(IntPtr snippet, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
+
+        [DllImport(DLL, EntryPoint = "bcfBimSnippetSetIsExternal")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool BimSnippetSetIsExternal(IntPtr snippet, [param: MarshalAs(UnmanagedType.U1)] bool val);
     }
 }

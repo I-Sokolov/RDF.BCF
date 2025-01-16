@@ -9,6 +9,7 @@
 #include "BCFComponent.h"
 #include "BCFColor.h"
 #include "BCFDocumentReference.h"
+#include "BCFBimSnippet.h"
 
 /// <summary>
 /// Macros to implement put/get attributes and iterate/remove objects
@@ -416,3 +417,25 @@ OBJ_GET_ATTR(Str, Component, AuthoringToolId)
 OBJ_SET_ATTR(Str, Component, IfcGuid)
 OBJ_SET_ATTR(Str, Component, OriginatingSystem)
 OBJ_SET_ATTR(Str, Component, AuthoringToolId)
+
+/// <summary>
+/// 
+/// </summary>
+OBJ_REMOVE(BimSnippet)
+RDFBCF_EXPORT BCFBimSnippet* bcfTopicGetBimSnippet(BCFTopic* topic, bool forceCreate)
+{
+    if (topic) {
+        return topic->GetBimSnippet(forceCreate);
+    }
+    return NULL;
+}
+
+OBJ_GET_ATTR(Str, BimSnippet, SnippetType)
+OBJ_GET_ATTR(Bool,BimSnippet, IsExternal)
+OBJ_GET_ATTR(Str, BimSnippet, Reference)
+OBJ_GET_ATTR(Str, BimSnippet, ReferenceSchema)
+
+OBJ_SET_ATTR(Str, BimSnippet, SnippetType)
+OBJ_SET_ATTR(Bool,BimSnippet, IsExternal)
+OBJ_SET_ATTR(Str, BimSnippet, Reference)
+OBJ_SET_ATTR(Str, BimSnippet, ReferenceSchema)

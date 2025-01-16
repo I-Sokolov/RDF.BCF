@@ -128,14 +128,14 @@ void BCFTopic::Write_Topic(_xml_writer& writer, const std::string& folder)
     WRITE_CONTENT(AssignedTo);
     WRITE_CONTENT(Stage);
     WRITE_CONTENT(Description);
+    if (!m_BimSnippets.Items().empty()) {
+        m_BimSnippets.Items().front()->Write(writer, folder, "BimSnippet");
+    }
     WRITE_LIST(DocumentReference);
     WRITE_LIST(RelatedTopic);
     WRITE_LIST(Comment);
     WRITE_LIST(Viewpoint);
 
-    if (!m_BimSnippets.Items().empty()) {
-       m_BimSnippets.Items().front()->Write(writer, folder, "BimSnippet");
-    }
 }
 
 /// <summary>

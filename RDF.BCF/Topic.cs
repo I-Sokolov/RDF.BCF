@@ -42,14 +42,14 @@ namespace RDF.BCF
         /// <summary>
         /// 
         /// </summary>
-        public List<BIMFile> Files { get { return GetFiles(); } }
+        public List<BimFile> Files { get { return GetFiles(); } }
 
-        public BIMFile AddFile(string? filePath, bool isExternal = true)
+        public BimFile AddFile(string? filePath, bool isExternal = true)
         {
             IntPtr fileHandle = Interop.FileAdd(m_handle, filePath, isExternal);
             if (fileHandle == IntPtr.Zero)
                 throw new ApplicationException("Fail to add file: " + Interop.ErrorsGet(m_project.Handle));
-            return new BIMFile(this, fileHandle);
+            return new BimFile(this, fileHandle);
         }
 
         /// <summary>
@@ -106,6 +106,18 @@ namespace RDF.BCF
         /// <summary>
         /// 
         /// </summary>
+        public BimSnippet? GetBimSnippet(bool forceCreate)
+        {
+            IntPtr handle = Interop.TopicGetBimSnippet(m_handle, forceCreate);
+            if (handle == IntPtr.Zero)
+                return null;
+            else
+                return new BimSnippet(this, handle);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public Project Project { get { return m_project; } }
 
         #region IMPLEMENTATION
@@ -119,15 +131,15 @@ namespace RDF.BCF
             m_handle = handle;
         }
 
-        private List<BIMFile> GetFiles()
+        private List<BimFile> GetFiles()
         {
-            var ret = new List<BIMFile>();
+            var ret = new List<BimFile>();
 
             IntPtr handle = IntPtr.Zero;
 
             while ((handle = Interop.FileIterate(m_handle, handle)) != IntPtr.Zero)
             {
-                ret.Add(new BIMFile(this, handle));
+                ret.Add(new BimFile(this, handle));
             }
 
             return ret;

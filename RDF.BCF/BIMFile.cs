@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RDF.BCF
 {
-    public class BIMFile
+    public class BimFile
     {
         /// <summary>
         /// 
@@ -28,7 +28,7 @@ namespace RDF.BCF
         Topic m_topic;
         IntPtr m_handle;
 
-        internal BIMFile(Topic topic, IntPtr handle)
+        internal BimFile(Topic topic, IntPtr handle)
         {
             m_topic = topic;
             m_handle = handle;

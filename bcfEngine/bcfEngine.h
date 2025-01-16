@@ -276,6 +276,24 @@ extern "C" {
     RDFBCF_EXPORT BCFBitmap* bcfViewPointBitmapIterate(BCFBitmap* prev);
     RDFBCF_EXPORT bool bcfViewPointBitmapRemove(BCFBitmap* line);
 
+    /// <summary>
+    ///
+    /// </summary>
+    RDFBCF_EXPORT BCFBimSnippet* bcfTopicGetBimSnippet(BCFTopic* topic, bool forceCreate);
+    RDFBCF_EXPORT bool bcfBimSnippetRemove(BCFFile* file);
+
+    /// <summary>
+    ///
+    /// </summary>
+    RDFBCF_EXPORT const char* bcfBimSnippetGetSnippetType (BCFBimSnippet* snippet);
+    RDFBCF_EXPORT bool        bcfBimSnippetGetIsExternal (BCFBimSnippet* snippet);
+    RDFBCF_EXPORT const char* bcfBimSnippetGetReference (BCFBimSnippet* snippet);
+    RDFBCF_EXPORT const char* bcfBimSnippetGetReferenceSchema(BCFBimSnippet* snippet);
+
+    RDFBCF_EXPORT bool bcfBimSnippetSetSnippetType(BCFBimSnippet* snippet, const char* val);
+    RDFBCF_EXPORT bool bcfBimSnippetSetIsExternal(BCFBimSnippet* snippet, const char* val);
+    RDFBCF_EXPORT bool bcfBimSnippetSetReference(BCFBimSnippet* snippet, const char* val);
+    RDFBCF_EXPORT bool bcfBimSnippetSetReferenceSchema(BCFBimSnippet* snippet, const char* val);
 
 #ifdef __cplusplus
 } //extern "C"

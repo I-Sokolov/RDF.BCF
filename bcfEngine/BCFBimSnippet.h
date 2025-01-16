@@ -9,7 +9,7 @@ public:
     BCFBimSnippet(BCFTopic& project, ListOfBCFObjects* parentList);
 
 public:
-    const char* GetSnippetType() { return m_Reference.c_str(); }
+    const char* GetSnippetType() { return m_SnippetType.c_str(); }
     bool        GetIsExternal() { return StrToBool(m_IsExternal); }
     const char* GetReference() { return m_Reference.c_str(); }
     const char* GetReferenceSchema() { return m_ReferenceSchema.c_str(); }

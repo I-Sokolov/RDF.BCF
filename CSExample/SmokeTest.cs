@@ -115,8 +115,8 @@ namespace CSExample
                 var name = bcf.Name;
                 ASSERT(name == "BCF 3.0 test cases");
 
+                TestSnippest(bcf);
                 TestTopics(bcf);
-
                 CheckExtensions(bcf);
 
                 var ok = bcf.FileWrite("Кирилица.bcf");
@@ -245,6 +245,19 @@ namespace CSExample
             // remove
             //
             topic.Remove();
+        }
+
+        static void TestSnippest(Project bcf)
+        {
+            var snippet = bcf.Topics.First().GetBimSnippet(false);
+            ASSERT(snippet != null);
+            if (snippet != null)
+            {
+                ASSERT(snippet.IsExternal == true);
+                ASSERT(snippet.SnippetType == "JSON");
+                ASSERT(snippet.Reference == "JsonElement.json");
+                ASSERT(snippet.ReferenceSchema == "http://json-schema.org");
+            }
         }
 
         static private void Topics()
@@ -528,7 +541,7 @@ namespace CSExample
                 bool isExternal = (i % 2 == 0);
                 var reference = TestFile("ifc");
 
-                RDF.BCF.BIMFile file;
+                RDF.BCF.BimFile file;
                 if (i < 2)
                 {
                     file = topic.AddFile(reference, isExternal);
