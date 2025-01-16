@@ -280,7 +280,7 @@ extern "C" {
     ///
     /// </summary>
     RDFBCF_EXPORT BCFBimSnippet* bcfTopicGetBimSnippet(BCFTopic* topic, bool forceCreate);
-    RDFBCF_EXPORT bool bcfBimSnippetRemove(BCFFile* file);
+    RDFBCF_EXPORT bool bcfBimSnippetRemove(BCFBimSnippet* snippet);
 
     /// <summary>
     ///
@@ -291,7 +291,7 @@ extern "C" {
     RDFBCF_EXPORT const char* bcfBimSnippetGetReferenceSchema(BCFBimSnippet* snippet);
 
     RDFBCF_EXPORT bool bcfBimSnippetSetSnippetType(BCFBimSnippet* snippet, const char* val);
-    RDFBCF_EXPORT bool bcfBimSnippetSetIsExternal(BCFBimSnippet* snippet, const char* val);
+    RDFBCF_EXPORT bool bcfBimSnippetSetIsExternal(BCFBimSnippet* snippet, bool val);
     RDFBCF_EXPORT bool bcfBimSnippetSetReference(BCFBimSnippet* snippet, const char* val);
     RDFBCF_EXPORT bool bcfBimSnippetSetReferenceSchema(BCFBimSnippet* snippet, const char* val);
 

@@ -351,6 +351,22 @@ namespace CSExample
                 ASSERT(topic.GetDocumentReferences().Count == 4);
                 ASSERT(topic.GetDocumentReferences()[3].Remove());
                 ASSERT(topic.GetDocumentReferences().Count == 3);
+
+                ASSERT(topic.GetBimSnippet(false) == null);
+                ASSERT(topic.GetBimSnippet(true) != null);
+                ASSERT(topic.GetBimSnippet(false) != null);
+                ASSERT(topic.GetBimSnippet(false).Remove());
+                ASSERT(topic.GetBimSnippet(false) == null);
+
+                var snippet = topic.GetBimSnippet(true);
+                ASSERT(snippet != null);
+                if (snippet != null)
+                {
+                    snippet.IsExternal = true;
+                    snippet.SnippetType = "NEW_TYPE";
+                    snippet.Reference = "http://aaa";
+                    snippet.ReferenceSchema = "http://bbb";
+                }
             }
 
         }
@@ -430,6 +446,17 @@ namespace CSExample
                         ASSERT(reference.Description.Length == 0);
                     }
                 }
+
+                var snippet = topic.GetBimSnippet(false);
+                ASSERT(snippet != null);
+                if (snippet != null)
+                {
+                    ASSERT(snippet.IsExternal == true);
+                    ASSERT(snippet.SnippetType == "NEW_TYPE");
+                    ASSERT(snippet.Reference == "http://aaa");
+                    ASSERT(snippet.ReferenceSchema == "http://bbb");
+                }
+
             }
         }
 

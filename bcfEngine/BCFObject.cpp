@@ -200,6 +200,9 @@ bool BCFObject::IsIfcGuidValid(const char* str, const char* propName)
 /// </summary>
 bool BCFObject::IsFilePathValid(const char* str, const char* propName)
 {
+    if (IsURL(str)) {
+        return true;
+    }
     if (FileSystem::Exists(str)) {
         return true;
     }
@@ -219,10 +222,10 @@ bool BCFObject::IsURL(const char* path)
         return false;
     }
 
-    std::string data(path, 5);
+    std::string data(path, 6);
     std::transform(data.begin(), data.end(), data.begin(), [](unsigned char c) { return std::tolower(c); });
 
-    return data == "http:" || data == "ftp:/";
+    return data == "https:" || data == "http:/" || data == "ftp://";
 }
 
 /// <summary>

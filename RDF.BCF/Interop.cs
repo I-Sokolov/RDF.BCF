@@ -532,7 +532,7 @@ namespace RDF.BCF
 
         [DllImport(DLL, EntryPoint = "bcfBimSnippetRemove")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool BimSnippetRemove(IntPtr comment);
+        public static extern bool BimSnippetRemove(IntPtr snippet);
 
         [DllImport(DLL, EntryPoint = "bcfBimSnippetGetSnippetType")]
         private static extern IntPtr _BimSnippetGetSnippetType(IntPtr snippet);
