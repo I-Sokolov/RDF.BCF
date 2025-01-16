@@ -41,6 +41,7 @@ void BCFViewPoint::Read(_xml::_element& elem, const std::string& folder)
     CHILDREN_START
         CHILD_GET_CONTENT(Viewpoint)
         CHILD_GET_CONTENT(Snapshot)
+        CHILD_GET_CONTENT(Index)
     CHILDREN_END
 
     if (!ReadFile(folder)) {
@@ -82,6 +83,7 @@ void BCFViewPoint::Write_ViewPoint(_xml_writer& writer, const std::string& folde
 {
     WRITE_CONTENT(Viewpoint);
     WRITE_CONTENT(Snapshot);
+    WRITE_CONTENT(Index);
 }
 
 /// <summary>

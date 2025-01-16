@@ -97,6 +97,7 @@ private:
 
     std::string                 m_Viewpoint; //name.bcfv
     std::string                 m_Snapshot;  //name.jpg
+    std::string                 m_Index;
 
     ListOfBCFComponents         m_Selection;
     
