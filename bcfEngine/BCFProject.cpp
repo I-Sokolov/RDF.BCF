@@ -207,3 +207,11 @@ BCFTopic* BCFProject::TopicIterate(BCFTopic* prev)
 { 
     return m_topics.GetNext(prev); 
 }
+
+/// <summary>
+/// 
+/// </summary>
+BCFTopic* BCFProject::TopicByGuid(const char* guid)
+{
+    return m_topics.FindByGuid(guid);
+}

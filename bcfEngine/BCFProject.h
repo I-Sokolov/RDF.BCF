@@ -37,6 +37,7 @@ public:
 
     BCFTopic* TopicAdd(const char* type, const char* title, const char* status, const char* guid = NULL);
     BCFTopic* TopicIterate(BCFTopic* prev);
+    BCFTopic* TopicByGuid(const char* guid);
 
 public: //internal
     Log& log() { return m_log; }
@@ -56,7 +57,7 @@ private:
     std::string m_author;
     bool        m_autoExtentSchema;
 
-    ListGuid<BCFTopic>  m_topics;
+    SetByGuid<BCFTopic>  m_topics;
 
     StringList  m_workingFolders;
 };

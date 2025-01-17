@@ -54,6 +54,8 @@ public:
     void Read(_xml::_element& elem, const std::string&);
     void Write(_xml_writer& writer, const std::string&, const char* tag);
 
+    std::string& string() { return m_str; }
+
 private:
     std::string m_str;
 };

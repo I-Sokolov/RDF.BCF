@@ -2,6 +2,7 @@
 #include "ListOf.h"
 #include "BCFProject.h"
 #include "BCFComponent.h"
+#include "BCFTopic.h"
 
 /// <summary>
 /// 
@@ -79,6 +80,15 @@ void ListOfBCFObjects::LogDuplicatedGuid(const char* guid)
     m_project.log().add(Log::Level::error, "Duplicated GUID");
 }
 
+/// <summary>
+/// 
+/// </summary>
+SetOfXMLText::SetOfXMLText(BCFTopic& topic) 
+    : ListOf<XMLText>(topic.Project()) 
+    , m_topic(topic)
+{
+}
+
 
 /// <summary>
 /// 
@@ -102,3 +112,64 @@ BCFComponent* ListOfBCFComponents::Add(BCFViewPoint& viewPoint, const char* ifcG
     }
 }
 
+/// <summary>
+/// 
+/// </summary>
+void SetOfXMLText::Add(const char* val)
+{
+    if (!Find(val)) {
+        auto txt = new XMLText(m_topic, this);
+        __super::Add(txt);
+    }
+}
+
+/// <summary>
+/// 
+/// </summary>
+XMLText* SetOfXMLText::Find(const char* val)
+{
+    if (val) {
+        std::string sval(val);
+        for (auto txt : Items()) {
+            if (txt->string() == val) {
+                return txt;
+            }
+        }
+    }
+    return NULL;
+}
+
+/// <summary>
+/// 
+/// </summary>
+const char* SetOfXMLText::GetNext(const char* prev)
+{
+    XMLText* txtPrev = NULL;
+    if (prev) {
+        txtPrev = Find(prev);
+        if (!txtPrev) {
+            m_project.log().add(Log::Level::error, "Invalid element", "Text element %s is not in the list", prev);
+            return NULL;
+        }
+    }
+
+    auto txtNext = __super::GetNext(txtPrev);
+
+    if (txtNext) {
+        return txtNext->string().c_str();
+    }
+    else {
+        return NULL;
+    }
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool SetOfXMLText::Remove(const char* val)
+{
+    if (auto txt = Find(val)) {
+        return txt->Remove();
+    }
+    return NULL;
+}

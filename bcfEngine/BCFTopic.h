@@ -55,6 +55,18 @@ public:
 
     BCFBimSnippet* GetBimSnippet(bool forceCreate);
 
+    bool ReferenceLinkAdd(const char* val);
+    const char* ReferenceLinkIterate(const char* prev);
+    bool ReferenceLinkRemove(const char* val);
+
+    bool LabelAdd(const char* val);
+    const char* LabelIterate(const char* prev);
+    bool LabelRemove(const char* val);
+
+    bool RelatedTopicAdd(BCFTopic* topic);
+    BCFTopic* RelatedTopicIterate(BCFTopic* prev);
+    bool RelatedTopicRemove(BCFTopic* topic);
+
 private:
     //XMLFile implementation
     virtual const char* XMLFileName() override { return "markup.bcf"; }
@@ -72,6 +84,8 @@ private:
 
     bool UpdateAuthor();
 
+    BCFTopic* GetNextRelatedTopic(const char* guid);
+
 private:
     GuidStr                         m_Guid;
     ListOf<BCFFile>                 m_Files;
@@ -79,10 +93,10 @@ private:
     std::string                     m_TopicStatus;
     std::string                     m_TopicType;
     std::string                     m_Title;
-    ListOf<XMLText>                 m_ReferenceLinks;
+    SetOfXMLText                    m_ReferenceLinks;
     std::string                     m_Priority;
     std::string                     m_Index;
-    ListOf<XMLText>                 m_Labels;
+    SetOfXMLText                    m_Labels;
     std::string                     m_CreationDate;
     std::string                     m_CreationAuthor;
     std::string                     m_ModifiedDate;
@@ -92,10 +106,10 @@ private:
     std::string                     m_Description;
     std::string                     m_Stage;
     ListOf<BCFBimSnippet>           m_BimSnippets;
-    ListGuid<BCFDocumentReference>  m_DocumentReferences;
-    ListGuid<GuidReference>         m_RelatedTopics;
-    ListGuid<BCFComment>            m_Comments;
-    ListGuid<BCFViewPoint>          m_Viewpoints;
+    SetByGuid<BCFDocumentReference> m_DocumentReferences;
+    SetByGuid<GuidReference>        m_RelatedTopics;
+    SetByGuid<BCFComment>           m_Comments;
+    SetByGuid<BCFViewPoint>         m_Viewpoints;
 
 private:
     bool                            m_bReadFromFile;

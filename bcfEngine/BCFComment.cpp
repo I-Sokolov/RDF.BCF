@@ -72,11 +72,12 @@ void BCFComment::Write_Comment(_xml_writer& writer, const std::string& folder)
 BCFViewPoint* BCFComment::GetViewPoint()
 {
     if (*m_Viewpoint.GetGuid()) {
-        return m_topic.ViewPointByGuid(m_Viewpoint.GetGuid());
+        if (auto vp = m_topic.ViewPointByGuid(m_Viewpoint.GetGuid())) {
+            return vp;
+        }
+        Log().add(Log::Level::error, "ViewPoint for comment '%s' referencec but does not exist", m_Comment.empty() ? m_Guid.c_str() : m_Comment.c_str());
     }
-    else {
-        return NULL;
-    }
+    return NULL;
 }
 
 /// <summary>

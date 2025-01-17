@@ -1,9 +1,11 @@
 #pragma once
 
 struct BCFProject;
+struct BCFTopic;
 struct BCFObject;
 struct BCFComponent;
 struct BCFViewPoint;
+class XMLText;
 
 /// <summary>
 /// 
@@ -52,7 +54,11 @@ public:
     Item* GetNext(Item* prev)
     {
         auto next = __super::GetNext(prev);
-        return dynamic_cast<Item*>(next);
+        if (next) {
+            assert(dynamic_cast<Item*>(next));
+            return dynamic_cast<Item*>(next);
+        }
+        return NULL;
     }
 
     std::list<Item*>& Items()
@@ -66,22 +72,19 @@ public:
 /// 
 /// </summary>
 template <class Item>
-class ListGuid : public ListOf<Item>
+class SetByGuid : public ListOf<Item>
 {
 public:
-    ListGuid(BCFProject& project) : ListOf<Item>(project) {}
+    SetByGuid(BCFProject& project) : ListOf<Item>(project) {}
 
 public:
-    void Add(Item* item) 
-    {        
+    void Add(Item* item)
+    {
         if (item && *item->GetGuid()) {
 
-            for (auto it = this->Items().begin(); it != this->Items().end(); it++) {
-                if (0 == strcmp(item->GetGuid(), (*it)->GetGuid())) {
-                    this->LogDuplicatedGuid(item->GetGuid());
-                    this->Remove(*it);
-                    break;
-                }
+            if (auto found = FindByGuid(item->GetGuid())) {
+                this->LogDuplicatedGuid(item->GetGuid());
+                found->Remove();
             }
 
             __super::Add(item);
@@ -89,6 +92,18 @@ public:
         else {
             assert(false);
         }
+    }
+
+    Item* FindByGuid(const char* guid)
+    {
+        if (guid) {
+            for (auto it = this->Items().begin(); it != this->Items().end(); it++) {
+                if (0 == strcmp(guid, (*it)->GetGuid())) {
+                    return *it;
+                }
+            }
+        }
+        return NULL;
     }
 };
 
@@ -101,4 +116,22 @@ public:
     ListOfBCFComponents(BCFProject& project) : ListOf<BCFComponent>(project) {}
 
     BCFComponent* Add(BCFViewPoint& viewPoint, const char* ifcGuid, const char* authoringToolId, const char* originatingSystem);
+};
+
+
+/// <summary>
+/// 
+/// </summary>
+class SetOfXMLText : public ListOf<XMLText>
+{
+public:
+    SetOfXMLText(BCFTopic& topic);
+
+    void Add(const char* val);
+    XMLText* Find(const char* val);
+    const char* GetNext(const char* prev);
+    bool Remove(const char* val);
+
+private:
+    BCFTopic& m_topic;
 };

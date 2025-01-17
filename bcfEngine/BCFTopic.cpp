@@ -18,8 +18,8 @@ BCFTopic::BCFTopic(BCFProject& project, ListOfBCFObjects* parentList, const char
     , m_BimSnippets(project)
     , m_bReadFromFile (false)
     , m_Files(project)
-    , m_ReferenceLinks(project)
-    , m_Labels(project)
+    , m_ReferenceLinks(*this)
+    , m_Labels(*this)
     , m_DocumentReferences(project)
     , m_RelatedTopics(project)
     , m_Comments(project)
@@ -299,15 +299,15 @@ bool BCFTopic::UpdateAuthor()
 /// </summary>
 BCFViewPoint* BCFTopic::ViewPointAdd(const char* guid)
 {
-    auto viewPoint = new BCFViewPoint(*this, &m_Viewpoints, guid ? guid : "");
+    if (UpdateAuthor()) {
+        auto viewPoint = new BCFViewPoint(*this, &m_Viewpoints, guid ? guid : "");
 
-    if (viewPoint) {
-        m_Viewpoints.Add(viewPoint);
-        return viewPoint;
+        if (viewPoint) {
+            m_Viewpoints.Add(viewPoint);
+            return viewPoint;
+        }
     }
-    else {
-        return NULL;
-    }
+    return NULL;
 }
 
 /// <summary>
@@ -331,6 +331,7 @@ BCFFile* BCFTopic::FileAdd(const char* filePath, bool isExternal)
     if (file && filePath && *filePath) {
         ok = ok && file->SetIsExternal(isExternal);
         ok = ok && file->SetReference(filePath);
+        ok = ok && UpdateAuthor();
     }
 
     if (!ok) {
@@ -362,20 +363,7 @@ BCFFile* BCFTopic::FileIterate(BCFFile* prev)
 /// </summary>
 BCFViewPoint* BCFTopic::ViewPointByGuid(const char* guid)
 {
-    if (guid && *guid) {
-        for (auto vp : m_Viewpoints.Items()) {
-            if (vp && 0 == strcmp(vp->GetGuid(), guid)) {
-                return vp;
-            }
-        }
-
-        Log().add(Log::Level::error, "Invalid reference", "Viewpoint with GUID %s not found in topic %s", guid, GetGuid());
-    }
-    else {
-        Log().add(Log::Level::error, "NULL GUID", "Viewpoingt with NULL GUID is requested from topic %s", GetGuid());
-    }
-
-    return NULL;
+    return m_Viewpoints.FindByGuid(guid);
 }
 
 /// <summary>
@@ -383,15 +371,15 @@ BCFViewPoint* BCFTopic::ViewPointByGuid(const char* guid)
 /// </summary>
 BCFComment* BCFTopic::CommentAdd(const char* guid)
 {
-    auto comment = new BCFComment(*this, &m_Comments, guid ? guid : "");//"" forces generate guid
+    if (UpdateAuthor()) {
+        auto comment = new BCFComment(*this, &m_Comments, guid ? guid : "");//"" forces generate guid
 
-    if (comment) {
-        m_Comments.Add(comment);
-        return comment;
+        if (comment) {
+            m_Comments.Add(comment);
+            return comment;
+        }
     }
-    else {
-        return NULL;
-    }
+    return NULL;
 }
 
 /// <summary>
@@ -409,7 +397,10 @@ BCFDocumentReference* BCFTopic::DocumentReferenceAdd(const char* urlPath, const 
 {
     auto ref = new BCFDocumentReference(*this, &m_DocumentReferences, guid ? guid : "");
 
-    if (!ref->SetUrlPath(urlPath)){
+    bool ok = ref->SetUrlPath(urlPath);
+    ok = ok && UpdateAuthor();
+
+    if (!ok){
         delete ref;
         ref = NULL;
     }
@@ -438,8 +429,10 @@ BCFDocumentReference* BCFTopic::DocumentReferenceIterate(BCFDocumentReference* p
 BCFBimSnippet* BCFTopic::GetBimSnippet(bool forceCreate)
 {
     if (forceCreate && m_BimSnippets.Items().empty()) {
-        auto snippet = new BCFBimSnippet(*this, &m_BimSnippets);
-        m_BimSnippets.Add(snippet);
+        if (UpdateAuthor()) {
+            auto snippet = new BCFBimSnippet(*this, &m_BimSnippets);
+            m_BimSnippets.Add(snippet);
+        }
     }
 
     if (m_BimSnippets.Items().empty()) {
@@ -448,4 +441,152 @@ BCFBimSnippet* BCFTopic::GetBimSnippet(bool forceCreate)
     else {
         return m_BimSnippets.Items().front();
     }
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFTopic::ReferenceLinkAdd(const char* val)
+{
+    if (UpdateAuthor()) {
+        m_ReferenceLinks.Add(val);
+        return true;
+    }
+    return false;
+}
+
+/// <summary>
+/// 
+/// </summary>
+const char* BCFTopic::ReferenceLinkIterate(const char* prev)
+{
+    return m_ReferenceLinks.GetNext(prev);
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFTopic::ReferenceLinkRemove(const char* val)
+{
+    if (UpdateAuthor()) {
+        return m_ReferenceLinks.Remove(val);
+    }
+    return false;
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFTopic::LabelAdd(const char* val)
+{
+    UNNULL;
+
+    if (Project().GetExtensions().CheckElement(BCFTopicLabels, val)) {
+        if (UpdateAuthor()) {
+            m_Labels.Add(val);
+            return true;
+        }
+    }
+    return false;
+
+}
+
+/// <summary>
+/// 
+/// </summary>
+const char* BCFTopic::LabelIterate(const char* prev)
+{
+    return m_Labels.GetNext(prev);
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFTopic::LabelRemove(const char* val)
+{
+    if (UpdateAuthor()) {
+        return m_Labels.Remove(val);
+    }
+    return false;
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFTopic::RelatedTopicAdd(BCFTopic* topic)
+{
+    if (topic) {
+        auto guid = topic->GetGuid();
+        if (guid) {
+            if (!m_RelatedTopics.FindByGuid(guid)) {
+                if (UpdateAuthor()) {
+                    auto ref = new GuidReference(*this, &m_RelatedTopics);
+                    m_RelatedTopics.Add(ref);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+
+/// <summary>
+/// 
+/// </summary>
+BCFTopic* BCFTopic::GetNextRelatedTopic(const char* guid)
+{
+    auto it = m_RelatedTopics.Items().begin();
+
+    if (guid) {
+        for (; it != m_RelatedTopics.Items().end(); it++) {
+            if (0 == strcmp((*it)->GetGuid(), guid))
+                break;
+        }
+        if (it != m_RelatedTopics.Items().end()) {
+            it++;
+        }
+    }
+
+    if (it == m_RelatedTopics.Items().end()) {
+        return NULL;
+    }
+    else {
+        guid = (*it)->GetGuid();
+        auto topic = Project().TopicByGuid(guid);
+        if (topic) {
+            return topic;
+        }
+        else {
+            Log().add(Log::Level::error, "Invaid topic reference", "Referenced topic not found in this package");
+            return GetNextRelatedTopic(guid);
+        }
+    }
+
+}
+
+/// <summary>
+/// 
+/// </summary>
+BCFTopic* BCFTopic::RelatedTopicIterate(BCFTopic* prev)
+{
+    return GetNextRelatedTopic(prev ? prev->GetGuid() : NULL);
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFTopic::RelatedTopicRemove(BCFTopic* topic)
+{
+    if (topic) {
+        if (UpdateAuthor()) {
+            auto guid = topic->GetGuid();
+            auto ref = m_RelatedTopics.FindByGuid(guid);
+            if (ref) {
+                return ref->Remove();
+            }
+            return true;
+        }
+    }
+    return false;
 }
