@@ -96,6 +96,7 @@ bool BCFComment::SetViewPoint(BCFViewPoint* viewPoint)
         guid = viewPoint->GetGuid();
       
         if (!m_topic.ViewPointByGuid(guid)) {
+            log().add(Log::Level::error, "Invalid viewpoint", "Viewpoint %s is not from this topic %s", guid, m_topic.GetTitle());
             ok = false;
             guid = NULL;
         }

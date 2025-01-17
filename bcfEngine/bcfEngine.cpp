@@ -70,7 +70,8 @@ typedef double        tReal;
 typedef bool          tBool;
 typedef BCFViewPoint* tViewPoint;
 typedef BCFCamera     tCamera;
-typedef BCFPoint* tPoint;
+typedef BCFPoint*     tPoint;
+typedef BCFTopic*     tTopic;
 
 /// <summary>
 /// 
@@ -439,3 +440,34 @@ OBJ_SET_ATTR(Str, BimSnippet, SnippetType)
 OBJ_SET_ATTR(Bool,BimSnippet, IsExternal)
 OBJ_SET_ATTR(Str, BimSnippet, Reference)
 OBJ_SET_ATTR(Str, BimSnippet, ReferenceSchema)
+
+/// <summary>
+/// 
+/// </summary>
+#define TOPIC_LIST(ListName, ElemType)                                                  \
+RDFBCF_EXPORT bool          bcf##ListName##Add   (BCFTopic* topic, t##ElemType val)     \
+{                                                                                       \
+    if (topic) {                                                                        \
+        return topic->##ListName##Add(val);                                             \
+    }                                                                                   \
+    return false;                                                                       \
+}                                                                                       \
+RDFBCF_EXPORT t##ElemType   bcf##ListName##Iterate(BCFTopic* topic, t##ElemType prev)   \
+{                                                                                       \
+    if (topic) {                                                                        \
+        return topic->##ListName##Iterate(prev);                                        \
+    }                                                                                   \
+    return NULL;                                                                        \
+}                                                                                       \
+RDFBCF_EXPORT bool          bcf##ListName##Remove(BCFTopic* topic, t##ElemType val)     \
+{                                                                                       \
+    if (topic) {                                                                        \
+        topic->##ListName##Remove(val);                                                 \
+    }                                                                                   \
+    return false;                                                                       \
+}
+
+TOPIC_LIST(ReferenceLink, Str)
+TOPIC_LIST(Label, Str)
+TOPIC_LIST(RelatedTopic, Topic)
+

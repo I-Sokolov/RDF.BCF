@@ -295,6 +295,27 @@ extern "C" {
     RDFBCF_EXPORT bool bcfBimSnippetSetReference(BCFBimSnippet* snippet, const char* val);
     RDFBCF_EXPORT bool bcfBimSnippetSetReferenceSchema(BCFBimSnippet* snippet, const char* val);
 
+    /// <summary>
+    ///
+    /// </summary>
+    RDFBCF_EXPORT bool          bcfReferenceLinkAdd    (BCFTopic* topic, const char* val);
+    RDFBCF_EXPORT const char*   bcfReferenceLinkIterate(BCFTopic* topic, const char* prev);
+    RDFBCF_EXPORT bool          bcfReferenceLinkRemove (BCFTopic* topic, const char* val);
+
+    /// <summary>
+    ///
+    /// </summary>
+    RDFBCF_EXPORT bool          bcfLabelAdd    (BCFTopic* topic, const char* val);
+    RDFBCF_EXPORT const char*   bcfLabelIterate(BCFTopic* topic, const char* prev);
+    RDFBCF_EXPORT bool          bcfLabelRemove (BCFTopic* topic, const char* val);
+
+    /// <summary>
+    ///
+    /// </summary>
+    RDFBCF_EXPORT bool          bcfRelatedTopicAdd     (BCFTopic* topic,BCFTopic* related);
+    RDFBCF_EXPORT BCFTopic*     bcfRelatedTopicIterate (BCFTopic* topic,BCFTopic* prev);
+    RDFBCF_EXPORT bool          bcfRelatedTopicRemove  (BCFTopic* topic,BCFTopic* related);
+
 #ifdef __cplusplus
 } //extern "C"
 #endif
