@@ -565,5 +565,40 @@ namespace RDF.BCF
         [DllImport(DLL, EntryPoint = "bcfBimSnippetSetIsExternal")]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool BimSnippetSetIsExternal(IntPtr snippet, [param: MarshalAs(UnmanagedType.U1)] bool val);
+
+        [DllImport(DLL, EntryPoint = "bcfReferenceLinkAdd")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool ReferenceLinkAdd(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
+
+        [DllImport(DLL, EntryPoint = "bcfReferenceLinkIterate")]
+        private static extern IntPtr _ReferenceLinkIterate(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? prev);
+        public static string ReferenceLinkIterate(IntPtr topic, string? prev) { return PtrToString(_ReferenceLinkIterate(topic, prev)); }
+
+        [DllImport(DLL, EntryPoint = "bcfReferenceLinkRemove")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool ReferenceLinkRemove(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
+
+        [DllImport(DLL, EntryPoint = "bcfLabelAdd")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool LabelAdd(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
+
+        [DllImport(DLL, EntryPoint = "bcfLabelIterate")]
+        private static extern IntPtr _LabelIterate(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? prev);
+        public static string LabelIterate(IntPtr topic, string? prev) { return PtrToString(_LabelIterate(topic, prev)); }
+
+        [DllImport(DLL, EntryPoint = "bcfLabelRemove")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool LabelRemove(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
+
+        [DllImport(DLL, EntryPoint = "bcfRelatedTopicAdd")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool RelatedTopicAdd(IntPtr topic, IntPtr related);
+
+        [DllImport(DLL, EntryPoint = "bcfRelatedTopicIterate")]
+        public static extern IntPtr RelatedTopicIterate(IntPtr topic, IntPtr prev);
+
+        [DllImport(DLL, EntryPoint = "bcfRelatedTopicRemove")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool RelatedTopicRemove(IntPtr topic, IntPtr related);
     }
 }

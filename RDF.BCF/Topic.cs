@@ -34,6 +34,90 @@ namespace RDF.BCF
         /// <summary>
         /// 
         /// </summary>
+        public List<string> GetReferenceLinks()
+        {
+            var list = new List<string>();
+            string elem = "";
+            while (!string.IsNullOrEmpty(elem = Interop.ReferenceLinkIterate(m_handle, elem)))
+            {
+                list.Add(elem);
+            }
+            return list;
+        }
+
+        public void SetReferenceLinks(IEnumerable<string> list)
+        {
+            string elem = "";
+            while (!string.IsNullOrEmpty(elem = Interop.ReferenceLinkIterate(m_handle, null)))
+            {
+                Interop.ReferenceLinkRemove(m_handle, elem);
+            }
+
+            foreach (var e in list)
+            {
+                Interop.ReferenceLinkAdd(m_handle, e);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public List<string> GetLabels()
+        {
+            var list = new List<string>();
+            string elem = "";
+            while (!string.IsNullOrEmpty (elem = Interop.LabelIterate(m_handle, elem)))
+            {
+                list.Add(elem);
+            }
+            return list;
+        }
+
+        public void SetLabels(IEnumerable<string> list)
+        {
+            string elem = "";
+            while (!string.IsNullOrEmpty (elem = Interop.LabelIterate(m_handle, "")))
+            {
+                Interop.LabelRemove(m_handle, elem);
+            }
+
+            foreach (var e in list)
+            {
+                Interop.LabelAdd(m_handle, e);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public List<Topic> GetRelatedTopics()
+        {
+            var list = new List<Topic>();
+            IntPtr elem = IntPtr.Zero;
+            while (IntPtr.Zero != (elem = Interop.RelatedTopicIterate(m_handle, elem)))
+            {
+                list.Add(new Topic(m_project, elem));
+            }
+            return list;
+        }
+
+        public void SetRelatedTopics(IEnumerable<Topic> list)
+        {
+            IntPtr elem = IntPtr.Zero;
+            while (IntPtr.Zero != (elem = Interop.RelatedTopicIterate(m_handle, IntPtr.Zero)))
+            {
+                Interop.RelatedTopicRemove(m_handle, elem);
+            }
+
+            foreach (var e in list)
+            {
+                Interop.RelatedTopicAdd(m_handle, e.m_handle);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public bool Remove()
         {
             return Interop.TopicRemove(m_handle);

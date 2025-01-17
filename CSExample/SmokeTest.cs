@@ -31,6 +31,9 @@ namespace CSExample
             Console.WriteLine("TEST Comments and ViewPoint");
             CommentAndViewPoints();
 
+            Console.WriteLine("TEST Links, Labels, Related topics");
+            TestTopicListAttributes();
+
             Console.WriteLine("TEST Validarions");
             Validations();
 
@@ -838,6 +841,83 @@ namespace CSExample
                 docref.UrlPath = "http://ss";
                 ok = bcf.FileWrite("Validation.bcf");
                 ASSERT(ok);
+            }
+        }
+
+        static void TestTopicListAttributes()
+        {
+            using (var project = new Project("TestListAttr"))
+            {
+                project.SetAuthor("creator", true);
+
+                for (int i = 0; i < 7; i++)
+                {
+                    project.AddTopic($"Topic Type {i}", $"Topic Title {i}", $"Topic Status {i}", TestGuid(i));
+                }
+
+                CreateTopicLists(project, 1, 3);
+                CheckTopicLists(project, 1, 3);
+
+                CreateTopicLists(project, 3, 7);
+                CheckTopicLists(project, 3, 7);
+
+                var ok = project.FileWrite("TestListAttr.bcf");
+                ASSERT(ok);
+            }
+
+            using (var project = new Project("ddd"))
+            {
+                var ok = project.FileRead("TestListAttr.bcf");
+                ASSERT(ok);
+
+                CheckTopicLists(project, 3, 7);
+            }
+        }
+
+        static void CreateTopicLists(Project project, int A, int B)
+        { 
+            var topic = project.Topics.First();
+
+            var labels = new List<string>();
+            var links = new List<string>();
+            var refs = new List<Topic>();
+            for (int i = A; i < B; i++)
+            {
+                labels.Add($"Label {i}");
+                links.Add($"http://{i}");
+                refs.Add(project.Topics[i]);
+            }
+
+            topic.SetLabels(labels);
+            topic.SetReferenceLinks(links);
+            topic.SetRelatedTopics(refs);
+        }
+
+        static void CheckTopicLists(Project project, int A, int B)
+        {
+            var topic = project.Topics.First();
+
+            var labels = topic.GetLabels();
+            ASSERT(labels.Count == B-A);
+
+            var links = topic.GetReferenceLinks();
+            ASSERT(links.Count == B-A);
+
+            var refs = topic.GetRelatedTopics();
+            ASSERT(refs.Count == B-A);
+
+            for (int i = A; i < B; i++)
+            {
+                ASSERT(labels[i-A]==$"Label {i}");
+                ASSERT(links[i-A] == $"http://{i}");
+                ASSERT(refs[i-A].Guid == project.Topics[i].Guid);
+            }
+
+            labels = project.Extensions.GetEnumeration(Interop.BCFEnumeration.TopicLabels);
+            ASSERT(labels.Count == B-1);
+            for (int i = 1; i < B; i++)
+            {
+                ASSERT(labels[i - 1] == $"Label {i}");
             }
         }
     }

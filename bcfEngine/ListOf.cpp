@@ -117,9 +117,12 @@ BCFComponent* ListOfBCFComponents::Add(BCFViewPoint& viewPoint, const char* ifcG
 /// </summary>
 void SetOfXMLText::Add(const char* val)
 {
-    if (!Find(val)) {
-        auto txt = new XMLText(m_topic, this);
-        __super::Add(txt);
+    if (val && *val) {
+        if (!Find(val)) {
+            auto txt = new XMLText(m_topic, this);
+            txt->string().assign(val);
+            __super::Add(txt);
+        }
     }
 }
 
@@ -145,7 +148,7 @@ XMLText* SetOfXMLText::Find(const char* val)
 const char* SetOfXMLText::GetNext(const char* prev)
 {
     XMLText* txtPrev = NULL;
-    if (prev) {
+    if (prev && *prev) {
         txtPrev = Find(prev);
         if (!txtPrev) {
             m_project.log().add(Log::Level::error, "Invalid element", "Text element %s is not in the list", prev);
@@ -159,7 +162,7 @@ const char* SetOfXMLText::GetNext(const char* prev)
         return txtNext->string().c_str();
     }
     else {
-        return NULL;
+        return "";
     }
 }
 
@@ -171,5 +174,5 @@ bool SetOfXMLText::Remove(const char* val)
     if (auto txt = Find(val)) {
         return txt->Remove();
     }
-    return NULL;
+    return false;
 }

@@ -115,8 +115,8 @@ void BCFTopic::Read_Topic(_xml::_element& elem, const std::string& folder)
 
 void BCFTopic::Write_Topic(_xml_writer& writer, const std::string& folder)
 {
-    WRITE_CONTENT(Title);
     WRITE_LIST(ReferenceLink);
+    WRITE_CONTENT(Title);
     WRITE_CONTENT(Priority);
     WRITE_CONTENT(Index);
     WRITE_LIST(Label);
@@ -448,9 +448,11 @@ BCFBimSnippet* BCFTopic::GetBimSnippet(bool forceCreate)
 /// </summary>
 bool BCFTopic::ReferenceLinkAdd(const char* val)
 {
-    if (UpdateAuthor()) {
-        m_ReferenceLinks.Add(val);
-        return true;
+    if (val && *val) {
+        if (UpdateAuthor()) {
+            m_ReferenceLinks.Add(val);
+            return true;
+        }
     }
     return false;
 }
@@ -479,12 +481,12 @@ bool BCFTopic::ReferenceLinkRemove(const char* val)
 /// </summary>
 bool BCFTopic::LabelAdd(const char* val)
 {
-    UNNULL;
-
-    if (Project().GetExtensions().CheckElement(BCFTopicLabels, val)) {
-        if (UpdateAuthor()) {
-            m_Labels.Add(val);
-            return true;
+    if (val && *val) {
+        if (Project().GetExtensions().CheckElement(BCFTopicLabels, val)) {
+            if (UpdateAuthor()) {
+                m_Labels.Add(val);
+                return true;
+            }
         }
     }
     return false;
@@ -521,6 +523,7 @@ bool BCFTopic::RelatedTopicAdd(BCFTopic* topic)
             if (!m_RelatedTopics.FindByGuid(guid)) {
                 if (UpdateAuthor()) {
                     auto ref = new GuidReference(*this, &m_RelatedTopics);
+                    ref->SetGuid(guid);
                     m_RelatedTopics.Add(ref);
                     return true;
                 }
