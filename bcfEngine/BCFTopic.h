@@ -67,6 +67,8 @@ public:
     BCFTopic* RelatedTopicIterate(BCFTopic* prev);
     bool RelatedTopicRemove(BCFTopic* topic);
 
+    bool UpdateAuthor();
+
 private:
     //XMLFile implementation
     virtual const char* XMLFileName() override { return "markup.bcf"; }
@@ -81,8 +83,6 @@ private:
 
     void Write_Header(_xml_writer& writer, const std::string& folder);
     void Write_Topic(_xml_writer& writer, const std::string& folder);
-
-    bool UpdateAuthor();
 
     BCFTopic* GetNextRelatedTopic(const char* guid);
 

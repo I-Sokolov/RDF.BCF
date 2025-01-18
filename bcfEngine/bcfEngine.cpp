@@ -10,6 +10,7 @@
 #include "BCFColor.h"
 #include "BCFDocumentReference.h"
 #include "BCFBimSnippet.h"
+#include "BCFBitmap.h"
 
 /// <summary>
 /// Macros to implement put/get attributes and iterate/remove objects
@@ -72,6 +73,7 @@ typedef BCFViewPoint* tViewPoint;
 typedef BCFCamera     tCamera;
 typedef BCFPoint*     tPoint;
 typedef BCFTopic*     tTopic;
+typedef BCFBitmapFormat tBitmapFormat;
 
 /// <summary>
 /// 
@@ -470,4 +472,34 @@ RDFBCF_EXPORT bool          bcf##ListName##Remove(BCFTopic* topic, t##ElemType v
 TOPIC_LIST(ReferenceLink, Str)
 TOPIC_LIST(Label, Str)
 TOPIC_LIST(RelatedTopic, Topic)
+
+/// <summary>
+/// 
+/// </summary>
+OBJ_REMOVE(Bitmap)
+OBJ_ITERATE(Bitmap, ViewPoint)
+RDFBCF_EXPORT BCFBitmap* bcfBitmapAdd(BCFViewPoint* viewPoint, const char* filePath, BCFBitmapFormat format, BCFPoint* location, BCFPoint* normal, BCFPoint* up, double height)
+{
+    if (viewPoint) {
+        return viewPoint->BitmapAdd(filePath, format, location, normal, up, height);
+    }
+    return NULL;
+}
+
+/// <summary>
+/// 
+/// </summary>
+OBJ_GET_ATTR_R(BitmapFormat, Bitmap, Format, BCFBitmapPNG);
+OBJ_GET_ATTR(Str, Bitmap, Reference);
+OBJ_GET_ATTR_PT(Bitmap, Location);
+OBJ_GET_ATTR_PT(Bitmap, Normal);
+OBJ_GET_ATTR_PT(Bitmap, Up);
+OBJ_GET_ATTR(Real, Bitmap, Height);
+
+OBJ_SET_ATTR(BitmapFormat, Bitmap, Format);
+OBJ_SET_ATTR(Str, Bitmap, Reference);
+OBJ_SET_ATTR(Point, Bitmap, Location);
+OBJ_SET_ATTR(Point, Bitmap, Normal);
+OBJ_SET_ATTR(Point, Bitmap, Up);
+OBJ_SET_ATTR(Real, Bitmap, Height);
 

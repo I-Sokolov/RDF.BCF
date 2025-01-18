@@ -51,7 +51,7 @@ public:
     BCFComponent* ExceptionsAdd(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL);
     BCFComponent* ExceptionsIterate(BCFComponent* prev);
 
-    BCFBitmap* BitmapAdd();
+    BCFBitmap* BitmapAdd(const char* filePath, BCFBitmapFormat format, BCFPoint* location, BCFPoint* normal, BCFPoint* up, double height);
     BCFBitmap* BitmapIterate(BCFBitmap* prev);
 
     BCFColor* ColoringAdd();

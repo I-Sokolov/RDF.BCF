@@ -128,7 +128,6 @@ void BCFViewPoint::WriteRootContent(_xml_writer& writer, const std::string& fold
     WRITE_LIST(Line);
     WRITE_LIST(ClippingPlane);
     WRITE_LIST(Bitmap);
-
 }
 
 /// <summary>
@@ -301,9 +300,34 @@ BCFComponent* BCFViewPoint::ExceptionsIterate(BCFComponent* prev)
 /// <summary>
 /// 
 /// </summary>
-BCFBitmap* BCFViewPoint::BitmapAdd()
+BCFBitmap* BCFViewPoint::BitmapAdd(const char* filePath, BCFBitmapFormat format, BCFPoint* location, BCFPoint* normal, BCFPoint* up, double height)
 {
-    return NULL;
+    auto bitmap = new BCFBitmap(*this, &m_Bitmaps);
+
+    bool ok = true;
+
+    if (filePath && *filePath) {
+        ok = ok && bitmap->SetReference(filePath);
+        ok = ok && bitmap->SetFormat(format);
+        ok = ok && bitmap->SetLocation(location);
+        ok = ok && bitmap->SetNormal(normal);
+        ok = ok && bitmap->SetUp(up);
+        ok = ok && bitmap->SetHeight(height);
+        ok = ok && m_topic.UpdateAuthor();
+    }
+
+    if (!ok) {
+        delete bitmap;
+        bitmap = NULL;
+    }
+
+    if (bitmap) {
+        m_Bitmaps.Add(bitmap);
+        return bitmap;
+    }
+    else {
+        return NULL;
+    }
 }
 
 /// <summary>

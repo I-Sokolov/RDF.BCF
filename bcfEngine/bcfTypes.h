@@ -81,6 +81,15 @@ extern "C" {
         double xyz[3];
     };
 
+    /// <summary>
+    /// 
+    /// </summary>
+    enum BCFBitmapFormat
+    {
+        BCFBitmapPNG = 0,
+        BCFBitmapJPG = 1
+    };
+
 #ifdef __cplusplus
 } //extern "C"
 #endif

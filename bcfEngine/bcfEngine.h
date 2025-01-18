@@ -272,9 +272,27 @@ extern "C" {
     /// <summary>
     ///
     /// </summary>
-    RDFBCF_EXPORT BCFBitmap* bcfViewPointBitmapAdd();
-    RDFBCF_EXPORT BCFBitmap* bcfViewPointBitmapIterate(BCFBitmap* prev);
-    RDFBCF_EXPORT bool bcfViewPointBitmapRemove(BCFBitmap* line);
+    RDFBCF_EXPORT BCFBitmap* bcfBitmapAdd(BCFViewPoint* viewPoint, const char* filePath, BCFBitmapFormat format, BCFPoint* location, BCFPoint* normal, BCFPoint* up, double height);
+    RDFBCF_EXPORT BCFBitmap* bcfBitmapIterate(BCFViewPoint* viewPoint, BCFBitmap* prev);
+    RDFBCF_EXPORT bool bcfBitmapRemove(BCFBitmap* bitmap);
+
+    /// <summary>
+    ///
+    /// </summary>
+    RDFBCF_EXPORT BCFBitmapFormat   bcfBitmapGetFormat      (BCFBitmap* bitmap);
+    RDFBCF_EXPORT const char*       bcfBitmapGetReference   (BCFBitmap* bitmap);
+    RDFBCF_EXPORT bool              bcfBitmapGetLocation    (BCFBitmap* bitmap, BCFPoint* retPt);
+    RDFBCF_EXPORT bool              bcfBitmapGetNormal      (BCFBitmap* bitmap, BCFPoint* retPt);
+    RDFBCF_EXPORT bool              bcfBitmapGetUp          (BCFBitmap* bitmap, BCFPoint* retPt);
+    RDFBCF_EXPORT double            bcfBitmapGetHeight      (BCFBitmap* bitmap);
+
+    RDFBCF_EXPORT bool bcfBitmapSetFormat       (BCFBitmap* bitmap, BCFBitmapFormat val);
+    RDFBCF_EXPORT bool bcfBitmapSetReference    (BCFBitmap* bitmap, const char* val);
+    RDFBCF_EXPORT bool bcfBitmapSetLocation     (BCFBitmap* bitmap, BCFPoint* pt);
+    RDFBCF_EXPORT bool bcfBitmapSetNormal       (BCFBitmap* bitmap, BCFPoint* pt);
+    RDFBCF_EXPORT bool bcfBitmapSetUp           (BCFBitmap* bitmap, BCFPoint* pt);
+    RDFBCF_EXPORT bool bcfBitmapSetHeight       (BCFBitmap* bitmap, double val);
+
 
     /// <summary>
     ///
