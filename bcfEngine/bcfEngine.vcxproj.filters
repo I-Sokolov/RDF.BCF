@@ -224,6 +224,9 @@
     <ClCompile Include="BCFBimSnippet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BCFBitmap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="InstallZipLib.bat" />

@@ -51,6 +51,9 @@ public:
     BCFComponent* ExceptionsAdd(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL);
     BCFComponent* ExceptionsIterate(BCFComponent* prev);
 
+    BCFBitmap* BitmapAdd();
+    BCFBitmap* BitmapIterate(BCFBitmap* prev);
+
     BCFColor* ColoringAdd();
     BCFColor* ColoringIterate(BCFColor* prev);
 
@@ -59,9 +62,6 @@ public:
 
     BCFClippingPlane* ClippingPlaneAdd();
     BCFClippingPlane* ClippingPlaneIterate(BCFClippingPlane* prev);
-
-    BCFBitmap* BitmapAdd();
-    BCFBitmap* BitmapIterate(BCFBitmap* prev);
 
 public:
     void Read(_xml::_element& elem, const std::string& folder);

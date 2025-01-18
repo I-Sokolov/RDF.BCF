@@ -241,6 +241,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="BCFBimSnippet.cpp" />
+    <ClCompile Include="BCFBitmap.cpp" />
     <ClCompile Include="BCFColor.cpp" />
     <ClCompile Include="BCFDocumentReference.cpp" />
     <ClCompile Include="bcfEngine.cpp" />

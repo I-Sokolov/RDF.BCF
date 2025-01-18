@@ -298,3 +298,18 @@ BCFComponent* BCFViewPoint::ExceptionsIterate(BCFComponent* prev)
     return m_Exceptions.GetNext(prev);
 }
 
+/// <summary>
+/// 
+/// </summary>
+BCFBitmap* BCFViewPoint::BitmapAdd()
+{
+    return NULL;
+}
+
+/// <summary>
+/// 
+/// </summary>
+BCFBitmap* BCFViewPoint::BitmapIterate(BCFBitmap* prev)
+{
+    return m_Bitmaps.GetNext(prev);
+}
