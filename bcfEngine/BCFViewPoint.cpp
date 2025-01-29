@@ -16,6 +16,7 @@ BCFViewPoint::BCFViewPoint(BCFTopic& topic, ListOfBCFObjects* parentList, const 
     : XMLFile(topic.Project(), parentList)
     , m_topic(topic)
     , m_Guid(topic.Project(), guid)
+    , m_GuidBCFV(topic.Project(), guid)
     , m_cameraType(BCFCameraPerspective)
     , m_CameraViewPoint(topic.Project())
     , m_CameraDirection(topic.Project())
@@ -35,7 +36,7 @@ BCFViewPoint::BCFViewPoint(BCFTopic& topic, ListOfBCFObjects* parentList, const 
 void BCFViewPoint::Read(_xml::_element& elem, const std::string& folder)
 {
     ATTRS_START
-        ATTR_GET(Guid)
+        ATTR_GET(Guid) 
     ATTRS_END(UnknownNames::NotAllowed)
 
     CHILDREN_START
@@ -92,7 +93,7 @@ void BCFViewPoint::Write_ViewPoint(_xml_writer& writer, const std::string& folde
 void BCFViewPoint::ReadRoot(_xml::_element& elem, const std::string& folder)
 {
     ATTRS_START
-        ATTR_GET(Guid)
+        ATTR_GET_STR(Guid, m_GuidBCFV) //guid read from .bcfv file
     ATTRS_END(UnknownNames::Allowed)
 
     CHILDREN_START
@@ -139,6 +140,9 @@ void  BCFViewPoint::Read_Components(_xml::_element& elem, const std::string& fol
         CHILD_GET_LIST(Selection, Component)
         CHILD_GET_LIST(Coloring, Color)
         CHILD_READ(Visibility)
+
+        CHILD_READ(ViewSetupHints) //v2.1
+
     CHILDREN_END
 }
 
@@ -424,4 +428,18 @@ BCFClippingPlane* BCFViewPoint::ClippingPlaneAdd(BCFPoint* location, BCFPoint* d
 BCFClippingPlane* BCFViewPoint::ClippingPlaneIterate(BCFClippingPlane* prev)
 {
     return m_ClippingPlanes.GetNext(prev);
+}
+
+/// <summary>
+/// 
+/// </summary>
+void BCFViewPoint::UpgradeReadVersion()
+{
+    if (Project().GetVersion() < BCFVer_3_0) {
+        if (m_AspectRatio.empty()) {
+            m_AspectRatio.assign("1");
+        }
+    }
+
+    m_Bitmaps.UpgradeReadVersion();
 }

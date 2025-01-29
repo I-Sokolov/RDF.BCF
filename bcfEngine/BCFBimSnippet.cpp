@@ -22,6 +22,9 @@ void BCFBimSnippet::Read(_xml::_element& elem, const std::string& folder)
     ATTRS_START
         ATTR_GET(SnippetType)
         ATTR_GET(IsExternal)
+
+        ATTR_GET_STR(isExternal, m_IsExternal) //v2.1
+    
     ATTRS_END(UnknownNames::NotAllowed)
 
     CHILDREN_START

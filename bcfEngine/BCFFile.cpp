@@ -24,6 +24,9 @@ void BCFFile::Read(_xml::_element& elem, const std::string& folder)
         ATTR_GET(IsExternal)
         ATTR_GET(IfcProject)
         ATTR_GET(IfcSpatialStructureElement)
+
+        ATTR_GET_STR(isExternal, m_IsExternal) //v2.1
+    
     ATTRS_END(UnknownNames::NotAllowed)
 
     CHILDREN_START

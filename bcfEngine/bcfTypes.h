@@ -55,6 +55,7 @@ extern "C" {
     /// </summary>
     enum BCFEnumeration
     {
+        BCFUnknown          = 0,
         BCFTopicTypes       = 1,
         BCFTopicStatuses    = 2,
         BCFPriorities       = 3,

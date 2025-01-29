@@ -18,14 +18,22 @@ BCFDocumentReference::BCFDocumentReference(BCFTopic& topic, ListOfBCFObjects* pa
 /// </summary>
 void BCFDocumentReference::Read(_xml::_element& elem, const std::string& folder) 
 { 
+    std::string isExternal; //v2.1
+
     ATTRS_START
         ATTR_GET(Guid)
+        ATTR_GET_STR(isExternal, isExternal)
     ATTRS_END(UnknownNames::NotAllowed)
+
+    assert(isExternal != "false"); //TODO: implement embedded doucments
 
     CHILDREN_START
         CHILD_GET_CONTENT(DocumentGuid)
         CHILD_GET_CONTENT(Url)
         CHILD_GET_CONTENT(Description)
+
+        CHILD_GET_CONTENT_STR(ReferencedDocument, m_Url)
+
     CHILDREN_END
 }
 
@@ -101,3 +109,14 @@ bool BCFDocumentReference::SetUrlPath(const char* val)
     }
 }
 
+/// <summary>
+/// 
+/// </summary>
+void BCFDocumentReference::UpgradeReadVersion()
+{
+    if (Project().GetVersion() < BCFVer_3_0) {
+        if (m_Guid.IsEmpty()) {
+            m_Guid.AssignNew();
+        }
+    }
+}

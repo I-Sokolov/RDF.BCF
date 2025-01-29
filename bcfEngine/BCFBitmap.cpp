@@ -28,6 +28,9 @@ void BCFBitmap::Read(_xml::_element& elem, const std::string& folder)
         CHILD_READ_MEMBER(Normal)
         CHILD_READ_MEMBER(Up)
         CHILD_GET_CONTENT(Height)
+
+        CHILD_GET_CONTENT_STR(Bitmap, m_Format) //v2.1
+
     CHILDREN_END
 
     m_Reference = AbsolutePath(m_Reference, folder);
@@ -65,13 +68,14 @@ void BCFBitmap::Write(_xml_writer& writer, const std::string& folder, const char
 /// </summary>
 BCFBitmapFormat BCFBitmap::GetFormat()
 {
-    std::string format(m_Format);
-    std::transform(format.begin(), format.end(), format.begin(), [](unsigned char c) { return std::tolower(c); });
-
     if (m_Format == "png") {
         return BCFBitmapPNG;
     }
+    else if (m_Format == "jpg"){
+        return BCFBitmapJPG;
+    }
     else {
+        assert(false);
         return BCFBitmapJPG;
     }
 }
@@ -103,4 +107,14 @@ bool BCFBitmap::SetReference(const char* val)
     m_Reference.assign(val);
 
     return true;
+}
+
+/// <summary>
+/// 
+/// </summary>
+void BCFBitmap::UpgradeReadVersion()
+{
+    if (Project().GetVersion() < BCFVer_3_0) {
+        std::transform(m_Format.begin(), m_Format.end(), m_Format.begin(), [](unsigned char c) { return std::tolower(c); });
+    }
 }

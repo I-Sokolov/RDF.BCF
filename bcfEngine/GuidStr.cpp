@@ -88,7 +88,7 @@ void GuidStr::assign(const std::string& s)
         }
     }
     else if (value!=s) {
-        m_project.log().add(Log::Level::warning, "Inconsitent GUIDs",  "%s is aloso referenced as %s", value.c_str(), s.c_str());
+        m_project.log().add(Log::Level::warning, "Inconsistent GUIDs",  "%s is also referenced as %s", value.c_str(), s.c_str());
     }
 }
 

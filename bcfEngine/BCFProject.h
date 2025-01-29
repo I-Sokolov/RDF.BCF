@@ -10,6 +10,9 @@ struct BCFTopic;
 
 struct BCFProject
 {
+public:
+    static long gProjectCounter;
+
 private:
     BCFProject(const BCFProject&) = delete;
     void operator=(const BCFProject&) = delete;
@@ -24,6 +27,8 @@ private:
 public:
     bool Read(const char* bcfFilePath);
     bool Write(const char* bcfFilePath, BCFVersion version);
+
+    BCFVersion GetVersion() { return m_version.Get(); }
 
     bool SetAuthor(const char* user, bool autoExtentSchema) { m_author = user; m_autoExtentSchema = autoExtentSchema; return true; }
     const char* GetAuthor() { return m_author.c_str(); }

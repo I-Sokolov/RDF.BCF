@@ -36,7 +36,34 @@ void BCFTopic::ReadRoot(_xml::_element& elem, const std::string& folder)
     CHILDREN_START
         CHILD_READ(Header)
         CHILD_READ(Topic)
+
+        CHILD_GET_LIST(Comments, Comment) //v2.1
+        CHILD_ADD_TO_LIST(Viewpoints, Viewpoints)
+
     CHILDREN_END
+}
+
+/// <summary>
+/// 
+/// </summary>
+void BCFTopic::UpgradeReadVersion()
+{
+    auto NOT_SET = "Not set";
+
+    if (Project().GetVersion() < BCFVer_3_0) {
+
+        if (m_TopicType.empty()) {
+            Project().GetExtensions().AddElement(BCFTopicTypes, NOT_SET);
+            m_TopicType.assign(NOT_SET);
+        }
+        if (m_TopicStatus.empty()) {
+            Project().GetExtensions().AddElement(BCFTopicStatuses, NOT_SET);
+            m_TopicStatus.assign(NOT_SET);
+        }
+    }
+
+    m_Comments.UpgradeReadVersion();
+    m_DocumentReferences.UpgradeReadVersion();
 }
 
 /// <summary>

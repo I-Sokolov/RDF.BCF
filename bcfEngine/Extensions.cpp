@@ -2,12 +2,14 @@
 #include "bcfTypes.h"
 #include "Extensions.h"
 #include "BCFProject.h"
+#include "FileSystem.h"
 
 /// <summary>
 /// 
 /// </summary>
 Extensions::Extensions(BCFProject& project)
-    :XMLFile(project, NULL)
+    : XMLFile(project, NULL)
+    , m_currentList (NULL)
 {
     m_elements.resize(7);
 }
@@ -71,7 +73,7 @@ StringSet* Extensions::GetList(BCFEnumeration enumeration)
 {
     size_t ind = enumeration - 1;
     
-    if (ind < m_elements.size()) {
+    if (ind>=0 && ind < m_elements.size()) {
         return &m_elements[ind];
     }
     else {
@@ -147,7 +149,6 @@ void Extensions::WriteEnumeration(_xml_writer& writer, const std::string& tag, B
             writer.writeTag(tag, elem);
         }
     }
-
 }
 
 /// <summary>
@@ -171,4 +172,107 @@ bool Extensions::CheckElement(BCFEnumeration enumeration, const char* element)
 
     m_project.log().add(Log::Level::error, "Extension schema", "%s is not in enumeration", element);
     return false;
+}
+
+/// <summary>
+/// 
+/// </summary>
+void Extensions::ReadExtensionSchema(_xml::_element& extensionSchemaElem, const std::string& folder)
+{
+    auto& fileName = extensionSchemaElem.getContent();
+
+    std::string path(folder);
+    FileSystem::AddPath(path, fileName.c_str());
+
+    try {
+        _xml::_document doc(nullptr);
+        doc.load(path.c_str());
+
+        if (auto pelem = doc.getRoot()) {
+            auto& elem = *pelem;
+            CHILDREN_START
+                CHILD_READ_FUNC(redefine, ReadExtensionSchema_redefine)
+            CHILDREN_END
+        }
+    }
+    catch (std::exception& ex) {
+        m_project.log().add(Log::Level::error, "Read file error", "Failed to read %s file. %s", path.c_str(), ex.what());
+        throw;
+    }
+}
+
+/// <summary>
+/// 
+/// </summary>
+void Extensions::ReadExtensionSchema_redefine(_xml::_element& elem, const std::string& folder) //v2.1
+{
+    CHILDREN_START
+        CHILD_READ_FUNC(simpleType, ReadExtensionSchema_simpleType)
+    CHILDREN_END
+}
+
+/// <summary>
+/// 
+/// </summary>
+BCFEnumeration Extensions::FromName(const std::string& enumName)
+{
+    if (enumName == "Priority") return BCFPriorities;
+    if (enumName == "SnippetType") return BCFSnippetTypes;
+    if (enumName == "Stage") return BCFStages;
+    if (enumName == "TopicLabel") return BCFTopicLabels;
+    if (enumName == "TopicStatus") return BCFTopicStatuses;
+    if (enumName == "TopicType") return BCFTopicTypes;
+    if (enumName == "UserIdType") return BCFUsers;
+    return BCFUnknown;
+}
+
+/// <summary>
+/// 
+/// </summary>
+void Extensions::ReadExtensionSchema_simpleType(_xml::_element& elem, const std::string& folder) //v2.1
+{
+    std::string enumName;
+
+    ATTRS_START
+        ATTR_GET_STR(name, enumName)
+    ATTRS_END(UnknownNames::NotAllowed);
+
+    auto enumeration = FromName(enumName);
+
+    m_currentList = GetList(enumeration);
+
+    CHILDREN_START
+        CHILD_READ_FUNC(restriction, ReadExtensionSchema_restriction)
+    CHILDREN_END
+
+    m_currentList = NULL;
+}
+
+/// <summary>
+/// 
+/// </summary>
+void Extensions::ReadExtensionSchema_restriction(_xml::_element& elem, const std::string& folder)
+{
+    CHILDREN_START
+        CHILD_READ_FUNC(enumeration, ReadExtensionSchema_enumeration)
+    CHILDREN_END
+}
+
+/// <summary>
+/// 
+/// </summary>
+void Extensions::ReadExtensionSchema_enumeration(_xml::_element& elem, const std::string& folder)
+{
+    std::string value;
+
+    ATTRS_START
+        ATTR_GET_STR(value, value)
+    ATTRS_END(UnknownNames::NotAllowed);
+
+    if (!m_currentList) {
+        assert(false);
+        throw std::exception("Invalid BCF enumeration in " __FUNCTION__);
+    }
+
+    m_currentList->insert(value);
 }

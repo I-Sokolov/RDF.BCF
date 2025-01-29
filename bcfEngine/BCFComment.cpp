@@ -129,3 +129,16 @@ bool BCFComment::UpdateAuthor()
     return __super::UpdateAuthor(m_readFromFile ? m_ModifiedAuthor : m_Author, m_readFromFile ? m_ModifiedDate : m_Date);
 }
 
+/// <summary>
+/// 
+/// </summary>
+void BCFComment::UpgradeReadVersion()
+{
+    if (Project().GetVersion() < BCFVer_3_0) {
+        if (!*m_Viewpoint.GetGuid()) { //empty comment appeared from a file
+            if (m_Comment.empty()) {
+                m_Comment.assign("empty");
+            }
+        }
+    }
+}

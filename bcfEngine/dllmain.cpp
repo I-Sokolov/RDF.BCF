@@ -1,6 +1,7 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "pch.h"
 #include "BCFObject.h"
+#include "BCFProject.h"
 
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
@@ -14,8 +15,8 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     case DLL_THREAD_DETACH:
         break;
     case DLL_PROCESS_DETACH:
-        if (BCFObject::gObjectCounter) {
-            printf("ERROR: BCF Object counter %d\n", BCFObject::gObjectCounter);
+        if (BCFProject::gProjectCounter || !BCFObject::gAllocatedObjects.empty()) {
+            printf("ERROR: BCF Object counter %d\n", int(BCFObject::gAllocatedObjects.size() + BCFProject::gProjectCounter));
             assert(!"Object counter is not 0");
         }
         break;

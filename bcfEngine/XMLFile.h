@@ -37,6 +37,7 @@ protected:
     virtual const char* XSDName() = NULL;
     virtual const char* RootElemName() = NULL;
     virtual void ReadRoot(_xml::_element& elem, const std::string& folder) = NULL;    
+    virtual void UpgradeReadVersion() = NULL;
     virtual void WriteRootElem(_xml_writer& writer, const std::string& folder, Attributes& attr);
     virtual void WriteRootContent(_xml_writer& writer, const std::string& folder) = NULL;
 
@@ -118,13 +119,15 @@ enum class UnknownNames : bool
     if (attr) {                             \
         auto& attrName = attr->getName();   \
 
-#define ATTR_GET(name)                          \
-        if (attrName == #name) {                \
-            m_##name.assign (attr->getValue()); \
+#define ATTR_GET_STR(name, str)                \
+        if (attrName == #name) {               \
+            str.assign (attr->getValue());     \
         } else
 
+#define ATTR_GET(name) ATTR_GET_STR(name, m_##name)
+
 #define ATTRS_END(onUnknownNames)           \
-        if ((bool)onUnknownNames) { Project().log().add(Log::Level::warning, "XML parsing", "Unknown attribute %s in " __FUNCTION__, attrName.c_str()); assert(!"TODO?"); } } }
+        if ((bool)onUnknownNames) { Project().log().add(Log::Level::warning, "XML parsing", "Unknown attribute '%s' in " __FUNCTION__, attrName.c_str()); assert(!"TODO?"); } } }
 
 
 /// <summary>
@@ -135,21 +138,21 @@ enum class UnknownNames : bool
         if (child) {                        \
             auto&  tag= child->getName();   \
 
-#define CHILD_GET_CONTENT(name)                         \
+#define CHILD_GET_CONTENT_STR(name, str)             \
+            if (tag == #name) {                      \
+                str.assign(child->getContent());     \
+            } else
+
+#define CHILD_GET_CONTENT(name) CHILD_GET_CONTENT_STR(name, m_##name)
+
+#define CHILD_READ_FUNC(name, func)                     \
             if (tag == #name) {                         \
-                m_##name.assign(child->getContent());   \
+                ##func(*child, folder);                 \
             } else
 
-#define CHILD_READ(name)                                \
-            if (tag == #name) {                         \
-                Read_##name(*child, folder);            \
-            } else
+#define CHILD_READ(name)        CHILD_READ_FUNC(name, Read_##name)
 
-
-#define CHILD_READ_MEMBER(name)                         \
-            if (tag == #name) {                        \
-                m_##name.Read(*child, folder);         \
-            } else
+#define CHILD_READ_MEMBER(name) CHILD_READ_FUNC(name, m_##name.Read)
 
 #define CHILD_GET_LIST(listName, elemName)                                                          \
             if (tag == #elemName) {                                                                 \
@@ -164,8 +167,9 @@ enum class UnknownNames : bool
                 AddToList(m_##listName, *this, *child, folder);                                     \
             } else
 
-#define CHILDREN_END \
-        { Project().log().add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str()); assert(!"TODO?"); } } }
+#define CHILD_UNEXPECTED(tag) { Project().log().add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str()); assert(!"TODO?"); }
+
+#define CHILDREN_END CHILD_UNEXPECTED(tag) } }
 
 
 /// <summary>
@@ -176,7 +180,7 @@ void AddToList(ListOf<TReadable>& list, TContainer& container, _xml::_element& e
 {
     auto item = new TReadable(container, &list);
     item->Read(elem, folder);
-    list.push_back(item);
+    list.Add(item);
 }
 
 /// <summary>
@@ -201,6 +205,7 @@ void ReadList(ListOf<TReadable>& list, TContainer& container, _xml::_element& el
                 }
                 else {
                     log.add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str());
+                    assert(false);
                 }
             }
         }

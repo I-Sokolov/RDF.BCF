@@ -10,26 +10,31 @@
 /// </summary>
 bool XMLFile::ReadFile(const std::string& bcfFolder)
 {
-    bool ok = false;
+    bool ok = true;
 
     std::string path(bcfFolder);
     FileSystem::AddPath(path, XMLFileName());
 
-    if (!FileSystem::Exists(path.c_str())) {
-        return true; 
-    }
-
     try {
-        _xml::_document doc(nullptr);
-        doc.load(path.c_str());
+        if (FileSystem::Exists(path.c_str())) {
+            ok = false;
 
-        if (auto root = doc.getRoot()) {
-            ReadRoot(*root, bcfFolder);
-            ok = true;
+            _xml::_document doc(nullptr);
+            doc.load(path.c_str());
+
+            auto root = doc.getRoot();
+            if (root) {
+                ReadRoot(*root, bcfFolder);
+                ok = true;
+            }
         }
     }
     catch (std::exception& ex) {
         m_project.log().add(Log::Level::error, "Read file error", "Failed to read %s file. %s", path.c_str(), ex.what());
+    }
+
+    if (ok) {
+        UpgradeReadVersion();
     }
 
     return ok;

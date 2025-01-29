@@ -12,11 +12,11 @@ class ListOfBCFObjects;
 struct BCFObject
 {
 public:
-    static long gObjectCounter;
+    static std::set<BCFObject*> gAllocatedObjects;
 
 public:
-    BCFObject(BCFProject& project, ListOfBCFObjects* parentList) : m_project(project), m_parentList(parentList) { gObjectCounter++; }
-    virtual ~BCFObject() { gObjectCounter--; }
+    BCFObject(BCFProject& project, ListOfBCFObjects* parentList);
+    virtual ~BCFObject();
    
     bool Remove();
 

@@ -65,6 +65,13 @@ public:
     {
         return (std::list<Item*>&) m_items;
     }
+
+    void UpgradeReadVersion()
+    {
+        for (auto item : Items()) {
+            item->UpgradeReadVersion();
+        }
+    }
 };
 
 

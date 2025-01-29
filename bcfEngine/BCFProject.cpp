@@ -4,6 +4,8 @@
 #include "Archivator.h"
 #include "FileSystem.h"
 
+long BCFProject::gProjectCounter = 0;
+
 /// <summary>
 /// 
 /// </summary>
@@ -14,7 +16,7 @@ BCFProject::BCFProject(const char* projectId)
     , m_autoExtentSchema(true)
     , m_topics(*this)
 {
-    BCFObject::gObjectCounter++;
+    gProjectCounter++;
 }
 
 /// <summary>
@@ -23,7 +25,7 @@ BCFProject::BCFProject(const char* projectId)
 BCFProject::~BCFProject()
 {
     CleanWorkingFolders();
-    BCFObject::gObjectCounter--;
+    gProjectCounter--;
 }
 
 /// <summary>
@@ -95,11 +97,6 @@ bool BCFProject::Read(const char* bcfFilePath)
 /// </summary>
 bool BCFProject::Write(const char* bcfFilePath, BCFVersion version)
 {
-    if (m_projectInfo.m_ProjectId.empty()) {
-        log().add(Log::Level::warning, "Invalid value", "ProjectId must be set");
-        m_projectInfo.m_ProjectId = GuidStr::New();
-    }
-
     m_version.Set(version);
 
     std::string bcfFolder;

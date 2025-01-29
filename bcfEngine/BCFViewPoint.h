@@ -73,6 +73,7 @@ private:
     virtual const char* XSDName() override { return "visinfo.xsd"; }
     virtual const char* RootElemName() override { return "VisualizationInfo"; }
     virtual void ReadRoot(_xml::_element& elem, const std::string& folder) override;
+    virtual void UpgradeReadVersion() override;
     virtual void WriteRootElem(_xml_writer& writer, const std::string& folder, Attributes& attr) override;
     virtual void WriteRootContent(_xml_writer& writer, const std::string& folder) override;
 
@@ -94,6 +95,7 @@ private:
     BCFTopic&                   m_topic;
 
     GuidStr                     m_Guid;
+    GuidStr                     m_GuidBCFV;
 
     std::string                 m_Viewpoint; //name.bcfv
     std::string                 m_Snapshot;  //name.jpg

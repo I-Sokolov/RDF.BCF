@@ -4,7 +4,19 @@
 #include "XMLPoint.h"
 #include "FileSystem.h"
 
-long BCFObject::gObjectCounter = 0;
+std::set<BCFObject*> BCFObject::gAllocatedObjects;
+
+BCFObject::BCFObject(BCFProject& project, ListOfBCFObjects* parentList) 
+    : m_project(project)
+    , m_parentList(parentList) 
+{ 
+    gAllocatedObjects.insert(this);
+}
+
+BCFObject::~BCFObject() 
+{ 
+    gAllocatedObjects.erase(this);
+}
 
 /// <summary>
 /// 
