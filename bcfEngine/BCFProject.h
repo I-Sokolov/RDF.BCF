@@ -5,6 +5,7 @@
 #include "Version.h"
 #include "ProjectInfo.h"
 #include "Extensions.h"
+#include "Documents.h"
 
 struct BCFTopic;
 
@@ -39,6 +40,7 @@ public:
     void SetName(const char* name) { m_projectInfo.m_Name = name; }
 
     Extensions& GetExtensions() { return m_extensions; }
+    Documents& GetDocuments() { return m_documents; }
 
     BCFTopic* TopicAdd(const char* type, const char* title, const char* status, const char* guid = NULL);
     BCFTopic* TopicIterate(BCFTopic* prev);
@@ -58,6 +60,7 @@ private:
     Version     m_version;
     ProjectInfo m_projectInfo;
     Extensions  m_extensions;
+    Documents   m_documents;
 
     std::string m_author;
     bool        m_autoExtentSchema;

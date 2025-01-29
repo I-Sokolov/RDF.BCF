@@ -72,14 +72,13 @@ void BCFDocumentReference::Write_DocumentReference(_xml_writer& writer, const st
 /// <summary>
 /// 
 /// </summary>
-const char* BCFDocumentReference::GetUrlPath()
+const char* BCFDocumentReference::GetFilePath()
 {
     if (!m_Url.empty()) {
         return m_Url.c_str();
     }
     else if (!m_DocumentGuid.empty()) {
-        assert(!"TODO - local document");
-        return "";
+        return Project().GetDocuments().GetFilePath(m_DocumentGuid.c_str());
     }
     else {
         return "";
@@ -89,23 +88,22 @@ const char* BCFDocumentReference::GetUrlPath()
 /// <summary>
 /// 
 /// </summary>
-bool BCFDocumentReference::SetUrlPath(const char* val)
+bool BCFDocumentReference::SetFilePath(const char* filePath, bool isExternal)
 {
-    UNNULL;
-
-    if (!*val) {
+    if (!filePath || !*filePath) {
         m_DocumentGuid.clear();
         m_Url.clear();
         return true;
     }
-    else if (IsURL(val)) {
+    else if (isExternal) {
         m_DocumentGuid.clear();
-        m_Url.assign(val);
+        m_Url.assign(filePath);
         return true;
     }
     else {
-        assert(!"TODO - local document");
-        return false;
+        m_DocumentGuid = Project().GetDocuments().Add (filePath);
+        m_Url.clear();
+        return !m_DocumentGuid.empty();
     }
 }
 

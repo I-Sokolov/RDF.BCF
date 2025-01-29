@@ -34,9 +34,12 @@ public:
     static bool CopyFile(const char* src, const char* dst, Log& log);
 
     //
+    static bool MoveFile(const char* src, const char* dst, Log& log);
+    
+    //
     static bool CreateTempDir(std::string& pathName, Log& log);
 
-    //
+    //(non-recursive)
     static bool CreateDir(const char* pathName, Log& log);
 };
 

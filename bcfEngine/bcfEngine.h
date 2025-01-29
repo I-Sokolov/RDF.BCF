@@ -200,17 +200,17 @@ extern "C" {
     ///
     /// </summary>
     RDFBCF_EXPORT BCFDocumentReference* bcfDocumentReferenceIterate(BCFTopic* topic, BCFDocumentReference* prev);
-    RDFBCF_EXPORT BCFDocumentReference* bcfDocumentReferenceAdd(BCFTopic* topic, const char* urlPath, const char* guid);
+    RDFBCF_EXPORT BCFDocumentReference* bcfDocumentReferenceAdd(BCFTopic* topic, const char* filePath, bool isExternal, const char* guid);
     RDFBCF_EXPORT bool                  bcfDocumentReferenceRemove(BCFDocumentReference* comment);
 
     /// <summary>
     ///
     /// </summary>
     RDFBCF_EXPORT const char* bcfDocumentReferenceGetGuid       (BCFDocumentReference* documentReferece);
-    RDFBCF_EXPORT const char* bcfDocumentReferenceGetUrlPath    (BCFDocumentReference* documentReferece);
+    RDFBCF_EXPORT const char* bcfDocumentReferenceGetFilePath   (BCFDocumentReference* documentReferece);
     RDFBCF_EXPORT const char* bcfDocumentReferenceGetDescription(BCFDocumentReference* documentReferece);
 
-    RDFBCF_EXPORT bool bcfDocumentReferenceSetUrlPath           (BCFDocumentReference* documentReferece, const char* value);
+    RDFBCF_EXPORT bool bcfDocumentReferenceSetFilePath          (BCFDocumentReference* documentReferece, const char* filePath, bool isExternal);
     RDFBCF_EXPORT bool bcfDocumentReferenceSetDescription       (BCFDocumentReference* documentReferece, const char* value);
 
     /// <summary>

@@ -117,6 +117,7 @@
     <ClInclude Include="BCFComment.h" />
     <ClInclude Include="BCFComponent.h" />
     <ClInclude Include="BCFDocumentReference.h" />
+    <ClInclude Include="Documents.h" />
     <ClInclude Include="Extensions.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="framework.h" />
@@ -156,6 +157,7 @@
     <ClCompile Include="BCFDocumentReference.cpp" />
     <ClCompile Include="bcfEngine.cpp" />
     <ClCompile Include="BCFLine.cpp" />
+    <ClCompile Include="Documents.cpp" />
     <ClCompile Include="GuidReference.cpp" />
     <ClCompile Include="ListOf.cpp" />
     <ClCompile Include="BCFObject.cpp" />

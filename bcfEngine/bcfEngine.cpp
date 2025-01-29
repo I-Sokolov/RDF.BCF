@@ -316,20 +316,28 @@ OBJ_SET_ATTR(ViewPoint, Comment, ViewPoint)
 /// </summary>
 OBJ_ITERATE(DocumentReference, Topic)
 OBJ_REMOVE(DocumentReference)
-RDFBCF_EXPORT BCFDocumentReference* bcfDocumentReferenceAdd(BCFTopic* topic, const char* urlPath, const char* guid)
+RDFBCF_EXPORT BCFDocumentReference* bcfDocumentReferenceAdd(BCFTopic* topic, const char* filePath, bool isExternal, const char* guid)
 {
     if (topic) {
-        return topic->DocumentReferenceAdd(urlPath, guid);
+        return topic->DocumentReferenceAdd(filePath, isExternal, guid);
     }
     return 0;
 }
 
 OBJ_GET_ATTR(Str, DocumentReference, Guid)
-OBJ_GET_ATTR(Str, DocumentReference, UrlPath)
+OBJ_GET_ATTR(Str, DocumentReference, FilePath)
 OBJ_GET_ATTR(Str, DocumentReference, Description)
 
-OBJ_SET_ATTR(Str, DocumentReference, UrlPath)
 OBJ_SET_ATTR(Str, DocumentReference, Description)
+
+RDFBCF_EXPORT bool bcfDocumentReferenceSetFilePath(BCFDocumentReference* documentReferece, const char* filePath, bool isExternal)
+{
+    if (documentReferece) {
+        return documentReferece->SetFilePath(filePath, isExternal);
+    }
+    return false;
+}
+
 
 /// <summary>
 /// 

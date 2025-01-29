@@ -16,10 +16,10 @@ public:
 
 public:
     const char* GetGuid() { return m_Guid.c_str(); }
-    const char* GetUrlPath();
+    const char* GetFilePath();
     const char* GetDescription() { return m_Description.c_str(); }
 
-    bool SetUrlPath(const char* val);
+    bool SetFilePath(const char* filePath, bool isExternal);
     bool SetDescription(const char* val) { UNNULL; m_Description.assign(val); return true; }
 
 private:

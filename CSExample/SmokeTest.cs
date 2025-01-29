@@ -334,7 +334,7 @@ namespace CSExample
 
         static private string TestGuid(int i)
         {
-            return $"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa{i}";
+            return $"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaa{i/10}{i%10}";
         }
 
         static private string TestIfcGuid(int i)
@@ -361,22 +361,27 @@ namespace CSExample
                 topic.Stage = "Stage";
                 topic.Index = 7;
 
-                for (int j = 0; j < 4; j++)
+                for (int j = 0; j < 12; j++)
                 {
+                    string filePath = TestFile((j % 3 == 0) ? "ifc" : "png");
+                    bool isExternal = (j%5==0);
+
                     if (j % 2 == 0)
                     {
-                        var reference = topic.AddDocumentRefernce("hTtp://lala", TestGuid(j));
+                        var reference = topic.AddDocumentRefernce(filePath, isExternal, TestGuid(j));
                         reference.Description = ($"Descr {j}");
                     }
                     else
                     {
                         var reference = topic.AddDocumentRefernce("ftp://ee");
-                        reference.UrlPath = "ftP://changed";
+                        reference.SetFilePath("");
+                        ASSERT(reference.FilePath.Length==0);
+                        reference.SetFilePath (filePath, isExternal);
                     }
                 }
-                ASSERT(topic.GetDocumentReferences().Count == 4);
-                ASSERT(topic.GetDocumentReferences()[3].Remove());
-                ASSERT(topic.GetDocumentReferences().Count == 3);
+                ASSERT(topic.GetDocumentReferences().Count == 12);
+                ASSERT(topic.GetDocumentReferences()[11].Remove());
+                ASSERT(topic.GetDocumentReferences().Count == 11);
 
                 ASSERT(topic.GetBimSnippet(false) == null);
                 ASSERT(topic.GetBimSnippet(true) != null);
@@ -463,19 +468,28 @@ namespace CSExample
                     ASSERT(topic.ModifiedAuthor == "Smoke-Editor");
                 }
 
-                ASSERT(topic.GetDocumentReferences().Count == 3);
-                for (int j = 0; j < 3; j++)
+                ASSERT(topic.GetDocumentReferences().Count == 11);
+                for (int j = 0; j < 11; j++)
                 {
+                    string filePath = TestFile((j % 3 == 0) ? "ifc" : "png");
+                    bool isExternal = (j % 5 == 0);
+
                     var reference = topic.GetDocumentReferences()[j];
+                    if (isExternal)
+                    {
+                        ASSERT(reference.FilePath == filePath);
+                    }
+                    else
+                    {
+                        ASSERT(reference.FilePath.Substring(reference.FilePath.Length-13)==filePath.Substring(filePath.Length-13));
+                    }
                     if (j % 2 == 0)
                     {
-                        ASSERT(reference.UrlPath == "hTtp://lala"); 
                         ASSERT(reference.Guid ==     TestGuid(j));
                         ASSERT(reference.Description == ($"Descr {j}"));
                     }
                     else
                     {
-                        ASSERT(reference.UrlPath == "ftP://changed");
                         ASSERT(reference.Guid.Length > 0);
                         ASSERT(reference.Description.Length == 0);
                     }
@@ -1020,7 +1034,7 @@ namespace CSExample
                 ASSERT(err.Contains("Missed property"));
                 ASSERT(err.Contains("Url"));
 
-                docref.UrlPath = "http://ss";
+                docref.SetFilePath ("http://ss");
                 ok = bcf.FileWrite("Validation.bcf");
                 ASSERT(ok);
             }

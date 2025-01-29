@@ -13,6 +13,7 @@ BCFProject::BCFProject(const char* projectId)
     : m_version(*this)
     , m_projectInfo(*this, projectId)
     , m_extensions (*this)
+    , m_documents(*this)
     , m_autoExtentSchema(true)
     , m_topics(*this)
 {
@@ -85,6 +86,7 @@ bool BCFProject::Read(const char* bcfFilePath)
         ok = ok && m_version.ReadFile(bcfFolder);
         ok = ok && m_projectInfo.ReadFile(bcfFolder);
         ok = ok && m_extensions.ReadFile(bcfFolder);
+        ok = ok && m_documents.ReadFile(bcfFolder);
         
         ok = ok && ReadTopics(bcfFolder);
     }
@@ -110,6 +112,7 @@ bool BCFProject::Write(const char* bcfFilePath, BCFVersion version)
         ok = ok && m_version.WriteFile(bcfFolder);
         ok = ok && m_projectInfo.WriteFile(bcfFolder);
         ok = ok && m_extensions.WriteFile(bcfFolder);
+        ok = ok && m_documents.WriteFile(bcfFolder);
 
         if (ok) {
             Archivator ar(m_log);

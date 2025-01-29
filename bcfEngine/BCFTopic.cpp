@@ -420,11 +420,11 @@ BCFComment* BCFTopic::CommentIterate(BCFComment* prev)
 /// <summary>
 /// 
 /// </summary>
-BCFDocumentReference* BCFTopic::DocumentReferenceAdd(const char* urlPath, const char* guid)
+BCFDocumentReference* BCFTopic::DocumentReferenceAdd(const char* path, bool isExternal, const char* guid)
 {
     auto ref = new BCFDocumentReference(*this, &m_DocumentReferences, guid ? guid : "");
 
-    bool ok = ref->SetUrlPath(urlPath);
+    bool ok = ref->SetFilePath(path, isExternal);
     ok = ok && UpdateAuthor();
 
     if (!ok){

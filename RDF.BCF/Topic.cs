@@ -248,9 +248,9 @@ namespace RDF.BCF
         /// <summary>
         /// Add documents associated with the topics
         /// </summary>
-        public DocumentReference AddDocumentRefernce(string urlPath, string? guid = null)
+        public DocumentReference AddDocumentRefernce(string filePath, bool isExternal = true, string? guid = null)
         {
-            IntPtr vpHandle = Interop.DocumentReferenceAdd(m_handle, urlPath, guid);
+            IntPtr vpHandle = Interop.DocumentReferenceAdd(m_handle, filePath, isExternal, guid);
             if (vpHandle == IntPtr.Zero)
                 throw new ApplicationException("Fail to create document reference: " + Interop.ErrorsGet(m_project.Handle));
             return new DocumentReference(this, vpHandle);

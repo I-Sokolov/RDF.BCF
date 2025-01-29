@@ -50,7 +50,7 @@ public:
     BCFComment* CommentAdd(const char* guid = NULL);
     BCFComment* CommentIterate(BCFComment* prev);
 
-    BCFDocumentReference* DocumentReferenceAdd(const char* urlPath, const char* guid = NULL);
+    BCFDocumentReference* DocumentReferenceAdd(const char* filePath, bool isExternal = true, const char* guid = NULL);
     BCFDocumentReference* DocumentReferenceIterate(BCFDocumentReference* prev);
 
     BCFBimSnippet* GetBimSnippet(bool forceCreate);

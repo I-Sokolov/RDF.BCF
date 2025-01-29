@@ -512,7 +512,7 @@ namespace RDF.BCF
         [DllImport(DLL, EntryPoint = "bcfDocumentReferenceIterate")]
         public static extern IntPtr DocumentReferenceIterate(IntPtr topic, IntPtr prev);
         [DllImport(DLL, EntryPoint = "bcfDocumentReferenceAdd")]
-        public static extern IntPtr DocumentReferenceAdd(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string urlPath, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? guid = null);
+        public static extern IntPtr DocumentReferenceAdd(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string filePath, [param: MarshalAs(UnmanagedType.U1)] bool isExternal, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? guid = null);
         [DllImport(DLL, EntryPoint = "bcfDocumentReferenceRemove")]
         public static extern bool DocumentReferenceRemove(IntPtr comment);
 
@@ -521,13 +521,13 @@ namespace RDF.BCF
         /// </summary>
         [DllImport(DLL, EntryPoint = "bcfDocumentReferenceGetGuid")]
         private static extern IntPtr _DocumentReferenceGetGuid(IntPtr documentReferece); public static string DocumentReferenceGetGuid(IntPtr documentReference) { return PtrToString(_DocumentReferenceGetGuid(documentReference)); }
-        [DllImport(DLL, EntryPoint = "bcfDocumentReferenceGetUrlPath")]
-        private static extern IntPtr _DocumentReferenceGetUrlPath(IntPtr documentReferece); public static string DocumentReferenceGetUrlPath(IntPtr documentReference) { return PtrToString(_DocumentReferenceGetUrlPath(documentReference)); }
+        [DllImport(DLL, EntryPoint = "bcfDocumentReferenceGetFilePath")]
+        private static extern IntPtr _DocumentReferenceGetUrlPath(IntPtr documentReferece); public static string DocumentReferenceGetFilePath(IntPtr documentReference) { return PtrToString(_DocumentReferenceGetUrlPath(documentReference)); }
         [DllImport(DLL, EntryPoint = "bcfDocumentReferenceGetDescription")]
         private static extern IntPtr _DocumentReferenceGetDescription(IntPtr documentReferece); public static string DocumentReferenceGetDescription(IntPtr documentReference) { return PtrToString(_DocumentReferenceGetDescription(documentReference)); }
 
-        [DllImport(DLL, EntryPoint = "bcfDocumentReferenceSetUrlPath")]
-        public static extern bool DocumentReferenceSetUrlPath(IntPtr documentReferece, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string value);
+        [DllImport(DLL, EntryPoint = "bcfDocumentReferenceSetFilePath")]
+        public static extern bool DocumentReferenceSetFilePath(IntPtr documentReferece, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string value, [param: MarshalAs(UnmanagedType.U1)] bool isExternal);
         [DllImport(DLL, EntryPoint = "bcfDocumentReferenceSetDescription")]
         public static extern bool DocumentReferenceSetDescription(IntPtr documentReferece, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string value);
 

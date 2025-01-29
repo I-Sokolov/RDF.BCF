@@ -87,6 +87,21 @@ bool FileSystem::CopyFile(const char* src, const char* dst, Log& log)
 /// <summary>
 /// 
 /// </summary>
+bool FileSystem::MoveFile(const char* src, const char* dst, Log& log)
+{
+    try {
+        std::filesystem::rename(src, dst);
+        return true;
+    }
+    catch (std::exception& expt) {
+        log.add(Log::Level::error, "File move", "Can not move '%s' to '%s': %s", src, dst, expt.what());
+        return false;
+    }
+}
+
+/// <summary>
+/// 
+/// </summary>
 bool FileSystem::Remove(const char* path, Log& log)
 {
     try {
