@@ -73,7 +73,7 @@ private:
     virtual const char* XSDName() override { return "visinfo.xsd"; }
     virtual const char* RootElemName() override { return "VisualizationInfo"; }
     virtual void ReadRoot(_xml::_element& elem, const std::string& folder) override;
-    virtual void UpgradeReadVersion() override;
+    virtual void UpgradeReadVersion(const std::string& folder) override;
     virtual void WriteRootElem(_xml_writer& writer, const std::string& folder, Attributes& attr) override;
     virtual void WriteRootContent(_xml_writer& writer, const std::string& folder) override;
 

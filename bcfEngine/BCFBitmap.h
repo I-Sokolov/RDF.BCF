@@ -12,7 +12,7 @@ public:
 
     void Read(_xml::_element& elem, const std::string& folder);
     void Write(_xml_writer& writer, const std::string& folder, const char* tag);
-    void UpgradeReadVersion();
+    void UpgradeReadVersion(const std::string& folder);
 
 public:
     BCFBitmapFormat GetFormat();

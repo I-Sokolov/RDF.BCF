@@ -34,7 +34,7 @@ bool XMLFile::ReadFile(const std::string& bcfFolder)
     }
 
     if (ok) {
-        UpgradeReadVersion();
+        UpgradeReadVersion(bcfFolder);
     }
 
     return ok;

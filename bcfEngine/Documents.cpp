@@ -42,7 +42,7 @@ void Documents::Doc::Read(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-void Documents::UpgradeReadVersion()
+void Documents::UpgradeReadVersion(const std::string&)
 {
 
 }

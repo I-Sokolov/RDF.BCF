@@ -433,7 +433,7 @@ BCFClippingPlane* BCFViewPoint::ClippingPlaneIterate(BCFClippingPlane* prev)
 /// <summary>
 /// 
 /// </summary>
-void BCFViewPoint::UpgradeReadVersion()
+void BCFViewPoint::UpgradeReadVersion(const std::string& folder)
 {
     if (Project().GetVersion() < BCFVer_3_0) {
         if (m_AspectRatio.empty()) {
@@ -441,5 +441,5 @@ void BCFViewPoint::UpgradeReadVersion()
         }
     }
 
-    m_Bitmaps.UpgradeReadVersion();
+    m_Bitmaps.UpgradeReadVersion(folder);
 }

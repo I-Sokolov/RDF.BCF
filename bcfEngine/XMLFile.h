@@ -37,7 +37,7 @@ protected:
     virtual const char* XSDName() = NULL;
     virtual const char* RootElemName() = NULL;
     virtual void ReadRoot(_xml::_element& elem, const std::string& folder) = NULL;    
-    virtual void UpgradeReadVersion() = NULL;
+    virtual void UpgradeReadVersion(const std::string& folder) = NULL;
     virtual void WriteRootElem(_xml_writer& writer, const std::string& folder, Attributes& attr);
     virtual void WriteRootContent(_xml_writer& writer, const std::string& folder) = NULL;
 

@@ -12,7 +12,7 @@ public:
 
     void Read(_xml::_element& elem, const std::string& folder);
     void Write(_xml_writer& writer, const std::string& folder, const char* tag);
-    void UpgradeReadVersion();
+    void UpgradeReadVersion(const std::string& folder);
 
 public:
     const char* GetGuid() { return m_Guid.c_str(); }
@@ -32,5 +32,8 @@ private:
     std::string                m_DocumentGuid;
     std::string                m_Url;
     std::string                m_Description;
+    //v2.1
+    std::string                m_isExternal;  
+    std::string                m_ReferencedDocument;
 };
 

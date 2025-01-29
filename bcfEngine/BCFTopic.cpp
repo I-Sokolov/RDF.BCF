@@ -46,7 +46,7 @@ void BCFTopic::ReadRoot(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-void BCFTopic::UpgradeReadVersion()
+void BCFTopic::UpgradeReadVersion(const std::string& folder)
 {
     auto NOT_SET = "Not set";
 
@@ -62,8 +62,8 @@ void BCFTopic::UpgradeReadVersion()
         }
     }
 
-    m_Comments.UpgradeReadVersion();
-    m_DocumentReferences.UpgradeReadVersion();
+    m_Comments.UpgradeReadVersion(folder);
+    m_DocumentReferences.UpgradeReadVersion(folder);
 }
 
 /// <summary>

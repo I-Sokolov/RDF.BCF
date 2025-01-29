@@ -39,7 +39,7 @@ void ProjectInfo::Read_Project(_xml::_element& elem, const std::string& /*folder
 /// <summary>
 /// 
 /// </summary>
-void ProjectInfo::UpgradeReadVersion()
+void ProjectInfo::UpgradeReadVersion(const std::string&)
 {
     if (Project().GetVersion() < BCFVer_3_0) {
         if (m_ProjectId.empty()) {

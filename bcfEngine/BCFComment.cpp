@@ -132,7 +132,7 @@ bool BCFComment::UpdateAuthor()
 /// <summary>
 /// 
 /// </summary>
-void BCFComment::UpgradeReadVersion()
+void BCFComment::UpgradeReadVersion(const std::string&)
 {
     if (Project().GetVersion() < BCFVer_3_0) {
         if (!*m_Viewpoint.GetGuid()) { //empty comment appeared from a file

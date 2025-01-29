@@ -2,6 +2,7 @@
 #include "BCFDocumentReference.h"
 #include "BCFProject.h"
 #include "BCFTopic.h"
+#include "FileSystem.h"
 
 /// <summary>
 /// 
@@ -18,22 +19,16 @@ BCFDocumentReference::BCFDocumentReference(BCFTopic& topic, ListOfBCFObjects* pa
 /// </summary>
 void BCFDocumentReference::Read(_xml::_element& elem, const std::string& folder) 
 { 
-    std::string isExternal; //v2.1
-
     ATTRS_START
         ATTR_GET(Guid)
-        ATTR_GET_STR(isExternal, isExternal)
+        ATTR_GET(isExternal) //v2.1
     ATTRS_END(UnknownNames::NotAllowed)
-
-    assert(isExternal != "false"); //TODO: implement embedded doucments
 
     CHILDREN_START
         CHILD_GET_CONTENT(DocumentGuid)
         CHILD_GET_CONTENT(Url)
         CHILD_GET_CONTENT(Description)
-
-        CHILD_GET_CONTENT_STR(ReferencedDocument, m_Url)
-
+        CHILD_GET_CONTENT(ReferencedDocument) //v2.1
     CHILDREN_END
 }
 
@@ -110,11 +105,21 @@ bool BCFDocumentReference::SetFilePath(const char* filePath, bool isExternal)
 /// <summary>
 /// 
 /// </summary>
-void BCFDocumentReference::UpgradeReadVersion()
+void BCFDocumentReference::UpgradeReadVersion(const std::string& folder)
 {
     if (Project().GetVersion() < BCFVer_3_0) {
+        
         if (m_Guid.IsEmpty()) {
             m_Guid.AssignNew();
+        }
+
+        if (StrToBool(m_isExternal)) {
+            SetFilePath(m_ReferencedDocument.c_str(), true);
+        }
+        else {
+            std::string path(folder);
+            FileSystem::AddPath(path, m_ReferencedDocument.c_str());
+            SetFilePath(path.c_str(), false);
         }
     }
 }

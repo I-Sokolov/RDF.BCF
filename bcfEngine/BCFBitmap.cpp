@@ -112,7 +112,7 @@ bool BCFBitmap::SetReference(const char* val)
 /// <summary>
 /// 
 /// </summary>
-void BCFBitmap::UpgradeReadVersion()
+void BCFBitmap::UpgradeReadVersion(const std::string&)
 {
     if (Project().GetVersion() < BCFVer_3_0) {
         std::transform(m_Format.begin(), m_Format.end(), m_Format.begin(), [](unsigned char c) { return std::tolower(c); });

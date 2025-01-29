@@ -66,10 +66,10 @@ public:
         return (std::list<Item*>&) m_items;
     }
 
-    void UpgradeReadVersion()
+    void UpgradeReadVersion(const std::string& folder)
     {
         for (auto item : Items()) {
-            item->UpgradeReadVersion();
+            item->UpgradeReadVersion(folder);
         }
     }
 };
