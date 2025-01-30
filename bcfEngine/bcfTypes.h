@@ -46,6 +46,7 @@ extern "C" {
     enum BCFVersion
     {
         BCFVerNotSupported = 0,
+        BCFVer_2_0 = 20,
         BCFVer_2_1 = 21,
         BCFVer_3_0 = 30
     };

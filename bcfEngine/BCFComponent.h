@@ -12,6 +12,7 @@ public:
 
     void Read(_xml::_element& elem, const std::string& folder);
     void Write(_xml_writer& writer, const std::string& folder, const char* tag);
+    void UpgradeReadVersion(const std::string& folder);
 
 public:
     const char* GetIfcGuid() {return m_IfcGuid.c_str();}
@@ -23,8 +24,15 @@ public:
     bool SetAuthoringToolId(const char* val) { UNNULL; m_AuthoringToolId.assign(val); return true; }
 
 private:
+    BCFViewPoint* m_pViewPoint;
+
     std::string m_IfcGuid;
     std::string m_OriginatingSystem;
     std::string m_AuthoringToolId;
+    
+    //v2.0
+    std::string m_Selected;
+    std::string m_Visible;
+    std::string m_Color;
 };
 

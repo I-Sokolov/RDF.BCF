@@ -85,7 +85,7 @@ RDFBCF_EXPORT void SmokeTest_DataSet(const char* folder)
         }
         else {
             auto ext = entry.path().extension();
-            if (ext.string() == ".bcf") {
+            if (ext.string() == ".bcf" || ext.string() == ".bcfzip") {
                 TestFromDataSet(entry.path().string().c_str());
             }
         }

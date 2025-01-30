@@ -68,7 +68,8 @@ public:
 
     void UpgradeReadVersion(const std::string& folder)
     {
-        for (auto item : Items()) {
+        std::list<Item*> items = Items();//list copy list is intentional, next processing may remove components
+        for (auto item : items) {
             item->UpgradeReadVersion(folder);
         }
     }

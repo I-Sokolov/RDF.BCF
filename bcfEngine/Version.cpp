@@ -36,6 +36,9 @@ BCFVersion Version::Get()
     if (m_VersionId == "2.1") {
         return BCFVer_2_1;
     }
+    if (m_VersionId == "2.0") {
+        return BCFVer_2_0;
+    }
     else {
         assert(false);
         return BCFVerNotSupported;

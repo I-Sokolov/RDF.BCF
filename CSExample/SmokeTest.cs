@@ -42,7 +42,7 @@ namespace CSExample
 
 #if DEBUG
             Console.WriteLine("Dataset test");
-            SmokeTest_DataSet("W:\\DevArea\\buildingSMART\\BCF-XML\\Test Cases\\v2.1");
+            SmokeTest_DataSet("W:\\DevArea\\buildingSMART\\BCF-XML\\Test Cases");
 #endif
 
             Console.WriteLine("TESTS PASSED");

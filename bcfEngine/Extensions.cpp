@@ -181,23 +181,30 @@ void Extensions::ReadExtensionSchema(_xml::_element& extensionSchemaElem, const 
 {
     auto& fileName = extensionSchemaElem.getContent();
 
-    std::string path(folder);
-    FileSystem::AddPath(path, fileName.c_str());
+    if (!fileName.empty()) {
+        std::string path(folder);
+        FileSystem::AddPath(path, fileName.c_str());
 
-    try {
-        _xml::_document doc(nullptr);
-        doc.load(path.c_str());
+        if (FileSystem::Exists(path.c_str())) {
+            try {
+                _xml::_document doc(nullptr);
+                doc.load(path.c_str());
 
-        if (auto pelem = doc.getRoot()) {
-            auto& elem = *pelem;
-            CHILDREN_START
-                CHILD_READ_FUNC(redefine, ReadExtensionSchema_redefine)
-            CHILDREN_END
+                if (auto pelem = doc.getRoot()) {
+                    auto& elem = *pelem;
+                    CHILDREN_START
+                        CHILD_READ_FUNC(redefine, ReadExtensionSchema_redefine)
+                        CHILDREN_END
+                }
+            }
+            catch (std::exception& ex) {
+                m_project.log().add(Log::Level::error, "Read file error", "Failed to read %s file. %s", path.c_str(), ex.what());
+                throw;
+            }
         }
-    }
-    catch (std::exception& ex) {
-        m_project.log().add(Log::Level::error, "Read file error", "Failed to read %s file. %s", path.c_str(), ex.what());
-        throw;
+        else {
+            m_project.log().add(Log::Level::warning, "File not exists", "File is referenced but not exists: %s", path.c_str());
+        }
     }
 }
 

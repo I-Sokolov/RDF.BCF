@@ -28,6 +28,10 @@ void BCFComment::Read(_xml::_element& elem, const std::string& folder)
         ATTR_GET(Guid)
     ATTRS_END(UnknownNames::NotAllowed)
 
+    std::string ignore; //v2.0
+    std::string verbalStatus;
+    std::string status;
+
     CHILDREN_START
         CHILD_GET_CONTENT(Date)
         CHILD_GET_CONTENT(Author)
@@ -35,7 +39,27 @@ void BCFComment::Read(_xml::_element& elem, const std::string& folder)
         CHILD_READ_MEMBER(Viewpoint)
         CHILD_GET_CONTENT(ModifiedDate)
         CHILD_GET_CONTENT(ModifiedAuthor)
-    CHILDREN_END
+        //v2.0
+        CHILD_GET_CONTENT_STR(Topic, ignore) 
+        CHILD_GET_CONTENT_STR(VerbalStatus, verbalStatus)
+        CHILD_GET_CONTENT_STR(Status, status)
+        CHILD_GET_CONTENT_STR(ReplyToComment, ignore)
+    CHILDREN_END;
+
+    //v2.0
+    if (!status.empty()) { 
+        if (!m_Comment.empty()) {
+            m_Comment.push_back('\n');
+        }
+        m_Comment.append(status);
+    }
+
+    if (!verbalStatus.empty()) {
+        if (!m_Comment.empty()) {
+            m_Comment.push_back('\n');
+        }
+        m_Comment.append(verbalStatus);
+    }
 }
 
 /// <summary>

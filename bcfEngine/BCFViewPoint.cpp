@@ -16,7 +16,6 @@ BCFViewPoint::BCFViewPoint(BCFTopic& topic, ListOfBCFObjects* parentList, const 
     : XMLFile(topic.Project(), parentList)
     , m_topic(topic)
     , m_Guid(topic.Project(), guid)
-    , m_GuidBCFV(topic.Project(), guid)
     , m_cameraType(BCFCameraPerspective)
     , m_CameraViewPoint(topic.Project())
     , m_CameraDirection(topic.Project())
@@ -92,9 +91,15 @@ void BCFViewPoint::Write_ViewPoint(_xml_writer& writer, const std::string& folde
 /// </summary>
 void BCFViewPoint::ReadRoot(_xml::_element& elem, const std::string& folder)
 {
+    std::string vpGuid;
+
     ATTRS_START
-        ATTR_GET_STR(Guid, m_GuidBCFV) //guid read from .bcfv file
+        ATTR_GET_STR(Guid, vpGuid) //guid read from .bcfv file
     ATTRS_END(UnknownNames::Allowed)
+
+    //if (!vpGuid.empty() && strcmp(vpGuid.c_str(), m_Guid.c_str())) {
+    //    printf("Data inconsistent: %s\n", folder.c_str());
+    //}
 
     CHILDREN_START
         CHILD_READ(Components)
@@ -102,7 +107,8 @@ void BCFViewPoint::ReadRoot(_xml::_element& elem, const std::string& folder)
         CHILD_READ(OrthogonalCamera)
         CHILD_GET_LIST(Lines, Line)
         CHILD_GET_LIST(ClippingPlanes, ClippingPlane)
-        CHILD_GET_LIST(Bitmaps, Bitmap)
+        CHILD_GET_LIST_CONDITIONAL(Bitmaps, Bitmap, Project().GetVersion() > BCFVer_2_0)
+        CHILD_ADD_TO_LIST_CONDITIONAL(Bitmaps, Bitmaps, Project().GetVersion() == BCFVer_2_0)
     CHILDREN_END
 }
 
@@ -442,4 +448,5 @@ void BCFViewPoint::UpgradeReadVersion(const std::string& folder)
     }
 
     m_Bitmaps.UpgradeReadVersion(folder);
+    m_Selection.UpgradeReadVersion(folder);
 }

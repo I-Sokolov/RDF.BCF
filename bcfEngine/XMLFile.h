@@ -154,18 +154,22 @@ enum class UnknownNames : bool
 
 #define CHILD_READ_MEMBER(name) CHILD_READ_FUNC(name, m_##name.Read)
 
-#define CHILD_GET_LIST(listName, elemName)                                                          \
-            if (tag == #elemName) {                                                                 \
+#define CHILD_GET_LIST_CONDITIONAL(listName, elemName, condition)                                   \
+            if ((tag == #elemName) && (condition)) {                                                \
                 ReadList(m_##listName, *this, *child, folder, NULL, m_project.log());               \
             }                                                                                       \
-            else if(tag == #listName) {                                                             \
+            else if((tag == #listName) && (condition)) {                                            \
                 ReadList(m_##listName, *this, *child, folder, #elemName, m_project.log());          \
             } else
 
-#define CHILD_ADD_TO_LIST(listName, elemName)                                                       \
-            if(tag == #elemName) {                                                                  \
+#define CHILD_GET_LIST(listName, elemName)       CHILD_GET_LIST_CONDITIONAL(listName, elemName, true)
+
+#define CHILD_ADD_TO_LIST_CONDITIONAL(listName, elemName, condition)                                \
+            if((tag == #elemName) && (condition)) {                                                 \
                 AddToList(m_##listName, *this, *child, folder);                                     \
             } else
+
+#define CHILD_ADD_TO_LIST(listName, elemName)   CHILD_ADD_TO_LIST_CONDITIONAL(listName, elemName, true)
 
 #define CHILD_UNEXPECTED(tag) { Project().log().add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str()); assert(!"TODO?"); }
 

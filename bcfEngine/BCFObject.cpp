@@ -131,13 +131,23 @@ bool BCFObject::UpdateAuthor(std::string& author, std::string& date)
 std::string BCFObject::AbsolutePath(const std::string& relativePath, const std::string& folder)
 {
     if (!relativePath.empty()) {
+
         std::string filePath(folder);
         FileSystem::AddPath(filePath, relativePath.c_str());
-        if (!FileSystem::Exists(filePath.c_str())) {
-            log().add(Log::Level::error, "File read", "File does not exist: %s", filePath.c_str());
-            throw std::exception("Failed to read viewpoint");
+        if (FileSystem::Exists(filePath.c_str())) {
+            return filePath;
         }
-        return filePath;
+
+        //try to find in current folder (buildingSMART\BCF-XML\Test Cases\v2.0\Visualization\Bitmap\Bitmap.bcfzip)
+        auto fileName = FileSystem::GetFileName(relativePath.c_str(), log());
+        filePath.assign(folder);
+        FileSystem::AddPath(filePath, fileName.c_str());
+        if (FileSystem::Exists(filePath.c_str())) {
+            return filePath;
+        }
+
+        log().add(Log::Level::error, "File read", "File does not exist: %s", filePath.c_str());
+        throw std::exception("Failed to read viewpoint");
     }
     return "";
 }

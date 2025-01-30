@@ -60,6 +60,10 @@ void BCFTopic::UpgradeReadVersion(const std::string& folder)
             Project().GetExtensions().AddElement(BCFTopicStatuses, NOT_SET);
             m_TopicStatus.assign(NOT_SET);
         }
+        if (m_CreationAuthor.empty()) {
+            Project().GetExtensions().AddElement(BCFUsers, NOT_SET);
+            m_CreationAuthor.assign(NOT_SET);
+        }
     }
 
     m_Comments.UpgradeReadVersion(folder);
@@ -110,13 +114,18 @@ void BCFTopic::Write_Header(_xml_writer& writer, const std::string& folder)
 void BCFTopic::Read_Topic(_xml::_element& elem, const std::string& folder)
 {
     m_bReadFromFile = true;
+    std::string topicGuid;
 
     ATTRS_START
-        ATTR_GET(Guid)
+        ATTR_GET_STR(Guid, topicGuid)
         ATTR_GET(ServerAssignedId)
         ATTR_GET(TopicStatus)
         ATTR_GET(TopicType)
     ATTRS_END(UnknownNames::NotAllowed)
+
+    //if (!topicGuid.empty() && strcmp(topicGuid.c_str(), m_Guid.c_str())) {
+    //    printf("Data inconsistent: %s\n", folder.c_str());
+    //}
 
     CHILDREN_START
         CHILD_GET_CONTENT(Title)
@@ -132,7 +141,8 @@ void BCFTopic::Read_Topic(_xml::_element& elem, const std::string& folder)
         CHILD_GET_CONTENT(AssignedTo)
         CHILD_GET_CONTENT(Description)
         CHILD_GET_CONTENT(Stage)
-        CHILD_GET_LIST(DocumentReferences, DocumentReference)
+        CHILD_GET_LIST_CONDITIONAL(DocumentReferences, DocumentReference, Project().GetVersion() > BCFVer_2_0)
+        CHILD_ADD_TO_LIST_CONDITIONAL(DocumentReferences, DocumentReferences, Project().GetVersion() == BCFVer_2_0)
         CHILD_GET_LIST(RelatedTopics, RelatedTopic)
         CHILD_GET_LIST(Comments, Comment)
         CHILD_GET_LIST(Viewpoints, ViewPoint)

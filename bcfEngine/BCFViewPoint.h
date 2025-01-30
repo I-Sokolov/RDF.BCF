@@ -95,7 +95,6 @@ private:
     BCFTopic&                   m_topic;
 
     GuidStr                     m_Guid;
-    GuidStr                     m_GuidBCFV;
 
     std::string                 m_Viewpoint; //name.bcfv
     std::string                 m_Snapshot;  //name.jpg
