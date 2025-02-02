@@ -78,7 +78,7 @@ namespace CSExample
         {
             using (var bcfData = new RDF.BCF.Project())
             {
-                if (!bcfData.FileRead("MyTest.bcf")) {
+                if (!bcfData.FileRead("MyTest.bcf", false)) {
                     Console.WriteLine($"Failed to read BCF file: {bcfData.GetErrors()}");
                     return;
                 }

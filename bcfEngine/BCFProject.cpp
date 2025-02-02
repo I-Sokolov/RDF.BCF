@@ -72,7 +72,7 @@ bool BCFProject::CleanWorkingFolders(bool keepLast)
 /// <summary>
 /// 
 /// </summary>
-bool BCFProject::Read(const char* bcfFilePath)
+bool BCFProject::Read(const char* bcfFilePath, bool autofix)
 {
     std::string bcfFolder;
     bool ok = FileSystem::CreateTempDir(bcfFolder, m_log);
@@ -91,7 +91,25 @@ bool BCFProject::Read(const char* bcfFilePath)
         ok = ok && ReadTopics(bcfFolder);
     }
 
+    if (ok && autofix) {
+        Validate(true);
+    }
+
     return ok;
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFProject::Validate(bool fix)
+{
+    bool valid = true;
+    valid = m_version.Validate(fix) && valid;
+    valid = m_projectInfo.Validate(fix) && valid;
+    valid = m_extensions.Validate(fix) && valid;
+    valid = m_documents.Validate(fix) && valid;
+    valid = m_topics.Validate(fix) && valid;
+    return valid;
 }
 
 /// <summary>
@@ -99,6 +117,10 @@ bool BCFProject::Read(const char* bcfFilePath)
 /// </summary>
 bool BCFProject::Write(const char* bcfFilePath, BCFVersion version)
 {
+    if (!Validate(false)) {
+        return false;
+    }
+
     m_version.Set(version);
 
     std::string bcfFolder;

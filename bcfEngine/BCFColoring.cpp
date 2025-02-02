@@ -34,11 +34,35 @@ void BCFColoring::Read(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-void BCFColoring::Write(_xml_writer& writer, const std::string& folder, const char* tag)
-{ 
+bool BCFColoring::Validate(bool fix)
+{
+    if (fix) {
+        if (m_Color.empty()) {
+            m_Color.assign("FF0000");
+        }
+    }
+
+    bool valid = true;
+    
     REQUIRED_PROP(Color);
     REQUIRED(Components, !m_Components.Items().empty());
 
+    valid = m_Components.Validate(fix) && valid;
+
+    if (!valid && fix) {
+        Remove();
+        return true;
+    }
+
+    return valid;
+}
+
+
+/// <summary>
+/// 
+/// </summary>
+void BCFColoring::Write(_xml_writer& writer, const std::string& folder, const char* tag)
+{ 
     XMLFile::Attributes attr;
     ATTR_ADD(Color);
 

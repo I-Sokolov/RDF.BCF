@@ -111,10 +111,10 @@ RDFBCF_EXPORT const char* bcfErrorsGet(BCFProject* project, bool cleanLog)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT bool bcfFileRead(BCFProject* project, const char* bcfFilePath)
+RDFBCF_EXPORT bool bcfFileRead(BCFProject* project, const char* bcfFilePath, bool autofix)
 {
     if (project) {
-        return project->Read(bcfFilePath);
+        return project->Read(bcfFilePath, autofix);
     }
     return false;
 }

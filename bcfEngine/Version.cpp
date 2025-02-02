@@ -51,6 +51,9 @@ BCFVersion Version::Get()
 void Version::Set(BCFVersion version)
 {
     switch (version) {
+        case BCFVer_2_0:
+            m_VersionId = "2.0";
+            break;
         case BCFVer_2_1:
             m_VersionId = "2.1";
             break;

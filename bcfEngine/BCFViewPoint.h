@@ -25,9 +25,9 @@ public:
     bool        GetSpaceBoundariesVisible() { return StrToBool(m_SpaceBoundariesVisible); }
     bool        GetOpeningsVisible() { return StrToBool(m_OpeningsVisible); }
     BCFCamera   GetCameraType() { return m_cameraType; }
-    bool        GetCameraViewPoint(BCFPoint& pt) { return GetPoint(m_CameraViewPoint, pt); }
-    bool        GetCameraDirection(BCFPoint& pt) { return GetPoint(m_CameraDirection, pt); }
-    bool        GetCameraUpVector(BCFPoint& pt) { return GetPoint(m_CameraUpVector, pt); }
+    bool        GetCameraViewPoint(BCFPoint& pt) { return m_CameraViewPoint.GetPoint(pt); }
+    bool        GetCameraDirection(BCFPoint& pt) { return m_CameraDirection.GetPoint(pt); }
+    bool        GetCameraUpVector(BCFPoint& pt) { return m_CameraUpVector.GetPoint(pt); }
     double      GetViewToWorldScale() { return atof(m_ViewToWorldScale.c_str()); }
     double      GetFieldOfView() { return atof(m_FieldOfView.c_str()); }
     double      GetAspectRatio() { return atof(m_AspectRatio.c_str()); }
@@ -38,9 +38,9 @@ public:
     bool        SetSpaceBoundariesVisible(bool val) { return BoolToStr(val, m_SpaceBoundariesVisible); }
     bool        SetOpeningsVisible(bool val) { return BoolToStr(val, m_OpeningsVisible); }
     bool        SetCameraType(BCFCamera val) { m_cameraType = val; return true; }
-    bool        SetCameraViewPoint(BCFPoint* pt) { return SetPoint(pt, m_CameraViewPoint); }
-    bool        SetCameraDirection(BCFPoint* pt) { return SetPoint(pt, m_CameraDirection); }
-    bool        SetCameraUpVector(BCFPoint* pt) { return SetPoint(pt, m_CameraUpVector); }
+    bool        SetCameraViewPoint(BCFPoint* pt) { return m_CameraViewPoint.SetPoint(pt); }
+    bool        SetCameraDirection(BCFPoint* pt) { return m_CameraDirection.SetPoint(pt); }
+    bool        SetCameraUpVector(BCFPoint* pt) { return m_CameraUpVector.SetPoint(pt); }
     bool        SetViewToWorldScale(double val) { return RealToStr(val,m_ViewToWorldScale); }
     bool        SetFieldOfView(double val) { return RealToStr (val, m_FieldOfView); }
     bool        SetAspectRatio(double val) { return RealToStr (val, m_AspectRatio); }
@@ -66,6 +66,7 @@ public:
 public:
     void Read(_xml::_element& elem, const std::string& folder);
     void Write(_xml_writer& writer, const std::string& folder, const char* tag);
+    bool Validate(bool fix);
 
 private:
     //XMLFile implementation
@@ -73,7 +74,7 @@ private:
     virtual const char* XSDName() override { return "visinfo.xsd"; }
     virtual const char* RootElemName() override { return "VisualizationInfo"; }
     virtual void ReadRoot(_xml::_element& elem, const std::string& folder) override;
-    virtual void UpgradeReadVersion(const std::string& folder) override;
+    virtual void AfterRead(const std::string& folder) override;
     virtual void WriteRootElem(_xml_writer& writer, const std::string& folder, Attributes& attr) override;
     virtual void WriteRootContent(_xml_writer& writer, const std::string& folder) override;
 

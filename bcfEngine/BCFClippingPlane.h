@@ -12,13 +12,14 @@ public:
 
     void Read(_xml::_element& elem, const std::string& folder);
     void Write(_xml_writer& writer, const std::string& folder, const char* tag);
+    bool Validate(bool fix);
 
 public:
-    bool GetLocation(BCFPoint& pt) { return GetPoint(m_Location, pt); }
-    bool GetDirection(BCFPoint& pt) { return GetPoint(m_Direction, pt); }
+    bool GetLocation(BCFPoint& pt) { return m_Location.GetPoint(pt); }
+    bool GetDirection(BCFPoint& pt) { return m_Direction.GetPoint(pt); }
 
-    bool SetLocation(BCFPoint* pt) { return SetPoint(pt, m_Location); }
-    bool SetDirection(BCFPoint* pt) { return SetPoint(pt, m_Direction); }
+    bool SetLocation(BCFPoint* pt) { return m_Location.SetPoint(pt); }
+    bool SetDirection(BCFPoint* pt) { return m_Direction.SetPoint(pt); }
 
 private:
     XMLPoint m_Location;

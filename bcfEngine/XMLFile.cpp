@@ -34,7 +34,7 @@ bool XMLFile::ReadFile(const std::string& bcfFolder)
     }
 
     if (ok) {
-        UpgradeReadVersion(bcfFolder);
+        AfterRead(bcfFolder);
     }
 
     return ok;
@@ -111,6 +111,14 @@ XMLText::XMLText(BCFTopic& topic, ListOfBCFObjects* parentList)
 void XMLText::Read(_xml::_element& elem, const std::string&) 
 { 
     m_str.assign(elem.getContent()); 
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool XMLText::Validate(bool)
+{
+    return true;
 }
 
 /// <summary>

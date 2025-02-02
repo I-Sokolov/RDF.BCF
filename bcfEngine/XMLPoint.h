@@ -1,11 +1,12 @@
 #pragma once
 
 #include "bcfTypes.h"
+#include "BCFObject.h"
 
-struct XMLPoint
+struct XMLPoint : public BCFObject
 {
 public:
-    XMLPoint(BCFProject& project) : m_project(project), m_X(XYZ[0]), m_Y(XYZ[1]), m_Z(XYZ[2]) {}
+    XMLPoint(BCFProject& project);
 
     void Read(_xml::_element& elem, const std::string& folder);
     void Write(_xml_writer& writer, const std::string& folder, const char* tag);
@@ -14,10 +15,12 @@ public:
 
     bool IsSet() { return !m_X.empty() && !m_Y.empty() && !m_Z.empty(); }
 
-    std::string XYZ[3];
+    bool GetPoint(BCFPoint& bcfpt);
+    bool SetPoint(const BCFPoint* bcfpt);
+    void SetPoint(double x, double y, double z);
 
 private:
-    BCFProject& m_project;
+    std::string XYZ[3];
 
     std::string& m_X;
     std::string& m_Y;

@@ -66,12 +66,22 @@ public:
         return (std::list<Item*>&) m_items;
     }
 
-    void UpgradeReadVersion(const std::string& folder)
+    void AfterRead(const std::string& folder)
     {
         std::list<Item*> items = Items();//list copy list is intentional, next processing may remove components
         for (auto item : items) {
-            item->UpgradeReadVersion(folder);
+            item->AfterRead(folder);
         }
+    }
+
+    bool Validate(bool fix)
+    {
+        bool valid = true;
+        std::list<Item*> items = Items();//list copy list is intentional, next processing may remove components
+        for (auto item : items) {
+            valid = item->Validate(fix) && valid;
+        }
+        return valid;
     }
 };
 

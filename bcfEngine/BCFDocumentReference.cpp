@@ -32,13 +32,34 @@ void BCFDocumentReference::Read(_xml::_element& elem, const std::string& folder)
     CHILDREN_END
 }
 
+/// <summary>
+/// 
+/// </summary>
+void BCFDocumentReference::AfterRead(const std::string& folder)
+{
+    if (Project().GetVersion() < BCFVer_3_0) {
+
+        if (StrToBool(m_isExternal)) {
+            SetFilePath(m_ReferencedDocument.c_str(), true);
+        }
+        else {
+            std::string path(folder);
+            FileSystem::AddPath(path, m_ReferencedDocument.c_str());
+            SetFilePath(path.c_str(), false);
+        }
+    }
+}
 
 /// <summary>
 /// 
 /// </summary>
-void BCFDocumentReference::Write(_xml_writer& writer, const std::string& folder, const char* tag) 
-{ 
-    assert(0 == strcmp(tag, "DocumentReference"));
+bool BCFDocumentReference::Validate(bool fix)
+{
+    if (m_Guid.IsEmpty()) {
+        m_Guid.AssignNew();
+    }
+
+    bool valid = true;
 
     if (m_DocumentGuid.empty()) { //mutually exclusive
         REQUIRED_PROP(Url);
@@ -46,6 +67,21 @@ void BCFDocumentReference::Write(_xml_writer& writer, const std::string& folder,
     else {
         REQUIRED(Url, m_Url.empty());
     }
+
+    if (!valid && fix) {
+        Remove();
+        return true;
+    }
+
+    return valid;
+}
+
+/// <summary>
+/// 
+/// </summary>
+void BCFDocumentReference::Write(_xml_writer& writer, const std::string& folder, const char* tag) 
+{ 
+    assert(0 == strcmp(tag, "DocumentReference"));
 
     XMLFile::Attributes attr;
     ATTR_ADD(Guid);
@@ -102,24 +138,3 @@ bool BCFDocumentReference::SetFilePath(const char* filePath, bool isExternal)
     }
 }
 
-/// <summary>
-/// 
-/// </summary>
-void BCFDocumentReference::UpgradeReadVersion(const std::string& folder)
-{
-    if (Project().GetVersion() < BCFVer_3_0) {
-        
-        if (m_Guid.IsEmpty()) {
-            m_Guid.AssignNew();
-        }
-
-        if (StrToBool(m_isExternal)) {
-            SetFilePath(m_ReferencedDocument.c_str(), true);
-        }
-        else {
-            std::string path(folder);
-            FileSystem::AddPath(path, m_ReferencedDocument.c_str());
-            SetFilePath(path.c_str(), false);
-        }
-    }
-}

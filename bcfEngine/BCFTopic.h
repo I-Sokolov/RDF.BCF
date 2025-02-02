@@ -69,13 +69,15 @@ public:
 
     bool UpdateAuthor();
 
+    bool Validate(bool fix);
+
 private:
     //XMLFile implementation
     virtual const char* XMLFileName() override { return "markup.bcf"; }
     virtual const char* XSDName() override { return "markup.xsd"; }
     virtual const char* RootElemName() override { return "Markup"; }
     virtual void ReadRoot(_xml::_element& elem, const std::string& folder) override;
-    virtual void UpgradeReadVersion(const std::string& folder) override;
+    virtual void AfterRead(const std::string& folder) override;
     virtual void WriteRootContent(_xml_writer& writer, const std::string& folder) override;
 
 private:

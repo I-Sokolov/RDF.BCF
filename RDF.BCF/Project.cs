@@ -22,9 +22,9 @@
         /// Reads BCF data from given BCF XML file.
         /// Data can be modified after reading.
         /// </summary>
-        public bool FileRead(string filePath)
+        public bool FileRead(string filePath, bool autofix)
         {
-            return BCF.Interop.FileRead(m_handle, filePath);
+            return BCF.Interop.FileRead(m_handle, filePath, autofix);
         }
 
         /// <summary>

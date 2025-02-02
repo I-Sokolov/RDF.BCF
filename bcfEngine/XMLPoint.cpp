@@ -6,6 +6,13 @@
 /// <summary>
 /// 
 /// </summary>
+XMLPoint::XMLPoint(BCFProject& project) 
+    : BCFObject(project, NULL)
+    , m_X(XYZ[0]), m_Y(XYZ[1]), m_Z(XYZ[2]) {}
+
+/// <summary>
+/// 
+/// </summary>
 void XMLPoint::Read(_xml::_element& elem, const std::string&)
 {
     CHILDREN_START
@@ -31,3 +38,41 @@ void XMLPoint::Write(_xml_writer& writer, const std::string& folder, const char*
     writer.writeEndTag(tag);
 }
 
+/// <summary>
+/// 
+/// </summary>
+bool XMLPoint::GetPoint(BCFPoint& bcfpt)
+{
+    for (int i = 0; i < 3; i++) {
+        bcfpt.xyz[i] = atof(XYZ[i].c_str());
+    }
+
+    return true;
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool XMLPoint::SetPoint(const BCFPoint* bcfpt)
+{
+    if (bcfpt) {
+        for (int i = 0; i < 3; i++) {
+            RealToStr(bcfpt->xyz[i], XYZ[i]);
+        }
+        return true;
+    }
+    else {
+        m_project.log().add(Log::Level::error, "NULL argument");
+        return false;
+    }
+}
+
+/// <summary>
+/// 
+/// </summary>
+void XMLPoint::SetPoint(double x, double y, double z)
+{
+    RealToStr(x, m_X);
+    RealToStr(y, m_Y);
+    RealToStr(z, m_Z);
+}

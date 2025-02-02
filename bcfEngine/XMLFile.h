@@ -37,7 +37,7 @@ protected:
     virtual const char* XSDName() = NULL;
     virtual const char* RootElemName() = NULL;
     virtual void ReadRoot(_xml::_element& elem, const std::string& folder) = NULL;    
-    virtual void UpgradeReadVersion(const std::string& folder) = NULL;
+    virtual void AfterRead(const std::string& folder) = NULL;
     virtual void WriteRootElem(_xml_writer& writer, const std::string& folder, Attributes& attr);
     virtual void WriteRootContent(_xml_writer& writer, const std::string& folder) = NULL;
 
@@ -54,6 +54,7 @@ public:
     
     void Read(_xml::_element& elem, const std::string&);
     void Write(_xml_writer& writer, const std::string&, const char* tag);
+    bool Validate(bool fix);
 
     std::string& string() { return m_str; }
 
@@ -68,7 +69,7 @@ private:
 #define REQUIRED(prop, condition)                                               \
     if (!(condition)) {                                                         \
         log().add(Log::Level::error, "Missed property or wrong value", #prop);  \
-        throw std::exception();                                                 \
+        valid = false;                                                          \
     }
 
 #define REQUIRED_PROP(prop) REQUIRED(prop, !m_##prop.empty())

@@ -28,6 +28,26 @@ void BCFLine::Read(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
+bool BCFLine::Validate(bool fix)
+{
+    if (fix) {
+        if (!m_StartPoint.IsSet()) {
+            return Remove();
+        }
+        if (!m_EndPoint.IsSet()) {
+            return Remove();
+        }
+    }
+
+    bool valid = true;
+    REQUIRED(StartPoint, m_StartPoint.IsSet());
+    REQUIRED(EndPoint, m_EndPoint.IsSet());
+    return valid;
+}
+
+/// <summary>
+/// 
+/// </summary>
 void BCFLine::Write(_xml_writer& writer, const std::string& folder, const char* tag)
 {
     XMLFile::Attributes attr;

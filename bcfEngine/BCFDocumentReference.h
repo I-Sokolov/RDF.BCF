@@ -12,7 +12,8 @@ public:
 
     void Read(_xml::_element& elem, const std::string& folder);
     void Write(_xml_writer& writer, const std::string& folder, const char* tag);
-    void UpgradeReadVersion(const std::string& folder);
+    void AfterRead(const std::string& folder);
+    bool Validate(bool fix);
 
 public:
     const char* GetGuid() { return m_Guid.c_str(); }

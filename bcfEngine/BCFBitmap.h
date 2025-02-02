@@ -12,21 +12,22 @@ public:
 
     void Read(_xml::_element& elem, const std::string& folder);
     void Write(_xml_writer& writer, const std::string& folder, const char* tag);
-    void UpgradeReadVersion(const std::string& folder);
+    void AfterRead(const std::string& folder);
+    bool Validate(bool fix);
 
 public:
     BCFBitmapFormat GetFormat();
     const char* GetReference() { return m_Reference.c_str(); }
-    bool        GetLocation(BCFPoint& pt) { return GetPoint(m_Location, pt); }
-    bool        GetNormal(BCFPoint& pt) { return GetPoint(m_Normal, pt); }
-    bool        GetUp(BCFPoint& pt) { return GetPoint(m_Up, pt); }
+    bool        GetLocation(BCFPoint& pt) { return m_Location.GetPoint(pt); }
+    bool        GetNormal(BCFPoint& pt) { return m_Normal.GetPoint(pt); }
+    bool        GetUp(BCFPoint& pt) { return m_Up.GetPoint(pt); }
     double      GetHeight() { return atof(m_Height.c_str()); }
 
     bool SetFormat(BCFBitmapFormat val);
     bool SetReference(const char* val);
-    bool SetLocation(BCFPoint* pt) { return SetPoint(pt, m_Location); }
-    bool SetNormal(BCFPoint* pt) { return SetPoint(pt, m_Normal); }
-    bool SetUp(BCFPoint* pt) { return SetPoint(pt, m_Up); }
+    bool SetLocation(BCFPoint* pt) { return m_Location.SetPoint(pt); }
+    bool SetNormal(BCFPoint* pt) { return m_Normal.SetPoint(pt); }
+    bool SetUp(BCFPoint* pt) { return m_Up.SetPoint(pt); }
     bool SetHeight(double val) { return RealToStr(val, m_Height); }
 
 private:

@@ -46,28 +46,65 @@ void BCFTopic::ReadRoot(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-void BCFTopic::UpgradeReadVersion(const std::string& folder)
+void BCFTopic::AfterRead(const std::string& folder)
 {
-    auto NOT_SET = "Not set";
+    m_Comments.AfterRead(folder);
+    m_DocumentReferences.AfterRead(folder);
+}
 
-    if (Project().GetVersion() < BCFVer_3_0) {
+/// <summary>
+/// 
+/// </summary>
+bool BCFTopic::Validate(bool fix)
+{
+    if (fix) {
+        auto NOT_SET = "Not set";
+
+        if (m_Guid.IsEmpty()) {
+            m_Guid.AssignNew();
+        }
 
         if (m_TopicType.empty()) {
             Project().GetExtensions().AddElement(BCFTopicTypes, NOT_SET);
             m_TopicType.assign(NOT_SET);
         }
+
         if (m_TopicStatus.empty()) {
             Project().GetExtensions().AddElement(BCFTopicStatuses, NOT_SET);
             m_TopicStatus.assign(NOT_SET);
         }
+
         if (m_CreationAuthor.empty()) {
             Project().GetExtensions().AddElement(BCFUsers, NOT_SET);
             m_CreationAuthor.assign(NOT_SET);
         }
+
+        if (m_CreationDate.empty()) {
+            m_CreationDate = GetCurrentDate();
+        }
+
+        if (m_Title.empty()) {
+            m_Title.assign(NOT_SET);
+        }
     }
 
-    m_Comments.UpgradeReadVersion(folder);
-    m_DocumentReferences.UpgradeReadVersion(folder);
+    //
+    bool valid = true;
+
+    REQUIRED_PROP(TopicType);
+    REQUIRED_PROP(TopicStatus);
+    REQUIRED_PROP(Title);
+
+    valid = m_Files.Validate(fix) && valid;
+    valid = m_ReferenceLinks.Validate(fix) && valid;
+    valid = m_Labels.Validate(fix) && valid;
+    valid = m_BimSnippets.Validate(fix) && valid;
+    valid = m_DocumentReferences.Validate(fix) && valid;
+    valid = m_RelatedTopics.Validate(fix) && valid;
+    valid = m_Comments.Validate(fix) && valid;
+    valid = m_Viewpoints.Validate(fix) && valid;
+
+    return valid;
 }
 
 /// <summary>
@@ -75,10 +112,6 @@ void BCFTopic::UpgradeReadVersion(const std::string& folder)
 /// </summary>
 void BCFTopic::WriteRootContent(_xml_writer& writer, const std::string& folder)
 {
-    REQUIRED_PROP(TopicType);
-    REQUIRED_PROP(TopicStatus);
-    REQUIRED_PROP(Title);
-
     Attributes attr;
 
     WRITE_ELEM(Header);

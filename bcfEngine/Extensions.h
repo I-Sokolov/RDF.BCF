@@ -14,6 +14,7 @@ public:
 public:
     bool CheckElement(BCFEnumeration enumeration, const char* element);
     void ReadExtensionSchema(_xml::_element& elem, const std::string& folder); //v2.1
+    bool Validate(bool) { return true; }
 
 private:
     //XMLFile implementation
@@ -21,7 +22,7 @@ private:
     virtual const char* XSDName() override { return "extensions.xsd"; }
     virtual const char* RootElemName() override { return "Extensions"; }
     virtual void ReadRoot(_xml::_element& elem, const std::string& folder) override;
-    virtual void UpgradeReadVersion(const std::string&) override  {}
+    virtual void AfterRead(const std::string&) override  {}
     virtual void WriteRootContent(_xml_writer& writer, const std::string& folder) override;
 
 private:

@@ -65,12 +65,27 @@ void BCFComment::Read(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-void BCFComment::Write(_xml_writer& writer, const std::string& folder, const char* /*tag*/)
+bool BCFComment::Validate(bool fix)
 {
+    bool valid = true;
+
     if (!*m_Viewpoint.GetGuid()) {
         REQUIRED_PROP(Comment);
     }
 
+    if (!valid && fix) {
+        Remove();
+        return true;
+    }
+
+    return valid;
+}
+
+/// <summary>
+/// 
+/// </summary>
+void BCFComment::Write(_xml_writer& writer, const std::string& folder, const char* /*tag*/)
+{
     XMLFile::Attributes attr;
     ATTR_ADD(Guid);
 
@@ -156,7 +171,7 @@ bool BCFComment::UpdateAuthor()
 /// <summary>
 /// 
 /// </summary>
-void BCFComment::UpgradeReadVersion(const std::string&)
+void BCFComment::AfterRead(const std::string&)
 {
     if (Project().GetVersion() < BCFVer_3_0) {
         if (!*m_Viewpoint.GetGuid()) { //empty comment appeared from a file

@@ -29,6 +29,26 @@ void BCFClippingPlane::Read(_xml::_element & elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
+bool BCFClippingPlane::Validate(bool fix)
+{
+    if (fix) {
+        if (!m_Direction.IsSet()) {
+            return Remove();
+        }
+        if (!m_Location.IsSet()) {
+            return Remove();
+        }
+    }
+
+    bool valid = true;
+    REQUIRED(Direction, m_Direction.IsSet());
+    REQUIRED(Location, m_Direction.IsSet());
+    return valid;
+}
+
+/// <summary>
+/// 
+/// </summary>
 void BCFClippingPlane::Write(_xml_writer& writer, const std::string& folder, const char* tag) 
 {
     XMLFile::Attributes attr;

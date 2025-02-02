@@ -28,7 +28,7 @@ extern "C" {
     /// <summary>
     /// 
     /// </summary>
-    RDFBCF_EXPORT bool bcfFileRead(BCFProject* project, const char* bcfFilePath);
+    RDFBCF_EXPORT bool bcfFileRead(BCFProject* project, const char* bcfFilePath, bool autofix);
 
     /// <summary>
     /// 

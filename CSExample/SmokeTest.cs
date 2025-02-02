@@ -74,7 +74,7 @@ namespace CSExample
                 ASSERT(errors.Length == 0);
 
                 Console.WriteLine("Expected errors....");
-                var res = bcf.FileRead("J:\\NotExist.bcf");
+                var res = bcf.FileRead("J:\\NotExist.bcf", false);
                 ASSERT(!res);
 
                 errors = bcf.GetErrors(false);
@@ -117,7 +117,7 @@ namespace CSExample
         {
             using (var bcf = new RDF.BCF.Project())
             {
-                var res = bcf.FileRead("..\\TestCases\\кИрилица.bcf");
+                var res = bcf.FileRead("..\\TestCases\\кИрилица.bcf", false);
                 ASSERT(res);
 
                 var name = bcf.Name;
@@ -134,7 +134,7 @@ namespace CSExample
 
             using (var bcf = new Project())
             {
-                var res = bcf.FileRead("Кирилица.bcf");
+                var res = bcf.FileRead("Кирилица.bcf", false);
                 ASSERT(res);
 
                 CheckExtensions(bcf);
@@ -303,7 +303,7 @@ namespace CSExample
 
             using (var bcf = new RDF.BCF.Project())
             {
-                var ok = bcf.FileRead("TopicsTest.bcf");
+                var ok = bcf.FileRead("TopicsTest.bcf", false);
                 ASSERT(ok);
 
                 var i = CheckTopicAttributes(bcf, true);
@@ -320,7 +320,7 @@ namespace CSExample
 
             using (var bcf = new RDF.BCF.Project())
             {
-                var ok = bcf.FileRead("TopicsTest2.bcf");
+                var ok = bcf.FileRead("TopicsTest2.bcf", false);
                 ASSERT(ok);
 
                 CheckTopicAttributes(bcf, false);
@@ -526,7 +526,7 @@ namespace CSExample
 
             using (var bcf = new Project())
             {
-                bool ok = bcf.FileRead("TestCommentsVP.bcf");
+                bool ok = bcf.FileRead("TestCommentsVP.bcf", false);
                 ASSERT(ok);
 
                 CheckCommentAndViewPoints(bcf, true, false);
@@ -544,7 +544,7 @@ namespace CSExample
 
             using (var bcf = new Project())
             {
-                bool ok = bcf.FileRead("TestCommentsVP2.bcf");
+                bool ok = bcf.FileRead("TestCommentsVP2.bcf", false);
                 ASSERT(ok);
 
                 CheckCommentAndViewPoints(bcf, true, true);
@@ -1063,7 +1063,7 @@ namespace CSExample
 
             using (var project = new Project("ddd"))
             {
-                var ok = project.FileRead("TestListAttr.bcf");
+                var ok = project.FileRead("TestListAttr.bcf", false);
                 ASSERT(ok);
 
                 CheckTopicLists(project, 3, 7);

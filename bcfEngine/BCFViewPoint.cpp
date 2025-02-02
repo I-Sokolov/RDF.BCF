@@ -55,6 +55,60 @@ void BCFViewPoint::Read(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
+bool BCFViewPoint::Validate(bool fix)
+{
+    if (fix) {
+       
+        if (!m_CameraViewPoint.IsSet())
+            m_CameraViewPoint.SetPoint(0, 0, 0);
+        if (!m_CameraDirection.IsSet())
+            m_CameraDirection.SetPoint(1, 0, 0);
+        if (!m_CameraUpVector.IsSet())
+            m_CameraUpVector.SetPoint(0, 0, 1);
+        if (GetAspectRatio() < 1e-8)
+            SetAspectRatio(1);
+        if (GetCameraType() == BCFCameraPerspective) {
+            if (GetFieldOfView() < 1e-8 || GetFieldOfView() > 180 - 1e-8)
+                SetFieldOfView(90);
+        }
+        else {
+            if (GetViewToWorldScale() < 1e-8)
+                SetViewToWorldScale(1);
+        }
+    }
+
+    bool valid = true;
+
+    valid = m_Selection.Validate(fix) && valid;
+    valid = m_Exceptions.Validate(fix) && valid;
+    valid = m_Coloring.Validate(fix) && valid;
+    valid = m_Lines.Validate(fix) && valid;
+    valid = m_ClippingPlanes.Validate(fix) && valid;
+    valid = m_Bitmaps.Validate(fix) && valid;
+
+    REQUIRED(CameraViewPoint, m_CameraViewPoint.IsSet());
+    REQUIRED(CameraDirection, m_CameraDirection.IsSet());
+    REQUIRED(CameraUpVector, m_CameraUpVector.IsSet());
+    REQUIRED(AspectRatio, GetAspectRatio() > 0);
+
+    REQUIRED(CameraViewPoint, m_CameraViewPoint.IsSet());
+    REQUIRED(CameraDirection, m_CameraDirection.IsSet());
+    REQUIRED(CameraUpVector, m_CameraUpVector.IsSet());
+    REQUIRED(AspectRatio, GetAspectRatio() > 0);
+
+    if (GetCameraType() == BCFCameraPerspective) {
+        REQUIRED(FieldOfView, GetFieldOfView() > 0 && GetFieldOfView() < 180);
+    }
+    else {
+        REQUIRED(ViewToWorldScale, GetViewToWorldScale() != 0);
+    }
+
+    return valid;
+}
+
+/// <summary>
+/// 
+/// </summary>
 void BCFViewPoint::Write(_xml_writer& writer, const std::string& folder, const char* /*tag*/)
 {
     m_Snapshot = CopyToRelative(m_Snapshot, folder, NULL);
@@ -228,12 +282,6 @@ void  BCFViewPoint::Read_PerspectiveCamera(_xml::_element& elem, const std::stri
 /// </summary>
 void BCFViewPoint::Write_PerspectiveCamera(_xml_writer& writer, const std::string& folder)
 {
-    REQUIRED(CameraViewPoint, m_CameraViewPoint.IsSet());
-    REQUIRED(CameraDirection, m_CameraDirection.IsSet());
-    REQUIRED(CameraUpVector, m_CameraUpVector.IsSet());
-    REQUIRED(FieldOfView, GetFieldOfView() > 0 && GetFieldOfView() < 180);
-    REQUIRED(AspectRatio, GetAspectRatio() > 0);
-
     WRITE_MEMBER(CameraViewPoint);
     WRITE_MEMBER(CameraDirection);
     WRITE_MEMBER(CameraUpVector);
@@ -262,12 +310,6 @@ void  BCFViewPoint::Read_OrthogonalCamera(_xml::_element& elem, const std::strin
 /// </summary>
 void BCFViewPoint::Write_OrthogonalCamera(_xml_writer& writer, const std::string& folder)
 {
-    REQUIRED(CameraViewPoint, m_CameraViewPoint.IsSet());
-    REQUIRED(CameraDirection, m_CameraDirection.IsSet());
-    REQUIRED(CameraUpVector, m_CameraUpVector.IsSet());
-    REQUIRED(ViewToWorldScale, GetViewToWorldScale() != 0);
-    REQUIRED(AspectRatio, GetAspectRatio() > 0);
-
     WRITE_MEMBER(CameraViewPoint);
     WRITE_MEMBER(CameraDirection);
     WRITE_MEMBER(CameraUpVector);
@@ -439,7 +481,7 @@ BCFClippingPlane* BCFViewPoint::ClippingPlaneIterate(BCFClippingPlane* prev)
 /// <summary>
 /// 
 /// </summary>
-void BCFViewPoint::UpgradeReadVersion(const std::string& folder)
+void BCFViewPoint::AfterRead(const std::string& folder)
 {
     if (Project().GetVersion() < BCFVer_3_0) {
         if (m_AspectRatio.empty()) {
@@ -447,6 +489,6 @@ void BCFViewPoint::UpgradeReadVersion(const std::string& folder)
         }
     }
 
-    m_Bitmaps.UpgradeReadVersion(folder);
-    m_Selection.UpgradeReadVersion(folder);
+    m_Bitmaps.AfterRead(folder);
+    m_Selection.AfterRead(folder);
 }

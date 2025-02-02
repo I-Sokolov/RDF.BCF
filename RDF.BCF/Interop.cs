@@ -92,7 +92,7 @@ namespace RDF.BCF
 
         [DllImport(DLL, EntryPoint = "bcfFileRead")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool FileRead(IntPtr project, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string filePath);
+        public static extern bool FileRead(IntPtr project, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string filePath, [param: MarshalAs(UnmanagedType.U1)] bool autofix);
 
         [DllImport(DLL, EntryPoint = "bcfFileWrite")]
         [return: MarshalAs(UnmanagedType.U1)]

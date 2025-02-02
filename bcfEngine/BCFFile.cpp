@@ -44,6 +44,14 @@ void BCFFile::Read(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
+bool BCFFile::Validate(bool)
+{
+    return true;
+}
+
+/// <summary>
+/// 
+/// </summary>
 void BCFFile::Write(_xml_writer& writer, const std::string& folder, const char* /*tag*/)
 {
     if (!GetIsExternal()) {

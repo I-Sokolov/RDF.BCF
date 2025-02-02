@@ -78,35 +78,6 @@ bool BCFObject::RealToStr(double val, std::string& prop)
 /// <summary>
 /// 
 /// </summary>
-bool BCFObject::GetPoint(const XMLPoint& xmlpt, BCFPoint& bcfpt)
-{
-    for (int i = 0; i < 3; i++) {
-        bcfpt.xyz[i] = atof(xmlpt.XYZ[i].c_str());
-    }
-
-    return true;
-}
-
-/// <summary>
-/// 
-/// </summary>
-bool BCFObject::SetPoint(const BCFPoint* bcfpt, XMLPoint& xmlpt)
-{
-    if (bcfpt) {
-        for (int i = 0; i < 3; i++) {
-            RealToStr(bcfpt->xyz[i], xmlpt.XYZ[i]);
-        }
-        return true;
-    }
-    else {
-        m_project.log().add(Log::Level::error, "NULL argument");
-        return false;
-    }
-}
-
-/// <summary>
-/// 
-/// </summary>
 bool BCFObject::UpdateAuthor(std::string& author, std::string& date)
 {
     const char* user = Project().GetAuthor();

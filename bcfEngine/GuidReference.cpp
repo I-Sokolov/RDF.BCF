@@ -26,6 +26,14 @@ void GuidReference::Read(_xml::_element& elem, const std::string& /*folder*/)
 /// <summary>
 /// 
 /// </summary>
+bool GuidReference::Validate(bool)
+{
+    return true;
+}
+
+/// <summary>
+/// 
+/// </summary>
 void GuidReference::Write(_xml_writer& writer, const std::string&, const char* tag)
 {
     if (!m_Guid.empty()) {

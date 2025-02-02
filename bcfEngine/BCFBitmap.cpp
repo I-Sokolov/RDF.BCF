@@ -39,8 +39,10 @@ void BCFBitmap::Read(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-void BCFBitmap::Write(_xml_writer& writer, const std::string& folder, const char* tag)
+bool BCFBitmap::Validate(bool fix)
 {
+    //
+    bool valid = true;
     REQUIRED_PROP(Format);
     REQUIRED_PROP(Reference);
     REQUIRED(Location, m_Location.IsSet());
@@ -48,6 +50,18 @@ void BCFBitmap::Write(_xml_writer& writer, const std::string& folder, const char
     REQUIRED(Up, m_Up.IsSet());
     REQUIRED_PROP(Height);
 
+    if (fix && !valid) {
+        Remove();
+        return true;
+    }
+    return valid;
+}
+
+/// <summary>
+/// 
+/// </summary>
+void BCFBitmap::Write(_xml_writer& writer, const std::string& folder, const char* tag)
+{
     XMLFile::Attributes attr;
     XMLFile::ElemTag _(writer, tag, attr);
 
@@ -112,7 +126,7 @@ bool BCFBitmap::SetReference(const char* val)
 /// <summary>
 /// 
 /// </summary>
-void BCFBitmap::UpgradeReadVersion(const std::string&)
+void BCFBitmap::AfterRead(const std::string&)
 {
     if (Project().GetVersion() < BCFVer_3_0) {
         std::transform(m_Format.begin(), m_Format.end(), m_Format.begin(), [](unsigned char c) { return std::tolower(c); });

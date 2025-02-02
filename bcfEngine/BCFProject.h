@@ -26,7 +26,7 @@ private:
     ~BCFProject();
 
 public:
-    bool Read(const char* bcfFilePath);
+    bool Read(const char* bcfFilePath, bool autofix);
     bool Write(const char* bcfFilePath, BCFVersion version);
 
     BCFVersion GetVersion() { return m_version.Get(); }
@@ -50,6 +50,7 @@ public: //internal
     Log& log() { return m_log; }
 
 private:
+    bool Validate(bool fix);
     bool ReadTopics(const std::string& bcfFolder);
     bool WriteTopics(const std::string& bcfFolder);
     bool CleanWorkingFolders(bool keepLast = false);

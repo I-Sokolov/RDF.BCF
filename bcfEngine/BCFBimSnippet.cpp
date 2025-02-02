@@ -41,13 +41,35 @@ void BCFBimSnippet::Read(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-void BCFBimSnippet::Write(_xml_writer& writer, const std::string& folder, const char* tag)
+bool BCFBimSnippet::Validate(bool fix)
 {
+    if (fix) {
+        if (m_SnippetType.empty()) {
+            auto NOT_SET = "Not set";
+            Project().GetExtensions().AddElement(BCFSnippetTypes, NOT_SET);
+            m_SnippetType.assign(NOT_SET);
+        }
+    }
+
     //
+    bool valid = true;
     REQUIRED_PROP(SnippetType);
     REQUIRED_PROP(Reference);
     REQUIRED_PROP(ReferenceSchema);
 
+    if (!valid && fix) {
+        Remove();
+        return true;
+    }
+
+    return valid;
+}
+
+/// <summary>
+/// 
+/// </summary>
+void BCFBimSnippet::Write(_xml_writer& writer, const std::string& folder, const char* tag)
+{
     //
     if (!GetIsExternal()) {
         m_Reference = CopyToRelative(m_Reference, folder, NULL);

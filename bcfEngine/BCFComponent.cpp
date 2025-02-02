@@ -47,7 +47,7 @@ void BCFComponent::Read(_xml::_element& elem, const std::string&)
 /// <summary>
 /// 
 /// </summary>
-void BCFComponent::UpgradeReadVersion(const std::string&)
+void BCFComponent::AfterRead(const std::string&)
 {
     if (Project().GetVersion() < BCFVer_2_1) {
         assert(m_pViewPoint);
@@ -81,12 +81,27 @@ void BCFComponent::UpgradeReadVersion(const std::string&)
 /// <summary>
 /// 
 /// </summary>
-void BCFComponent::Write(_xml_writer& writer, const std::string& folder, const char* tag)
-{ 
+bool BCFComponent::Validate(bool fix)
+{
+    bool valid = true;
+
     if (m_AuthoringToolId.empty()) {
         REQUIRED_PROP(IfcGuid);
     }
 
+    if (!valid && fix) {
+        Remove();
+        return true;
+    }
+
+    return valid;
+}
+
+/// <summary>
+/// 
+/// </summary>
+void BCFComponent::Write(_xml_writer& writer, const std::string& folder, const char* tag)
+{ 
     XMLFile::Attributes attr;
     ATTR_ADD(IfcGuid);
 

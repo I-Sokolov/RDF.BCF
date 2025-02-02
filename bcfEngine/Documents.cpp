@@ -42,9 +42,16 @@ void Documents::Doc::Read(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-void Documents::UpgradeReadVersion(const std::string&)
+void Documents::AfterRead(const std::string&)
 {
+}
 
+/// <summary>
+/// 
+/// </summary>
+bool Documents::Validate(bool fix)
+{
+    return m_Documents.Validate(fix);
 }
 
 /// <summary>
@@ -171,6 +178,14 @@ void Documents::Doc::PrepareToWrite(const std::string& folder)
     if (!FileSystem::CopyFile(src_name.c_str(), dst_name.c_str(), log())) {
         throw std::exception();
     }
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool Documents::Doc::Validate(bool)
+{
+    return true;
 }
 
 
