@@ -3,6 +3,8 @@
 #include "GuidStr.h"
 #include "FileSystem.h"
 #include "BCFProject.h"
+#include "BCFTopic.h"
+#include "BCFDocumentReference.h"
 
 /// <summary>
 /// 
@@ -59,8 +61,43 @@ bool Documents::Validate(bool fix)
 /// </summary>
 void Documents::WriteRootContent(_xml_writer& writer, const std::string& folder)
 {
-    WRITE_LIST(Document);
+    MarkUsedDocuments();
+
+    Attributes attr;
+    ElemTag listtag(writer, "Documents", attr);
+
+    for (auto doc : m_Documents.Items()) {
+        if (doc->used) {
+            doc->Write(writer, folder, "Document");
+        }
+    }
 }
+
+/// <summary>
+/// 
+/// </summary>
+void Documents::MarkUsedDocuments()
+{
+    for (auto doc : m_Documents.Items()) {
+        doc->used = false;
+    }
+
+    BCFTopic* topic = NULL;
+    while (NULL != (topic = Project().TopicIterate(topic))) {        
+
+        BCFDocumentReference* ref = NULL;
+        while (NULL != (ref = topic->DocumentReferenceIterate(ref))) {
+
+            auto docGuid = ref->GetDocumentGuid();
+            if (*docGuid) {
+                if (auto doc = m_Documents.FindByGuid(docGuid)) {
+                    doc->used = true;
+                }
+            }
+        }
+    }
+}
+
 
 /// <summary>
 /// 
@@ -88,7 +125,7 @@ const char* Documents::GetFilePath(const char* guid)
         return doc->GetFilePath(true);
     }
     else {
-        log().add(Log::Level::error, "Invalid document guid");
+        log().add(Log::Level::error, "Invalid document guid %s", guid);
         return "";
     }
 }
@@ -99,6 +136,7 @@ const char* Documents::GetFilePath(const char* guid)
 Documents::Doc::Doc(Documents& documents, ListOf<Doc>* list, const char* filePath)
     : BCFObject(documents.Project(), list)
     , m_Guid(documents.Project(), filePath ? "" : NULL)
+    , used(true)
 {
     if (filePath && *filePath) {
         m_filePath = filePath;
@@ -185,6 +223,7 @@ void Documents::Doc::PrepareToWrite(const std::string& folder)
 /// </summary>
 bool Documents::Doc::Validate(bool)
 {
+    //here we can remove invalid link but need to remove references
     return true;
 }
 

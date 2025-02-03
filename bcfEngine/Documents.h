@@ -21,6 +21,8 @@ private:
     virtual void AfterRead(const std::string& folder) override;
     virtual void WriteRootContent(_xml_writer& writer, const std::string& folder) override;
 
+    void MarkUsedDocuments();
+
 private:
     struct Doc : public BCFObject
     {
@@ -33,6 +35,9 @@ private:
         void Read(_xml::_element& elem, const std::string& folder);
         void Write(_xml_writer& writer, const std::string& folder, const char* tag);
         bool Validate(bool fix);
+
+    public:
+        bool used;
 
     private:
         void GetReadWritePath(std::string& path, bool createFolder);

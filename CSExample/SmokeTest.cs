@@ -240,6 +240,10 @@ namespace CSExample
 
             if (topic != null)
             {
+                topic.SetRelatedTopics(items);
+
+                ASSERT(topic.GetRelatedTopics().Count==1);
+
                 ASSERT(topic.ServerAssignedId.Length == 0);
                 var stat = topic.TopicStatus;
                 ASSERT(stat == "Topic Status");
@@ -249,11 +253,17 @@ namespace CSExample
             items = bcf.GetTopics();
             ASSERT(items.Count() == 2);
             topic = items.First();
+            var topic2 = items[1];
+
+            ASSERT(topic2.GetRelatedTopics().Count == 1);
+            ASSERT(topic2.GetRelatedTopics()[0].Guid == topic.Guid);
 
             //
             // remove
             //
             topic.Remove();
+
+            ASSERT(topic2.GetRelatedTopics().Count == 0);
         }
 
         static void TestBitmaps(Project bcf)
@@ -571,6 +581,14 @@ namespace CSExample
 
             comment.Text = "Text comment";
             comment.ViewPoint = topic.GetViewPoints()[0];
+
+            //can't comment used viewpoint
+            var cnt = topic.GetViewPoints().Count;
+            var res = comment.ViewPoint.Remove();
+            ASSERT(!res);
+            var str = bcf.GetErrors();
+            ASSERT(str.Length != 0);
+            ASSERT(topic.GetViewPoints().Count == cnt);       
         }
 
         static void CheckCommentAndViewPoints(Project bcf, bool read, bool modified)

@@ -66,6 +66,8 @@ bool BCFDocumentReference::Validate(bool fix)
     }
     else {
         REQUIRED(Url, m_Url.empty());
+        auto path = GetFilePath();
+        REQUIRED(DocumentGuid, path && *path);
     }
 
     if (!valid && fix) {

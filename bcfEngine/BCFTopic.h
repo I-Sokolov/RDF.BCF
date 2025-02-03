@@ -71,7 +71,7 @@ public:
 
     bool Validate(bool fix);
 
-private:
+public:
     //XMLFile implementation
     virtual const char* XMLFileName() override { return "markup.bcf"; }
     virtual const char* XSDName() override { return "markup.xsd"; }
@@ -79,6 +79,8 @@ private:
     virtual void ReadRoot(_xml::_element& elem, const std::string& folder) override;
     virtual void AfterRead(const std::string& folder) override;
     virtual void WriteRootContent(_xml_writer& writer, const std::string& folder) override;
+    //BCFObject
+    virtual bool Remove() override;
 
 private:
     void Read_Header(_xml::_element& elem, const std::string& folder);

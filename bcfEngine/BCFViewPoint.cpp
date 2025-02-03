@@ -8,6 +8,7 @@
 #include "BCFBitmap.h"
 #include "BCFComponent.h"
 #include "FileSystem.h"
+#include "BCFComment.h"
 
 /// <summary>
 /// 
@@ -491,4 +492,22 @@ void BCFViewPoint::AfterRead(const std::string& folder)
 
     m_Bitmaps.AfterRead(folder);
     m_Selection.AfterRead(folder);
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFViewPoint::Remove()
+{
+    //check references
+    BCFComment* comment = NULL;
+    while (NULL != (comment = m_topic.CommentIterate(comment))) {
+        if (this == comment->GetViewPoint()) {
+            log().add(Log::Level::error, "ViewPoint is used", "Can not delete used viewpoint %s", m_Guid.c_str());
+            return false;
+        }
+    }
+
+    //
+    return __super::Remove();
 }

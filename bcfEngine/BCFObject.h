@@ -18,7 +18,7 @@ public:
     BCFObject(BCFProject& project, ListOfBCFObjects* parentList);
     virtual ~BCFObject();
    
-    bool Remove();
+    virtual bool Remove();
 
 public:
     BCFProject& Project() { return m_project; }

@@ -68,7 +68,7 @@ public:
     void Write(_xml_writer& writer, const std::string& folder, const char* tag);
     bool Validate(bool fix);
 
-private:
+public:
     //XMLFile implementation
     virtual const char* XMLFileName() override { return m_Viewpoint.c_str(); }
     virtual const char* XSDName() override { return "visinfo.xsd"; }
@@ -77,6 +77,8 @@ private:
     virtual void AfterRead(const std::string& folder) override;
     virtual void WriteRootElem(_xml_writer& writer, const std::string& folder, Attributes& attr) override;
     virtual void WriteRootContent(_xml_writer& writer, const std::string& folder) override;
+    //BCFObject
+    virtual bool Remove();
 
 private:
     void Read_Components(_xml::_element& elem, const std::string& folder);

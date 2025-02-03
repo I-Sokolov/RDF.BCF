@@ -23,6 +23,8 @@ public:
     bool SetFilePath(const char* filePath, bool isExternal);
     bool SetDescription(const char* val) { UNNULL; m_Description.assign(val); return true; }
 
+    const char* GetDocumentGuid() { return m_DocumentGuid.c_str(); }
+
 private:
     void Write_DocumentReference(_xml_writer& writer, const std::string& folder);
 

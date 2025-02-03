@@ -663,3 +663,29 @@ bool BCFTopic::RelatedTopicRemove(BCFTopic* topic)
     }
     return false;
 }
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFTopic::Remove()
+{
+    //remove references
+    BCFTopic* topic = NULL;
+    while (NULL != (topic = Project().TopicIterate(topic))) {
+
+        if (topic != this) {
+
+            BCFTopic* related = NULL;
+            while (NULL != (related = topic->RelatedTopicIterate(related))) {
+
+                if (related == this) {
+                    topic->RelatedTopicRemove(this);
+                    break;
+                }
+            }
+        }
+    }
+
+    //
+    return __super::Remove();
+}
