@@ -158,7 +158,7 @@
     <ClCompile Include="Implementation\bcfEngine.cpp" />
     <ClCompile Include="Implementation\File.cpp" />
     <ClCompile Include="Implementation\Line.cpp" />
-    <ClCompile Include="Implementation\Object.cpp" />
+    <ClCompile Include="Implementation\BCFObject.cpp" />
     <ClCompile Include="Implementation\Project.cpp" />
     <ClCompile Include="Implementation\Topic.cpp" />
     <ClCompile Include="Implementation\ViewPoint.cpp" />

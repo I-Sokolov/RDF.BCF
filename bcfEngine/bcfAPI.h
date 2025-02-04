@@ -4,6 +4,24 @@
 
 struct BCFExtensions;
 
+// These constants are stored in BCF structures after virtual function tables 
+// and can be used to runtime type checks
+#define BCFTypeCheck_Project             102030 
+#define BCFTypeCheck_Topic               102031
+#define BCFTypeCheck_File                102032
+#define BCFTypeCheck_ViewPoint           102033
+#define BCFTypeCheck_Comment             102034
+#define BCFTypeCheck_DocumentReference   102036
+#define BCFTypeCheck_Component           102037
+#define BCFTypeCheck_Coloring            102038
+#define BCFTypeCheck_Line                102039
+#define BCFTypeCheck_ClippingPlane       102040
+#define BCFTypeCheck_Bitmap              102041
+#define BCFTypeCheck_BimSnippet          102042
+#define BCFTypeCheck_Extensions          102043
+
+// Properties declaration macros
+//
 #define BCF_PROPERTY_RO(Type, PropName)               \
     virtual Type Get##PropName() = NULL;
 
@@ -22,6 +40,8 @@ struct BCFExtensions;
 /// </summary>
 struct BCFProject
 {
+    long TypeCheck = BCFTypeCheck_Project;
+
     static RDFBCF_EXPORT BCFProject* Create(const char* projectId = NULL);
 
     virtual bool            Delete(void) = NULL;
@@ -46,6 +66,8 @@ struct BCFProject
 /// </summary>
 struct BCFTopic
 {
+    long TypeCheck = BCFTypeCheck_Topic;
+
     BCF_PROPERTY_RO(const char*, Guid);
     BCF_PROPERTY_RW(const char*, ServerAssignedId);
     BCF_PROPERTY_RW(const char*, TopicStatus);
@@ -96,6 +118,8 @@ struct BCFTopic
 /// </summary>
 struct BCFComment
 {
+    long TypeCheck = BCFTypeCheck_Comment;
+
     BCF_PROPERTY_RO(const char*, Guid);
     BCF_PROPERTY_RO(const char*, Date);
     BCF_PROPERTY_RO(const char*, Author);
@@ -112,6 +136,8 @@ struct BCFComment
 /// </summary>
 struct BCFViewPoint
 {
+    long TypeCheck = BCFTypeCheck_ViewPoint;
+
     BCF_PROPERTY_RO(const char*, Guid);
     BCF_PROPERTY_RW(const char*, Snapshot);
     BCF_PROPERTY_RW(bool, DefaultVisibility);
@@ -152,6 +178,8 @@ struct BCFViewPoint
 /// </summary>
 struct BCFDocumentReference
 {
+    long TypeCheck = BCFTypeCheck_DocumentReference;
+
     BCF_PROPERTY_RO(const char*, Guid);
     BCF_PROPERTY_RO(const char*, DocumentGuid);
     BCF_PROPERTY_RO(const char*, FilePath);
@@ -167,6 +195,8 @@ struct BCFDocumentReference
 /// </summary>
 struct BCFComponent
 {
+    long TypeCheck = BCFTypeCheck_Component;
+
     BCF_PROPERTY_RW(const char*, IfcGuid);
     BCF_PROPERTY_RW(const char*, OriginatingSystem);
     BCF_PROPERTY_RW(const char*, AuthoringToolId);
@@ -179,6 +209,8 @@ struct BCFComponent
 /// </summary>
 struct BCFColoring
 {
+    long TypeCheck = BCFTypeCheck_Coloring;
+
     BCF_PROPERTY_RW(const char*, Color)
 
     virtual BCFComponent* ComponentIterate(BCFComponent* prev) = NULL;
@@ -192,6 +224,8 @@ struct BCFColoring
 /// </summary>
 struct BCFFile
 {
+    long TypeCheck = BCFTypeCheck_File;
+
     BCF_PROPERTY_RW(bool, IsExternal);
     BCF_PROPERTY_RW(const char*, Filename);
     BCF_PROPERTY_RW(const char*, Date);
@@ -207,6 +241,8 @@ struct BCFFile
 /// </summary>
 struct BCFLine
 {
+    long TypeCheck = BCFTypeCheck_Line;
+
     BCF_PROPERTY_PT(StartPoint);
     BCF_PROPERTY_PT(EndPoint);
 
@@ -218,6 +254,8 @@ struct BCFLine
 /// </summary>
 struct BCFClippingPlane
 {
+    long TypeCheck = BCFTypeCheck_ClippingPlane;
+
     BCF_PROPERTY_PT(Location);
     BCF_PROPERTY_PT(Direction);
 
@@ -229,6 +267,8 @@ struct BCFClippingPlane
 /// </summary>
 struct BCFBitmap
 {
+    long TypeCheck = BCFTypeCheck_Bitmap;
+
     BCF_PROPERTY_RW(BCFBitmapFormat, Format);
     BCF_PROPERTY_RW(const char*, Reference);
     BCF_PROPERTY_PT(Location);
@@ -244,6 +284,8 @@ struct BCFBitmap
 /// </summary>
 struct BCFBimSnippet
 {
+    long TypeCheck = BCFTypeCheck_BimSnippet;
+
     BCF_PROPERTY_RW(const char*, SnippetType);
     BCF_PROPERTY_RW(bool, IsExternal);
     BCF_PROPERTY_RW(const char*, Reference);
@@ -257,6 +299,8 @@ struct BCFBimSnippet
 /// </summary>
 struct BCFExtensions
 {
+    long TypeCheck = BCFTypeCheck_Extensions;
+
     virtual const char* GetElement(BCFEnumeration enumeration, int index) = NULL;
     virtual bool        AddElement(BCFEnumeration enumeration, const char* value) = NULL;
     virtual bool        RemoveElement(BCFEnumeration enumeration, const char* element) = NULL;

@@ -191,7 +191,7 @@
     <ClCompile Include="Implementation\Line.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Implementation\Object.cpp">
+    <ClCompile Include="Implementation\BCFObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Implementation\Project.cpp">
