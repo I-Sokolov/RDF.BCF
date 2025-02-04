@@ -1,23 +1,23 @@
 #include "pch.h"
 
-#include "BCFLine.h"
-#include "BCFViewPoint.h"
-#include "BCFProject.h"
+#include "Line.h"
+#include "ViewPoint.h"
+#include "Project.h"
 
 /// <summary>
 /// 
 /// </summary>
-BCFLine::BCFLine(BCFViewPoint& viewPoint, ListOfBCFObjects* parentList)
-    : BCFObject(viewPoint.Project(), parentList)
-    , m_StartPoint(viewPoint.Project())
-    , m_EndPoint(viewPoint.Project())
+Line::Line(ViewPoint& viewPoint, ListOfBCFObjects* parentList)
+    : BCFObject(viewPoint.GetProject(), parentList)
+    , m_StartPoint(viewPoint.GetProject())
+    , m_EndPoint(viewPoint.GetProject())
 { 
 }
 
 /// <summary>
 /// 
 /// </summary>
-void BCFLine::Read(_xml::_element& elem, const std::string& folder)
+void Line::Read(_xml::_element& elem, const std::string& folder)
 {
     CHILDREN_START
         CHILD_READ_MEMBER(StartPoint)
@@ -28,7 +28,7 @@ void BCFLine::Read(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-bool BCFLine::Validate(bool fix)
+bool Line::Validate(bool fix)
 {
     if (fix) {
         if (!m_StartPoint.IsSet()) {
@@ -48,7 +48,7 @@ bool BCFLine::Validate(bool fix)
 /// <summary>
 /// 
 /// </summary>
-void BCFLine::Write(_xml_writer& writer, const std::string& folder, const char* tag)
+void Line::Write(_xml_writer& writer, const std::string& folder, const char* tag)
 {
     XMLFile::Attributes attr;
     XMLFile::ElemTag _(writer, tag, attr);

@@ -1,6 +1,6 @@
 #pragma once
 
-struct BCFProject;
+struct Project;
 class Log;
 
 /// <summary>
@@ -13,7 +13,7 @@ public:
     static std::string New();
 
 public:
-    GuidStr(BCFProject& project, const char* guid);
+    GuidStr(Project& project, const char* guid);
 
     void AssignNew();
 
@@ -23,7 +23,7 @@ public:
     const char* c_str() { return value.c_str(); }
 
 private:
-    BCFProject& m_project;
+    Project& m_project;
     std::string value;
 };
 

@@ -63,46 +63,43 @@
     <ClInclude Include="Implementation\Archivator.h">
       <Filter>Implementation Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Implementation\BCFBimSnippet.h">
+    <ClInclude Include="Implementation\BimSnippet.h">
       <Filter>Implementation Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Implementation\BCFBitmap.h">
+    <ClInclude Include="Implementation\Bitmap.h">
       <Filter>Implementation Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Implementation\BCFClippingPlane.h">
+    <ClInclude Include="Implementation\ClippingPlane.h">
       <Filter>Implementation Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Implementation\BCFColoring.h">
+    <ClInclude Include="Implementation\Coloring.h">
       <Filter>Implementation Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Implementation\BCFComment.h">
+    <ClInclude Include="Implementation\Comment.h">
       <Filter>Implementation Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Implementation\BCFComponent.h">
+    <ClInclude Include="Implementation\Component.h">
       <Filter>Implementation Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Implementation\BCFDocumentReference.h">
+    <ClInclude Include="Implementation\DocumentReference.h">
       <Filter>Implementation Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Implementation\BCFFile.h">
+    <ClInclude Include="Implementation\File.h">
       <Filter>Implementation Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Implementation\BCFGuid.h">
-      <Filter>Implementation Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Implementation\BCFLine.h">
+    <ClInclude Include="Implementation\Line.h">
       <Filter>Implementation Headers</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\BCFObject.h">
       <Filter>Implementation Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Implementation\BCFProject.h">
+    <ClInclude Include="Implementation\Project.h">
       <Filter>Implementation Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Implementation\BCFTopic.h">
+    <ClInclude Include="Implementation\Topic.h">
       <Filter>Implementation Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Implementation\BCFViewPoint.h">
+    <ClInclude Include="Implementation\ViewPoint.h">
       <Filter>Implementation Headers</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\Documents.h">
@@ -164,46 +161,46 @@
     <ClCompile Include="Implementation\Archivator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Implementation\BCFBimSnippet.cpp">
+    <ClCompile Include="Implementation\BimSnippet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Implementation\BCFBitmap.cpp">
+    <ClCompile Include="Implementation\Bitmap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Implementation\BCFClippingPlane.cpp">
+    <ClCompile Include="Implementation\ClippingPlane.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Implementation\BCFColoring.cpp">
+    <ClCompile Include="Implementation\Coloring.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Implementation\BCFComment.cpp">
+    <ClCompile Include="Implementation\Comment.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Implementation\BCFComponent.cpp">
+    <ClCompile Include="Implementation\Component.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Implementation\BCFDocumentReference.cpp">
+    <ClCompile Include="Implementation\DocumentReference.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Implementation\bcfEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Implementation\BCFFile.cpp">
+    <ClCompile Include="Implementation\File.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Implementation\BCFLine.cpp">
+    <ClCompile Include="Implementation\Line.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Implementation\BCFObject.cpp">
+    <ClCompile Include="Implementation\Object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Implementation\BCFProject.cpp">
+    <ClCompile Include="Implementation\Project.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Implementation\BCFTopic.cpp">
+    <ClCompile Include="Implementation\Topic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Implementation\BCFViewPoint.cpp">
+    <ClCompile Include="Implementation\ViewPoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Implementation\dllmain.cpp">

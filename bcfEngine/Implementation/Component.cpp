@@ -1,14 +1,14 @@
 #include "pch.h"
-#include "BCFComponent.h"
-#include "BCFViewPoint.h"
-#include "BCFColoring.h"
-#include "BCFProject.h"
+#include "Component.h"
+#include "ViewPoint.h"
+#include "Coloring.h"
+#include "Project.h"
 
 /// <summary>
 /// 
 /// </summary>
-BCFComponent::BCFComponent(BCFViewPoint& viewPoint, ListOfBCFObjects* parentList)
-    : BCFObject(viewPoint.Project(), parentList)
+Component::Component(ViewPoint& viewPoint, ListOfBCFObjects* parentList)
+    : BCFObject(viewPoint.GetProject(), parentList)
     , m_pViewPoint(&viewPoint)
     , m_Visible("true")
 {
@@ -17,8 +17,8 @@ BCFComponent::BCFComponent(BCFViewPoint& viewPoint, ListOfBCFObjects* parentList
 /// <summary>
 /// 
 /// </summary>
-BCFComponent::BCFComponent(BCFColoring& coloring, ListOfBCFObjects* parentList)
-    : BCFObject(coloring.Project(), parentList)
+Component::Component(Coloring& coloring, ListOfBCFObjects* parentList)
+    : BCFObject(coloring.GetProject(), parentList)
     , m_pViewPoint(NULL)
     , m_Visible("true")
 {
@@ -27,7 +27,7 @@ BCFComponent::BCFComponent(BCFColoring& coloring, ListOfBCFObjects* parentList)
 /// <summary>
 /// 
 /// </summary>
-void BCFComponent::Read(_xml::_element& elem, const std::string&)
+void Component::Read(_xml::_element& elem, const std::string&)
 {
     ATTRS_START
         ATTR_GET(IfcGuid)
@@ -47,9 +47,9 @@ void BCFComponent::Read(_xml::_element& elem, const std::string&)
 /// <summary>
 /// 
 /// </summary>
-void BCFComponent::AfterRead(const std::string&)
+void Component::AfterRead(const std::string&)
 {
-    if (Project().GetVersion() < BCFVer_2_1) {
+    if (GetProject().GetVersion() < BCFVer_2_1) {
         assert(m_pViewPoint);
 
         if (!StrToBool(m_Visible) && m_pViewPoint) {
@@ -57,8 +57,7 @@ void BCFComponent::AfterRead(const std::string&)
         }
 
         if (!m_Color.empty() && m_pViewPoint) {
-            BCFColoring* coloring = NULL;
-            
+            BCFColoring* coloring = NULL;            
             while ((coloring = m_pViewPoint->ColoringIterate(coloring)) != NULL) {
                 if (0 == strcmp(coloring->GetColor(), m_Color.c_str())) {
                     break;
@@ -81,7 +80,7 @@ void BCFComponent::AfterRead(const std::string&)
 /// <summary>
 /// 
 /// </summary>
-bool BCFComponent::Validate(bool fix)
+bool Component::Validate(bool fix)
 {
     bool valid = true;
 
@@ -100,7 +99,7 @@ bool BCFComponent::Validate(bool fix)
 /// <summary>
 /// 
 /// </summary>
-void BCFComponent::Write(_xml_writer& writer, const std::string& folder, const char* tag)
+void Component::Write(_xml_writer& writer, const std::string& folder, const char* tag)
 { 
     XMLFile::Attributes attr;
     ATTR_ADD(IfcGuid);

@@ -20,7 +20,7 @@ namespace RDF.BCF
         {
             IntPtr handle = Interop.ColoringComponentAdd(m_handle, ifcGuid);
             if (handle == IntPtr.Zero)
-                throw new ApplicationException("Fail to add coloring component: " + Interop.ErrorsGet(Project.Handle));
+                throw new ApplicationException("Fail to add coloring component: " + Interop.GetErrors(Project.Handle));
             return new Component(Project, handle);
         }
 

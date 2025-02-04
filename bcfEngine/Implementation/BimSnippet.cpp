@@ -1,14 +1,14 @@
 #include "pch.h"
-#include "BCFBimSnippet.h"
-#include "BCFProject.h"
-#include "BCFTopic.h"
+#include "BimSnippet.h"
+#include "Project.h"
+#include "Topic.h"
 #include "XMLFile.h"
 
 /// <summary>
 /// 
 /// </summary>
-BCFBimSnippet::BCFBimSnippet(BCFTopic& topic, ListOfBCFObjects* parentList)
-    : BCFObject(topic.Project(), parentList)
+BimSnippet::BimSnippet(Topic& topic, ListOfBCFObjects* parentList)
+    : BCFObject(topic.GetProject(), parentList)
     , m_IsExternal("false")
 {
 }
@@ -17,7 +17,7 @@ BCFBimSnippet::BCFBimSnippet(BCFTopic& topic, ListOfBCFObjects* parentList)
 /// <summary>
 /// 
 /// </summary>
-void BCFBimSnippet::Read(_xml::_element& elem, const std::string& folder)
+void BimSnippet::Read(_xml::_element& elem, const std::string& folder)
 {
     ATTRS_START
         ATTR_GET(SnippetType)
@@ -41,12 +41,12 @@ void BCFBimSnippet::Read(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-bool BCFBimSnippet::Validate(bool fix)
+bool BimSnippet::Validate(bool fix)
 {
     if (fix) {
         if (m_SnippetType.empty()) {
             auto NOT_SET = "Not set";
-            Project().GetExtensions().AddElement(BCFSnippetTypes, NOT_SET);
+            GetProject().GetExtensions().AddElement(BCFSnippetTypes, NOT_SET);
             m_SnippetType.assign(NOT_SET);
         }
     }
@@ -68,7 +68,7 @@ bool BCFBimSnippet::Validate(bool fix)
 /// <summary>
 /// 
 /// </summary>
-void BCFBimSnippet::Write(_xml_writer& writer, const std::string& folder, const char* tag)
+void BimSnippet::Write(_xml_writer& writer, const std::string& folder, const char* tag)
 {
     //
     if (!GetIsExternal()) {
@@ -93,11 +93,11 @@ void BCFBimSnippet::Write(_xml_writer& writer, const std::string& folder, const 
 /// <summary>
 /// 
 /// </summary>
-bool BCFBimSnippet::SetSnippetType(const char* val)
+bool BimSnippet::SetSnippetType(const char* val)
 {
     UNNULL;
 
-    if (Project().GetExtensions().CheckElement(BCFSnippetTypes, val)) {
+    if (GetProject().GetExtensionsImpl().CheckElement(BCFSnippetTypes, val)) {
         m_SnippetType.assign(val);
         return true;
     }
@@ -108,7 +108,7 @@ bool BCFBimSnippet::SetSnippetType(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool BCFBimSnippet::SetReference(const char* val)
+bool BimSnippet::SetReference(const char* val)
 {
     UNNULL;
     VALIDATE(Reference, FilePath);
@@ -121,7 +121,7 @@ bool BCFBimSnippet::SetReference(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool BCFBimSnippet::SetReferenceSchema(const char* val) 
+bool BimSnippet::SetReferenceSchema(const char* val) 
 {
     UNNULL;
     VALIDATE(ReferenceSchema, FilePath);

@@ -1,15 +1,18 @@
 #pragma once
 
+#include "bcfAPI.h"
 #include "XMLFile.h"
 
-class Extensions : public XMLFile
+class Extensions : public XMLFile, public BCFExtensions
 {
 public:
-    Extensions(BCFProject& project);
+    Extensions(Project& project);
 
-    const char* GetElement(BCFEnumeration enumeration, BCFIndex index);
-    bool AddElement(BCFEnumeration enumeration, const char* element);
-    bool RemoveElement(BCFEnumeration enumeration, const char* element);
+public:
+    //BCF API
+    virtual const char* GetElement(BCFEnumeration enumeration, int index) override;
+    virtual bool AddElement(BCFEnumeration enumeration, const char* element) override;
+    virtual bool RemoveElement(BCFEnumeration enumeration, const char* element) override;
 
 public:
     bool CheckElement(BCFEnumeration enumeration, const char* element);

@@ -1,16 +1,16 @@
 #include "pch.h"
-#include "BCFComment.h"
-#include "BCFTopic.h"
-#include "BCFProject.h"
-#include "BCFViewPoint.h"
+#include "Comment.h"
+#include "Topic.h"
+#include "Project.h"
+#include "ViewPoint.h"
 
 /// <summary>
 /// 
 /// </summary>
-BCFComment::BCFComment(BCFTopic& topic, ListOfBCFObjects* parentList, const char* guid)
-    : BCFObject(topic.Project(), parentList)
+Comment::Comment(Topic& topic, ListOfBCFObjects* parentList, const char* guid)
+    : BCFObject(topic.GetProject(), parentList)
     , m_topic(topic)
-    , m_Guid(topic.Project(), guid)
+    , m_Guid(topic.GetProject(), guid)
     , m_Viewpoint(topic, NULL)
     , m_readFromFile(false)
 {
@@ -20,7 +20,7 @@ BCFComment::BCFComment(BCFTopic& topic, ListOfBCFObjects* parentList, const char
 /// <summary>
 /// 
 /// </summary>
-void BCFComment::Read(_xml::_element& elem, const std::string& folder)
+void Comment::Read(_xml::_element& elem, const std::string& folder)
 {
     m_readFromFile = true;
 
@@ -65,7 +65,7 @@ void BCFComment::Read(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-bool BCFComment::Validate(bool fix)
+bool Comment::Validate(bool fix)
 {
     bool valid = true;
 
@@ -84,7 +84,7 @@ bool BCFComment::Validate(bool fix)
 /// <summary>
 /// 
 /// </summary>
-void BCFComment::Write(_xml_writer& writer, const std::string& folder, const char* /*tag*/)
+void Comment::Write(_xml_writer& writer, const std::string& folder, const char* /*tag*/)
 {
     XMLFile::Attributes attr;
     ATTR_ADD(Guid);
@@ -95,7 +95,7 @@ void BCFComment::Write(_xml_writer& writer, const std::string& folder, const cha
 /// <summary>
 /// 
 /// </summary>
-void BCFComment::Write_Comment(_xml_writer& writer, const std::string& folder)
+void Comment::Write_Comment(_xml_writer& writer, const std::string& folder)
 {
     WRITE_CONTENT(Date);
     WRITE_CONTENT(Author);
@@ -108,7 +108,7 @@ void BCFComment::Write_Comment(_xml_writer& writer, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-BCFViewPoint* BCFComment::GetViewPoint()
+BCFViewPoint* Comment::GetViewPoint()
 {
     if (*m_Viewpoint.GetGuid()) {
         if (auto vp = m_topic.ViewPointByGuid(m_Viewpoint.GetGuid())) {
@@ -122,12 +122,8 @@ BCFViewPoint* BCFComment::GetViewPoint()
 /// <summary>
 /// 
 /// </summary>
-bool BCFComment::SetViewPoint(BCFViewPoint* viewPoint)
+bool Comment::SetViewPoint(BCFViewPoint* viewPoint)
 {
-    if (!UpdateAuthor()) {
-        return false;
-    }
-
     bool ok = true;
     const char* guid = NULL;
 
@@ -135,10 +131,14 @@ bool BCFComment::SetViewPoint(BCFViewPoint* viewPoint)
         guid = viewPoint->GetGuid();
       
         if (!m_topic.ViewPointByGuid(guid)) {
-            log().add(Log::Level::error, "Invalid viewpoint", "Viewpoint %s is not from this topic %s", guid, m_topic.GetTitle());
+            GetLog().add(Log::Level::error, "Invalid viewpoint", "Viewpoint %s is not from this topic %s", guid, m_topic.GetTitle());
             ok = false;
             guid = NULL;
         }
+    }
+
+    if (!UpdateAuthor()) {
+        return false;
     }
 
     m_Viewpoint.SetGuid(guid);
@@ -148,7 +148,7 @@ bool BCFComment::SetViewPoint(BCFViewPoint* viewPoint)
 /// <summary>
 /// 
 /// </summary>
-bool BCFComment::SetText(const char* val)
+bool Comment::SetText(const char* val)
 {
     UNNULL;
 
@@ -163,7 +163,7 @@ bool BCFComment::SetText(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool BCFComment::UpdateAuthor()
+bool Comment::UpdateAuthor()
 {
     return __super::UpdateAuthor(m_readFromFile ? m_ModifiedAuthor : m_Author, m_readFromFile ? m_ModifiedDate : m_Date);
 }
@@ -171,9 +171,9 @@ bool BCFComment::UpdateAuthor()
 /// <summary>
 /// 
 /// </summary>
-void BCFComment::AfterRead(const std::string&)
+void Comment::AfterRead(const std::string&)
 {
-    if (Project().GetVersion() < BCFVer_3_0) {
+    if (GetProject().GetVersion() < BCFVer_3_0) {
         if (!*m_Viewpoint.GetGuid()) { //empty comment appeared from a file
             if (m_Comment.empty()) {
                 m_Comment.assign("empty");

@@ -112,7 +112,7 @@ namespace RDF.BCF
         {
             IntPtr handle = Interop.ViewPointSelectionAdd(m_handle, ifcGuid);
             if (handle == IntPtr.Zero)
-                throw new ApplicationException("Fail to add selection: " + Interop.ErrorsGet(Project.Handle));
+                throw new ApplicationException("Fail to add selection: " + Interop.GetErrors(Project.Handle));
             return new Component(Project, handle);
         }
 
@@ -137,7 +137,7 @@ namespace RDF.BCF
         {
             IntPtr handle = Interop.ViewPointExceptionsAdd(m_handle, ifcGuid);
             if (handle == IntPtr.Zero)
-                throw new ApplicationException("Fail to add exception: " + Interop.ErrorsGet(Project.Handle));
+                throw new ApplicationException("Fail to add exception: " + Interop.GetErrors(Project.Handle));
             return new Component(Project, handle);
         }
 
@@ -162,7 +162,7 @@ namespace RDF.BCF
         {
             var handle = Interop.BitmapAdd(m_handle, filePath, format, location, normal, up, height);
             if (handle == IntPtr.Zero)
-                throw new ApplicationException("Fail to add bitmap: " + Interop.ErrorsGet(Project.Handle));
+                throw new ApplicationException("Fail to add bitmap: " + Interop.GetErrors(Project.Handle));
             return new Bitmap(this, handle);
         }
 
@@ -189,7 +189,7 @@ namespace RDF.BCF
         {
             var handle = Interop.ColoringAdd(m_handle, color);
             if (handle == IntPtr.Zero)
-                throw new ApplicationException("Fail to add color: " + Interop.ErrorsGet(Project.Handle));
+                throw new ApplicationException("Fail to add color: " + Interop.GetErrors(Project.Handle));
             return new Coloring(this, handle);
         }
 
@@ -216,7 +216,7 @@ namespace RDF.BCF
         {
             var handle = Interop.LineAdd(m_handle, start, end);
             if (handle == IntPtr.Zero)
-                throw new ApplicationException("Fail to add line: " + Interop.ErrorsGet(Project.Handle));
+                throw new ApplicationException("Fail to add line: " + Interop.GetErrors(Project.Handle));
             return new Line(this, handle);
         }
 
@@ -241,7 +241,7 @@ namespace RDF.BCF
         {
             var handle = Interop.ClippingPlaneAdd(m_handle, location, direction);
             if (handle == IntPtr.Zero)
-                throw new ApplicationException("Fail to add clipping plane: " + Interop.ErrorsGet(Project.Handle));
+                throw new ApplicationException("Fail to add clipping plane: " + Interop.GetErrors(Project.Handle));
             return new ClippingPlane(this, handle);
         }
 

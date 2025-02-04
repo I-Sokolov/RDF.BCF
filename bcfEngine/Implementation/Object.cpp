@@ -1,12 +1,12 @@
 #include "pch.h"
 #include "BCFObject.h"
-#include "BCFProject.h"
+#include "Project.h"
 #include "XMLPoint.h"
 #include "FileSystem.h"
 
 std::set<BCFObject*> BCFObject::gAllocatedObjects;
 
-BCFObject::BCFObject(BCFProject& project, ListOfBCFObjects* parentList) 
+BCFObject::BCFObject(Project& project, ListOfBCFObjects* parentList) 
     : m_project(project)
     , m_parentList(parentList) 
 { 
@@ -48,9 +48,9 @@ std::string BCFObject::TimeToStr(time_t tm_)
 /// <summary>
 /// 
 /// </summary>
-Log& BCFObject::log()
+Log& BCFObject::GetLog()
 {
-    return m_project.log();
+    return m_project.GetLog();
 }
 
 /// <summary>
@@ -80,13 +80,13 @@ bool BCFObject::RealToStr(double val, std::string& prop)
 /// </summary>
 bool BCFObject::UpdateAuthor(std::string& author, std::string& date)
 {
-    const char* user = Project().GetAuthor();
+    const char* user = GetProject().GetAuthor();
     if (!*user) {
-        Project().log().add(Log::Level::error, "Author is not set");
+        GetProject().GetLog().add(Log::Level::error, "Author is not set");
         return false;
     }
 
-    if (!Project().GetExtensions().CheckElement(BCFUsers, user)) {
+    if (!GetProject().GetExtensionsImpl().CheckElement(BCFUsers, user)) {
         return false;
     }
 
@@ -110,14 +110,14 @@ std::string BCFObject::AbsolutePath(const std::string& relativePath, const std::
         }
 
         //try to find in current folder (buildingSMART\BCF-XML\Test Cases\v2.0\Visualization\Bitmap\Bitmap.bcfzip)
-        auto fileName = FileSystem::GetFileName(relativePath.c_str(), log());
+        auto fileName = FileSystem::GetFileName(relativePath.c_str(), GetLog());
         filePath.assign(folder);
         FileSystem::AddPath(filePath, fileName.c_str());
         if (FileSystem::Exists(filePath.c_str())) {
             return filePath;
         }
 
-        log().add(Log::Level::error, "File read", "File does not exist: %s", filePath.c_str());
+        GetLog().add(Log::Level::error, "File read", "File does not exist: %s", filePath.c_str());
         throw std::exception("Failed to read viewpoint");
     }
     return "";
@@ -132,7 +132,7 @@ std::string BCFObject::CopyToRelative(const std::string& absolutePath, const std
     if (absolutePath.empty())
         return "";
 
-    auto filename = FileSystem::GetFileName(absolutePath.c_str(), log());
+    auto filename = FileSystem::GetFileName(absolutePath.c_str(), GetLog());
     if (!filename.empty()) {
 
         std::string target(folder);
@@ -143,7 +143,7 @@ std::string BCFObject::CopyToRelative(const std::string& absolutePath, const std
         FileSystem::AddPath(target, filename.c_str());
 
         if (FileSystem::Exists(target.c_str())
-            || FileSystem::CopyFile(absolutePath.c_str(), target.c_str(), log())
+            || FileSystem::CopyFile(absolutePath.c_str(), target.c_str(), GetLog())
             ) {
 
             std::string ret;
@@ -169,7 +169,7 @@ bool BCFObject::IsDateTimeValid (const char* str, const char* propName)
         return true;
     }
 
-    log().add(Log::Level::error, "Invalid value", "'%s' is not correct ISO 8601 date-time and can not be used as %s", str, propName);
+    GetLog().add(Log::Level::error, "Invalid value", "'%s' is not correct ISO 8601 date-time and can not be used as %s", str, propName);
     return false;
 }
 
@@ -184,7 +184,7 @@ bool BCFObject::IsIfcGuidValid(const char* str, const char* propName)
         return true;
     }
 
-    log().add(Log::Level::error, "Invalid value", "'%s' is not correct IfcGuid and can not be used as %s", str, propName);
+    GetLog().add(Log::Level::error, "Invalid value", "'%s' is not correct IfcGuid and can not be used as %s", str, propName);
     return false;
 }
 
@@ -200,7 +200,7 @@ bool BCFObject::IsFilePathValid(const char* str, const char* propName)
         return true;
     }
 
-    log().add(Log::Level::error, "Invalid value", "'%s' is not existing file and can not be used as %s", str, propName);
+    GetLog().add(Log::Level::error, "Invalid value", "'%s' is not existing file and can not be used as %s", str, propName);
     return false;
 }
 
@@ -224,7 +224,7 @@ bool BCFObject::IsURL(const char* path)
 /// <summary>
 /// 
 /// </summary>
-bool BCFObject::Remove()
+bool BCFObject::RemoveImpl()
 {
     if (m_parentList) {
         return m_parentList->Remove(this);

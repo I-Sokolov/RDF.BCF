@@ -1,15 +1,15 @@
 #include "pch.h"
 #include "GuidStr.h"
-#include "BCFProject.h"
+#include "Project.h"
 
 /// <summary>
 /// 
 /// </summary>
-GuidStr::GuidStr(BCFProject& project, const char* guid) 
+GuidStr::GuidStr(Project& project, const char* guid) 
     : m_project(project)
 {
     if (guid) {
-        if (*guid && IsGUIDValid(guid, &project.log())) {
+        if (*guid && IsGUIDValid(guid, &project.GetLog())) {
             value.assign(guid);
         }
         else {
@@ -80,7 +80,7 @@ std::string GuidStr::New()
 void GuidStr::assign(const std::string& s)
 { 
     if (value.empty()) {
-        if (IsGUIDValid(s.c_str(), &m_project.log())) {
+        if (IsGUIDValid(s.c_str(), &m_project.GetLog())) {
             value.assign(s);
         }
         else {
@@ -88,7 +88,7 @@ void GuidStr::assign(const std::string& s)
         }
     }
     else if (value!=s) {
-        m_project.log().add(Log::Level::warning, "Inconsistent GUIDs",  "%s is also referenced as %s", value.c_str(), s.c_str());
+        m_project.GetLog().add(Log::Level::warning, "Inconsistent GUIDs",  "%s is also referenced as %s", value.c_str(), s.c_str());
     }
 }
 

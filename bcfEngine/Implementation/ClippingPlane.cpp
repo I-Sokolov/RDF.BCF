@@ -1,24 +1,24 @@
 
 #include "pch.h"
 
-#include "BCFClippingPlane.h"
-#include "BCFViewPoint.h"
-#include "BCFProject.h"
+#include "ClippingPlane.h"
+#include "ViewPoint.h"
+#include "Project.h"
 
 /// <summary>
 /// 
 /// </summary>
-BCFClippingPlane::BCFClippingPlane(BCFViewPoint& viewPoint, ListOfBCFObjects* parentList)
-    : BCFObject(viewPoint.Project(), parentList)
-    , m_Location(viewPoint.Project())
-    , m_Direction(viewPoint.Project())
+ClippingPlane::ClippingPlane(ViewPoint& viewPoint, ListOfBCFObjects* parentList)
+    : BCFObject(viewPoint.GetProject(), parentList)
+    , m_Location(viewPoint.GetProject())
+    , m_Direction(viewPoint.GetProject())
 {
 }
 
 /// <summary>
 /// 
 /// </summary>
-void BCFClippingPlane::Read(_xml::_element & elem, const std::string& folder) 
+void ClippingPlane::Read(_xml::_element & elem, const std::string& folder) 
 {
     CHILDREN_START
         CHILD_READ_MEMBER(Location)
@@ -29,7 +29,7 @@ void BCFClippingPlane::Read(_xml::_element & elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-bool BCFClippingPlane::Validate(bool fix)
+bool ClippingPlane::Validate(bool fix)
 {
     if (fix) {
         if (!m_Direction.IsSet()) {
@@ -49,7 +49,7 @@ bool BCFClippingPlane::Validate(bool fix)
 /// <summary>
 /// 
 /// </summary>
-void BCFClippingPlane::Write(_xml_writer& writer, const std::string& folder, const char* tag) 
+void ClippingPlane::Write(_xml_writer& writer, const std::string& folder, const char* tag) 
 {
     XMLFile::Attributes attr;
     XMLFile::ElemTag _(writer, tag, attr);

@@ -1,12 +1,12 @@
 #include "pch.h"
 #include "XMLPoint.h"
 #include "XMLFile.h"
-#include "BCFProject.h"
+#include "Project.h"
 
 /// <summary>
 /// 
 /// </summary>
-XMLPoint::XMLPoint(BCFProject& project) 
+XMLPoint::XMLPoint(Project& project) 
     : BCFObject(project, NULL)
     , m_X(XYZ[0]), m_Y(XYZ[1]), m_Z(XYZ[2]) {}
 
@@ -62,7 +62,7 @@ bool XMLPoint::SetPoint(const BCFPoint* bcfpt)
         return true;
     }
     else {
-        m_project.log().add(Log::Level::error, "NULL argument");
+        m_project.GetLog().add(Log::Level::error, "NULL argument");
         return false;
     }
 }

@@ -1,14 +1,14 @@
 #include "pch.h"
 #include "GuidReference.h"
-#include "BCFTopic.h"
-#include "BCFProject.h"
+#include "Topic.h"
+#include "Project.h"
 #include "XMLFile.h"
 
 /// <summary>
 /// 
 /// </summary>
-GuidReference::GuidReference(BCFTopic& topic, ListOfBCFObjects* parentList) 
-    : BCFObject(topic.Project(), parentList)
+GuidReference::GuidReference(Topic& topic, ListOfBCFObjects* parentList) 
+    : BCFObject(topic.GetProject(), parentList)
 {
 }
 

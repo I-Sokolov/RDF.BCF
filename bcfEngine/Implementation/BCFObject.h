@@ -1,10 +1,10 @@
 #pragma once
 
-class Log;
-struct BCFProject;
+class  Log;
+struct Project;
 struct XMLPoint;
 struct BCFPoint;
-class ListOfBCFObjects;
+class  ListOfBCFObjects;
 
 /// <summary>
 /// 
@@ -15,14 +15,12 @@ public:
     static std::set<BCFObject*> gAllocatedObjects;
 
 public:
-    BCFObject(BCFProject& project, ListOfBCFObjects* parentList);
+    BCFObject(Project& project, ListOfBCFObjects* parentList);
     virtual ~BCFObject();
    
-    virtual bool Remove();
-
 public:
-    BCFProject& Project() { return m_project; }
-    Log& log();
+    Project& GetProject() { return m_project; }
+    Log& GetLog();
 
 protected:
     bool IntToStr(int val, std::string& prop);
@@ -47,11 +45,13 @@ protected:
 
     static std::string GetCurrentDate() { return GetCurrentTime(); }
 
+    bool RemoveImpl();
+
 private:
     static std::string GetCurrentTime();
 
 protected:
-    BCFProject&         m_project;
+    Project&            m_project;
     ListOfBCFObjects*   m_parentList;
 };
 

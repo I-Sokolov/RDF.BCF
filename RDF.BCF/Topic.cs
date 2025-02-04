@@ -202,7 +202,7 @@ namespace RDF.BCF
         {
             IntPtr fileHandle = Interop.FileAdd(m_handle, filePath, isExternal);
             if (fileHandle == IntPtr.Zero)
-                throw new ApplicationException("Fail to add file: " + Interop.ErrorsGet(m_project.Handle));
+                throw new ApplicationException("Fail to add file: " + Interop.GetErrors(m_project.Handle));
             return new BimFile(this, fileHandle);
         }
 
@@ -227,7 +227,7 @@ namespace RDF.BCF
         {
             IntPtr vpHandle = Interop.ViewPointAdd(m_handle, guid);
             if (vpHandle == IntPtr.Zero)
-                throw new ApplicationException("Fail to create view point: " + Interop.ErrorsGet(m_project.Handle));
+                throw new ApplicationException("Fail to create view point: " + Interop.GetErrors(m_project.Handle));
             return new ViewPoint(this, vpHandle);
         }
 
@@ -252,7 +252,7 @@ namespace RDF.BCF
         {
             IntPtr vpHandle = Interop.DocumentReferenceAdd(m_handle, filePath, isExternal, guid);
             if (vpHandle == IntPtr.Zero)
-                throw new ApplicationException("Fail to create document reference: " + Interop.ErrorsGet(m_project.Handle));
+                throw new ApplicationException("Fail to create document reference: " + Interop.GetErrors(m_project.Handle));
             return new DocumentReference(this, vpHandle);
         }
 
@@ -277,7 +277,7 @@ namespace RDF.BCF
         {
             IntPtr commentHandle = Interop.CommentAdd(m_handle, guid);
             if (commentHandle == IntPtr.Zero)
-                throw new ApplicationException("Fail to create comment: " + Interop.ErrorsGet(m_project.Handle));
+                throw new ApplicationException("Fail to create comment: " + Interop.GetErrors(m_project.Handle));
             return new Comment(this, commentHandle);
         }
 

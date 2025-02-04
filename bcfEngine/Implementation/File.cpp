@@ -1,15 +1,15 @@
 #include "pch.h"
-#include "BCFFile.h"
+#include "File.h"
 #include "XMLFile.h"
-#include "BCFProject.h"
-#include "BCFTopic.h"
+#include "Project.h"
+#include "Topic.h"
 #include "FileSystem.h"
 
 /// <summary>
 /// 
 /// </summary>
-BCFFile::BCFFile(BCFTopic& topic, ListOfBCFObjects* parentList)
-    : BCFObject(topic.Project(), parentList)
+File::File(Topic& topic, ListOfBCFObjects* parentList)
+    : BCFObject(topic.GetProject(), parentList)
     , m_topic(topic)
     , m_IsExternal("true")
 {
@@ -18,7 +18,7 @@ BCFFile::BCFFile(BCFTopic& topic, ListOfBCFObjects* parentList)
 /// <summary>
 /// 
 /// </summary>
-void BCFFile::Read(_xml::_element& elem, const std::string& folder)
+void File::Read(_xml::_element& elem, const std::string& folder)
 {
     ATTRS_START
         ATTR_GET(IsExternal)
@@ -44,7 +44,7 @@ void BCFFile::Read(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-bool BCFFile::Validate(bool)
+bool File::Validate(bool)
 {
     return true;
 }
@@ -52,7 +52,7 @@ bool BCFFile::Validate(bool)
 /// <summary>
 /// 
 /// </summary>
-void BCFFile::Write(_xml_writer& writer, const std::string& folder, const char* /*tag*/)
+void File::Write(_xml_writer& writer, const std::string& folder, const char* /*tag*/)
 {
     if (!GetIsExternal()) {
         m_Reference = CopyToRelative(m_Reference, folder, "..");
@@ -73,7 +73,7 @@ void BCFFile::Write(_xml_writer& writer, const std::string& folder, const char* 
 /// <summary>
 /// 
 /// </summary>
-void BCFFile::Write_File(_xml_writer& writer, const std::string& folder)
+void File::Write_File(_xml_writer& writer, const std::string& folder)
 {
     WRITE_CONTENT(Filename);
     WRITE_CONTENT(Date);
@@ -83,7 +83,7 @@ void BCFFile::Write_File(_xml_writer& writer, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-bool BCFFile::SetReference(const char* val)
+bool File::SetReference(const char* val)
 { 
     UNNULL;
     VALIDATE(Reference, FilePath);
@@ -98,14 +98,14 @@ bool BCFFile::SetReference(const char* val)
 /// <summary>
 /// 
 /// </summary>
-void BCFFile::UpdateFileInfo()
+void File::UpdateFileInfo()
 {
     if (!m_Reference.empty()) {
 
-        m_Filename = FileSystem::GetFileName(m_Reference.c_str(), log());
+        m_Filename = FileSystem::GetFileName(m_Reference.c_str(), GetLog());
 
         if (FileSystem::Exists(m_Reference.c_str())) {
-            auto tm = FileSystem::GetFileModificationTime(m_Reference.c_str(), log());
+            auto tm = FileSystem::GetFileModificationTime(m_Reference.c_str(), GetLog());
             if (tm) {
                 m_Date = TimeToStr(tm);
             }

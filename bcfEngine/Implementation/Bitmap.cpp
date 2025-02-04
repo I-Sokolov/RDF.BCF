@@ -1,25 +1,25 @@
 
 #include "pch.h"
-#include "BCFBitmap.h"
-#include "BCFProject.h"
+#include "Bitmap.h"
+#include "Project.h"
 #include "XMLFile.h"
-#include "BCFViewPoint.h"
+#include "ViewPoint.h"
 
 /// <summary>
 /// 
 /// </summary>
-BCFBitmap::BCFBitmap(BCFViewPoint& viewPoint, ListOfBCFObjects* parentList) 
-    : BCFObject(viewPoint.Project(), parentList) 
-    , m_Location(viewPoint.Project())
-    , m_Normal(viewPoint.Project())
-    , m_Up(viewPoint.Project())
+Bitmap::Bitmap(ViewPoint& viewPoint, ListOfBCFObjects* parentList) 
+    : BCFObject(viewPoint.GetProject(), parentList) 
+    , m_Location(viewPoint.GetProject())
+    , m_Normal(viewPoint.GetProject())
+    , m_Up(viewPoint.GetProject())
 {
 }
 
 /// <summary>
 /// 
 /// </summary>
-void BCFBitmap::Read(_xml::_element& elem, const std::string& folder)
+void Bitmap::Read(_xml::_element& elem, const std::string& folder)
 {
     CHILDREN_START
         CHILD_GET_CONTENT(Format)
@@ -39,7 +39,7 @@ void BCFBitmap::Read(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-bool BCFBitmap::Validate(bool fix)
+bool Bitmap::Validate(bool fix)
 {
     //
     bool valid = true;
@@ -60,7 +60,7 @@ bool BCFBitmap::Validate(bool fix)
 /// <summary>
 /// 
 /// </summary>
-void BCFBitmap::Write(_xml_writer& writer, const std::string& folder, const char* tag)
+void Bitmap::Write(_xml_writer& writer, const std::string& folder, const char* tag)
 {
     XMLFile::Attributes attr;
     XMLFile::ElemTag _(writer, tag, attr);
@@ -80,7 +80,7 @@ void BCFBitmap::Write(_xml_writer& writer, const std::string& folder, const char
 /// <summary>
 /// 
 /// </summary>
-BCFBitmapFormat BCFBitmap::GetFormat()
+BCFBitmapFormat Bitmap::GetFormat()
 {
     if (m_Format == "png") {
         return BCFBitmapPNG;
@@ -97,7 +97,7 @@ BCFBitmapFormat BCFBitmap::GetFormat()
 /// <summary>
 /// 
 /// </summary>
-bool BCFBitmap::SetFormat(BCFBitmapFormat val)
+bool Bitmap::SetFormat(BCFBitmapFormat val)
 {
     switch (val) {
         case BCFBitmapPNG:
@@ -113,7 +113,7 @@ bool BCFBitmap::SetFormat(BCFBitmapFormat val)
 /// <summary>
 /// 
 /// </summary>
-bool BCFBitmap::SetReference(const char* val)
+bool Bitmap::SetReference(const char* val)
 {
     UNNULL;
     VALIDATE(Reference, FilePath);
@@ -126,9 +126,9 @@ bool BCFBitmap::SetReference(const char* val)
 /// <summary>
 /// 
 /// </summary>
-void BCFBitmap::AfterRead(const std::string&)
+void Bitmap::AfterRead(const std::string&)
 {
-    if (Project().GetVersion() < BCFVer_3_0) {
+    if (GetProject().GetVersion() < BCFVer_3_0) {
         std::transform(m_Format.begin(), m_Format.end(), m_Format.begin(), [](unsigned char c) { return std::tolower(c); });
     }
 }

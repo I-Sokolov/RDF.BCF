@@ -15,7 +15,7 @@
         /// </summary>
         public string GetErrors(bool cleanLog = true)
         {
-            return BCF.Interop.ErrorsGet(m_handle, cleanLog);
+            return BCF.Interop.GetErrors(m_handle, cleanLog);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@
         {
             IntPtr topicHandle = Interop.TopicAdd(m_handle, type, title, status, guid);
             if (topicHandle == IntPtr.Zero)
-                throw new ApplicationException("Fail to create topic: " + Interop.ErrorsGet(Handle));
+                throw new ApplicationException("Fail to create topic: " + Interop.GetErrors(Handle));
             return new Topic(this, topicHandle);
         }
 
@@ -110,12 +110,12 @@
         {
             if (m_handle != IntPtr.Zero)
             {
-                var remainedErrors = RDF.BCF.Interop.ErrorsGet(m_handle);
+                var remainedErrors = RDF.BCF.Interop.GetErrors(m_handle);
                 System.Diagnostics.Trace.Assert(remainedErrors.Length == 0);
 
                 if (!RDF.BCF.Interop.ProjectDelete(m_handle))
                 {
-                    var errors = RDF.BCF.Interop.ErrorsGet(m_handle);
+                    var errors = RDF.BCF.Interop.GetErrors(m_handle);
                     System.Diagnostics.Trace.Assert(false);
                 }
 

@@ -1,39 +1,39 @@
 #include "pch.h"
-#include "BCFViewPoint.h"
-#include "BCFProject.h"
-#include "BCFTopic.h"
-#include "BCFColoring.h"
-#include "BCFLine.h"
-#include "BCFClippingPlane.h"
-#include "BCFBitmap.h"
-#include "BCFComponent.h"
+#include "ViewPoint.h"
+#include "Project.h"
+#include "Topic.h"
+#include "Coloring.h"
+#include "Line.h"
+#include "ClippingPlane.h"
+#include "Bitmap.h"
+#include "Component.h"
 #include "FileSystem.h"
-#include "BCFComment.h"
+#include "Comment.h"
 
 /// <summary>
 /// 
 /// </summary>
-BCFViewPoint::BCFViewPoint(BCFTopic& topic, ListOfBCFObjects* parentList, const char* guid)
-    : XMLFile(topic.Project(), parentList)
+ViewPoint::ViewPoint(Topic& topic, ListOfBCFObjects* parentList, const char* guid)
+    : XMLFile(topic.GetProject(), parentList)
     , m_topic(topic)
-    , m_Guid(topic.Project(), guid)
+    , m_Guid(topic.GetProject(), guid)
     , m_cameraType(BCFCameraPerspective)
-    , m_CameraViewPoint(topic.Project())
-    , m_CameraDirection(topic.Project())
-    , m_CameraUpVector(topic.Project())
-    , m_Selection(topic.Project())
-    , m_Exceptions(topic.Project())
-    , m_Coloring(topic.Project())
-    , m_Lines(topic.Project())
-    , m_ClippingPlanes(topic.Project())
-    , m_Bitmaps(topic.Project())
+    , m_CameraViewPoint(topic.GetProject())
+    , m_CameraDirection(topic.GetProject())
+    , m_CameraUpVector(topic.GetProject())
+    , m_Selection(topic.GetProject())
+    , m_Exceptions(topic.GetProject())
+    , m_Coloring(topic.GetProject())
+    , m_Lines(topic.GetProject())
+    , m_ClippingPlanes(topic.GetProject())
+    , m_Bitmaps(topic.GetProject())
 {
 }
 
 /// <summary>
 /// 
 /// </summary>
-void BCFViewPoint::Read(_xml::_element& elem, const std::string& folder)
+void ViewPoint::Read(_xml::_element& elem, const std::string& folder)
 {
     ATTRS_START
         ATTR_GET(Guid) 
@@ -56,7 +56,7 @@ void BCFViewPoint::Read(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-bool BCFViewPoint::Validate(bool fix)
+bool ViewPoint::Validate(bool fix)
 {
     if (fix) {
        
@@ -110,7 +110,7 @@ bool BCFViewPoint::Validate(bool fix)
 /// <summary>
 /// 
 /// </summary>
-void BCFViewPoint::Write(_xml_writer& writer, const std::string& folder, const char* /*tag*/)
+void ViewPoint::Write(_xml_writer& writer, const std::string& folder, const char* /*tag*/)
 {
     m_Snapshot = CopyToRelative(m_Snapshot, folder, NULL);
     
@@ -134,7 +134,7 @@ void BCFViewPoint::Write(_xml_writer& writer, const std::string& folder, const c
 /// <summary>
 /// 
 /// </summary>
-void BCFViewPoint::Write_ViewPoint(_xml_writer& writer, const std::string& folder)
+void ViewPoint::Write_ViewPoint(_xml_writer& writer, const std::string& folder)
 {
     WRITE_CONTENT(Viewpoint);
     WRITE_CONTENT(Snapshot);
@@ -144,7 +144,7 @@ void BCFViewPoint::Write_ViewPoint(_xml_writer& writer, const std::string& folde
 /// <summary>
 /// 
 /// </summary>
-void BCFViewPoint::ReadRoot(_xml::_element& elem, const std::string& folder)
+void ViewPoint::ReadRoot(_xml::_element& elem, const std::string& folder)
 {
     std::string vpGuid;
 
@@ -162,21 +162,21 @@ void BCFViewPoint::ReadRoot(_xml::_element& elem, const std::string& folder)
         CHILD_READ(OrthogonalCamera)
         CHILD_GET_LIST(Lines, Line)
         CHILD_GET_LIST(ClippingPlanes, ClippingPlane)
-        CHILD_GET_LIST_CONDITIONAL(Bitmaps, Bitmap, Project().GetVersion() > BCFVer_2_0)
-        CHILD_ADD_TO_LIST_CONDITIONAL(Bitmaps, Bitmaps, Project().GetVersion() == BCFVer_2_0)
+        CHILD_GET_LIST_CONDITIONAL(Bitmaps, Bitmap, GetProject().GetVersion() > BCFVer_2_0)
+        CHILD_ADD_TO_LIST_CONDITIONAL(Bitmaps, Bitmaps, GetProject().GetVersion() == BCFVer_2_0)
     CHILDREN_END
 }
 
 /// <summary>
 /// 
 /// </summary>
-void BCFViewPoint::WriteRootElem(_xml_writer& writer, const std::string& folder, Attributes& attr)
+void ViewPoint::WriteRootElem(_xml_writer& writer, const std::string& folder, Attributes& attr)
 {
     ATTR_ADD(Guid);
     __super::WriteRootElem(writer, folder, attr);
 }
 
-void BCFViewPoint::WriteRootContent(_xml_writer& writer, const std::string& folder)
+void ViewPoint::WriteRootContent(_xml_writer& writer, const std::string& folder)
 {
     Attributes attr;
 
@@ -195,7 +195,7 @@ void BCFViewPoint::WriteRootContent(_xml_writer& writer, const std::string& fold
 /// <summary>
 /// 
 /// </summary>
-void  BCFViewPoint::Read_Components(_xml::_element& elem, const std::string& folder)
+void  ViewPoint::Read_Components(_xml::_element& elem, const std::string& folder)
 {
     CHILDREN_START
         CHILD_GET_LIST(Selection, Component)
@@ -210,7 +210,7 @@ void  BCFViewPoint::Read_Components(_xml::_element& elem, const std::string& fol
 /// <summary>
 /// 
 /// </summary>
-void  BCFViewPoint::Write_Components(_xml_writer& writer, const std::string& folder)
+void  ViewPoint::Write_Components(_xml_writer& writer, const std::string& folder)
 {
     WRITE_LIST_EX(Selection, Component);
 
@@ -224,7 +224,7 @@ void  BCFViewPoint::Write_Components(_xml_writer& writer, const std::string& fol
 /// <summary>
 /// 
 /// </summary>
-void  BCFViewPoint::Read_Visibility(_xml::_element& elem, const std::string& folder)
+void  ViewPoint::Read_Visibility(_xml::_element& elem, const std::string& folder)
 {
     ATTRS_START
         ATTR_GET(DefaultVisibility)
@@ -239,7 +239,7 @@ void  BCFViewPoint::Read_Visibility(_xml::_element& elem, const std::string& fol
 /// <summary>
 /// 
 /// </summary>
-void BCFViewPoint::Write_Visibility(_xml_writer& writer, const std::string& folder)
+void ViewPoint::Write_Visibility(_xml_writer& writer, const std::string& folder)
 {
     Attributes attr;
     ATTR_ADD(SpacesVisible);
@@ -253,7 +253,7 @@ void BCFViewPoint::Write_Visibility(_xml_writer& writer, const std::string& fold
 /// <summary>
 /// 
 /// </summary>
-void  BCFViewPoint::Read_ViewSetupHints(_xml::_element& elem, const std::string& folder)
+void  ViewPoint::Read_ViewSetupHints(_xml::_element& elem, const std::string& folder)
 {
     ATTRS_START
         ATTR_GET(SpacesVisible)
@@ -265,7 +265,7 @@ void  BCFViewPoint::Read_ViewSetupHints(_xml::_element& elem, const std::string&
 /// <summary>
 /// 
 /// </summary>
-void  BCFViewPoint::Read_PerspectiveCamera(_xml::_element& elem, const std::string& folder)
+void  ViewPoint::Read_PerspectiveCamera(_xml::_element& elem, const std::string& folder)
 {
     m_cameraType = BCFCameraPerspective;
 
@@ -281,7 +281,7 @@ void  BCFViewPoint::Read_PerspectiveCamera(_xml::_element& elem, const std::stri
 /// <summary>
 /// 
 /// </summary>
-void BCFViewPoint::Write_PerspectiveCamera(_xml_writer& writer, const std::string& folder)
+void ViewPoint::Write_PerspectiveCamera(_xml_writer& writer, const std::string& folder)
 {
     WRITE_MEMBER(CameraViewPoint);
     WRITE_MEMBER(CameraDirection);
@@ -293,7 +293,7 @@ void BCFViewPoint::Write_PerspectiveCamera(_xml_writer& writer, const std::strin
 /// <summary>
 /// 
 /// </summary>
-void  BCFViewPoint::Read_OrthogonalCamera(_xml::_element& elem, const std::string& folder)
+void  ViewPoint::Read_OrthogonalCamera(_xml::_element& elem, const std::string& folder)
 {
     m_cameraType = BCFCameraOrthogonal;
 
@@ -309,7 +309,7 @@ void  BCFViewPoint::Read_OrthogonalCamera(_xml::_element& elem, const std::strin
 /// <summary>
 /// 
 /// </summary>
-void BCFViewPoint::Write_OrthogonalCamera(_xml_writer& writer, const std::string& folder)
+void ViewPoint::Write_OrthogonalCamera(_xml_writer& writer, const std::string& folder)
 {
     WRITE_MEMBER(CameraViewPoint);
     WRITE_MEMBER(CameraDirection);
@@ -322,7 +322,7 @@ void BCFViewPoint::Write_OrthogonalCamera(_xml_writer& writer, const std::string
 /// <summary>
 /// 
 /// </summary>
-BCFComponent* BCFViewPoint::SelectionAdd(const char* ifcGuid, const char* authoringToolId, const char* originatingSystem)
+BCFComponent* ViewPoint::SelectionAdd(const char* ifcGuid, const char* authoringToolId, const char* originatingSystem)
 {
     return m_Selection.Add(*this, ifcGuid, authoringToolId, originatingSystem);
 }
@@ -330,15 +330,15 @@ BCFComponent* BCFViewPoint::SelectionAdd(const char* ifcGuid, const char* author
 /// <summary>
 /// 
 /// </summary>
-BCFComponent* BCFViewPoint::SelectionIterate(BCFComponent* prev)
+BCFComponent* ViewPoint::SelectionIterate(BCFComponent* prev)
 {
-    return m_Selection.GetNext(prev);
+    return m_Selection.GetNext((Component*)prev);
 }
 
 /// <summary>
 /// 
 /// </summary>
-BCFComponent* BCFViewPoint::ExceptionsAdd(const char* ifcGuid, const char* authoringToolId, const char* originatingSystem)
+BCFComponent* ViewPoint::ExceptionsAdd(const char* ifcGuid, const char* authoringToolId, const char* originatingSystem)
 {
     return m_Exceptions.Add(*this, ifcGuid, authoringToolId, originatingSystem);
 }
@@ -346,17 +346,17 @@ BCFComponent* BCFViewPoint::ExceptionsAdd(const char* ifcGuid, const char* autho
 /// <summary>
 /// 
 /// </summary>
-BCFComponent* BCFViewPoint::ExceptionsIterate(BCFComponent* prev)
+BCFComponent* ViewPoint::ExceptionsIterate(BCFComponent* prev)
 {
-    return m_Exceptions.GetNext(prev);
+    return m_Exceptions.GetNext((Component*)prev);
 }
 
 /// <summary>
 /// 
 /// </summary>
-BCFBitmap* BCFViewPoint::BitmapAdd(const char* filePath, BCFBitmapFormat format, BCFPoint* location, BCFPoint* normal, BCFPoint* up, double height)
+BCFBitmap* ViewPoint::BitmapAdd(const char* filePath, BCFBitmapFormat format, BCFPoint* location, BCFPoint* normal, BCFPoint* up, double height)
 {
-    auto bitmap = new BCFBitmap(*this, &m_Bitmaps);
+    auto bitmap = new Bitmap(*this, &m_Bitmaps);
 
     bool ok = true;
 
@@ -385,17 +385,17 @@ BCFBitmap* BCFViewPoint::BitmapAdd(const char* filePath, BCFBitmapFormat format,
 /// <summary>
 /// 
 /// </summary>
-BCFBitmap* BCFViewPoint::BitmapIterate(BCFBitmap* prev)
+BCFBitmap* ViewPoint::BitmapIterate(BCFBitmap* prev)
 {
-    return m_Bitmaps.GetNext(prev);
+    return m_Bitmaps.GetNext((Bitmap*)prev);
 }
 
 /// <summary>
 /// 
 /// </summary>
-BCFColoring* BCFViewPoint::ColoringAdd(const char* color)
+BCFColoring* ViewPoint::ColoringAdd(const char* color)
 {
-    auto obj = new BCFColoring(*this, &m_Coloring);
+    auto obj = new Coloring(*this, &m_Coloring);
 
     bool ok = true;
 
@@ -414,17 +414,17 @@ BCFColoring* BCFViewPoint::ColoringAdd(const char* color)
 /// <summary>
 /// 
 /// </summary>
-BCFColoring* BCFViewPoint::ColoringIterate(BCFColoring* prev)
+BCFColoring* ViewPoint::ColoringIterate(BCFColoring* prev)
 {
-    return m_Coloring.GetNext(prev);
+    return m_Coloring.GetNext((Coloring*)prev);
 }
 
 /// <summary>
 /// 
 /// </summary>
-BCFLine* BCFViewPoint::LineAdd(BCFPoint* start, BCFPoint* end)
+BCFLine* ViewPoint::LineAdd(BCFPoint* start, BCFPoint* end)
 {
-    auto obj = new BCFLine(*this, &m_Lines);
+    auto obj = new Line(*this, &m_Lines);
 
     bool ok = true;
 
@@ -444,17 +444,17 @@ BCFLine* BCFViewPoint::LineAdd(BCFPoint* start, BCFPoint* end)
 /// <summary>
 /// 
 /// </summary>
-BCFLine* BCFViewPoint::LineIterate(BCFLine* prev)
+BCFLine* ViewPoint::LineIterate(BCFLine* prev)
 {
-    return m_Lines.GetNext(prev);
+    return m_Lines.GetNext((Line*)prev);
 }
 
 /// <summary>
 /// 
 /// </summary>
-BCFClippingPlane* BCFViewPoint::ClippingPlaneAdd(BCFPoint* location, BCFPoint* direction)
+BCFClippingPlane* ViewPoint::ClippingPlaneAdd(BCFPoint* location, BCFPoint* direction)
 {
-    auto obj = new BCFClippingPlane(*this, &m_ClippingPlanes);
+    auto obj = new ClippingPlane(*this, &m_ClippingPlanes);
 
     bool ok = true;
 
@@ -474,17 +474,17 @@ BCFClippingPlane* BCFViewPoint::ClippingPlaneAdd(BCFPoint* location, BCFPoint* d
 /// <summary>
 /// 
 /// </summary>
-BCFClippingPlane* BCFViewPoint::ClippingPlaneIterate(BCFClippingPlane* prev)
+BCFClippingPlane* ViewPoint::ClippingPlaneIterate(BCFClippingPlane* prev)
 {
-    return m_ClippingPlanes.GetNext(prev);
+    return m_ClippingPlanes.GetNext((ClippingPlane*)prev);
 }
 
 /// <summary>
 /// 
 /// </summary>
-void BCFViewPoint::AfterRead(const std::string& folder)
+void ViewPoint::AfterRead(const std::string& folder)
 {
-    if (Project().GetVersion() < BCFVer_3_0) {
+    if (GetProject().GetVersion() < BCFVer_3_0) {
         if (m_AspectRatio.empty()) {
             m_AspectRatio.assign("1");
         }
@@ -497,17 +497,17 @@ void BCFViewPoint::AfterRead(const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-bool BCFViewPoint::Remove()
+bool ViewPoint::Remove()
 {
     //check references
     BCFComment* comment = NULL;
     while (NULL != (comment = m_topic.CommentIterate(comment))) {
         if (this == comment->GetViewPoint()) {
-            log().add(Log::Level::error, "ViewPoint is used", "Can not delete used viewpoint %s", m_Guid.c_str());
+            GetLog().add(Log::Level::error, "ViewPoint is used", "Can not delete used viewpoint %s", m_Guid.c_str());
             return false;
         }
     }
 
     //
-    return __super::Remove();
+    return RemoveImpl();
 }

@@ -6,12 +6,12 @@
 struct XMLPoint : public BCFObject
 {
 public:
-    XMLPoint(BCFProject& project);
+    XMLPoint(Project& project);
 
     void Read(_xml::_element& elem, const std::string& folder);
     void Write(_xml_writer& writer, const std::string& folder, const char* tag);
 
-    BCFProject& Project() { return m_project; }
+    Project& GetProject() { return m_project; }
 
     bool IsSet() { return !m_X.empty() && !m_Y.empty() && !m_Z.empty(); }
 

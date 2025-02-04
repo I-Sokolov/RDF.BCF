@@ -1,6 +1,6 @@
 #include "pch.h"
-#include "BCFProject.h"
-#include "BCFTopic.h"
+#include "Project.h"
+#include "Topic.h"
 #include "XMLFile.h"
 #include "FileSystem.h"
 #include "SmokeTest.h"
@@ -30,7 +30,7 @@ bool XMLFile::ReadFile(const std::string& bcfFolder)
         }
     }
     catch (std::exception& ex) {
-        m_project.log().add(Log::Level::error, "Read file error", "Failed to read %s file. %s", path.c_str(), ex.what());
+        m_project.GetLog().add(Log::Level::error, "Read file error", "Failed to read %s file. %s", path.c_str(), ex.what());
     }
 
     if (ok) {
@@ -68,7 +68,7 @@ bool XMLFile::WriteFile(const std::string& bcfFolder)
         ok = true;
     }
     catch (std::exception& ex) {
-        m_project.log().add(Log::Level::error, "Write file error", "Failed to write %s file. %s", xmlpath.c_str(), ex.what());
+        m_project.GetLog().add(Log::Level::error, "Write file error", "Failed to write %s file. %s", xmlpath.c_str(), ex.what());
     }
 
 #ifdef SMOKE_TEST
@@ -100,8 +100,8 @@ void XMLFile::WriteRootElem(_xml_writer& writer, const std::string& folder, Attr
 /// <summary>
 /// 
 /// </summary>
-XMLText::XMLText(BCFTopic& topic, ListOfBCFObjects* parentList)
-    : BCFObject(topic.Project(), parentList)
+XMLText::XMLText(Topic& topic, ListOfBCFObjects* parentList)
+    : BCFObject(topic.GetProject(), parentList)
 {
 }
 

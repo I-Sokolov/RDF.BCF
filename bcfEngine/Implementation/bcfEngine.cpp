@@ -1,18 +1,7 @@
 #include "pch.h"
 
 #include "bcfEngine.h"
-#include "BCFProject.h"
-#include "BCFTopic.h"
-#include "BCFComment.h"
-#include "BCFViewPoint.h"
-#include "BCFFile.h"
-#include "BCFComponent.h"
-#include "BCFColoring.h"
-#include "BCFDocumentReference.h"
-#include "BCFBimSnippet.h"
-#include "BCFBitmap.h"
-#include "BCFLine.h"
-#include "BCFClippingPlane.h"
+#include "bcfAPI.h"
 
 /// <summary>
 /// Macros to implement put/get attributes and iterate/remove objects
@@ -82,7 +71,7 @@ typedef BCFBitmapFormat tBitmapFormat;
 /// </summary>
 RDFBCF_EXPORT BCFProject* bcfProjectCreate(const char* projectId)
 {
-    return new BCFProject(projectId);
+    return BCFProject::Create(projectId);
 }
 
 
@@ -100,10 +89,10 @@ RDFBCF_EXPORT bool bcfProjectDelete(BCFProject* project)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT const char* bcfErrorsGet(BCFProject* project, bool cleanLog)
+RDFBCF_EXPORT const char* bcfGetErrors(BCFProject* project, bool cleanLog)
 {
     if (project) {
-        return project->log().get(cleanLog);
+        return project->GetErrors(cleanLog);
     }
     return "NULL ARGUMENT";
 }
@@ -114,7 +103,7 @@ RDFBCF_EXPORT const char* bcfErrorsGet(BCFProject* project, bool cleanLog)
 RDFBCF_EXPORT bool bcfFileRead(BCFProject* project, const char* bcfFilePath, bool autofix)
 {
     if (project) {
-        return project->Read(bcfFilePath, autofix);
+        return project->ReadFile(bcfFilePath, autofix);
     }
     return false;
 }
@@ -125,7 +114,7 @@ RDFBCF_EXPORT bool bcfFileRead(BCFProject* project, const char* bcfFilePath, boo
 RDFBCF_EXPORT bool bcfFileWrite(BCFProject* project, const char* bcfFilePath, BCFVersion version)
 {
     if (project) {
-        return project->Write(bcfFilePath, version);
+        return project->WriteFile(bcfFilePath, version);
     }
     return false;
 }
@@ -147,7 +136,7 @@ RDFBCF_EXPORT bool bcfSetAuthor(BCFProject* project, const char* user, bool auto
 RDFBCF_EXPORT const char* bcfProjectIdGet(BCFProject* project)
 {
     if (project) {
-        return project->ProjectId();
+        return project->GetProjectId();
     }
     return NULL;
 }
@@ -179,7 +168,7 @@ RDFBCF_EXPORT bool bcfProjectNameSet(BCFProject* project, const char* name)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT const char* bcfEnumerationElementGet(BCFProject* project, BCFEnumeration enumeration, BCFIndex index)
+RDFBCF_EXPORT const char* bcfEnumerationElementGet(BCFProject* project, BCFEnumeration enumeration, int index)
 {
     if (project) {
         return project->GetExtensions().GetElement(enumeration, index);
@@ -262,7 +251,7 @@ RDFBCF_EXPORT BCFFile* bcfFileAdd(BCFTopic* topic, const char* filePath, bool is
     if (topic) {
         return topic->FileAdd(filePath, isExternal);
     }
-    return 0;
+    return NULL;
 }
 
 /// <summary>
@@ -330,10 +319,10 @@ OBJ_GET_ATTR(Str, DocumentReference, Description)
 
 OBJ_SET_ATTR(Str, DocumentReference, Description)
 
-RDFBCF_EXPORT bool bcfDocumentReferenceSetFilePath(BCFDocumentReference* documentReferece, const char* filePath, bool isExternal)
+RDFBCF_EXPORT bool bcfDocumentReferenceSetFilePath(BCFDocumentReference* documentReference, const char* filePath, bool isExternal)
 {
-    if (documentReferece) {
-        return documentReferece->SetFilePath(filePath, isExternal);
+    if (documentReference) {
+        return documentReference->SetFilePath(filePath, isExternal);
     }
     return false;
 }

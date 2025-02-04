@@ -38,11 +38,6 @@ extern "C" {
     /// <summary>
     /// 
     /// </summary>
-    typedef uint16_t BCFIndex;
-
-    /// <summary>
-    /// 
-    /// </summary>
     enum BCFVersion
     {
         BCFVerNotSupported = 0,

@@ -1,18 +1,18 @@
 #pragma once
 
 #include "pch.h"
-#include "BCFColoring.h"
-#include "BCFViewPoint.h"
-#include "BCFComponent.h"
-#include "BCFProject.h"
+#include "Coloring.h"
+#include "ViewPoint.h"
+#include "Component.h"
+#include "Project.h"
 
 /// <summary>
 /// 
 /// </summary>
-BCFColoring::BCFColoring(BCFViewPoint& viewPoint, ListOfBCFObjects* parentList)
-    : BCFObject(viewPoint.Project(), parentList) 
+Coloring::Coloring(ViewPoint& viewPoint, ListOfBCFObjects* parentList)
+    : BCFObject(viewPoint.GetProject(), parentList) 
     , m_viewPoint(viewPoint)
-    , m_Components(viewPoint.Project())
+    , m_Components(viewPoint.GetProject())
 { 
 }
 
@@ -20,7 +20,7 @@ BCFColoring::BCFColoring(BCFViewPoint& viewPoint, ListOfBCFObjects* parentList)
 /// <summary>
 /// 
 /// </summary>
-void BCFColoring::Read(_xml::_element& elem, const std::string& folder) 
+void Coloring::Read(_xml::_element& elem, const std::string& folder) 
 { 
     ATTRS_START
         ATTR_GET(Color)
@@ -34,7 +34,7 @@ void BCFColoring::Read(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-bool BCFColoring::Validate(bool fix)
+bool Coloring::Validate(bool fix)
 {
     if (fix) {
         if (m_Color.empty()) {
@@ -61,7 +61,7 @@ bool BCFColoring::Validate(bool fix)
 /// <summary>
 /// 
 /// </summary>
-void BCFColoring::Write(_xml_writer& writer, const std::string& folder, const char* tag)
+void Coloring::Write(_xml_writer& writer, const std::string& folder, const char* tag)
 { 
     XMLFile::Attributes attr;
     ATTR_ADD(Color);
@@ -74,7 +74,7 @@ void BCFColoring::Write(_xml_writer& writer, const std::string& folder, const ch
 /// <summary>
 /// 
 /// </summary>
-BCFComponent* BCFColoring::ComponentAdd(const char* ifcGuid, const char* authoringToolId, const char* originatingSystem)
+BCFComponent* Coloring::ComponentAdd(const char* ifcGuid, const char* authoringToolId, const char* originatingSystem)
 {
     return m_Components.Add(m_viewPoint, ifcGuid, authoringToolId, originatingSystem);
 }
@@ -82,16 +82,16 @@ BCFComponent* BCFColoring::ComponentAdd(const char* ifcGuid, const char* authori
 /// <summary>
 /// 
 /// </summary>
-BCFComponent* BCFColoring::ComponentIterate(BCFComponent* prev)
+BCFComponent* Coloring::ComponentIterate(BCFComponent* prev)
 {
-    return m_Components.GetNext(prev);
+    return m_Components.GetNext((Component*)prev);
 }
 
 
 /// <summary>
 /// 
 /// </summary>
-bool BCFColoring::IsColorValid(const char* str, const char* propName)
+bool Coloring::IsColorValid(const char* str, const char* propName)
 {
     auto len = strlen(str);
 
@@ -107,6 +107,6 @@ bool BCFColoring::IsColorValid(const char* str, const char* propName)
         }
     }
 
-    log().add(Log::Level::error, "Invalid value", "Color value must be 6 or 8 hex digits, value '%s' is incorrect for %s", str, propName);
+    GetLog().add(Log::Level::error, "Invalid value", "Color value must be 6 or 8 hex digits, value '%s' is incorrect for %s", str, propName);
     return false;
 }

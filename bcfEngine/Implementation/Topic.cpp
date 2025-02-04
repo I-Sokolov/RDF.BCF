@@ -1,18 +1,18 @@
 #include "pch.h"
 #include "bcfTypes.h"
-#include "BCFTopic.h"
-#include "BCFProject.h"
-#include "BCFViewPoint.h"
-#include "BCFComment.h"
-#include "BCFFile.h"
-#include "BCFDocumentReference.h"
-#include "BCFBimSnippet.h"
+#include "Topic.h"
+#include "Project.h"
+#include "ViewPoint.h"
+#include "Comment.h"
+#include "File.h"
+#include "DocumentReference.h"
+#include "BimSnippet.h"
 #include "FileSystem.h"
 
 /// <summary>
 /// 
 /// </summary>
-BCFTopic::BCFTopic(BCFProject& project, ListOfBCFObjects* parentList, const char* guid)
+Topic::Topic(Project& project, ListOfBCFObjects* parentList, const char* guid)
     : XMLFile(project, parentList)
     , m_Guid(project, guid)
     , m_BimSnippets(project)
@@ -31,7 +31,7 @@ BCFTopic::BCFTopic(BCFProject& project, ListOfBCFObjects* parentList, const char
 /// <summary>
 /// 
 /// </summary>
-void BCFTopic::ReadRoot(_xml::_element& elem, const std::string& folder)
+void Topic::ReadRoot(_xml::_element& elem, const std::string& folder)
 {
     CHILDREN_START
         CHILD_READ(Header)
@@ -46,7 +46,7 @@ void BCFTopic::ReadRoot(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-void BCFTopic::AfterRead(const std::string& folder)
+void Topic::AfterRead(const std::string& folder)
 {
     m_Comments.AfterRead(folder);
     m_DocumentReferences.AfterRead(folder);
@@ -55,7 +55,7 @@ void BCFTopic::AfterRead(const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-bool BCFTopic::Validate(bool fix)
+bool Topic::Validate(bool fix)
 {
     if (fix) {
         auto NOT_SET = "Not set";
@@ -65,17 +65,17 @@ bool BCFTopic::Validate(bool fix)
         }
 
         if (m_TopicType.empty()) {
-            Project().GetExtensions().AddElement(BCFTopicTypes, NOT_SET);
+            GetProject().GetExtensions().AddElement(BCFTopicTypes, NOT_SET);
             m_TopicType.assign(NOT_SET);
         }
 
         if (m_TopicStatus.empty()) {
-            Project().GetExtensions().AddElement(BCFTopicStatuses, NOT_SET);
+            GetProject().GetExtensions().AddElement(BCFTopicStatuses, NOT_SET);
             m_TopicStatus.assign(NOT_SET);
         }
 
         if (m_CreationAuthor.empty()) {
-            Project().GetExtensions().AddElement(BCFUsers, NOT_SET);
+            GetProject().GetExtensions().AddElement(BCFUsers, NOT_SET);
             m_CreationAuthor.assign(NOT_SET);
         }
 
@@ -110,7 +110,7 @@ bool BCFTopic::Validate(bool fix)
 /// <summary>
 /// 
 /// </summary>
-void BCFTopic::WriteRootContent(_xml_writer& writer, const std::string& folder)
+void Topic::WriteRootContent(_xml_writer& writer, const std::string& folder)
 {
     Attributes attr;
 
@@ -126,7 +126,7 @@ void BCFTopic::WriteRootContent(_xml_writer& writer, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-void BCFTopic::Read_Header(_xml::_element& elem, const std::string& folder)
+void Topic::Read_Header(_xml::_element& elem, const std::string& folder)
 {
     CHILDREN_START
         CHILD_GET_LIST(Files, File)
@@ -136,7 +136,7 @@ void BCFTopic::Read_Header(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-void BCFTopic::Write_Header(_xml_writer& writer, const std::string& folder)
+void Topic::Write_Header(_xml_writer& writer, const std::string& folder)
 {
     WRITE_LIST(File)
 }
@@ -144,7 +144,7 @@ void BCFTopic::Write_Header(_xml_writer& writer, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-void BCFTopic::Read_Topic(_xml::_element& elem, const std::string& folder)
+void Topic::Read_Topic(_xml::_element& elem, const std::string& folder)
 {
     m_bReadFromFile = true;
     std::string topicGuid;
@@ -174,8 +174,8 @@ void BCFTopic::Read_Topic(_xml::_element& elem, const std::string& folder)
         CHILD_GET_CONTENT(AssignedTo)
         CHILD_GET_CONTENT(Description)
         CHILD_GET_CONTENT(Stage)
-        CHILD_GET_LIST_CONDITIONAL(DocumentReferences, DocumentReference, Project().GetVersion() > BCFVer_2_0)
-        CHILD_ADD_TO_LIST_CONDITIONAL(DocumentReferences, DocumentReferences, Project().GetVersion() == BCFVer_2_0)
+        CHILD_GET_LIST_CONDITIONAL(DocumentReferences, DocumentReference, GetProject().GetVersion() > BCFVer_2_0)
+        CHILD_ADD_TO_LIST_CONDITIONAL(DocumentReferences, DocumentReferences, GetProject().GetVersion() == BCFVer_2_0)
         CHILD_GET_LIST(RelatedTopics, RelatedTopic)
         CHILD_GET_LIST(Comments, Comment)
         CHILD_GET_LIST(Viewpoints, ViewPoint)
@@ -183,7 +183,7 @@ void BCFTopic::Read_Topic(_xml::_element& elem, const std::string& folder)
     CHILDREN_END
 }
 
-void BCFTopic::Write_Topic(_xml_writer& writer, const std::string& folder)
+void Topic::Write_Topic(_xml_writer& writer, const std::string& folder)
 {
     WRITE_LIST(ReferenceLink);
     WRITE_CONTENT(Title);
@@ -211,7 +211,7 @@ void BCFTopic::Write_Topic(_xml_writer& writer, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-bool BCFTopic::SetServerAssignedId(const char* val) 
+bool Topic::SetServerAssignedId(const char* val) 
 {
     UNNULL;
 
@@ -225,11 +225,11 @@ bool BCFTopic::SetServerAssignedId(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool BCFTopic::SetTopicStatus(const char* val)
+bool Topic::SetTopicStatus(const char* val)
 {
     UNNULL;
 
-    if (Project().GetExtensions().CheckElement(BCFTopicStatuses, val)) {
+    if (GetProject().GetExtensionsImpl().CheckElement(BCFTopicStatuses, val)) {
         if (UpdateAuthor()) {
             m_TopicStatus.assign(val);
             return true;
@@ -241,11 +241,11 @@ bool BCFTopic::SetTopicStatus(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool BCFTopic::SetTopicType(const char* val)
+bool Topic::SetTopicType(const char* val)
 {
     UNNULL;
 
-    if (Project().GetExtensions().CheckElement(BCFTopicTypes, val)) {
+    if (GetProject().GetExtensionsImpl().CheckElement(BCFTopicTypes, val)) {
         if (UpdateAuthor()) {
             m_TopicType.assign(val);
             return true;
@@ -257,7 +257,7 @@ bool BCFTopic::SetTopicType(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool BCFTopic::SetTitle(const char* val)
+bool Topic::SetTitle(const char* val)
 {
     UNNULL;
 
@@ -271,11 +271,11 @@ bool BCFTopic::SetTitle(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool BCFTopic::SetPriority(const char* val)
+bool Topic::SetPriority(const char* val)
 {
     UNNULL;
 
-    if (Project().GetExtensions().CheckElement(BCFPriorities, val)) {
+    if (GetProject().GetExtensionsImpl().CheckElement(BCFPriorities, val)) {
         if (UpdateAuthor()) {
             m_Priority.assign(val);
             return true;
@@ -287,7 +287,7 @@ bool BCFTopic::SetPriority(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool BCFTopic::SetIndex(int val)
+bool Topic::SetIndex(int val)
 {
     if (UpdateAuthor()) {
         return IntToStr(val, m_Index);
@@ -298,7 +298,7 @@ bool BCFTopic::SetIndex(int val)
 /// <summary>
 /// 
 /// </summary>
-bool BCFTopic::SetDueDate(const char* val)
+bool Topic::SetDueDate(const char* val)
 {
     UNNULL;
     VALIDATE(DueDate, DateTime);
@@ -313,11 +313,11 @@ bool BCFTopic::SetDueDate(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool BCFTopic::SetAssignedTo(const char* val)
+bool Topic::SetAssignedTo(const char* val)
 {
     UNNULL;
 
-    if (Project().GetExtensions().CheckElement(BCFUsers, val)) {
+    if (GetProject().GetExtensionsImpl().CheckElement(BCFUsers, val)) {
         if (UpdateAuthor()) {
             m_AssignedTo.assign(val);
             return true;
@@ -329,7 +329,7 @@ bool BCFTopic::SetAssignedTo(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool BCFTopic::SetDescription(const char* val)
+bool Topic::SetDescription(const char* val)
 {
     UNNULL;
 
@@ -343,11 +343,11 @@ bool BCFTopic::SetDescription(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool BCFTopic::SetStage(const char* val)
+bool Topic::SetStage(const char* val)
 {
     UNNULL;
 
-    if (Project().GetExtensions().CheckElement(BCFStages, val)) {
+    if (GetProject().GetExtensionsImpl().CheckElement(BCFStages, val)) {
         if (UpdateAuthor()) {
             m_Stage.assign(val);
             return true;
@@ -359,7 +359,7 @@ bool BCFTopic::SetStage(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool BCFTopic::UpdateAuthor()
+bool Topic::UpdateAuthor()
 {
     return __super::UpdateAuthor(m_bReadFromFile ? m_ModifiedAuthor : m_CreationAuthor, m_bReadFromFile ? m_ModifiedDate : m_CreationDate);
 }
@@ -367,10 +367,10 @@ bool BCFTopic::UpdateAuthor()
 /// <summary>
 /// 
 /// </summary>
-BCFViewPoint* BCFTopic::ViewPointAdd(const char* guid)
+BCFViewPoint* Topic::ViewPointAdd(const char* guid)
 {
     if (UpdateAuthor()) {
-        auto viewPoint = new BCFViewPoint(*this, &m_Viewpoints, guid ? guid : "");
+        auto viewPoint = new ViewPoint(*this, &m_Viewpoints, guid ? guid : "");
 
         if (viewPoint) {
             m_Viewpoints.Add(viewPoint);
@@ -383,18 +383,18 @@ BCFViewPoint* BCFTopic::ViewPointAdd(const char* guid)
 /// <summary>
 /// 
 /// </summary>
-BCFViewPoint* BCFTopic::ViewPointIterate(BCFViewPoint* prev)
+BCFViewPoint* Topic::ViewPointIterate(BCFViewPoint* prev)
 {
-    return m_Viewpoints.GetNext(prev);
+    return m_Viewpoints.GetNext((ViewPoint*)prev);
 }
 
 
 /// <summary>
 /// 
 /// </summary>
-BCFFile* BCFTopic::FileAdd(const char* filePath, bool isExternal)
+BCFFile* Topic::FileAdd(const char* filePath, bool isExternal)
 {
-    auto file = new BCFFile(*this, &m_Files);
+    auto file = new File(*this, &m_Files);
 
     bool ok = true;
 
@@ -422,16 +422,16 @@ BCFFile* BCFTopic::FileAdd(const char* filePath, bool isExternal)
 /// <summary>
 /// 
 /// </summary>
-BCFFile* BCFTopic::FileIterate(BCFFile* prev)
+BCFFile* Topic::FileIterate(BCFFile* prev)
 {
-    return m_Files.GetNext(prev);
+    return m_Files.GetNext((File*)prev);
 }
 
 
 /// <summary>
 /// 
 /// </summary>
-BCFViewPoint* BCFTopic::ViewPointByGuid(const char* guid)
+ViewPoint* Topic::ViewPointByGuid(const char* guid)
 {
     return m_Viewpoints.FindByGuid(guid);
 }
@@ -439,10 +439,10 @@ BCFViewPoint* BCFTopic::ViewPointByGuid(const char* guid)
 /// <summary>
 /// 
 /// </summary>
-BCFComment* BCFTopic::CommentAdd(const char* guid)
+BCFComment* Topic::CommentAdd(const char* guid)
 {
     if (UpdateAuthor()) {
-        auto comment = new BCFComment(*this, &m_Comments, guid ? guid : "");//"" forces generate guid
+        auto comment = new Comment(*this, &m_Comments, guid ? guid : "");//"" forces generate guid
 
         if (comment) {
             m_Comments.Add(comment);
@@ -455,17 +455,17 @@ BCFComment* BCFTopic::CommentAdd(const char* guid)
 /// <summary>
 /// 
 /// </summary>
-BCFComment* BCFTopic::CommentIterate(BCFComment* prev)
+BCFComment* Topic::CommentIterate(BCFComment* prev)
 {
-    return m_Comments.GetNext(prev);
+    return m_Comments.GetNext((Comment*)prev);
 }
 
 /// <summary>
 /// 
 /// </summary>
-BCFDocumentReference* BCFTopic::DocumentReferenceAdd(const char* path, bool isExternal, const char* guid)
+BCFDocumentReference* Topic::DocumentReferenceAdd(const char* path, bool isExternal, const char* guid)
 {
-    auto ref = new BCFDocumentReference(*this, &m_DocumentReferences, guid ? guid : "");
+    auto ref = new DocumentReference(*this, &m_DocumentReferences, guid ? guid : "");
 
     bool ok = ref->SetFilePath(path, isExternal);
     ok = ok && UpdateAuthor();
@@ -488,19 +488,19 @@ BCFDocumentReference* BCFTopic::DocumentReferenceAdd(const char* path, bool isEx
 /// <summary>
 /// 
 /// </summary>
-BCFDocumentReference* BCFTopic::DocumentReferenceIterate(BCFDocumentReference* prev)
+BCFDocumentReference* Topic::DocumentReferenceIterate(BCFDocumentReference* prev)
 {
-    return m_DocumentReferences.GetNext(prev);
+    return m_DocumentReferences.GetNext((DocumentReference*)prev);
 }
 
 /// <summary>
 /// 
 /// </summary>
-BCFBimSnippet* BCFTopic::GetBimSnippet(bool forceCreate)
+BCFBimSnippet* Topic::GetBimSnippet(bool forceCreate)
 {
     if (forceCreate && m_BimSnippets.Items().empty()) {
         if (UpdateAuthor()) {
-            auto snippet = new BCFBimSnippet(*this, &m_BimSnippets);
+            auto snippet = new BimSnippet(*this, &m_BimSnippets);
             m_BimSnippets.Add(snippet);
         }
     }
@@ -516,7 +516,7 @@ BCFBimSnippet* BCFTopic::GetBimSnippet(bool forceCreate)
 /// <summary>
 /// 
 /// </summary>
-bool BCFTopic::ReferenceLinkAdd(const char* val)
+bool Topic::ReferenceLinkAdd(const char* val)
 {
     if (val && *val) {
         if (UpdateAuthor()) {
@@ -530,7 +530,7 @@ bool BCFTopic::ReferenceLinkAdd(const char* val)
 /// <summary>
 /// 
 /// </summary>
-const char* BCFTopic::ReferenceLinkIterate(const char* prev)
+const char* Topic::ReferenceLinkIterate(const char* prev)
 {
     return m_ReferenceLinks.GetNext(prev);
 }
@@ -538,7 +538,7 @@ const char* BCFTopic::ReferenceLinkIterate(const char* prev)
 /// <summary>
 /// 
 /// </summary>
-bool BCFTopic::ReferenceLinkRemove(const char* val)
+bool Topic::ReferenceLinkRemove(const char* val)
 {
     if (UpdateAuthor()) {
         return m_ReferenceLinks.Remove(val);
@@ -549,10 +549,10 @@ bool BCFTopic::ReferenceLinkRemove(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool BCFTopic::LabelAdd(const char* val)
+bool Topic::LabelAdd(const char* val)
 {
     if (val && *val) {
-        if (Project().GetExtensions().CheckElement(BCFTopicLabels, val)) {
+        if (GetProject().GetExtensionsImpl().CheckElement(BCFTopicLabels, val)) {
             if (UpdateAuthor()) {
                 m_Labels.Add(val);
                 return true;
@@ -566,7 +566,7 @@ bool BCFTopic::LabelAdd(const char* val)
 /// <summary>
 /// 
 /// </summary>
-const char* BCFTopic::LabelIterate(const char* prev)
+const char* Topic::LabelIterate(const char* prev)
 {
     return m_Labels.GetNext(prev);
 }
@@ -574,7 +574,7 @@ const char* BCFTopic::LabelIterate(const char* prev)
 /// <summary>
 /// 
 /// </summary>
-bool BCFTopic::LabelRemove(const char* val)
+bool Topic::LabelRemove(const char* val)
 {
     if (UpdateAuthor()) {
         return m_Labels.Remove(val);
@@ -585,7 +585,7 @@ bool BCFTopic::LabelRemove(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool BCFTopic::RelatedTopicAdd(BCFTopic* topic)
+bool Topic::RelatedTopicAdd(BCFTopic* topic)
 {
     if (topic) {
         auto guid = topic->GetGuid();
@@ -607,7 +607,7 @@ bool BCFTopic::RelatedTopicAdd(BCFTopic* topic)
 /// <summary>
 /// 
 /// </summary>
-BCFTopic* BCFTopic::GetNextRelatedTopic(const char* guid)
+Topic* Topic::GetNextRelatedTopic(const char* guid)
 {
     auto it = m_RelatedTopics.Items().begin();
 
@@ -626,7 +626,7 @@ BCFTopic* BCFTopic::GetNextRelatedTopic(const char* guid)
     }
     else {
         guid = (*it)->GetGuid();
-        auto topic = Project().TopicByGuid(guid);
+        auto topic = GetProject().TopicByGuid(guid);
         if (topic) {
             return topic;
         }
@@ -641,7 +641,7 @@ BCFTopic* BCFTopic::GetNextRelatedTopic(const char* guid)
 /// <summary>
 /// 
 /// </summary>
-BCFTopic* BCFTopic::RelatedTopicIterate(BCFTopic* prev)
+BCFTopic* Topic::RelatedTopicIterate(BCFTopic* prev)
 {
     return GetNextRelatedTopic(prev ? prev->GetGuid() : NULL);
 }
@@ -649,7 +649,7 @@ BCFTopic* BCFTopic::RelatedTopicIterate(BCFTopic* prev)
 /// <summary>
 /// 
 /// </summary>
-bool BCFTopic::RelatedTopicRemove(BCFTopic* topic)
+bool Topic::RelatedTopicRemove(BCFTopic* topic)
 {
     if (topic) {
         if (UpdateAuthor()) {
@@ -667,11 +667,11 @@ bool BCFTopic::RelatedTopicRemove(BCFTopic* topic)
 /// <summary>
 /// 
 /// </summary>
-bool BCFTopic::Remove()
+bool Topic::Remove()
 {
     //remove references
     BCFTopic* topic = NULL;
-    while (NULL != (topic = Project().TopicIterate(topic))) {
+    while (NULL != (topic = GetProject().TopicIterate(topic))) {
 
         if (topic != this) {
 
@@ -687,5 +687,5 @@ bool BCFTopic::Remove()
     }
 
     //
-    return __super::Remove();
+    return RemoveImpl();
 }

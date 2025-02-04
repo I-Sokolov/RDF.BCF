@@ -1,11 +1,11 @@
 
 #include "pch.h"
+#include "bcfAPI.h"
 #include "SmokeTest.h"
 #include "FileSystem.h"
 
 #include <filesystem>
 
-#include "BCFProject.h"
 
 #ifdef SMOKE_TEST
 
@@ -61,12 +61,12 @@ static void TestFromDataSet(const char* filepath)
 {
     printf("\n\nTEST FILE %s\n", filepath);
 
-    BCFProject* bcf = new BCFProject();
+    auto bcf = BCFProject::Create();
 
-    auto ok = bcf->Read(filepath, true);
+    auto ok = bcf->ReadFile(filepath, true);
     ASSERT(ok);
 
-    ok = bcf->Write("Test.bcf", BCFVer_3_0);
+    ok = bcf->WriteFile("Test.bcf", BCFVer_3_0);
     ASSERT(ok);
 
     bcf->Delete();    

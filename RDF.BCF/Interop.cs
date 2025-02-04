@@ -82,12 +82,12 @@ namespace RDF.BCF
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ProjectDelete(IntPtr project);
 
-        [DllImport(DLL, EntryPoint = "bcfErrorsGet")]
-        private static extern IntPtr ErrorsGet_(IntPtr project, [param: MarshalAs(UnmanagedType.U1)] bool cleanLog);
+        [DllImport(DLL, EntryPoint = "bcfGetErrors")]
+        private static extern IntPtr GetErrors_(IntPtr project, [param: MarshalAs(UnmanagedType.U1)] bool cleanLog);
 
-        public static string ErrorsGet(IntPtr project, bool cleanLog = true)
+        public static string GetErrors(IntPtr project, bool cleanLog = true)
         {
-            return PtrToString(ErrorsGet_(project, cleanLog));
+            return PtrToString(GetErrors_(project, cleanLog));
         }
 
         [DllImport(DLL, EntryPoint = "bcfFileRead")]

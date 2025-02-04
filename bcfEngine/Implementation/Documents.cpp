@@ -2,14 +2,14 @@
 #include "Documents.h"
 #include "GuidStr.h"
 #include "FileSystem.h"
-#include "BCFProject.h"
-#include "BCFTopic.h"
-#include "BCFDocumentReference.h"
+#include "Project.h"
+#include "Topic.h"
+#include "DocumentReference.h"
 
 /// <summary>
 /// 
 /// </summary>
-Documents::Documents(BCFProject& project)
+Documents::Documents(Project& project)
     : XMLFile (project, NULL)
     , m_Documents(project)
 {
@@ -83,7 +83,7 @@ void Documents::MarkUsedDocuments()
     }
 
     BCFTopic* topic = NULL;
-    while (NULL != (topic = Project().TopicIterate(topic))) {        
+    while (NULL != (topic = GetProject().TopicIterate(topic))) {        
 
         BCFDocumentReference* ref = NULL;
         while (NULL != (ref = topic->DocumentReferenceIterate(ref))) {
@@ -125,7 +125,7 @@ const char* Documents::GetFilePath(const char* guid)
         return doc->GetFilePath(true);
     }
     else {
-        log().add(Log::Level::error, "Invalid document guid %s", guid);
+        GetLog().add(Log::Level::error, "Invalid document guid %s", guid);
         return "";
     }
 }
@@ -134,13 +134,13 @@ const char* Documents::GetFilePath(const char* guid)
 /// 
 /// </summary>
 Documents::Doc::Doc(Documents& documents, ListOf<Doc>* list, const char* filePath)
-    : BCFObject(documents.Project(), list)
-    , m_Guid(documents.Project(), filePath ? "" : NULL)
+    : BCFObject(documents.GetProject(), list)
+    , m_Guid(documents.GetProject(), filePath ? "" : NULL)
     , used(true)
 {
     if (filePath && *filePath) {
         m_filePath = filePath;
-        m_Filename = FileSystem::GetFileName(filePath, log());
+        m_Filename = FileSystem::GetFileName(filePath, GetLog());
     }
 }
 
@@ -154,7 +154,7 @@ void Documents::Doc::GetReadWritePath(std::string& path, bool createFolder)
     FileSystem::AddPath(path, "Documents");
 
     if (createFolder) {
-        if (!FileSystem::CreateDir(path.c_str(), log())) {
+        if (!FileSystem::CreateDir(path.c_str(), GetLog())) {
             throw std::exception();
         }
     }
@@ -176,18 +176,18 @@ const char* Documents::Doc::GetFilePath(bool create)
         std::string dst_path(m_readFolder);
 
         FileSystem::AddPath(dst_path, "Documents_");
-        if (!FileSystem::CreateDir(dst_path.c_str(), log())) {
+        if (!FileSystem::CreateDir(dst_path.c_str(), GetLog())) {
             return "";
         }
 
         FileSystem::AddPath(dst_path, m_Guid.c_str());
-        if (!FileSystem::CreateDir(dst_path.c_str(), log())) {
+        if (!FileSystem::CreateDir(dst_path.c_str(), GetLog())) {
             return "";
         }
 
         FileSystem::AddPath(dst_path, m_Filename.c_str());
 
-        if (!FileSystem::MoveFile(src_path.c_str(), dst_path.c_str(), log())) {
+        if (!FileSystem::MoveFile(src_path.c_str(), dst_path.c_str(), GetLog())) {
             return "";
         }
 
@@ -213,7 +213,7 @@ void Documents::Doc::PrepareToWrite(const std::string& folder)
     std::string dst_name;
     GetReadWritePath(dst_name, true);
 
-    if (!FileSystem::CopyFile(src_name.c_str(), dst_name.c_str(), log())) {
+    if (!FileSystem::CopyFile(src_name.c_str(), dst_name.c_str(), GetLog())) {
         throw std::exception();
     }
 }
@@ -234,7 +234,7 @@ bool Documents::Doc::Validate(bool)
 const char* Documents::Add(const char* filePath)
 {
     if (!filePath || !FileSystem::Exists(filePath)) {
-        log().add(Log::Level::error, "File does not exist", "%s", filePath ? filePath : "<null>");
+        GetLog().add(Log::Level::error, "File does not exist", "%s", filePath ? filePath : "<null>");
         return "";
     }
 

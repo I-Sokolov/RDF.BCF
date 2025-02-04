@@ -1,15 +1,23 @@
 #include "pch.h"
-#include "BCFProject.h"
-#include "BCFTopic.h"
+#include "Project.h"
+#include "Topic.h"
 #include "Archivator.h"
 #include "FileSystem.h"
 
-long BCFProject::gProjectCounter = 0;
+long Project::gProjectCounter = 0;
 
 /// <summary>
 /// 
 /// </summary>
-BCFProject::BCFProject(const char* projectId)
+BCFProject* BCFProject::Create(const char* projectId)
+{
+    return new Project(projectId);
+}
+
+/// <summary>
+/// 
+/// </summary>
+Project::Project(const char* projectId)
     : m_version(*this)
     , m_projectInfo(*this, projectId)
     , m_extensions (*this)
@@ -23,7 +31,7 @@ BCFProject::BCFProject(const char* projectId)
 /// <summary>
 /// 
 /// </summary>
-BCFProject::~BCFProject()
+Project::~Project()
 {
     CleanWorkingFolders();
     gProjectCounter--;
@@ -32,7 +40,7 @@ BCFProject::~BCFProject()
 /// <summary>
 /// 
 /// </summary>
-bool BCFProject::Delete(void)
+bool Project::Delete(void)
 {
     if (CleanWorkingFolders()) {
         delete this;
@@ -46,7 +54,7 @@ bool BCFProject::Delete(void)
 /// <summary>
 /// 
 /// </summary>
-bool BCFProject::CleanWorkingFolders(bool keepLast)
+bool Project::CleanWorkingFolders(bool keepLast)
 {
     StringList keep;
     if (keepLast && m_workingFolders.size()) {
@@ -72,7 +80,7 @@ bool BCFProject::CleanWorkingFolders(bool keepLast)
 /// <summary>
 /// 
 /// </summary>
-bool BCFProject::Read(const char* bcfFilePath, bool autofix)
+bool Project::ReadFile(const char* bcfFilePath, bool autofix)
 {
     std::string bcfFolder;
     bool ok = FileSystem::CreateTempDir(bcfFolder, m_log);
@@ -101,7 +109,7 @@ bool BCFProject::Read(const char* bcfFilePath, bool autofix)
 /// <summary>
 /// 
 /// </summary>
-bool BCFProject::Validate(bool fix)
+bool Project::Validate(bool fix)
 {
     bool valid = true;
     valid = m_version.Validate(fix) && valid;
@@ -115,7 +123,7 @@ bool BCFProject::Validate(bool fix)
 /// <summary>
 /// 
 /// </summary>
-bool BCFProject::Write(const char* bcfFilePath, BCFVersion version)
+bool Project::WriteFile(const char* bcfFilePath, BCFVersion version)
 {
     if (!Validate(false)) {
         return false;
@@ -153,7 +161,7 @@ bool BCFProject::Write(const char* bcfFilePath, BCFVersion version)
 /// <summary>
 /// 
 /// </summary>
-bool BCFProject::ReadTopics(const std::string& bcfFolder)
+bool Project::ReadTopics(const std::string& bcfFolder)
 {
     FileSystem::DirList elems;
     bool ok = FileSystem::GetDirContent(bcfFolder.c_str(), elems, m_log);
@@ -161,7 +169,7 @@ bool BCFProject::ReadTopics(const std::string& bcfFolder)
     for (auto& elem : elems) {
         if (ok && elem.folder) {
             if (GuidStr::IsGUIDValid(elem.name.c_str(), NULL)) {
-                auto topic = new BCFTopic(*this, &m_topics, elem.name.c_str());
+                auto topic = new Topic(*this, &m_topics, elem.name.c_str());
                 m_topics.Add(topic); 
 
                 std::string topicFolder(bcfFolder);
@@ -177,7 +185,7 @@ bool BCFProject::ReadTopics(const std::string& bcfFolder)
 /// <summary>
 /// 
 /// </summary>
-bool BCFProject::WriteTopics(const std::string& bcfFolder)
+bool Project::WriteTopics(const std::string& bcfFolder)
 {
     bool ok = true;
 
@@ -186,7 +194,7 @@ bool BCFProject::WriteTopics(const std::string& bcfFolder)
         std::string topicFolder(bcfFolder);
         FileSystem::AddPath(topicFolder, topic->GetGuid());
 
-        ok = ok && FileSystem::CreateDir(topicFolder.c_str(), log());
+        ok = ok && FileSystem::CreateDir(topicFolder.c_str(), GetLog());
 
         ok = ok && topic->WriteFile(topicFolder);
     }
@@ -197,9 +205,9 @@ bool BCFProject::WriteTopics(const std::string& bcfFolder)
 /// <summary>
 /// 
 /// </summary>
-BCFTopic* BCFProject::TopicAdd(const char* type, const char* title, const char* status, const char* guid)
+BCFTopic* Project::TopicAdd(const char* type, const char* title, const char* status, const char* guid)
 {
-    auto topic = new BCFTopic(*this, &m_topics, guid ? guid : "");
+    auto topic = new Topic(*this, &m_topics, guid ? guid : "");
 
     if (topic) {
 
@@ -225,15 +233,15 @@ BCFTopic* BCFProject::TopicAdd(const char* type, const char* title, const char* 
 /// <summary>
 /// 
 /// </summary>
-BCFTopic* BCFProject::TopicIterate(BCFTopic* prev)
+BCFTopic* Project::TopicIterate(BCFTopic* prev)
 { 
-    return m_topics.GetNext(prev); 
+    return m_topics.GetNext((Topic*)prev); 
 }
 
 /// <summary>
 /// 
 /// </summary>
-BCFTopic* BCFProject::TopicByGuid(const char* guid)
+Topic* Project::TopicByGuid(const char* guid)
 {
     return m_topics.FindByGuid(guid);
 }

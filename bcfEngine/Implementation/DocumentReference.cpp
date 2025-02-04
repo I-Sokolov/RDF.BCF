@@ -1,23 +1,23 @@
 #include "pch.h"
-#include "BCFDocumentReference.h"
-#include "BCFProject.h"
-#include "BCFTopic.h"
+#include "DocumentReference.h"
+#include "Project.h"
+#include "Topic.h"
 #include "FileSystem.h"
 
 /// <summary>
 /// 
 /// </summary>
-BCFDocumentReference::BCFDocumentReference(BCFTopic& topic, ListOfBCFObjects* parentList, const char* guid)
-        : BCFObject(topic.Project(), parentList) 
+DocumentReference::DocumentReference(Topic& topic, ListOfBCFObjects* parentList, const char* guid)
+        : BCFObject(topic.GetProject(), parentList) 
         , m_topic(topic)
-        , m_Guid(topic.Project(), guid)
+        , m_Guid(topic.GetProject(), guid)
 {
 }
 
 /// <summary>
 /// 
 /// </summary>
-void BCFDocumentReference::Read(_xml::_element& elem, const std::string& folder) 
+void DocumentReference::Read(_xml::_element& elem, const std::string& folder) 
 { 
     ATTRS_START
         ATTR_GET(Guid)
@@ -35,9 +35,9 @@ void BCFDocumentReference::Read(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-void BCFDocumentReference::AfterRead(const std::string& folder)
+void DocumentReference::AfterRead(const std::string& folder)
 {
-    if (Project().GetVersion() < BCFVer_3_0) {
+    if (GetProject().GetVersion() < BCFVer_3_0) {
 
         if (StrToBool(m_isExternal)) {
             SetFilePath(m_ReferencedDocument.c_str(), true);
@@ -53,7 +53,7 @@ void BCFDocumentReference::AfterRead(const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-bool BCFDocumentReference::Validate(bool fix)
+bool DocumentReference::Validate(bool fix)
 {
     if (m_Guid.IsEmpty()) {
         m_Guid.AssignNew();
@@ -81,7 +81,7 @@ bool BCFDocumentReference::Validate(bool fix)
 /// <summary>
 /// 
 /// </summary>
-void BCFDocumentReference::Write(_xml_writer& writer, const std::string& folder, const char* tag) 
+void DocumentReference::Write(_xml_writer& writer, const std::string& folder, const char* tag) 
 { 
     assert(0 == strcmp(tag, "DocumentReference"));
 
@@ -94,7 +94,7 @@ void BCFDocumentReference::Write(_xml_writer& writer, const std::string& folder,
 /// <summary>
 /// 
 /// </summary>
-void BCFDocumentReference::Write_DocumentReference(_xml_writer& writer, const std::string& folder)
+void DocumentReference::Write_DocumentReference(_xml_writer& writer, const std::string& folder)
 {
     WRITE_CONTENT(DocumentGuid);
     WRITE_CONTENT(Url);
@@ -105,13 +105,13 @@ void BCFDocumentReference::Write_DocumentReference(_xml_writer& writer, const st
 /// <summary>
 /// 
 /// </summary>
-const char* BCFDocumentReference::GetFilePath()
+const char* DocumentReference::GetFilePath()
 {
     if (!m_Url.empty()) {
         return m_Url.c_str();
     }
     else if (!m_DocumentGuid.empty()) {
-        return Project().GetDocuments().GetFilePath(m_DocumentGuid.c_str());
+        return GetProject().GetDocuments().GetFilePath(m_DocumentGuid.c_str());
     }
     else {
         return "";
@@ -121,7 +121,7 @@ const char* BCFDocumentReference::GetFilePath()
 /// <summary>
 /// 
 /// </summary>
-bool BCFDocumentReference::SetFilePath(const char* filePath, bool isExternal)
+bool DocumentReference::SetFilePath(const char* filePath, bool isExternal)
 {
     if (!filePath || !*filePath) {
         m_DocumentGuid.clear();
@@ -134,7 +134,7 @@ bool BCFDocumentReference::SetFilePath(const char* filePath, bool isExternal)
         return true;
     }
     else {
-        m_DocumentGuid = Project().GetDocuments().Add (filePath);
+        m_DocumentGuid = GetProject().GetDocuments().Add (filePath);
         m_Url.clear();
         return !m_DocumentGuid.empty();
     }

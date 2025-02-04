@@ -2,7 +2,7 @@
 
 #include "BCFObject.h"
 
-struct BCFTopic;
+struct Topic;
 
 /// <summary>
 /// 
@@ -10,7 +10,7 @@ struct BCFTopic;
 struct GuidReference : public BCFObject
 {
 public:
-    GuidReference(BCFTopic& topic, ListOfBCFObjects* parentList);
+    GuidReference(Topic& topic, ListOfBCFObjects* parentList);
 
     void Read(_xml::_element& elem, const std::string&);
     void Write(_xml_writer& writer, const std::string&, const char* tag);
@@ -19,6 +19,7 @@ public:
     const char* GetGuid() { return m_Guid.c_str(); }
     void SetGuid(const char* guid) { if (guid && *guid) m_Guid.assign(guid); else m_Guid.clear(); }
 
+    bool Remove() { return RemoveImpl(); }
 private:
     std::string    m_Guid;
 };

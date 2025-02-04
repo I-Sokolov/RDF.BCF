@@ -6,7 +6,7 @@
 class ProjectInfo : public XMLFile
 {
 public:
-    ProjectInfo(BCFProject& project, const char* projectId);
+    ProjectInfo(Project& project, const char* projectId);
 
     bool Validate(bool fix);
 

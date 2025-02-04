@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "ListOf.h"
-#include "BCFProject.h"
-#include "BCFComponent.h"
-#include "BCFTopic.h"
+#include "Project.h"
+#include "Component.h"
+#include "Topic.h"
 
 /// <summary>
 /// 
@@ -68,7 +68,7 @@ ListOfBCFObjects::Iterator ListOfBCFObjects::Find(BCFObject* item)
             return it;
         }
     }
-    m_project.log().add(Log::Level::error, "Item not found in the list");
+    m_project.GetLog().add(Log::Level::error, "Item not found in the list");
     return m_items.end();
 }
 
@@ -77,14 +77,14 @@ ListOfBCFObjects::Iterator ListOfBCFObjects::Find(BCFObject* item)
 /// </summary>
 void ListOfBCFObjects::LogDuplicatedGuid(const char* guid)
 {
-    m_project.log().add(Log::Level::error, "Duplicated GUID");
+    m_project.GetLog().add(Log::Level::error, "Duplicated GUID");
 }
 
 /// <summary>
 /// 
 /// </summary>
-SetOfXMLText::SetOfXMLText(BCFTopic& topic) 
-    : ListOf<XMLText>(topic.Project()) 
+SetOfXMLText::SetOfXMLText(Topic& topic) 
+    : ListOf<XMLText>(topic.GetProject()) 
     , m_topic(topic)
 {
 }
@@ -93,9 +93,9 @@ SetOfXMLText::SetOfXMLText(BCFTopic& topic)
 /// <summary>
 /// 
 /// </summary>
-BCFComponent* ListOfBCFComponents::Add(BCFViewPoint& viewPoint, const char* ifcGuid, const char* authoringToolId, const char* originatingSystem)
+Component* ListOfComponents::Add(ViewPoint& viewPoint, const char* ifcGuid, const char* authoringToolId, const char* originatingSystem)
 {
-    auto comp = new BCFComponent(viewPoint, this);
+    auto comp = new Component(viewPoint, this);
 
     bool ok = true;
     if (ifcGuid) ok = ok && comp->SetIfcGuid(ifcGuid);
@@ -151,7 +151,7 @@ const char* SetOfXMLText::GetNext(const char* prev)
     if (prev && *prev) {
         txtPrev = Find(prev);
         if (!txtPrev) {
-            m_project.log().add(Log::Level::error, "Invalid element", "Text element %s is not in the list", prev);
+            m_project.GetLog().add(Log::Level::error, "Invalid element", "Text element %s is not in the list", prev);
             return NULL;
         }
     }

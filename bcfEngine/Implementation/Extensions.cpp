@@ -1,13 +1,13 @@
 #include "pch.h"
 #include "bcfTypes.h"
 #include "Extensions.h"
-#include "BCFProject.h"
+#include "Project.h"
 #include "FileSystem.h"
 
 /// <summary>
 /// 
 /// </summary>
-Extensions::Extensions(BCFProject& project)
+Extensions::Extensions(Project& project)
     : XMLFile(project, NULL)
     , m_currentList (NULL)
 {
@@ -34,7 +34,7 @@ bool Extensions::AddElement(BCFEnumeration enumeration, const char* element)
 /// <summary>
 /// 
 /// </summary>
-const char* Extensions::GetElement(BCFEnumeration enumeration, BCFIndex index)
+const char* Extensions::GetElement(BCFEnumeration enumeration, int index)
 {
     auto list = GetList(enumeration);
     if (list) {
@@ -77,7 +77,7 @@ StringSet* Extensions::GetList(BCFEnumeration enumeration)
         return &m_elements[ind];
     }
     else {
-        m_project.log().add(Log::Level::error, "Extension schema", "Index %d is out of extensions types range [0..%d]", (int)ind, (int)m_elements.size());
+        m_project.GetLog().add(Log::Level::error, "Extension schema", "Index %d is out of extensions types range [0..%d]", (int)ind, (int)m_elements.size());
         return NULL;
     }
 }
@@ -165,12 +165,12 @@ bool Extensions::CheckElement(BCFEnumeration enumeration, const char* element)
         return true;
     }
 
-    if (Project().GetAutoExtentSchema()) {
+    if (GetProject().GetAutoExtentSchema()) {
         list->insert(element);
         return true;
     }
 
-    m_project.log().add(Log::Level::error, "Extension schema", "%s is not in enumeration", element);
+    m_project.GetLog().add(Log::Level::error, "Extension schema", "%s is not in enumeration", element);
     return false;
 }
 
@@ -198,12 +198,12 @@ void Extensions::ReadExtensionSchema(_xml::_element& extensionSchemaElem, const 
                 }
             }
             catch (std::exception& ex) {
-                m_project.log().add(Log::Level::error, "Read file error", "Failed to read %s file. %s", path.c_str(), ex.what());
+                m_project.GetLog().add(Log::Level::error, "Read file error", "Failed to read %s file. %s", path.c_str(), ex.what());
                 throw;
             }
         }
         else {
-            m_project.log().add(Log::Level::warning, "File not exists", "File is referenced but not exists: %s", path.c_str());
+            m_project.GetLog().add(Log::Level::warning, "File not exists", "File is referenced but not exists: %s", path.c_str());
         }
     }
 }

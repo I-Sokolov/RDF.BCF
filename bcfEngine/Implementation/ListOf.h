@@ -1,10 +1,10 @@
 #pragma once
 
-struct BCFProject;
-struct BCFTopic;
+struct Project;
+struct Topic;
 struct BCFObject;
-struct BCFComponent;
-struct BCFViewPoint;
+struct Component;
+struct ViewPoint;
 class XMLText;
 
 /// <summary>
@@ -17,7 +17,7 @@ public:
     void Add(BCFObject* item) { assert(item); if (item) m_items.push_back(item); }
 
 protected:
-    ListOfBCFObjects(BCFProject& project) : m_project(project) {}
+    ListOfBCFObjects(Project& project) : m_project(project) {}
     ~ListOfBCFObjects();
 
     BCFObject* GetNext(BCFObject* prev);
@@ -33,7 +33,7 @@ private:
     Iterator Find(BCFObject* item);
 
 protected:
-    BCFProject& m_project;
+    Project& m_project;
 
     Items       m_items;
     Items       m_removed;
@@ -48,7 +48,7 @@ template <class Item>
 class ListOf : public ListOfBCFObjects
 {
 public:
-    ListOf (BCFProject& project) : ListOfBCFObjects(project) {}
+    ListOf (Project& project) : ListOfBCFObjects(project) {}
 
 public:
     Item* GetNext(Item* prev)
@@ -93,7 +93,7 @@ template <class Item>
 class SetByGuid : public ListOf<Item>
 {
 public:
-    SetByGuid(BCFProject& project) : ListOf<Item>(project) {}
+    SetByGuid(Project& project) : ListOf<Item>(project) {}
 
 public:
     void Add(Item* item)
@@ -128,12 +128,12 @@ public:
 /// <summary>
 /// 
 /// </summary>
-class ListOfBCFComponents : public ListOf<BCFComponent>
+class ListOfComponents : public ListOf<Component>
 {
 public:
-    ListOfBCFComponents(BCFProject& project) : ListOf<BCFComponent>(project) {}
+    ListOfComponents(Project& project) : ListOf<Component>(project) {}
 
-    BCFComponent* Add(BCFViewPoint& viewPoint, const char* ifcGuid, const char* authoringToolId, const char* originatingSystem);
+    Component* Add(ViewPoint& viewPoint, const char* ifcGuid, const char* authoringToolId, const char* originatingSystem);
 };
 
 
@@ -143,7 +143,7 @@ public:
 class SetOfXMLText : public ListOf<XMLText>
 {
 public:
-    SetOfXMLText(BCFTopic& topic);
+    SetOfXMLText(Topic& topic);
 
     void Add(const char* val);
     XMLText* Find(const char* val);
@@ -151,5 +151,5 @@ public:
     bool Remove(const char* val);
 
 private:
-    BCFTopic& m_topic;
+    Topic& m_topic;
 };

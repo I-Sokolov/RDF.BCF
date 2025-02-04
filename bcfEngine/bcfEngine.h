@@ -21,9 +21,9 @@ extern "C" {
     RDFBCF_EXPORT bool bcfProjectDelete(BCFProject* project);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    RDFBCF_EXPORT const char* bcfErrorsGet(BCFProject* project, bool cleanLog);
+    RDFBCF_EXPORT const char* bcfGetErrors(BCFProject* project, bool cleanLog);
 
     /// <summary>
     /// 
@@ -58,7 +58,7 @@ extern "C" {
     /// <summary>
     /// 
     /// </summary>
-    RDFBCF_EXPORT const char* bcfEnumerationElementGet(BCFProject* project, BCFEnumeration enumeration, BCFIndex index);
+    RDFBCF_EXPORT const char* bcfEnumerationElementGet(BCFProject* project, BCFEnumeration enumeration, int index);
 
     /// <summary>
     /// 

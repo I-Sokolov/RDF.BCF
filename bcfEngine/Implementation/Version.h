@@ -7,7 +7,7 @@
 class Version : public XMLFile
 {
 public:
-    Version(BCFProject& project) : XMLFile(project, NULL), m_VersionId("3.0"){}
+    Version(Project& project) : XMLFile(project, NULL), m_VersionId("3.0"){}
 
     BCFVersion Get();
     void Set(BCFVersion version);

@@ -27,7 +27,7 @@ public:
     };
 
 public:
-    XMLFile(BCFProject& project, ListOfBCFObjects* parentList) : BCFObject(project, parentList) {}
+    XMLFile(Project& project, ListOfBCFObjects* parentList) : BCFObject(project, parentList) {}
 
     bool ReadFile(const std::string& folder);
     bool WriteFile(const std::string& folder);
@@ -50,11 +50,13 @@ protected:
 class XMLText : public BCFObject
 {
 public:
-    XMLText(BCFTopic&, ListOfBCFObjects* parentList);
+    XMLText(Topic&, ListOfBCFObjects* parentList);
     
     void Read(_xml::_element& elem, const std::string&);
     void Write(_xml_writer& writer, const std::string&, const char* tag);
     bool Validate(bool fix);
+
+    bool Remove() { return RemoveImpl(); }
 
     std::string& string() { return m_str; }
 
@@ -66,10 +68,10 @@ private:
 /// XML writing macros
 /// </summary>
 /// 
-#define REQUIRED(prop, condition)                                               \
-    if (!(condition)) {                                                         \
-        log().add(Log::Level::error, "Missed property or wrong value", #prop);  \
-        valid = false;                                                          \
+#define REQUIRED(prop, condition)                                                   \
+    if (!(condition)) {                                                             \
+        GetLog().add(Log::Level::error, "Missed property or wrong value", #prop);   \
+        valid = false;                                                              \
     }
 
 #define REQUIRED_PROP(prop) REQUIRED(prop, !m_##prop.empty())
@@ -128,7 +130,7 @@ enum class UnknownNames : bool
 #define ATTR_GET(name) ATTR_GET_STR(name, m_##name)
 
 #define ATTRS_END(onUnknownNames)           \
-        if ((bool)onUnknownNames) { Project().log().add(Log::Level::warning, "XML parsing", "Unknown attribute '%s' in " __FUNCTION__, attrName.c_str()); assert(!"TODO?"); } } }
+        if ((bool)onUnknownNames) { GetProject().GetLog().add(Log::Level::warning, "XML parsing", "Unknown attribute '%s' in " __FUNCTION__, attrName.c_str()); assert(!"TODO?"); } } }
 
 
 /// <summary>
@@ -157,10 +159,10 @@ enum class UnknownNames : bool
 
 #define CHILD_GET_LIST_CONDITIONAL(listName, elemName, condition)                                   \
             if ((tag == #elemName) && (condition)) {                                                \
-                ReadList(m_##listName, *this, *child, folder, NULL, m_project.log());               \
+                ReadList(m_##listName, *this, *child, folder, NULL, m_project.GetLog());            \
             }                                                                                       \
             else if((tag == #listName) && (condition)) {                                            \
-                ReadList(m_##listName, *this, *child, folder, #elemName, m_project.log());          \
+                ReadList(m_##listName, *this, *child, folder, #elemName, m_project.GetLog());       \
             } else
 
 #define CHILD_GET_LIST(listName, elemName)       CHILD_GET_LIST_CONDITIONAL(listName, elemName, true)
@@ -172,7 +174,7 @@ enum class UnknownNames : bool
 
 #define CHILD_ADD_TO_LIST(listName, elemName)   CHILD_ADD_TO_LIST_CONDITIONAL(listName, elemName, true)
 
-#define CHILD_UNEXPECTED(tag) { Project().log().add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str()); assert(!"TODO?"); }
+#define CHILD_UNEXPECTED(tag) { GetProject().GetLog().add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str()); assert(!"TODO?"); }
 
 #define CHILDREN_END CHILD_UNEXPECTED(tag) } }
 
