@@ -16,30 +16,12 @@
     <Filter Include="XMLparser">
       <UniqueIdentifier>{e390ec29-775c-46c7-b0ea-bf2bf85786bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Implementation Headers">
+      <UniqueIdentifier>{b8890f66-81f1-4ad7-b685-b932e099d450}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Archivator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Log.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BCFProject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="bcfEngine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FileSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Extensions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="XMLparser\_errors.h">
@@ -72,98 +54,101 @@
     <ClInclude Include="XMLparser\_xml.h">
       <Filter>XMLparser</Filter>
     </ClInclude>
-    <ClInclude Include="Version.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ProjectInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="XMLFile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BCFTopic.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GuidStr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BCFFile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BCFComment.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BCFViewPoint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BCFBimSnippet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BCFDocumentReference.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BCFLine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BCFClippingPlane.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BCFBitmap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="XMLPoint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BCFComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BCFColoring.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="bcfTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BCFObject.h">
+    <ClInclude Include="bcfAPI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GuidReference.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Implementation\Archivator.h">
+      <Filter>Implementation Headers</Filter>
     </ClInclude>
-    <ClInclude Include="ListOf.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Implementation\BCFBimSnippet.h">
+      <Filter>Implementation Headers</Filter>
     </ClInclude>
-    <ClInclude Include="SmokeTest.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Implementation\BCFBitmap.h">
+      <Filter>Implementation Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Documents.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Implementation\BCFClippingPlane.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\BCFColoring.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\BCFComment.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\BCFComponent.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\BCFDocumentReference.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\BCFFile.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\BCFGuid.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\BCFLine.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\BCFObject.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\BCFProject.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\BCFTopic.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\BCFViewPoint.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\Documents.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\Extensions.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\FileSystem.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\framework.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\GuidReference.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\GuidStr.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\ListOf.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\Log.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\pch.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\ProjectInfo.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\SmokeTest.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\Version.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\XMLFile.h">
+      <Filter>Implementation Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\XMLPoint.h">
+      <Filter>Implementation Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dllmain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Archivator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Log.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BCFProject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="bcfEngine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FileSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Extensions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="XMLparser\_net.cpp">
       <Filter>XMLparser</Filter>
     </ClCompile>
@@ -176,67 +161,91 @@
     <ClCompile Include="XMLparser\_xml.cpp">
       <Filter>XMLparser</Filter>
     </ClCompile>
-    <ClCompile Include="Version.cpp">
+    <ClCompile Include="Implementation\Archivator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ProjectInfo.cpp">
+    <ClCompile Include="Implementation\BCFBimSnippet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="XMLFile.cpp">
+    <ClCompile Include="Implementation\BCFBitmap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BCFTopic.cpp">
+    <ClCompile Include="Implementation\BCFClippingPlane.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GuidStr.cpp">
+    <ClCompile Include="Implementation\BCFColoring.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BCFFile.cpp">
+    <ClCompile Include="Implementation\BCFComment.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BCFComment.cpp">
+    <ClCompile Include="Implementation\BCFComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BCFViewPoint.cpp">
+    <ClCompile Include="Implementation\BCFDocumentReference.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="XMLPoint.cpp">
+    <ClCompile Include="Implementation\bcfEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BCFComponent.cpp">
+    <ClCompile Include="Implementation\BCFFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BCFObject.cpp">
+    <ClCompile Include="Implementation\BCFLine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GuidReference.cpp">
+    <ClCompile Include="Implementation\BCFObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ListOf.cpp">
+    <ClCompile Include="Implementation\BCFProject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SmokeTest.cpp">
+    <ClCompile Include="Implementation\BCFTopic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BCFDocumentReference.cpp">
+    <ClCompile Include="Implementation\BCFViewPoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BCFColoring.cpp">
+    <ClCompile Include="Implementation\dllmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BCFBimSnippet.cpp">
+    <ClCompile Include="Implementation\Documents.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BCFBitmap.cpp">
+    <ClCompile Include="Implementation\Extensions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BCFLine.cpp">
+    <ClCompile Include="Implementation\FileSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BCFClippingPlane.cpp">
+    <ClCompile Include="Implementation\GuidReference.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Documents.cpp">
+    <ClCompile Include="Implementation\GuidStr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Implementation\ListOf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Implementation\Log.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Implementation\pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Implementation\ProjectInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Implementation\SmokeTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Implementation\Version.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Implementation\XMLFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Implementation\XMLPoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

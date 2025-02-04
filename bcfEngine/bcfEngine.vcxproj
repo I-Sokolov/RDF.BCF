@@ -57,7 +57,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)libzip\libzip.1.1.2.7\build\native\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)libzip\libzip.1.1.2.7\build\native\include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -84,7 +84,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)libzip\libzip.1.1.2.7\build\native\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)libzip\libzip.1.1.2.7\build\native\include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -104,36 +104,38 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Archivator.h" />
+    <ClInclude Include="bcfAPI.h" />
     <ClInclude Include="bcfEngine.h" />
-    <ClInclude Include="BCFObject.h" />
-    <ClInclude Include="BCFProject.h" />
     <ClInclude Include="bcfTypes.h" />
-    <ClInclude Include="BCFFile.h" />
-    <ClInclude Include="BCFBimSnippet.h" />
-    <ClInclude Include="BCFBitmap.h" />
-    <ClInclude Include="BCFClippingPlane.h" />
-    <ClInclude Include="BCFColoring.h" />
-    <ClInclude Include="BCFComment.h" />
-    <ClInclude Include="BCFComponent.h" />
-    <ClInclude Include="BCFDocumentReference.h" />
-    <ClInclude Include="Documents.h" />
-    <ClInclude Include="Extensions.h" />
-    <ClInclude Include="FileSystem.h" />
-    <ClInclude Include="framework.h" />
-    <ClInclude Include="GuidStr.h" />
-    <ClInclude Include="GuidReference.h" />
-    <ClInclude Include="BCFLine.h" />
-    <ClInclude Include="Log.h" />
-    <ClInclude Include="pch.h" />
-    <ClInclude Include="SmokeTest.h" />
-    <ClInclude Include="XMLPoint.h" />
-    <ClInclude Include="ProjectInfo.h" />
-    <ClInclude Include="BCFTopic.h" />
-    <ClInclude Include="ListOf.h" />
-    <ClInclude Include="Version.h" />
-    <ClInclude Include="BCFViewPoint.h" />
-    <ClInclude Include="XMLFile.h" />
+    <ClInclude Include="Implementation\Archivator.h" />
+    <ClInclude Include="Implementation\BCFBimSnippet.h" />
+    <ClInclude Include="Implementation\BCFBitmap.h" />
+    <ClInclude Include="Implementation\BCFClippingPlane.h" />
+    <ClInclude Include="Implementation\BCFColoring.h" />
+    <ClInclude Include="Implementation\BCFComment.h" />
+    <ClInclude Include="Implementation\BCFComponent.h" />
+    <ClInclude Include="Implementation\BCFDocumentReference.h" />
+    <ClInclude Include="Implementation\BCFFile.h" />
+    <ClInclude Include="Implementation\BCFGuid.h" />
+    <ClInclude Include="Implementation\BCFLine.h" />
+    <ClInclude Include="Implementation\BCFObject.h" />
+    <ClInclude Include="Implementation\BCFProject.h" />
+    <ClInclude Include="Implementation\BCFTopic.h" />
+    <ClInclude Include="Implementation\BCFViewPoint.h" />
+    <ClInclude Include="Implementation\Documents.h" />
+    <ClInclude Include="Implementation\Extensions.h" />
+    <ClInclude Include="Implementation\FileSystem.h" />
+    <ClInclude Include="Implementation\framework.h" />
+    <ClInclude Include="Implementation\GuidReference.h" />
+    <ClInclude Include="Implementation\GuidStr.h" />
+    <ClInclude Include="Implementation\ListOf.h" />
+    <ClInclude Include="Implementation\Log.h" />
+    <ClInclude Include="Implementation\pch.h" />
+    <ClInclude Include="Implementation\ProjectInfo.h" />
+    <ClInclude Include="Implementation\SmokeTest.h" />
+    <ClInclude Include="Implementation\Version.h" />
+    <ClInclude Include="Implementation\XMLFile.h" />
+    <ClInclude Include="Implementation\XMLPoint.h" />
     <ClInclude Include="XMLparser\_errors.h" />
     <ClInclude Include="XMLparser\_io.h" />
     <ClInclude Include="XMLparser\_log.h" />
@@ -146,41 +148,38 @@
     <ClInclude Include="XMLparser\_xml.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Archivator.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="BCFBimSnippet.cpp" />
-    <ClCompile Include="BCFBitmap.cpp" />
-    <ClCompile Include="BCFClippingPlane.cpp" />
-    <ClCompile Include="BCFColoring.cpp" />
-    <ClCompile Include="BCFDocumentReference.cpp" />
-    <ClCompile Include="bcfEngine.cpp" />
-    <ClCompile Include="BCFLine.cpp" />
-    <ClCompile Include="Documents.cpp" />
-    <ClCompile Include="GuidReference.cpp" />
-    <ClCompile Include="ListOf.cpp" />
-    <ClCompile Include="BCFObject.cpp" />
-    <ClCompile Include="BCFProject.cpp" />
-    <ClCompile Include="BCFFile.cpp" />
-    <ClCompile Include="BCFComment.cpp" />
-    <ClCompile Include="BCFComponent.cpp" />
-    <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="Extensions.cpp" />
-    <ClCompile Include="FileSystem.cpp" />
-    <ClCompile Include="GuidStr.cpp" />
-    <ClCompile Include="Log.cpp" />
-    <ClCompile Include="pch.cpp">
+    <ClCompile Include="Implementation\Archivator.cpp" />
+    <ClCompile Include="Implementation\BCFBimSnippet.cpp" />
+    <ClCompile Include="Implementation\BCFBitmap.cpp" />
+    <ClCompile Include="Implementation\BCFClippingPlane.cpp" />
+    <ClCompile Include="Implementation\BCFColoring.cpp" />
+    <ClCompile Include="Implementation\BCFComment.cpp" />
+    <ClCompile Include="Implementation\BCFComponent.cpp" />
+    <ClCompile Include="Implementation\BCFDocumentReference.cpp" />
+    <ClCompile Include="Implementation\bcfEngine.cpp" />
+    <ClCompile Include="Implementation\BCFFile.cpp" />
+    <ClCompile Include="Implementation\BCFLine.cpp" />
+    <ClCompile Include="Implementation\BCFObject.cpp" />
+    <ClCompile Include="Implementation\BCFProject.cpp" />
+    <ClCompile Include="Implementation\BCFTopic.cpp" />
+    <ClCompile Include="Implementation\BCFViewPoint.cpp" />
+    <ClCompile Include="Implementation\dllmain.cpp" />
+    <ClCompile Include="Implementation\Documents.cpp" />
+    <ClCompile Include="Implementation\Extensions.cpp" />
+    <ClCompile Include="Implementation\FileSystem.cpp" />
+    <ClCompile Include="Implementation\GuidReference.cpp" />
+    <ClCompile Include="Implementation\GuidStr.cpp" />
+    <ClCompile Include="Implementation\ListOf.cpp" />
+    <ClCompile Include="Implementation\Log.cpp" />
+    <ClCompile Include="Implementation\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="SmokeTest.cpp" />
-    <ClCompile Include="XMLPoint.cpp" />
-    <ClCompile Include="ProjectInfo.cpp" />
-    <ClCompile Include="BCFTopic.cpp" />
-    <ClCompile Include="Version.cpp" />
-    <ClCompile Include="BCFViewPoint.cpp" />
-    <ClCompile Include="XMLFile.cpp" />
+    <ClCompile Include="Implementation\ProjectInfo.cpp" />
+    <ClCompile Include="Implementation\SmokeTest.cpp" />
+    <ClCompile Include="Implementation\Version.cpp" />
+    <ClCompile Include="Implementation\XMLFile.cpp" />
+    <ClCompile Include="Implementation\XMLPoint.cpp" />
     <ClCompile Include="XMLparser\_net.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
