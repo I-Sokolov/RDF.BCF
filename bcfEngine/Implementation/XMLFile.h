@@ -133,13 +133,30 @@ enum class UnknownNames : bool
         if ((bool)onUnknownNames) { GetProject().GetLog().add(Log::Level::warning, "XML parsing", "Unknown attribute '%s' in " __FUNCTION__, attrName.c_str()); assert(!"TODO?"); } } }
 
 
+static inline bool IsEmpty(_xml::_element* elem)
+{
+    if (!elem) {
+        return true;
+    }
+
+    //auto& tag = elem->getName();
+    auto& attr = elem->attributes();
+    auto& child = elem->children();
+    auto& text = elem->getContent();
+
+    if (attr.empty() && child.empty() && text.empty())
+        return true;
+
+    return false;
+}
+
 /// <summary>
 /// 
 /// </summary>
 #define CHILDREN_START                      \
     for (auto child : elem.children()) {    \
-        if (child) {                        \
-            auto&  tag= child->getName();   \
+        if (!IsEmpty(child)) {              \
+            auto&  tag= child->getName();   
 
 #define CHILD_GET_CONTENT_STR(name, str)             \
             if (tag == #name) {                      \
