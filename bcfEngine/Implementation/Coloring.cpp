@@ -16,6 +16,14 @@ Coloring::Coloring(ViewPoint& viewPoint, ListOfBCFObjects* parentList)
 { 
 }
 
+/// <summary>
+/// 
+/// </summary>
+Topic& Coloring::GetTopic()
+{
+    return m_viewPoint.GetTopic();
+}
+
 
 /// <summary>
 /// 
@@ -43,11 +51,11 @@ bool Coloring::Validate(bool fix)
     }
 
     bool valid = true;
-    
-    REQUIRED_PROP(Color);
-    REQUIRED(Components, !m_Components.Items().empty());
 
     valid = m_Components.Validate(fix) && valid;
+
+    REQUIRED_PROP(Color);
+    REQUIRED(Components, !m_Components.Items().empty());
 
     if (!valid && fix) {
         Remove();

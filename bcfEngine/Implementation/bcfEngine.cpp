@@ -147,11 +147,11 @@ RDFBCF_EXPORT bool bcfFileWrite(BCFProject* project, const char* bcfFilePath, BC
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT bool bcfSetAuthor(BCFProject* project, const char* user, bool autoExtent)
+RDFBCF_EXPORT bool bcfSetOptions(BCFProject* project, const char* user, bool autoExtent, bool validateIfcGuids)
 {
     if (project) {
         TYPE_CHECK(project, Project, false);
-        return project->SetAuthor(user, autoExtent);
+        return project->SetOptions(user, autoExtent, validateIfcGuids);
     }
     return false;
 }

@@ -23,6 +23,7 @@
 #include <vector>
 #include <set>
 #include <regex>
+#include <unordered_set>
 
 #include "XMLparser/_xml.h"
 #include "XMLparser/_xml_writer.h"

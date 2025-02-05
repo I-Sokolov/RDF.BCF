@@ -5,6 +5,7 @@
 
 struct ViewPoint;
 struct Coloring;
+struct Topic;
 
 struct Component : public BCFObject, public BCFComponent
 {
@@ -30,7 +31,13 @@ public:
     virtual bool Remove() override { return RemoveImpl(); }
 
 private:
+    Topic& GetTopic();
+
+    bool ValidateIfcGuid();
+
+private:
     ViewPoint*  m_pViewPoint;
+    Coloring*   m_pColoring;
 
     std::string m_IfcGuid;
     std::string m_OriginatingSystem;

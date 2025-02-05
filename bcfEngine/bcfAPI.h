@@ -50,7 +50,7 @@ struct BCFProject
     virtual bool            ReadFile(const char* bcfFilePath, bool autofix) = NULL;
     virtual bool            WriteFile(const char* bcfFilePath, BCFVersion version) = NULL;
 
-    virtual bool            SetAuthor(const char* user, bool autoExtent) = NULL;
+    virtual bool            SetOptions(const char* user, bool autoExtent = true, bool validateIfcGuids = false) = NULL;
     virtual BCFExtensions&  GetExtensions() = NULL;
 
     BCF_PROPERTY_RO(const char*, ProjectId);

@@ -12,6 +12,7 @@ public:
     void Read(_xml::_element& elem, const std::string& folder);
     void Write(_xml_writer& writer, const std::string& folder, const char* tag);
     bool Validate(bool fix);
+    Topic& GetTopic();
 
 public:
     //BCFColoring

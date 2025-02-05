@@ -214,7 +214,7 @@ namespace CSExample
             ASSERT(ex);
 
             //
-            bcf.SetAuthor(chinaUser, false);
+            bcf.SetOptions(chinaUser, false);
 
             Console.WriteLine("Expected exception - author unknown");
             ex = false;
@@ -233,7 +233,7 @@ namespace CSExample
             ASSERT(items.Count() == 1);
 
             //
-            bcf.SetAuthor(chinaUser, true);
+            bcf.SetOptions(chinaUser, true);
 
             topic = bcf.AddTopic("Topic Type", "Topic Title", "Topic Status");
             ASSERT(topic != null);
@@ -300,7 +300,7 @@ namespace CSExample
         {
             using (var bcf = new RDF.BCF.Project("MyProject"))
             {
-                bool ok = bcf.SetAuthor("Smoke-tester", true);
+                bool ok = bcf.SetOptions("Smoke-tester", true);
                 ASSERT(ok);
 
                 SetTopicAttributes(bcf);
@@ -318,7 +318,7 @@ namespace CSExample
 
                 var i = CheckTopicAttributes(bcf, true);
 
-                bcf.SetAuthor("Smoke-Editor", true);
+                bcf.SetOptions("Smoke-Editor", true);
 
                 bcf.GetTopics()[i].Title = "Modified title";
 
@@ -524,7 +524,7 @@ namespace CSExample
         {
             using (var bcf = new RDF.BCF.Project("MyProject"))
             {
-                bool ok = bcf.SetAuthor("Smoke-tester", true);
+                bool ok = bcf.SetOptions("Smoke-tester", true);
                 ASSERT(ok);
 
                 SetCommentAndViewPoints(bcf);
@@ -541,7 +541,7 @@ namespace CSExample
 
                 CheckCommentAndViewPoints(bcf, true, false);
 
-                ok = bcf.SetAuthor("Smoke-Editor", true);
+                ok = bcf.SetOptions("Smoke-Editor", true);
                 ASSERT(ok);
 
                 bcf.GetTopics()[0].GetComments()[0].Text = "Modified text";
@@ -933,7 +933,7 @@ namespace CSExample
         {
             using (var bcf = new Project("MyTset"))
             {
-                bcf.SetAuthor("me", true);
+                bcf.SetOptions("me", true);
 
                 var topic = bcf.AddTopic("", "B", "C");
 
@@ -1062,7 +1062,7 @@ namespace CSExample
         {
             using (var project = new Project("TestListAttr"))
             {
-                project.SetAuthor("creator", true);
+                project.SetOptions("creator", true);
 
                 for (int i = 0; i < 7; i++)
                 {

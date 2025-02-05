@@ -13,7 +13,27 @@ File::File(Topic& topic, ListOfBCFObjects* parentList)
     : BCFObject(topic.GetProject(), parentList)
     , m_topic(topic)
     , m_IsExternal("true")
+    , m_pIfcGuids(NULL)
 {
+}
+
+/// <summary>
+/// 
+/// </summary>
+File::~File()
+{
+    ClearContent();
+}
+
+/// <summary>
+/// 
+/// </summary>
+void File::ClearContent()
+{
+    if (m_pIfcGuids) {
+        delete m_pIfcGuids;
+    }
+    m_pIfcGuids = NULL;
 }
 
 /// <summary>
@@ -89,6 +109,8 @@ bool File::SetReference(const char* val)
     UNNULL;
     VALIDATE(Reference, FilePath);
 
+    ClearContent();
+
     m_Reference.assign(val);
     if (!m_Reference.empty()) {
         return UpdateFileInfo();
@@ -160,4 +182,42 @@ bool File::UpdateFileInfoIFC()
         sdaiCloseModel(model);
     }
     return true;
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool File::HasComponent(const std::string& ifcGuid)
+{
+    if (!IsIFC()) {
+        return false;
+    }
+
+    if (!m_pIfcGuids) {
+        m_pIfcGuids = new StrSet();
+
+        auto model = sdaiOpenModelBN(0, m_Reference.c_str(), "");
+        if (model) {
+
+            auto root = sdaiGetEntity(model, "IfcRoot");
+            auto attr = sdaiGetAttrDefinition(root, "GlobalId");
+
+            auto extent = xxxxGetEntityAndSubTypesExtentBN(model, "IfcRoot");
+            auto it = sdaiCreateIterator(extent);
+            while (sdaiNext(it)) {
+
+                auto inst = sdaiGetAggrByIterator(it);
+
+                const char* guid = NULL;
+                if (sdaiGetAttr(inst, attr, sdaiSTRING, &guid) && guid && *guid) {
+
+                    m_pIfcGuids->insert(guid);
+                }
+            }
+            sdaiDeleteIterator(it);
+            sdaiCloseModel(model);
+        }
+    }
+
+    return m_pIfcGuids->find(ifcGuid) != m_pIfcGuids->end();
 }

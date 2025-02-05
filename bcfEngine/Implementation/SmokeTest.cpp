@@ -63,6 +63,8 @@ static void TestFromDataSet(const char* filepath)
 
     auto bcf = BCFProject::Create();
 
+    bcf->SetOptions(NULL, false, true);
+
     auto ok = bcf->ReadFile(filepath, true);
     ASSERT(ok);
 

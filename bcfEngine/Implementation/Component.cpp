@@ -3,6 +3,8 @@
 #include "ViewPoint.h"
 #include "Coloring.h"
 #include "Project.h"
+#include "Topic.h"
+#include "File.h"
 
 /// <summary>
 /// 
@@ -10,6 +12,7 @@
 Component::Component(ViewPoint& viewPoint, ListOfBCFObjects* parentList)
     : BCFObject(viewPoint.GetProject(), parentList)
     , m_pViewPoint(&viewPoint)
+    , m_pColoring(NULL)
     , m_Visible("true")
 {
 }
@@ -20,8 +23,26 @@ Component::Component(ViewPoint& viewPoint, ListOfBCFObjects* parentList)
 Component::Component(Coloring& coloring, ListOfBCFObjects* parentList)
     : BCFObject(coloring.GetProject(), parentList)
     , m_pViewPoint(NULL)
+    , m_pColoring(&coloring)
     , m_Visible("true")
 {
+}
+
+/// <summary>
+/// 
+/// </summary>
+Topic& Component::GetTopic()
+{
+    if (m_pViewPoint) {
+        return m_pViewPoint->GetTopic();
+    }
+    else if (m_pColoring) {
+        return m_pColoring->GetTopic();
+    }
+    else {
+        assert(false);
+        return *(new Topic(GetProject(), NULL, NULL));
+    }
 }
 
 /// <summary>
@@ -88,12 +109,45 @@ bool Component::Validate(bool fix)
         REQUIRED_PROP(IfcGuid);
     }
 
+    if (!ValidateIfcGuid()) {
+        valid = false;
+    }
+
     if (!valid && fix) {
         Remove();
         return true;
     }
 
     return valid;
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool Component::ValidateIfcGuid()
+{
+    if (m_IfcGuid.empty()) 
+        return true;
+
+    if (!GetProject().GetValidateIfcGuids())
+        return true;
+
+    auto& topic = GetTopic();
+    BCFFile* bcffile = NULL;
+    while (NULL != (bcffile = topic.FileIterate(bcffile))) {
+        
+        auto file = dynamic_cast<File*>(bcffile);
+        assert(file);
+        if (file) {
+
+            if (file->HasComponent(m_IfcGuid)) {
+                return true;
+            }
+        }
+    }
+
+    Log().add(Log::Level::error, "Invalud IfcGUID", "Invalid IFC GlobalId: %s", m_IfcGuid.c_str());
+    return false;
 }
 
 /// <summary>

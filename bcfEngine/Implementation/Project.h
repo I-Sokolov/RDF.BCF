@@ -24,7 +24,7 @@ public:
     virtual bool Delete(void) override; 
     virtual bool ReadFile(const char* bcfFilePath, bool autofix) override;
     virtual bool WriteFile(const char* bcfFilePath, BCFVersion version) override;
-    virtual bool SetAuthor(const char* user, bool autoExtentSchema) override { m_author = user; m_autoExtentSchema = autoExtentSchema; return true; }
+    virtual bool SetOptions(const char* user, bool autoExtentSchema, bool validateIfcGuids) override { if (user) m_author.assign(user); m_autoExtentSchema = autoExtentSchema; m_validateIfcGuids = validateIfcGuids;  return true; }
     virtual const char* GetProjectId() override { return m_projectInfo.m_ProjectId.c_str(); }
     virtual const char* GetName() override { return m_projectInfo.m_Name.c_str(); }
     virtual bool SetName(const char* name) override { m_projectInfo.m_Name = name; return true; }
@@ -39,6 +39,7 @@ public:
     BCFVersion GetVersion() { return m_version.Get(); }
 
     bool GetAutoExtentSchema() { return m_autoExtentSchema; }
+    bool GetValidateIfcGuids() { return m_validateIfcGuids; }
 
     Extensions& GetExtensionsImpl() { return m_extensions; }
 
@@ -65,6 +66,7 @@ private:
 
     std::string m_author;
     bool        m_autoExtentSchema;
+    bool        m_validateIfcGuids;
 
     SetByGuid<Topic>  m_topics;
 

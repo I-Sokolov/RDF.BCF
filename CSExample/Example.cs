@@ -21,7 +21,7 @@ namespace CSExample
         {
             using (var bcfData = new RDF.BCF.Project("MyProject"))
             {
-                bcfData.SetAuthor("user@company.org", true);
+                bcfData.SetOptions("user@company.org", true);
 
                 //
                 // create topic

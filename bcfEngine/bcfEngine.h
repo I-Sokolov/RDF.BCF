@@ -38,7 +38,7 @@ extern "C" {
     /// <summary>
     /// 
     /// </summary>
-    RDFBCF_EXPORT bool bcfSetAuthor(BCFProject* project, const char* user, bool autoExtent);
+    RDFBCF_EXPORT bool bcfSetOptions(BCFProject* project, const char* user, bool autoExtent, bool validateIfcGuids);
 
     /// <summary>
     /// 

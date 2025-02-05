@@ -23,6 +23,7 @@ Project::Project(const char* projectId)
     , m_extensions (*this)
     , m_documents(*this)
     , m_autoExtentSchema(true)
+    , m_validateIfcGuids(false)
     , m_topics(*this)
 {
     gProjectCounter++;

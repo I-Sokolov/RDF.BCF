@@ -46,9 +46,9 @@
         /// topic type, status etc. when you set the value which is not in enumeration yet.
         /// If the option is disable, it makes strict checking and assigning any unknown elements will rise RDF.BCF.Exception.
         /// </param>
-        public bool SetAuthor(string user, bool autoExtent)
+        public bool SetOptions(string user, bool autoExtent = true, bool validateIfcGuids = false)
         {
-            return BCF.Interop.SetAuthor(m_handle, user, autoExtent);
+            return BCF.Interop.SetOptions(m_handle, user, autoExtent, validateIfcGuids);
         }
 
         /// <summary>

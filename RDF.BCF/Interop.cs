@@ -98,9 +98,9 @@ namespace RDF.BCF
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool FileWrite(IntPtr project, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string filePath, Version version);
 
-        [DllImport(DLL, EntryPoint = "bcfSetAuthor")]
+        [DllImport(DLL, EntryPoint = "bcfSetOptions")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool SetAuthor(IntPtr project, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string user, [param: MarshalAs(UnmanagedType.U1)] bool autoExtent);
+        public static extern bool SetOptions(IntPtr project, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string user, [param: MarshalAs(UnmanagedType.U1)] bool autoExtent = true, [param: MarshalAs(UnmanagedType.U1)] bool validateIfcGuids = false);
 
         [DllImport(DLL, EntryPoint = "bcfProjectIdGet")]
         private static extern IntPtr ProjectIdGet_(IntPtr project);

@@ -5,10 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -16,13 +12,17 @@
     <Filter Include="XMLparser">
       <UniqueIdentifier>{e390ec29-775c-46c7-b0ea-bf2bf85786bd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Implementation Headers">
+    <Filter Include="API Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
       <UniqueIdentifier>{b8890f66-81f1-4ad7-b685-b932e099d450}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bcfEngine.h">
-      <Filter>Header Files</Filter>
+      <Filter>API Header Files</Filter>
     </ClInclude>
     <ClInclude Include="XMLparser\_errors.h">
       <Filter>XMLparser</Filter>
@@ -55,94 +55,94 @@
       <Filter>XMLparser</Filter>
     </ClInclude>
     <ClInclude Include="bcfTypes.h">
-      <Filter>Header Files</Filter>
+      <Filter>API Header Files</Filter>
     </ClInclude>
     <ClInclude Include="bcfAPI.h">
-      <Filter>Header Files</Filter>
+      <Filter>API Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\Archivator.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\BimSnippet.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\Bitmap.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\ClippingPlane.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\Coloring.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\Comment.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\Component.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\DocumentReference.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\File.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\Line.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\BCFObject.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\Project.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\Topic.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\ViewPoint.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\Documents.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\Extensions.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\FileSystem.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\framework.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\GuidReference.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\GuidStr.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\ListOf.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\Log.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\pch.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\ProjectInfo.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\SmokeTest.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\Version.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\XMLFile.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\XMLPoint.h">
-      <Filter>Implementation Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
