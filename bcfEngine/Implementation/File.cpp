@@ -4,6 +4,7 @@
 #include "Project.h"
 #include "Topic.h"
 #include "FileSystem.h"
+#include "ifcengine.h"
 
 /// <summary>
 /// 
@@ -90,7 +91,7 @@ bool File::SetReference(const char* val)
 
     m_Reference.assign(val);
     if (!m_Reference.empty()) {
-        UpdateFileInfo();
+        return UpdateFileInfo();
     }
     return true; 
 }
@@ -98,17 +99,65 @@ bool File::SetReference(const char* val)
 /// <summary>
 /// 
 /// </summary>
-void File::UpdateFileInfo()
+bool File::UpdateFileInfo()
 {
     if (!m_Reference.empty()) {
 
         m_Filename = FileSystem::GetFileName(m_Reference.c_str(), GetLog());
 
         if (FileSystem::Exists(m_Reference.c_str())) {
-            auto tm = FileSystem::GetFileModificationTime(m_Reference.c_str(), GetLog());
-            if (tm) {
-                m_Date = TimeToStr(tm);
+
+            if (IsIFC()) {
+                return UpdateFileInfoIFC();
+            }
+            else {
+                auto tm = FileSystem::GetFileModificationTime(m_Reference.c_str(), GetLog());
+                if (tm) {
+                    m_Date = TimeToStr(tm);
+                }
             }
         }
     }
+
+    return true;
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool File::IsIFC()
+{
+    auto len = m_Reference.length();
+    if (len > 4) {
+        auto ext = m_Reference.c_str() + len - 4;
+        if (0 == _stricmp(".ifc", ext)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool File::UpdateFileInfoIFC()
+{
+    auto model = sdaiOpenModelBN(0, m_Reference.c_str(), NULL);
+    if (model) {
+
+        const char* value = NULL;
+        GetSPFFHeaderItem(model, 3, 0, sdaiSTRING, &value);
+        if (value && *value){
+            m_Date.assign(value);
+        }
+
+        value = NULL;
+        GetSPFFHeaderItem(model, 2, 0, sdaiSTRING, &value);
+        if (value && *value){
+            m_Filename.assign(value);
+        }
+
+        sdaiCloseModel(model);
+    }
+    return true;
 }

@@ -37,7 +37,9 @@ private:
     void Write_File(_xml_writer& writer, const std::string& folder);
 
 private:
-    void UpdateFileInfo();
+    bool UpdateFileInfo();
+    bool IsIFC();
+    bool UpdateFileInfoIFC();
 
 private:
     Topic&      m_topic;

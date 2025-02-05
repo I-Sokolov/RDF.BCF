@@ -248,5 +248,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="InstallZipLib.bat" />
+    <None Include="InstallIfcEngine.bat" />
   </ItemGroup>
 </Project>

@@ -682,7 +682,7 @@ namespace CSExample
                 else
                 {
                     ASSERT(file.Filename == "Architectural.ifc");
-                    ASSERT(file.Date.Length == 25);
+                    ASSERT(file.Date.Length > 0);
                 }
                 if (isExternal)
                 {
