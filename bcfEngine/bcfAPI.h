@@ -56,7 +56,7 @@ struct BCFProject
     BCF_PROPERTY_RO(const char*, ProjectId);
     BCF_PROPERTY_RW(const char*, Name);
 
-    virtual BCFTopic* TopicIterate(BCFTopic* prev) = NULL;
+    virtual BCFTopic* TopicGetAt(uint16_t ind) = NULL;
     virtual BCFTopic* TopicAdd(const char* type, const char* title, const char* status, const char* guid = NULL) = NULL;
 };
 
@@ -84,29 +84,29 @@ struct BCFTopic
     BCF_PROPERTY_RW(const char*, Stage);
     BCF_PROPERTY_RW(int,         Index);
 
-    virtual BCFFile* FileIterate(BCFFile* prev) = NULL;
+    virtual BCFFile* FileGetAt(uint16_t ind) = NULL;
     virtual BCFFile* FileAdd(const char* filePath, bool isExternal) = NULL;
 
-    virtual BCFComment* CommentIterate(BCFComment* prev) = NULL;
+    virtual BCFComment* CommentGetAt(uint16_t ind) = NULL;
     virtual BCFComment* CommentAdd(const char* guid = NULL) = NULL;
 
-    virtual BCFViewPoint* ViewPointIterate(BCFViewPoint* prev) = NULL;
+    virtual BCFViewPoint* ViewPointGetAt(uint16_t ind) = NULL;
     virtual BCFViewPoint* ViewPointAdd(const char* guid = NULL) = NULL;
 
-    virtual BCFDocumentReference* DocumentReferenceIterate(BCFDocumentReference* prev) = NULL;
+    virtual BCFDocumentReference* DocumentReferenceGetAt(uint16_t ind) = NULL;
     virtual BCFDocumentReference* DocumentReferenceAdd(const char* filePath, bool isExternal, const char* guid = NULL) = NULL;
 
     virtual BCFBimSnippet* GetBimSnippet(bool forceCreate) = NULL;
 
-    virtual const char* ReferenceLinkIterate(const char* prev) = NULL;
+    virtual const char* ReferenceLinkGetAt(uint16_t ind) = NULL;
     virtual bool ReferenceLinkAdd(const char* value) = NULL;
     virtual bool ReferenceLinkRemove(const char* value) = NULL;
 
-    virtual const char* LabelIterate(const char* prev) = NULL;
+    virtual const char* LabelGetAt(uint16_t ind) = NULL;
     virtual bool LabelAdd(const char* value) = NULL;
     virtual bool LabelRemove(const char* value) = NULL;
 
-    virtual BCFTopic* RelatedTopicIterate(BCFTopic* prev) = NULL;
+    virtual BCFTopic* RelatedTopicGetAt(uint16_t ind) = NULL;
     virtual bool RelatedTopicAdd(BCFTopic* value) = NULL;
     virtual bool RelatedTopicRemove(BCFTopic* value) = NULL;
 
@@ -152,22 +152,22 @@ struct BCFViewPoint
     BCF_PROPERTY_PT(CameraDirection);
     BCF_PROPERTY_PT(CameraUpVector);
 
-    virtual BCFComponent* SelectionIterate(BCFComponent* prev) = NULL;
+    virtual BCFComponent* SelectionGetAt(uint16_t ind) = NULL;
     virtual BCFComponent* SelectionAdd(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL) = NULL;
 
-    virtual BCFComponent* ExceptionsIterate(BCFComponent* prev) = NULL;
+    virtual BCFComponent* ExceptionsGetAt(uint16_t ind) = NULL;
     virtual BCFComponent* ExceptionsAdd(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL) = NULL;
 
-    virtual BCFColoring* ColoringIterate(BCFColoring* prev) = NULL;
+    virtual BCFColoring* ColoringGetAt(uint16_t ind) = NULL;
     virtual BCFColoring* ColoringAdd(const char* color) = NULL;
 
-    virtual BCFBitmap* BitmapIterate(BCFBitmap* prev) = NULL;
+    virtual BCFBitmap* BitmapGetAt(uint16_t ind) = NULL;
     virtual BCFBitmap* BitmapAdd(const char* filePath, BCFBitmapFormat format, BCFPoint* location, BCFPoint* normal, BCFPoint* up, double height) = NULL;
 
-    virtual BCFLine* LineIterate(BCFLine* prev) = NULL;
+    virtual BCFLine* LineGetAt(uint16_t ind) = NULL;
     virtual BCFLine* LineAdd(BCFPoint* start, BCFPoint* end) = NULL;
 
-    virtual BCFClippingPlane* ClippingPlaneIterate(BCFClippingPlane* prev) = NULL;
+    virtual BCFClippingPlane* ClippingPlaneGetAt(uint16_t ind) = NULL;
     virtual BCFClippingPlane* ClippingPlaneAdd(BCFPoint* start, BCFPoint* end) = NULL;
 
     virtual bool Remove() = NULL;
@@ -213,7 +213,7 @@ struct BCFColoring
 
     BCF_PROPERTY_RW(const char*, Color)
 
-    virtual BCFComponent* ComponentIterate(BCFComponent* prev) = NULL;
+    virtual BCFComponent* ComponentGetAt(uint16_t ind) = NULL;
     virtual BCFComponent* ComponentAdd(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL) = NULL;
 
     virtual bool Remove() = NULL;

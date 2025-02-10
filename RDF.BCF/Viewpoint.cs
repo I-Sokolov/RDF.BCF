@@ -98,7 +98,8 @@ namespace RDF.BCF
         {
             var ret = new List<Component>();
             IntPtr handle = IntPtr.Zero;
-            while ((handle = Interop.ViewPointSelectionIterate(m_handle, handle)) != IntPtr.Zero)
+            UInt16 ind = 0;
+            while ((handle = Interop.ViewPointSelectionGetAt(m_handle, ind++)) != IntPtr.Zero)
             {
                 ret.Add(new Component(Project, handle));
             }
@@ -123,7 +124,8 @@ namespace RDF.BCF
         {
             var ret = new List<Component>();
             IntPtr handle = IntPtr.Zero;
-            while ((handle = Interop.ViewPointExceptionsIterate(m_handle, handle)) != IntPtr.Zero)
+            UInt16 ind = 0;
+            while ((handle = Interop.ViewPointExceptionsGetAt(m_handle, ind++)) != IntPtr.Zero)
             {
                 ret.Add(new Component(Project, handle));
             }
@@ -148,7 +150,8 @@ namespace RDF.BCF
         {
             var ret = new List<Bitmap>();
             IntPtr handle = IntPtr.Zero;
-            while ((handle = Interop.BitmapIterate(m_handle, handle)) != IntPtr.Zero)
+            UInt16 ind = 0;
+            while ((handle = Interop.BitmapGetAt(m_handle, ind++)) != IntPtr.Zero)
             {
                 ret.Add(new Bitmap(this, handle));
             }
@@ -174,7 +177,8 @@ namespace RDF.BCF
         {
             var ret = new List<Coloring>();
             IntPtr handle = IntPtr.Zero;
-            while ((handle = Interop.ColoringIterate(m_handle, handle)) != IntPtr.Zero)
+            UInt16 ind = 0;
+            while ((handle = Interop.ColoringGetAt(m_handle, ind++)) != IntPtr.Zero)
             {
                 ret.Add(new Coloring(this, handle));
             }
@@ -201,7 +205,8 @@ namespace RDF.BCF
             var ret = new List<Line>();
 
             IntPtr handle = IntPtr.Zero;
-            while ((handle = Interop.LineIterate(m_handle, handle)) != IntPtr.Zero)
+            UInt16 ind = 0;
+            while ((handle = Interop.LineGetAt(m_handle, ind++)) != IntPtr.Zero)
             {
                 ret.Add(new Line(this, handle));
             }
@@ -227,7 +232,8 @@ namespace RDF.BCF
         {
             var ret = new List<ClippingPlane>();
             IntPtr handle = IntPtr.Zero;
-            while ((handle = Interop.ClippingPlaneIterate(m_handle, handle)) != IntPtr.Zero)
+            UInt16 ind = 0;
+            while ((handle = Interop.ClippingPlaneGetAt(m_handle, ind++)) != IntPtr.Zero)
             {
                 ret.Add(new ClippingPlane(this, handle));
             }

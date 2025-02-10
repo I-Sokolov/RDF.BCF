@@ -383,9 +383,9 @@ BCFViewPoint* Topic::ViewPointAdd(const char* guid)
 /// <summary>
 /// 
 /// </summary>
-BCFViewPoint* Topic::ViewPointIterate(BCFViewPoint* prev)
+BCFViewPoint* Topic::ViewPointGetAt(uint16_t ind)
 {
-    return m_Viewpoints.GetNext((ViewPoint*)prev);
+    return m_Viewpoints.GetAt(ind);
 }
 
 
@@ -422,9 +422,9 @@ BCFFile* Topic::FileAdd(const char* filePath, bool isExternal)
 /// <summary>
 /// 
 /// </summary>
-BCFFile* Topic::FileIterate(BCFFile* prev)
+BCFFile* Topic::FileGetAt(uint16_t ind)
 {
-    return m_Files.GetNext((File*)prev);
+    return m_Files.GetAt(ind);
 }
 
 
@@ -455,9 +455,9 @@ BCFComment* Topic::CommentAdd(const char* guid)
 /// <summary>
 /// 
 /// </summary>
-BCFComment* Topic::CommentIterate(BCFComment* prev)
+BCFComment* Topic::CommentGetAt(uint16_t ind)
 {
-    return m_Comments.GetNext((Comment*)prev);
+    return m_Comments.GetAt(ind);
 }
 
 /// <summary>
@@ -488,9 +488,9 @@ BCFDocumentReference* Topic::DocumentReferenceAdd(const char* path, bool isExter
 /// <summary>
 /// 
 /// </summary>
-BCFDocumentReference* Topic::DocumentReferenceIterate(BCFDocumentReference* prev)
+BCFDocumentReference* Topic::DocumentReferenceGetAt(uint16_t ind)
 {
-    return m_DocumentReferences.GetNext((DocumentReference*)prev);
+    return m_DocumentReferences.GetAt(ind);
 }
 
 /// <summary>
@@ -530,9 +530,9 @@ bool Topic::ReferenceLinkAdd(const char* val)
 /// <summary>
 /// 
 /// </summary>
-const char* Topic::ReferenceLinkIterate(const char* prev)
+const char* Topic::ReferenceLinkGetAt(uint16_t ind)
 {
-    return m_ReferenceLinks.GetNext(prev);
+    return m_ReferenceLinks.GetAt(ind);
 }
 
 /// <summary>
@@ -566,9 +566,9 @@ bool Topic::LabelAdd(const char* val)
 /// <summary>
 /// 
 /// </summary>
-const char* Topic::LabelIterate(const char* prev)
+const char* Topic::LabelGetAt(uint16_t ind)
 {
-    return m_Labels.GetNext(prev);
+    return m_Labels.GetAt(ind);
 }
 
 /// <summary>
@@ -607,43 +607,13 @@ bool Topic::RelatedTopicAdd(BCFTopic* topic)
 /// <summary>
 /// 
 /// </summary>
-Topic* Topic::GetNextRelatedTopic(const char* guid)
+BCFTopic* Topic::RelatedTopicGetAt(uint16_t ind)
 {
-    auto it = m_RelatedTopics.Items().begin();
-
-    if (guid) {
-        for (; it != m_RelatedTopics.Items().end(); it++) {
-            if (0 == strcmp((*it)->GetGuid(), guid))
-                break;
-        }
-        if (it != m_RelatedTopics.Items().end()) {
-            it++;
-        }
-    }
-
-    if (it == m_RelatedTopics.Items().end()) {
+    auto guidRef = m_RelatedTopics.GetAt(ind);
+    if (guidRef)
+        return GetProject().TopicByGuid(guidRef->GetGuid());
+    else
         return NULL;
-    }
-    else {
-        guid = (*it)->GetGuid();
-        auto topic = GetProject().TopicByGuid(guid);
-        if (topic) {
-            return topic;
-        }
-        else {
-            Log().add(Log::Level::error, "Invaid topic reference", "Referenced topic not found in this package");
-            return GetNextRelatedTopic(guid);
-        }
-    }
-
-}
-
-/// <summary>
-/// 
-/// </summary>
-BCFTopic* Topic::RelatedTopicIterate(BCFTopic* prev)
-{
-    return GetNextRelatedTopic(prev ? prev->GetGuid() : NULL);
 }
 
 /// <summary>
@@ -671,12 +641,14 @@ bool Topic::Remove()
 {
     //remove references
     BCFTopic* topic = NULL;
-    while (NULL != (topic = GetProject().TopicIterate(topic))) {
+    uint16_t ind = 0;
+    while (NULL != (topic = GetProject().TopicGetAt(ind++))) {
 
         if (topic != this) {
 
             BCFTopic* related = NULL;
-            while (NULL != (related = topic->RelatedTopicIterate(related))) {
+            uint16_t ind2 = 0;
+            while (NULL != (related = topic->RelatedTopicGetAt(ind2++))) {
 
                 if (related == this) {
                     topic->RelatedTopicRemove(this);

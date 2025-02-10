@@ -330,9 +330,9 @@ BCFComponent* ViewPoint::SelectionAdd(const char* ifcGuid, const char* authoring
 /// <summary>
 /// 
 /// </summary>
-BCFComponent* ViewPoint::SelectionIterate(BCFComponent* prev)
+BCFComponent* ViewPoint::SelectionGetAt(uint16_t ind)
 {
-    return m_Selection.GetNext((Component*)prev);
+    return m_Selection.GetAt(ind);
 }
 
 /// <summary>
@@ -346,9 +346,9 @@ BCFComponent* ViewPoint::ExceptionsAdd(const char* ifcGuid, const char* authorin
 /// <summary>
 /// 
 /// </summary>
-BCFComponent* ViewPoint::ExceptionsIterate(BCFComponent* prev)
+BCFComponent* ViewPoint::ExceptionsGetAt(uint16_t ind)
 {
-    return m_Exceptions.GetNext((Component*)prev);
+    return m_Exceptions.GetAt(ind);
 }
 
 /// <summary>
@@ -385,9 +385,9 @@ BCFBitmap* ViewPoint::BitmapAdd(const char* filePath, BCFBitmapFormat format, BC
 /// <summary>
 /// 
 /// </summary>
-BCFBitmap* ViewPoint::BitmapIterate(BCFBitmap* prev)
+BCFBitmap* ViewPoint::BitmapGetAt(uint16_t ind)
 {
-    return m_Bitmaps.GetNext((Bitmap*)prev);
+    return m_Bitmaps.GetAt(ind);
 }
 
 /// <summary>
@@ -414,9 +414,9 @@ BCFColoring* ViewPoint::ColoringAdd(const char* color)
 /// <summary>
 /// 
 /// </summary>
-BCFColoring* ViewPoint::ColoringIterate(BCFColoring* prev)
+BCFColoring* ViewPoint::ColoringGetAt(uint16_t ind)
 {
-    return m_Coloring.GetNext((Coloring*)prev);
+    return m_Coloring.GetAt(ind);
 }
 
 /// <summary>
@@ -444,9 +444,9 @@ BCFLine* ViewPoint::LineAdd(BCFPoint* start, BCFPoint* end)
 /// <summary>
 /// 
 /// </summary>
-BCFLine* ViewPoint::LineIterate(BCFLine* prev)
+BCFLine* ViewPoint::LineGetAt(uint16_t ind)
 {
-    return m_Lines.GetNext((Line*)prev);
+    return m_Lines.GetAt(ind);
 }
 
 /// <summary>
@@ -474,9 +474,9 @@ BCFClippingPlane* ViewPoint::ClippingPlaneAdd(BCFPoint* location, BCFPoint* dire
 /// <summary>
 /// 
 /// </summary>
-BCFClippingPlane* ViewPoint::ClippingPlaneIterate(BCFClippingPlane* prev)
+BCFClippingPlane* ViewPoint::ClippingPlaneGetAt(uint16_t ind)
 {
-    return m_ClippingPlanes.GetNext((ClippingPlane*)prev);
+    return m_ClippingPlanes.GetAt(ind);
 }
 
 /// <summary>
@@ -501,7 +501,8 @@ bool ViewPoint::Remove()
 {
     //check references
     BCFComment* comment = NULL;
-    while (NULL != (comment = m_topic.CommentIterate(comment))) {
+    uint16_t ind = 0;
+    while (NULL != (comment = m_topic.CommentGetAt(ind++))) {
         if (this == comment->GetViewPoint()) {
             GetLog().add(Log::Level::error, "ViewPoint is used", "Can not delete used viewpoint %s", m_Guid.c_str());
             return false;

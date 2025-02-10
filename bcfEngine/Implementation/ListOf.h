@@ -20,12 +20,12 @@ protected:
     ListOfBCFObjects(Project& project) : m_project(project) {}
     ~ListOfBCFObjects();
 
-    BCFObject* GetNext(BCFObject* prev);
+    BCFObject* GetAt(uint16_t ind);
 
     void LogDuplicatedGuid(const char* guid);
 
 private:
-    typedef std::list<BCFObject*> Items;
+    typedef std::vector<BCFObject*> Items;
     typedef Items::iterator Iterator;
 
 private:
@@ -51,24 +51,19 @@ public:
     ListOf (Project& project) : ListOfBCFObjects(project) {}
 
 public:
-    Item* GetNext(Item* prev)
+    Item* GetAt(uint16_t ind)
     {
-        auto next = __super::GetNext(prev);
-        if (next) {
-            assert(dynamic_cast<Item*>(next));
-            return dynamic_cast<Item*>(next);
-        }
-        return NULL;
+        return dynamic_cast<Item*> (__super::GetAt(ind));
     }
 
-    std::list<Item*>& Items()
+    std::vector<Item*>& Items()
     {
-        return (std::list<Item*>&) m_items;
+        return (std::vector<Item*>&) m_items;
     }
 
     void AfterRead(const std::string& folder)
     {
-        std::list<Item*> items = Items();//list copy list is intentional, next processing may remove components
+        std::vector<Item*> items = Items();//list copy list is intentional, next processing may remove components
         for (auto item : items) {
             item->AfterRead(folder);
         }
@@ -77,7 +72,7 @@ public:
     bool Validate(bool fix)
     {
         bool valid = true;
-        std::list<Item*> items = Items();//list copy list is intentional, next processing may remove components
+        std::vector<Item*> items = Items();//list copy list is intentional, next processing may remove components
         for (auto item : items) {
             valid = item->Validate(fix) && valid;
         }
@@ -147,7 +142,7 @@ public:
 
     void Add(const char* val);
     XMLText* Find(const char* val);
-    const char* GetNext(const char* prev);
+    const char* GetAt(uint16_t ind);
     bool Remove(const char* val);
 
 private:

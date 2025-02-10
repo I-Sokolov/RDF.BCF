@@ -57,11 +57,11 @@ RDFBCF_EXPORT bool bcf  ##OBJ##Set##ATTR (BCF##OBJ* obj, t##VAL val)            
 }
 
 #define OBJ_ITERATE(OBJ, CONTAINER)                                                     \
-RDFBCF_EXPORT BCF##OBJ* bcf##OBJ##Iterate(BCF##CONTAINER* container, BCF##OBJ* prev)    \
+RDFBCF_EXPORT BCF##OBJ* bcf##OBJ##GetAt(BCF##CONTAINER* container, uint16_t ind)        \
 {                                                                                       \
     if (container) {                                                                    \
         TYPE_CHECK(container, CONTAINER, NULL)                                          \
-        return container->##OBJ##Iterate(prev);                                         \
+        return container->##OBJ##GetAt(ind);                                            \
     }                                                                                   \
     return NULL;                                                                        \
 }                                                                                       
@@ -442,11 +442,11 @@ RDFBCF_EXPORT BCFComponent* bcf##Parent##List##Add(BCF##Parent* parent, const ch
     }                                                                                           \
     return NULL;                                                                                \
 }                                                                                               \
-RDFBCF_EXPORT BCFComponent* bcf##Parent##List##Iterate(BCF##Parent* parent, BCFComponent* prev) \
+RDFBCF_EXPORT BCFComponent* bcf##Parent##List##GetAt(BCF##Parent* parent, uint16_t ind)         \
 {                                                                                               \
     if (parent) {                                                                               \
         TYPE_CHECK(parent, Parent, NULL);                                                       \
-        return parent->##List##Iterate(prev);                                                   \
+        return parent->##List##GetAt(ind);                                                      \
     }                                                                                           \
     return NULL;                                                                                \
 }                                                                                               \
@@ -514,11 +514,11 @@ RDFBCF_EXPORT bool          bcf##ListName##Add   (BCFTopic* topic, t##ElemType v
     }                                                                                   \
     return false;                                                                       \
 }                                                                                       \
-RDFBCF_EXPORT t##ElemType   bcf##ListName##Iterate(BCFTopic* topic, t##ElemType prev)   \
+RDFBCF_EXPORT t##ElemType   bcf##ListName##GetAt(BCFTopic* topic, uint16_t ind)         \
 {                                                                                       \
     if (topic) {                                                                        \
         TYPE_CHECK(topic, Topic, NULL);                                                 \
-        return topic->##ListName##Iterate(prev);                                        \
+        return topic->##ListName##GetAt(ind);                                           \
     }                                                                                   \
     return NULL;                                                                        \
 }                                                                                       \

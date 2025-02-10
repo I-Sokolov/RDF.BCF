@@ -31,7 +31,8 @@ namespace RDF.BCF
         {
             var ret = new List<Component>();
             IntPtr handle = IntPtr.Zero;
-            while ((handle = Interop.ColoringComponentIterate(m_handle, handle)) != IntPtr.Zero)
+            UInt16 ind = 0;
+            while ((handle = Interop.ColoringComponentGetAt(m_handle, ind++)) != IntPtr.Zero)
             {
                 ret.Add(new Component(Project, handle));
             }

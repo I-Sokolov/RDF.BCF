@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.InteropServices;
 
 namespace RDF.BCF
 {
@@ -138,8 +131,8 @@ namespace RDF.BCF
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool EnumerationElementRemove(IntPtr project, BCFEnumeration enumeration, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string element);
 
-        [DllImport(DLL, EntryPoint = "bcfTopicIterate")]
-        public static extern IntPtr TopicsIterate(IntPtr project, IntPtr prev);
+        [DllImport(DLL, EntryPoint = "bcfTopicGetAt")]
+        public static extern IntPtr TopicsGetAt(IntPtr project, UInt16 ind);
 
         [DllImport(DLL, EntryPoint = "bcfTopicGetGuid")]
         private static extern IntPtr TopicGetGuid_(IntPtr topic);
@@ -266,8 +259,8 @@ namespace RDF.BCF
         public static extern bool TopicSetIndex(IntPtr topic, int val);
 
 
-        [DllImport(DLL, EntryPoint = "bcfFileIterate")]
-        public static extern IntPtr FileIterate(IntPtr topic, IntPtr prev);
+        [DllImport(DLL, EntryPoint = "bcfFileGetAt")]
+        public static extern IntPtr FileGetAt(IntPtr topic, UInt16 ind);
 
         [DllImport(DLL, EntryPoint = "bcfFileAdd")]
         public static extern IntPtr FileAdd(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? filePath, [param: MarshalAs(UnmanagedType.U1)] bool isExternal = true);
@@ -321,8 +314,8 @@ namespace RDF.BCF
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool FileSetIfcSpatialStructureElement(IntPtr file, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
 
-        [DllImport(DLL, EntryPoint = "bcfCommentIterate")]
-        public static extern IntPtr CommentIterate(IntPtr topic, IntPtr prev);
+        [DllImport(DLL, EntryPoint = "bcfCommentGetAt")]
+        public static extern IntPtr CommentGetAt(IntPtr topic, UInt16 ind);
 
         [DllImport(DLL, EntryPoint = "bcfCommentAdd")]
         public static extern IntPtr CommentAdd(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? guid = null);
@@ -366,8 +359,8 @@ namespace RDF.BCF
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool CommentSetViewPoint(IntPtr comment, IntPtr viewPoint);
 
-        [DllImport(DLL, EntryPoint = "bcfViewPointIterate")]
-        public static extern IntPtr ViewPointIterate(IntPtr topic, IntPtr prev);
+        [DllImport(DLL, EntryPoint = "bcfViewPointGetAt")]
+        public static extern IntPtr ViewPoitGetAt(IntPtr topic, UInt16 ind);
 
         [DllImport(DLL, EntryPoint = "bcfViewPointAdd")]
         public static extern IntPtr ViewPointAdd(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? guid = null);
@@ -472,8 +465,8 @@ namespace RDF.BCF
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ViewPointSetAspectRatio(IntPtr viewPoint, double val);
 
-        [DllImport(DLL, EntryPoint = "bcfViewPointSelectionIterate")]
-        public static extern IntPtr ViewPointSelectionIterate(IntPtr viewPoint, IntPtr prev);
+        [DllImport(DLL, EntryPoint = "bcfViewPointSelectionGetAt")]
+        public static extern IntPtr ViewPointSelectionGetAt(IntPtr viewPoint, UInt16 ind);
 
         [DllImport(DLL, EntryPoint = "bcfViewPointSelectionAdd")]
         public static extern IntPtr ViewPointSelectionAdd(IntPtr viewPoint, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? ifcGuid = null);
@@ -482,8 +475,8 @@ namespace RDF.BCF
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ViewPointComponentRemove(IntPtr component);
 
-        [DllImport(DLL, EntryPoint = "bcfViewPointExceptionsIterate")]
-        public static extern IntPtr ViewPointExceptionsIterate(IntPtr viewPoint, IntPtr prev);
+        [DllImport(DLL, EntryPoint = "bcfViewPointExceptionsGetAt")]
+        public static extern IntPtr ViewPointExceptionsGetAt(IntPtr viewPoint, UInt16 ind);
 
         [DllImport(DLL, EntryPoint = "bcfViewPointExceptionsAdd")]
         public static extern IntPtr ViewPointExceptionsAdd(IntPtr viewPoint, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? ifcGuid = null);
@@ -509,8 +502,9 @@ namespace RDF.BCF
         [DllImport(DLL, EntryPoint = "bcfComponentSetAuthoringToolId")]
         public static extern bool ComponentSetAuthoringToolId(IntPtr component, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string value);
 
-        [DllImport(DLL, EntryPoint = "bcfDocumentReferenceIterate")]
-        public static extern IntPtr DocumentReferenceIterate(IntPtr topic, IntPtr prev);
+        [DllImport(DLL, EntryPoint = "bcfDocumentReferenceGetAt")]
+        public static extern IntPtr DocumentReferenceGetAt(IntPtr topic, UInt16 ind);
+
         [DllImport(DLL, EntryPoint = "bcfDocumentReferenceAdd")]
         public static extern IntPtr DocumentReferenceAdd(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string filePath, [param: MarshalAs(UnmanagedType.U1)] bool isExternal, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? guid = null);
         [DllImport(DLL, EntryPoint = "bcfDocumentReferenceRemove")]
@@ -574,9 +568,10 @@ namespace RDF.BCF
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ReferenceLinkAdd(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
 
-        [DllImport(DLL, EntryPoint = "bcfReferenceLinkIterate")]
-        private static extern IntPtr _ReferenceLinkIterate(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? prev);
-        public static string ReferenceLinkIterate(IntPtr topic, string? prev) { return PtrToString(_ReferenceLinkIterate(topic, prev)); }
+        [DllImport(DLL, EntryPoint = "bcfReferenceLinkGetAt")]
+        private static extern IntPtr _ReferenceLinkGetAt(IntPtr topic, UInt16 ind);
+
+        public static string ReferenceLinkGetAt(IntPtr topic, UInt16 ind) { return PtrToString(_ReferenceLinkGetAt(topic, ind)); }
 
         [DllImport(DLL, EntryPoint = "bcfReferenceLinkRemove")]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -586,9 +581,9 @@ namespace RDF.BCF
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool LabelAdd(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
 
-        [DllImport(DLL, EntryPoint = "bcfLabelIterate")]
-        private static extern IntPtr _LabelIterate(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? prev);
-        public static string LabelIterate(IntPtr topic, string? prev) { return PtrToString(_LabelIterate(topic, prev)); }
+        [DllImport(DLL, EntryPoint = "bcfLabelGetAt")]
+        private static extern IntPtr _LabelGetAt(IntPtr topic, UInt16 ind);
+        public static string LabelGetAt(IntPtr topic, UInt16 ind) { return PtrToString(_LabelGetAt(topic, ind)); }
 
         [DllImport(DLL, EntryPoint = "bcfLabelRemove")]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -598,8 +593,8 @@ namespace RDF.BCF
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool RelatedTopicAdd(IntPtr topic, IntPtr related);
 
-        [DllImport(DLL, EntryPoint = "bcfRelatedTopicIterate")]
-        public static extern IntPtr RelatedTopicIterate(IntPtr topic, IntPtr prev);
+        [DllImport(DLL, EntryPoint = "bcfRelatedTopicGetAt")]
+        public static extern IntPtr RelatedTopicGetAt(IntPtr topic, UInt16 ind);
 
         [DllImport(DLL, EntryPoint = "bcfRelatedTopicRemove")]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -608,8 +603,8 @@ namespace RDF.BCF
         [DllImport(DLL, EntryPoint = "bcfBitmapAdd")]
         public static extern IntPtr BitmapAdd(IntPtr viewPoint, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string filePath, BCFBitmapFormat format, BCFPoint location, BCFPoint normal, BCFPoint up, double height);
 
-        [DllImport(DLL, EntryPoint = "bcfBitmapIterate")]
-        public static extern IntPtr BitmapIterate(IntPtr viewPoint, IntPtr prev);
+        [DllImport(DLL, EntryPoint = "bcfBitmapGetAt")]
+        public static extern IntPtr BitmapGetAt(IntPtr viewPoint, UInt16 ind);
 
         [DllImport(DLL, EntryPoint = "bcfBitmapRemove")]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -670,8 +665,8 @@ namespace RDF.BCF
         [DllImport(DLL, EntryPoint = "bcfColoringAdd")]
         public static extern IntPtr ColoringAdd(IntPtr viewPoint, string? color);
 
-        [DllImport(DLL, EntryPoint = "bcfColoringIterate")]
-        public static extern IntPtr ColoringIterate(IntPtr viewPoint, IntPtr prev);
+        [DllImport(DLL, EntryPoint = "bcfColoringGetAt")]
+        public static extern IntPtr ColoringGetAt(IntPtr viewPoint, UInt16 ind);
 
         [DllImport(DLL, EntryPoint = "bcfColoringRemove")]
         public static extern bool ColoringRemove(IntPtr color);
@@ -686,14 +681,14 @@ namespace RDF.BCF
         [DllImport(DLL, EntryPoint = "bcfColoringComponentAdd")] 
         public static extern IntPtr ColoringComponentAdd(IntPtr coloring, string? ifcGuid);
 
-        [DllImport(DLL, EntryPoint = "bcfColoringComponentIterate")] 
-        public static extern IntPtr ColoringComponentIterate(IntPtr coloring, IntPtr prev);
+        [DllImport(DLL, EntryPoint = "bcfColoringComponentGetAt")] 
+        public static extern IntPtr ColoringComponentGetAt(IntPtr coloring, UInt16 ind);
 
         [DllImport(DLL, EntryPoint = "bcfLineAdd")]
         public static extern IntPtr LineAdd(IntPtr viewPoint, BCFPoint start, BCFPoint end);
 
-        [DllImport(DLL, EntryPoint = "bcfLineIterate")]
-        public static extern IntPtr LineIterate(IntPtr viewPoint, IntPtr prev);
+        [DllImport(DLL, EntryPoint = "bcfLineGetAt")]
+        public static extern IntPtr LineGetAt(IntPtr viewPoint, UInt16 ind);
 
         [DllImport(DLL, EntryPoint = "bcfLineRemove")]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -718,8 +713,8 @@ namespace RDF.BCF
         [DllImport(DLL, EntryPoint = "bcfClippingPlaneAdd")]
         public static extern IntPtr ClippingPlaneAdd(IntPtr viewPoint, BCFPoint location, BCFPoint direction);
 
-        [DllImport(DLL, EntryPoint = "bcfClippingPlaneIterate")]
-        public static extern IntPtr ClippingPlaneIterate(IntPtr viewPoint, IntPtr prev);
+        [DllImport(DLL, EntryPoint = "bcfClippingPlaneGetAt")]
+        public static extern IntPtr ClippingPlaneGetAt(IntPtr viewPoint, UInt16 ind);
 
         [DllImport(DLL, EntryPoint = "bcfClippingPlaneRemove")]
         [return: MarshalAs(UnmanagedType.U1)]

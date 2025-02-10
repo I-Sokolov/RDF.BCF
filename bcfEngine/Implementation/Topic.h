@@ -47,29 +47,29 @@ public:
     virtual bool SetStage(const char* val) override;
 
     virtual BCFFile* FileAdd(const char* filePath, bool isExternal = true) override;
-    virtual BCFFile* FileIterate(BCFFile* prev) override;
+    virtual BCFFile* FileGetAt(uint16_t ind) override;
 
     virtual BCFViewPoint* ViewPointAdd(const char* guid = NULL) override;
-    virtual BCFViewPoint* ViewPointIterate(BCFViewPoint* prev) override;
+    virtual BCFViewPoint* ViewPointGetAt(uint16_t ind) override;
 
     virtual BCFComment* CommentAdd(const char* guid = NULL) override;
-    virtual BCFComment* CommentIterate(BCFComment* prev) override;
+    virtual BCFComment* CommentGetAt(uint16_t ind) override;
 
     virtual BCFDocumentReference* DocumentReferenceAdd(const char* filePath, bool isExternal = true, const char* guid = NULL) override;
-    virtual BCFDocumentReference* DocumentReferenceIterate(BCFDocumentReference* prev) override;
+    virtual BCFDocumentReference* DocumentReferenceGetAt(uint16_t ind) override;
 
     virtual BCFBimSnippet* GetBimSnippet(bool forceCreate) override;
 
     virtual bool ReferenceLinkAdd(const char* val) override;
-    virtual const char* ReferenceLinkIterate(const char* prev) override;
+    virtual const char* ReferenceLinkGetAt(uint16_t ind) override;
     virtual bool ReferenceLinkRemove(const char* val) override;
 
     virtual bool LabelAdd(const char* val) override;
-    virtual const char* LabelIterate(const char* prev) override;
+    virtual const char* LabelGetAt(uint16_t ind) override;
     virtual bool LabelRemove(const char* val) override;
 
     virtual bool RelatedTopicAdd(BCFTopic* topic) override;
-    virtual BCFTopic* RelatedTopicIterate(BCFTopic* prev) override;
+    virtual BCFTopic* RelatedTopicGetAt(uint16_t ind) override;
     virtual bool RelatedTopicRemove(BCFTopic* topic) override;
 
 public:
@@ -95,8 +95,6 @@ private:
 
     void Write_Header(_xml_writer& writer, const std::string& folder);
     void Write_Topic(_xml_writer& writer, const std::string& folder);
-
-    Topic* GetNextRelatedTopic(const char* guid);
 
 private:
     GuidStr                         m_Guid;

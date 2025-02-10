@@ -73,7 +73,7 @@ extern "C" {
     /// <summary>
     /// 
     /// </summary>
-    RDFBCF_EXPORT BCFTopic* bcfTopicIterate(BCFProject* project, BCFTopic* prev);
+    RDFBCF_EXPORT BCFTopic* bcfTopicGetAt(BCFProject* project, uint16_t ind);
     RDFBCF_EXPORT BCFTopic* bcfTopicAdd(BCFProject* project, const char* type, const char* title, const char* status, const char* guid);
     RDFBCF_EXPORT bool bcfTopicRemove(BCFTopic* topic);
 
@@ -113,7 +113,7 @@ extern "C" {
     /// <summary>
     ///
     /// </summary>
-    RDFBCF_EXPORT BCFFile* bcfFileIterate(BCFTopic* topic, BCFFile* prev);
+    RDFBCF_EXPORT BCFFile* bcfFileGetAt(BCFTopic* topic, uint16_t ind);
     RDFBCF_EXPORT BCFFile* bcfFileAdd(BCFTopic* topic, const char* filePath, bool isExternal);
     RDFBCF_EXPORT bool bcfFileRemove(BCFFile* file);
 
@@ -137,7 +137,7 @@ extern "C" {
     /// <summary>
     ///
     /// </summary>
-    RDFBCF_EXPORT BCFViewPoint* bcfViewPointIterate(BCFTopic* topic, BCFViewPoint* prev);
+    RDFBCF_EXPORT BCFViewPoint* bcfViewPointGetAt(BCFTopic* topic, uint16_t ind);
     RDFBCF_EXPORT BCFViewPoint* bcfViewPointAdd(BCFTopic* topic, const char* guid);
     RDFBCF_EXPORT bool bcfViewPointRemove(BCFViewPoint* viewPoint);
 
@@ -174,7 +174,7 @@ extern "C" {
     /// <summary>
     /// 
     /// </summary>
-    RDFBCF_EXPORT BCFComment* bcfCommentIterate (BCFTopic* topic, BCFComment* prev);
+    RDFBCF_EXPORT BCFComment* bcfCommentGetAt (BCFTopic* topic, uint16_t ind);
     RDFBCF_EXPORT BCFComment* bcfCommentAdd     (BCFTopic* topic, const char* guid);
     RDFBCF_EXPORT bool        bcfCommentRemove  (BCFComment* comment);
 
@@ -199,7 +199,7 @@ extern "C" {
     /// <summary>
     ///
     /// </summary>
-    RDFBCF_EXPORT BCFDocumentReference* bcfDocumentReferenceIterate(BCFTopic* topic, BCFDocumentReference* prev);
+    RDFBCF_EXPORT BCFDocumentReference* bcfDocumentReferenceGetAt(BCFTopic* topic, uint16_t ind);
     RDFBCF_EXPORT BCFDocumentReference* bcfDocumentReferenceAdd(BCFTopic* topic, const char* filePath, bool isExternal, const char* guid);
     RDFBCF_EXPORT bool                  bcfDocumentReferenceRemove(BCFDocumentReference* comment);
 
@@ -217,13 +217,13 @@ extern "C" {
     ///
     /// </summary>
     RDFBCF_EXPORT BCFComponent* bcfViewPointSelectionAdd(BCFViewPoint* viewPoint, const char* ifcGuid);
-    RDFBCF_EXPORT BCFComponent* bcfViewPointSelectionIterate(BCFViewPoint* viewPoint, BCFComponent* prev);
+    RDFBCF_EXPORT BCFComponent* bcfViewPointSelectionGetAt(BCFViewPoint* viewPoint, uint16_t ind);
 
     /// <summary>
     ///
     /// </summary>
     RDFBCF_EXPORT BCFComponent* bcfViewPointExceptionsAdd(BCFViewPoint* viewPoint, const char* ifcGuid);
-    RDFBCF_EXPORT BCFComponent* bcfViewPointExceptionsIterate(BCFViewPoint* viewPoint, BCFComponent* prev);
+    RDFBCF_EXPORT BCFComponent* bcfViewPointExceptionsGetAt(BCFViewPoint* viewPoint, uint16_t ind);
 
     /// <summary>
     /// 
@@ -245,20 +245,20 @@ extern "C" {
     ///
     /// </summary>
     RDFBCF_EXPORT BCFColoring* bcfColoringAdd(BCFViewPoint* viewPoint, const char* color);
-    RDFBCF_EXPORT BCFColoring* bcfColoringIterate(BCFViewPoint* viewPoint, BCFColoring* prev);
+    RDFBCF_EXPORT BCFColoring* bcfColoringGetAt(BCFViewPoint* viewPoint, uint16_t ind);
     RDFBCF_EXPORT bool bcfColoringRemove(BCFColoring* color);
 
     RDFBCF_EXPORT const char* bcfColoringGetColor(BCFColoring* coloring);
     RDFBCF_EXPORT bool bcfColoringSetColor(BCFColoring* coloring, const char* color);
 
     RDFBCF_EXPORT BCFComponent* bcfColoringComponentAdd(BCFColoring* coloring, const char* ifcGuid);
-    RDFBCF_EXPORT BCFComponent* bcfColoringComponentIterate(BCFColoring* coloring, BCFComponent* prev);
+    RDFBCF_EXPORT BCFComponent* bcfColoringComponentGetAt(BCFColoring* coloring, uint16_t ind);
 
     /// <summary>
     ///
     /// </summary>
     RDFBCF_EXPORT BCFLine* bcfLineAdd(BCFViewPoint* viewPoint, BCFPoint* start, BCFPoint* end);
-    RDFBCF_EXPORT BCFLine* bcfLineIterate(BCFViewPoint* viewPoint, BCFLine* prev);
+    RDFBCF_EXPORT BCFLine* bcfLineGetAt(BCFViewPoint* viewPoint, uint16_t ind);
     RDFBCF_EXPORT bool bcfLineRemove(BCFLine* line);
 
     RDFBCF_EXPORT bool bcfLineGetStartPoint  (BCFLine* bitmap, BCFPoint* retPt);
@@ -270,7 +270,7 @@ extern "C" {
     ///
     /// </summary>
     RDFBCF_EXPORT BCFClippingPlane* bcfClippingPlaneAdd(BCFViewPoint* viewPoint, BCFPoint* location, BCFPoint* direction);
-    RDFBCF_EXPORT BCFClippingPlane* bcfClippingPlaneIterate(BCFViewPoint* viewPoint, BCFClippingPlane* prev);
+    RDFBCF_EXPORT BCFClippingPlane* bcfClippingPlaneGetAt(BCFViewPoint* viewPoint, uint16_t ind);
     RDFBCF_EXPORT bool bcfClippingPlaneRemove(BCFClippingPlane* clippingPlane);
 
     RDFBCF_EXPORT bool bcfClippingPlaneGetLocation  (BCFClippingPlane* bitmap, BCFPoint* retPt);
@@ -282,7 +282,7 @@ extern "C" {
     ///
     /// </summary>
     RDFBCF_EXPORT BCFBitmap* bcfBitmapAdd(BCFViewPoint* viewPoint, const char* filePath, BCFBitmapFormat format, BCFPoint* location, BCFPoint* normal, BCFPoint* up, double height);
-    RDFBCF_EXPORT BCFBitmap* bcfBitmapIterate(BCFViewPoint* viewPoint, BCFBitmap* prev);
+    RDFBCF_EXPORT BCFBitmap* bcfBitmapGetAt(BCFViewPoint* viewPoint, uint16_t ind);
     RDFBCF_EXPORT bool bcfBitmapRemove(BCFBitmap* bitmap);
 
     /// <summary>
@@ -326,21 +326,21 @@ extern "C" {
     ///
     /// </summary>
     RDFBCF_EXPORT bool          bcfReferenceLinkAdd    (BCFTopic* topic, const char* val);
-    RDFBCF_EXPORT const char*   bcfReferenceLinkIterate(BCFTopic* topic, const char* prev);
+    RDFBCF_EXPORT const char*   bcfReferenceLinkGetAt  (BCFTopic* topic, uint16_t ind);
     RDFBCF_EXPORT bool          bcfReferenceLinkRemove (BCFTopic* topic, const char* val);
 
     /// <summary>
     ///
     /// </summary>
     RDFBCF_EXPORT bool          bcfLabelAdd    (BCFTopic* topic, const char* val);
-    RDFBCF_EXPORT const char*   bcfLabelIterate(BCFTopic* topic, const char* prev);
+    RDFBCF_EXPORT const char*   bcfLabelGetAt  (BCFTopic* topic, uint16_t ind);
     RDFBCF_EXPORT bool          bcfLabelRemove (BCFTopic* topic, const char* val);
 
     /// <summary>
     ///
     /// </summary>
     RDFBCF_EXPORT bool          bcfRelatedTopicAdd     (BCFTopic* topic,BCFTopic* related);
-    RDFBCF_EXPORT BCFTopic*     bcfRelatedTopicIterate (BCFTopic* topic,BCFTopic* prev);
+    RDFBCF_EXPORT BCFTopic*     bcfRelatedTopicGetAt   (BCFTopic* topic,uint16_t ind);
     RDFBCF_EXPORT bool          bcfRelatedTopicRemove  (BCFTopic* topic,BCFTopic* related);
 
 #ifdef __cplusplus

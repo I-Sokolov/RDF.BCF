@@ -29,7 +29,7 @@ public:
     virtual const char* GetName() override { return m_projectInfo.m_Name.c_str(); }
     virtual bool SetName(const char* name) override { m_projectInfo.m_Name = name; return true; }
     virtual BCFTopic* TopicAdd(const char* type, const char* title, const char* status, const char* guid = NULL) override;
-    virtual BCFTopic* TopicIterate(BCFTopic* prev) override;
+    virtual BCFTopic* TopicGetAt(uint16_t ind) override;
     virtual BCFExtensions& GetExtensions() override { return GetExtensionsImpl(); }
     virtual const char* GetErrors(bool cleanLog) override { return GetLog().get(cleanLog); }
 

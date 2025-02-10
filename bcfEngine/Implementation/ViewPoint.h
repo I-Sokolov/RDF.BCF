@@ -47,22 +47,22 @@ public:
     virtual bool        SetAspectRatio(double val) override { return RealToStr (val, m_AspectRatio); }
 
     virtual BCFComponent* SelectionAdd(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL) override;
-    virtual BCFComponent* SelectionIterate(BCFComponent* prev) override;
+    virtual BCFComponent* SelectionGetAt(uint16_t ind) override;
 
     virtual BCFComponent* ExceptionsAdd(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL) override;
-    virtual BCFComponent* ExceptionsIterate(BCFComponent* prev) override;
+    virtual BCFComponent* ExceptionsGetAt(uint16_t ind) override;
 
     virtual BCFBitmap* BitmapAdd(const char* filePath, BCFBitmapFormat format, BCFPoint* location, BCFPoint* normal, BCFPoint* up, double height) override;
-    virtual BCFBitmap* BitmapIterate(BCFBitmap* prev) override;
+    virtual BCFBitmap* BitmapGetAt(uint16_t ind) override;
 
     virtual BCFColoring* ColoringAdd(const char* color) override;
-    virtual BCFColoring* ColoringIterate(BCFColoring* prev) override;
+    virtual BCFColoring* ColoringGetAt(uint16_t ind) override;
 
     virtual BCFLine* LineAdd(BCFPoint* start, BCFPoint* end) override;
-    virtual BCFLine* LineIterate(BCFLine* prev) override;
+    virtual BCFLine* LineGetAt(uint16_t ind) override;
 
     virtual BCFClippingPlane* ClippingPlaneAdd(BCFPoint* location, BCFPoint* direction) override;
-    virtual BCFClippingPlane* ClippingPlaneIterate(BCFClippingPlane* prev) override;
+    virtual BCFClippingPlane* ClippingPlaneGetAt(uint16_t ind) override;
 
 public:
     void Read(_xml::_element& elem, const std::string& folder);

@@ -1107,7 +1107,7 @@ namespace CSExample
             topic.SetRelatedTopics(refs);
         }
 
-            static void CheckTopicLists(Project project, int A, int B)
+        static void CheckTopicLists(Project project, int A, int B)
         {
             var topic = project.GetTopics().First();
 

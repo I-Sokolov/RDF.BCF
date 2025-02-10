@@ -234,9 +234,9 @@ BCFTopic* Project::TopicAdd(const char* type, const char* title, const char* sta
 /// <summary>
 /// 
 /// </summary>
-BCFTopic* Project::TopicIterate(BCFTopic* prev)
+BCFTopic* Project::TopicGetAt(uint16_t ind)
 { 
-    return m_topics.GetNext((Topic*)prev); 
+    return m_topics.GetAt(ind);
 }
 
 /// <summary>

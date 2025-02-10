@@ -83,10 +83,12 @@ void Documents::MarkUsedDocuments()
     }
 
     BCFTopic* topic = NULL;
-    while (NULL != (topic = GetProject().TopicIterate(topic))) {        
+    uint16_t ind = 0;
+    while (NULL != (topic = GetProject().TopicGetAt(ind++))) {        
 
         BCFDocumentReference* ref = NULL;
-        while (NULL != (ref = topic->DocumentReferenceIterate(ref))) {
+        uint16_t ind2 = 0;
+        while (NULL != (ref = topic->DocumentReferenceGetAt(ind2++))) {
 
             auto docGuid = ref->GetDocumentGuid();
             if (*docGuid) {

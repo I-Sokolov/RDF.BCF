@@ -16,18 +16,12 @@ ListOfBCFObjects::~ListOfBCFObjects()
 /// <summary>
 /// 
 /// </summary>
-BCFObject* ListOfBCFObjects::GetNext(BCFObject* prev)
+BCFObject* ListOfBCFObjects::GetAt(uint16_t ind)
 {
-    auto it = m_items.begin();
-
-    if (prev) {
-        it = Find(prev);
-        if (it != m_items.end()) {
-            it++;
-        }
-    }
-
-    return (it == m_items.end()) ? NULL : *it;
+    if (ind < m_items.size())
+        return m_items[ind];
+    else
+        return NULL;
 }
 
 /// <summary>
@@ -145,18 +139,9 @@ XMLText* SetOfXMLText::Find(const char* val)
 /// <summary>
 /// 
 /// </summary>
-const char* SetOfXMLText::GetNext(const char* prev)
+const char* SetOfXMLText::GetAt(uint16_t ind)
 {
-    XMLText* txtPrev = NULL;
-    if (prev && *prev) {
-        txtPrev = Find(prev);
-        if (!txtPrev) {
-            m_project.GetLog().add(Log::Level::error, "Invalid element", "Text element %s is not in the list", prev);
-            return NULL;
-        }
-    }
-
-    auto txtNext = __super::GetNext(txtPrev);
+    auto txtNext = __super::GetAt(ind);
 
     if (txtNext) {
         return txtNext->string().c_str();

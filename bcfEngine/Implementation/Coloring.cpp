@@ -90,9 +90,9 @@ BCFComponent* Coloring::ComponentAdd(const char* ifcGuid, const char* authoringT
 /// <summary>
 /// 
 /// </summary>
-BCFComponent* Coloring::ComponentIterate(BCFComponent* prev)
+BCFComponent* Coloring::ComponentGetAt(uint16_t ind)
 {
-    return m_Components.GetNext((Component*)prev);
+    return m_Components.GetAt(ind);
 }
 
 

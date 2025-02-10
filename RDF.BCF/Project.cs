@@ -68,7 +68,8 @@
         {
             var ret = new List<Topic>();
             IntPtr topicHandle = IntPtr.Zero;
-            while ((topicHandle = RDF.BCF.Interop.TopicsIterate(m_handle, topicHandle)) != IntPtr.Zero)
+            UInt16 ind = 0;
+            while ((topicHandle = RDF.BCF.Interop.TopicsGetAt(m_handle, ind++)) != IntPtr.Zero)
             {
                 ret.Add(new Topic(this, topicHandle));
             }

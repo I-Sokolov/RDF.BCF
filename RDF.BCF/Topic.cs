@@ -90,7 +90,8 @@ namespace RDF.BCF
         {
             var list = new List<string>();
             string elem = "";
-            while (!string.IsNullOrEmpty(elem = Interop.ReferenceLinkIterate(m_handle, elem)))
+            UInt16 ind = 0;
+            while (!string.IsNullOrEmpty(elem = Interop.ReferenceLinkGetAt(m_handle, ind++)))
             {
                 list.Add(elem);
             }
@@ -103,7 +104,7 @@ namespace RDF.BCF
         public void SetReferenceLinks(IEnumerable<string> list)
         {
             string elem = "";
-            while (!string.IsNullOrEmpty(elem = Interop.ReferenceLinkIterate(m_handle, null)))
+            while (!string.IsNullOrEmpty(elem = Interop.ReferenceLinkGetAt(m_handle, 0)))
             {
                 Interop.ReferenceLinkRemove(m_handle, elem);
             }
@@ -120,7 +121,8 @@ namespace RDF.BCF
         {
             var list = new List<string>();
             string elem = "";
-            while (!string.IsNullOrEmpty (elem = Interop.LabelIterate(m_handle, elem)))
+            UInt16 ind = 0;
+            while (!string.IsNullOrEmpty (elem = Interop.LabelGetAt(m_handle, ind++)))
             {
                 list.Add(elem);
             }
@@ -133,7 +135,7 @@ namespace RDF.BCF
         public void SetLabels(IEnumerable<string> list)
         {
             string elem = "";
-            while (!string.IsNullOrEmpty (elem = Interop.LabelIterate(m_handle, "")))
+            while (!string.IsNullOrEmpty (elem = Interop.LabelGetAt(m_handle, 0)))
             {
                 Interop.LabelRemove(m_handle, elem);
             }
@@ -150,7 +152,8 @@ namespace RDF.BCF
         {
             var list = new List<Topic>();
             IntPtr elem = IntPtr.Zero;
-            while (IntPtr.Zero != (elem = Interop.RelatedTopicIterate(m_handle, elem)))
+            UInt16 ind = 0;
+            while (IntPtr.Zero != (elem = Interop.RelatedTopicGetAt(m_handle, ind++)))
             {
                 list.Add(new Topic(m_project, elem));
             }
@@ -163,7 +166,7 @@ namespace RDF.BCF
         public void SetRelatedTopics(IEnumerable<Topic> list)
         {
             IntPtr elem = IntPtr.Zero;
-            while (IntPtr.Zero != (elem = Interop.RelatedTopicIterate(m_handle, IntPtr.Zero)))
+            while (IntPtr.Zero != (elem = Interop.RelatedTopicGetAt(m_handle, 0)))
             {
                 Interop.RelatedTopicRemove(m_handle, elem);
             }
@@ -188,7 +191,8 @@ namespace RDF.BCF
         {
             var ret = new List<BimFile>();
             IntPtr handle = IntPtr.Zero;
-            while ((handle = Interop.FileIterate(m_handle, handle)) != IntPtr.Zero)
+            UInt16 ind = 0;
+            while ((handle = Interop.FileGetAt(m_handle, ind++)) != IntPtr.Zero)
             {
                 ret.Add(new BimFile(this, handle));
             }
@@ -213,7 +217,8 @@ namespace RDF.BCF
         {
             var ret = new List<ViewPoint>();
             IntPtr viewPoint = IntPtr.Zero;
-            while ((viewPoint = Interop.ViewPointIterate(m_handle, viewPoint)) != IntPtr.Zero)
+            UInt16 ind = 0;
+            while ((viewPoint = Interop.ViewPoitGetAt(m_handle, ind++)) != IntPtr.Zero)
             {
                 ret.Add(new ViewPoint(this, viewPoint));
             }
@@ -238,7 +243,8 @@ namespace RDF.BCF
         {
             var ret = new List<DocumentReference>();
             IntPtr handle = IntPtr.Zero;
-            while ((handle = Interop.DocumentReferenceIterate(m_handle, handle)) != IntPtr.Zero)
+            UInt16 ind = 0;
+            while ((handle = Interop.DocumentReferenceGetAt(m_handle, ind++)) != IntPtr.Zero)
             {
                 ret.Add(new DocumentReference(this, handle));
             }
@@ -263,7 +269,8 @@ namespace RDF.BCF
         {
             var ret = new List<Comment>();
             IntPtr commentHandle = IntPtr.Zero;
-            while ((commentHandle = Interop.CommentIterate(m_handle, commentHandle)) != IntPtr.Zero)
+            UInt16 ind = 0;
+            while ((commentHandle = Interop.CommentGetAt(m_handle, ind++)) != IntPtr.Zero)
             {
                 ret.Add(new Comment(this, commentHandle));
             }

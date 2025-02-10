@@ -79,7 +79,8 @@ void Component::AfterRead(const std::string&)
 
         if (!m_Color.empty() && m_pViewPoint) {
             BCFColoring* coloring = NULL;            
-            while ((coloring = m_pViewPoint->ColoringIterate(coloring)) != NULL) {
+            uint16_t ind = 0;
+            while ((coloring = m_pViewPoint->ColoringGetAt(ind++)) != NULL) {
                 if (0 == strcmp(coloring->GetColor(), m_Color.c_str())) {
                     break;
                 }
@@ -134,7 +135,8 @@ bool Component::ValidateIfcGuid()
 
     auto& topic = GetTopic();
     BCFFile* bcffile = NULL;
-    while (NULL != (bcffile = topic.FileIterate(bcffile))) {
+    uint16_t ind = 0;
+    while (NULL != (bcffile = topic.FileGetAt(ind++))) {
         
         auto file = dynamic_cast<File*>(bcffile);
         assert(file);
