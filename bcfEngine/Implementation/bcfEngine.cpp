@@ -197,11 +197,11 @@ RDFBCF_EXPORT bool bcfProjectNameSet(BCFProject* project, const char* name)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT const char* bcfEnumerationElementGet(BCFProject* project, BCFEnumeration enumeration, int index)
+RDFBCF_EXPORT const char* bcfEnumerationElementGet(BCFProject* project, BCFEnumeration enumeration, uint16_t ind)
 {
     if (project) {
         TYPE_CHECK(project, Project, NULL);
-        return project->GetExtensions().GetElement(enumeration, index);
+        return project->GetExtensions().GetElement(enumeration, ind);
     }
     return NULL;
 }

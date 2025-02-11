@@ -34,15 +34,15 @@ bool Extensions::AddElement(BCFEnumeration enumeration, const char* element)
 /// <summary>
 /// 
 /// </summary>
-const char* Extensions::GetElement(BCFEnumeration enumeration, int index)
+const char* Extensions::GetElement(BCFEnumeration enumeration, uint16_t ind)
 {
     auto list = GetList(enumeration);
     if (list) {
         for (auto& elem : *list) {
-            if (index == 0) {
+            if (ind == 0) {
                 return elem.c_str();
             }
-            index--;
+            ind--;
         }
     }
     return NULL;

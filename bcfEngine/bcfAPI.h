@@ -301,7 +301,7 @@ struct BCFExtensions
 {
     long TypeCheck = BCFTypeCheck_Extensions;
 
-    virtual const char* GetElement(BCFEnumeration enumeration, int index) = NULL;
+    virtual const char* GetElement(BCFEnumeration enumeration, uint16_t ind) = NULL;
     virtual bool        AddElement(BCFEnumeration enumeration, const char* value) = NULL;
     virtual bool        RemoveElement(BCFEnumeration enumeration, const char* element) = NULL;
 };
