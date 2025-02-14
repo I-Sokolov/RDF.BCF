@@ -8,9 +8,9 @@
 /// 
 /// </summary>
 Comment::Comment(Topic& topic, ListOfBCFObjects* parentList, const char* guid)
-    : BCFObject(topic.GetProject(), parentList)
+    : BCFObject(topic.Project_(), parentList)
     , m_topic(topic)
-    , m_Guid(topic.GetProject(), guid)
+    , m_Guid(topic.Project_(), guid)
     , m_Viewpoint(topic, NULL)
     , m_readFromFile(false)
 {
@@ -131,7 +131,7 @@ bool Comment::SetViewPoint(BCFViewPoint* viewPoint)
         guid = viewPoint->GetGuid();
       
         if (!m_topic.ViewPointByGuid(guid)) {
-            GetLog().add(Log::Level::error, "Invalid viewpoint", "Viewpoint %s is not from this topic %s", guid, m_topic.GetTitle());
+            Log_().add(Log::Level::error, "Invalid viewpoint", "Viewpoint %s is not from this topic %s", guid, m_topic.GetTitle());
             ok = false;
             guid = NULL;
         }
@@ -173,11 +173,19 @@ bool Comment::UpdateAuthor()
 /// </summary>
 void Comment::AfterRead(const std::string&)
 {
-    if (GetProject().GetVersion() < BCFVer_3_0) {
+    if (Project_().GetVersion() < BCFVer_3_0) {
         if (!*m_Viewpoint.GetGuid()) { //empty comment appeared from a file
             if (m_Comment.empty()) {
                 m_Comment.assign("empty");
             }
         }
     }
+}
+
+/// <summary>
+/// 
+/// </summary>
+BCFTopic& Comment::GetTopic()
+{ 
+    return m_topic; 
 }

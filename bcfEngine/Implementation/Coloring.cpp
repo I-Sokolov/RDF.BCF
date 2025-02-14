@@ -10,9 +10,9 @@
 /// 
 /// </summary>
 Coloring::Coloring(ViewPoint& viewPoint, ListOfBCFObjects* parentList)
-    : BCFObject(viewPoint.GetProject(), parentList) 
+    : BCFObject(viewPoint.Project_(), parentList) 
     , m_viewPoint(viewPoint)
-    , m_Components(viewPoint.GetProject())
+    , m_Components(viewPoint.Project_())
 { 
 }
 
@@ -21,7 +21,7 @@ Coloring::Coloring(ViewPoint& viewPoint, ListOfBCFObjects* parentList)
 /// </summary>
 Topic& Coloring::GetTopic()
 {
-    return m_viewPoint.GetTopic();
+    return m_viewPoint.Topic_();
 }
 
 
@@ -82,7 +82,7 @@ void Coloring::Write(_xml_writer& writer, const std::string& folder, const char*
 /// <summary>
 /// 
 /// </summary>
-BCFComponent* Coloring::ComponentAdd(const char* ifcGuid, const char* authoringToolId, const char* originatingSystem)
+BCFComponent* Coloring::AddComponent(const char* ifcGuid, const char* authoringToolId, const char* originatingSystem)
 {
     return m_Components.Add(m_viewPoint, ifcGuid, authoringToolId, originatingSystem);
 }
@@ -90,7 +90,7 @@ BCFComponent* Coloring::ComponentAdd(const char* ifcGuid, const char* authoringT
 /// <summary>
 /// 
 /// </summary>
-BCFComponent* Coloring::ComponentGetAt(uint16_t ind)
+BCFComponent* Coloring::GetComponent(uint16_t ind)
 {
     return m_Components.GetAt(ind);
 }
@@ -115,6 +115,14 @@ bool Coloring::IsColorValid(const char* str, const char* propName)
         }
     }
 
-    GetLog().add(Log::Level::error, "Invalid value", "Color value must be 6 or 8 hex digits, value '%s' is incorrect for %s", str, propName);
+    Log_().add(Log::Level::error, "Invalid value", "Color value must be 6 or 8 hex digits, value '%s' is incorrect for %s", str, propName);
     return false;
+}
+
+/// <summary>
+/// 
+/// </summary>
+BCFViewPoint& Coloring::GetViewPoint()
+{ 
+    return m_viewPoint; 
 }

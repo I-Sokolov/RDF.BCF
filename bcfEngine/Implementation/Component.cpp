@@ -4,13 +4,13 @@
 #include "Coloring.h"
 #include "Project.h"
 #include "Topic.h"
-#include "File.h"
+#include "BimFile.h"
 
 /// <summary>
 /// 
 /// </summary>
 Component::Component(ViewPoint& viewPoint, ListOfBCFObjects* parentList)
-    : BCFObject(viewPoint.GetProject(), parentList)
+    : BCFObject(viewPoint.Project_(), parentList)
     , m_pViewPoint(&viewPoint)
     , m_pColoring(NULL)
     , m_Visible("true")
@@ -21,7 +21,7 @@ Component::Component(ViewPoint& viewPoint, ListOfBCFObjects* parentList)
 /// 
 /// </summary>
 Component::Component(Coloring& coloring, ListOfBCFObjects* parentList)
-    : BCFObject(coloring.GetProject(), parentList)
+    : BCFObject(coloring.Project_(), parentList)
     , m_pViewPoint(NULL)
     , m_pColoring(&coloring)
     , m_Visible("true")
@@ -34,15 +34,40 @@ Component::Component(Coloring& coloring, ListOfBCFObjects* parentList)
 Topic& Component::GetTopic()
 {
     if (m_pViewPoint) {
-        return m_pViewPoint->GetTopic();
+        return m_pViewPoint->Topic_();
     }
     else if (m_pColoring) {
         return m_pColoring->GetTopic();
     }
     else {
         assert(false);
-        return *(new Topic(GetProject(), NULL, NULL));
+        return *(new Topic(Project_(), NULL, NULL));
     }
+}
+
+/// <summary>
+/// 
+/// </summary>
+BCFViewPoint& Component::GetViewPoint()
+{
+    if (m_pViewPoint) {
+        return *m_pViewPoint;
+    }
+    else if (m_pColoring) {
+        return m_pColoring->GetViewPoint();
+    }
+    else {
+        assert(false);
+        return *(new ViewPoint(GetTopic(), NULL));
+    }
+}
+
+/// <summary>
+/// 
+/// </summary>
+BCFColoring* Component::GetColoring()
+{
+    return m_pColoring;
 }
 
 /// <summary>
@@ -70,27 +95,27 @@ void Component::Read(_xml::_element& elem, const std::string&)
 /// </summary>
 void Component::AfterRead(const std::string&)
 {
-    if (GetProject().GetVersion() < BCFVer_2_1) {
+    if (Project_().GetVersion() < BCFVer_2_1) {
         assert(m_pViewPoint);
 
         if (!StrToBool(m_Visible) && m_pViewPoint) {
-            m_pViewPoint->ExceptionsAdd(m_IfcGuid.c_str(), m_AuthoringToolId.c_str(), m_OriginatingSystem.c_str());
+            m_pViewPoint->AddException(m_IfcGuid.c_str(), m_AuthoringToolId.c_str(), m_OriginatingSystem.c_str());
         }
 
         if (!m_Color.empty() && m_pViewPoint) {
             BCFColoring* coloring = NULL;            
             uint16_t ind = 0;
-            while ((coloring = m_pViewPoint->ColoringGetAt(ind++)) != NULL) {
+            while ((coloring = m_pViewPoint->GetColoring(ind++)) != NULL) {
                 if (0 == strcmp(coloring->GetColor(), m_Color.c_str())) {
                     break;
                 }
             }
 
             if (!coloring) {
-                coloring = m_pViewPoint->ColoringAdd(m_Color.c_str());
+                coloring = m_pViewPoint->AddColoring(m_Color.c_str());
             }
 
-            coloring->ComponentAdd(m_IfcGuid.c_str(), m_AuthoringToolId.c_str(), m_OriginatingSystem.c_str());
+            coloring->AddComponent(m_IfcGuid.c_str(), m_AuthoringToolId.c_str(), m_OriginatingSystem.c_str());
         }
 
         if (!StrToBool(m_Selected)) {
@@ -130,15 +155,15 @@ bool Component::ValidateIfcGuid()
     if (m_IfcGuid.empty()) 
         return true;
 
-    if (!GetProject().GetValidateIfcGuids())
+    if (!Project_().GetValidateIfcGuids())
         return true;
 
     auto& topic = GetTopic();
-    BCFFile* bcffile = NULL;
+    BCFBimFile* bcffile = NULL;
     uint16_t ind = 0;
-    while (NULL != (bcffile = topic.FileGetAt(ind++))) {
+    while (NULL != (bcffile = topic.GetBimFile(ind++))) {
         
-        auto file = dynamic_cast<File*>(bcffile);
+        auto file = dynamic_cast<BimFile*>(bcffile);
         assert(file);
         if (file) {
 

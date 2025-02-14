@@ -192,7 +192,7 @@ namespace RDF.BCF
             var ret = new List<BimFile>();
             IntPtr handle = IntPtr.Zero;
             UInt16 ind = 0;
-            while ((handle = Interop.FileGetAt(m_handle, ind++)) != IntPtr.Zero)
+            while ((handle = Interop.BimFileGetAt(m_handle, ind++)) != IntPtr.Zero)
             {
                 ret.Add(new BimFile(this, handle));
             }
@@ -204,7 +204,7 @@ namespace RDF.BCF
         /// </summary>
         public BimFile AddFile(string? filePath, bool isExternal = true)
         {
-            IntPtr fileHandle = Interop.FileAdd(m_handle, filePath, isExternal);
+            IntPtr fileHandle = Interop.BimFileAdd(m_handle, filePath, isExternal);
             if (fileHandle == IntPtr.Zero)
                 throw new ApplicationException("Fail to add file: " + Interop.GetErrors(m_project.Handle));
             return new BimFile(this, fileHandle);

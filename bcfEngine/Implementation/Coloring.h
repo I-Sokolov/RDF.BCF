@@ -19,9 +19,10 @@ public:
     virtual const char* GetColor() override { return m_Color.c_str(); }
     virtual bool SetColor(const char* val) override { UNNULL; VALIDATE(Color, Color); m_Color.assign(val); return true; }
     
-    virtual BCFComponent* ComponentAdd(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL) override;
-    virtual BCFComponent* ComponentGetAt(uint16_t ind) override;
+    virtual BCFComponent* AddComponent(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL) override;
+    virtual BCFComponent* GetComponent(uint16_t ind) override;
 
+    virtual BCFViewPoint& GetViewPoint() override;
     virtual bool Remove() override { return RemoveImpl(); }
 
 private:

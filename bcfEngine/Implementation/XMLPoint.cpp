@@ -62,7 +62,7 @@ bool XMLPoint::SetPoint(const BCFPoint* bcfpt)
         return true;
     }
     else {
-        m_project.GetLog().add(Log::Level::error, "NULL argument");
+        m_project.Log_().add(Log::Level::error, "NULL argument");
         return false;
     }
 }

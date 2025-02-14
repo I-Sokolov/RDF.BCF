@@ -8,7 +8,7 @@
 /// 
 /// </summary>
 GuidReference::GuidReference(Topic& topic, ListOfBCFObjects* parentList) 
-    : BCFObject(topic.GetProject(), parentList)
+    : BCFObject(topic.Project_(), parentList)
 {
 }
 

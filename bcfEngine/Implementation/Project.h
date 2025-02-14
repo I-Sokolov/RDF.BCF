@@ -28,10 +28,10 @@ public:
     virtual const char* GetProjectId() override { return m_projectInfo.m_ProjectId.c_str(); }
     virtual const char* GetName() override { return m_projectInfo.m_Name.c_str(); }
     virtual bool SetName(const char* name) override { m_projectInfo.m_Name = name; return true; }
-    virtual BCFTopic* TopicAdd(const char* type, const char* title, const char* status, const char* guid = NULL) override;
-    virtual BCFTopic* TopicGetAt(uint16_t ind) override;
-    virtual BCFExtensions& GetExtensions() override { return GetExtensionsImpl(); }
-    virtual const char* GetErrors(bool cleanLog) override { return GetLog().get(cleanLog); }
+    virtual BCFTopic* AddTopic(const char* type, const char* title, const char* status, const char* guid = NULL) override;
+    virtual BCFTopic* GetTopic(uint16_t ind) override;
+    virtual BCFExtensions& GetExtensions() override { return GetExtensions_(); }
+    virtual const char* GetErrors(bool cleanLog) override { return Log_().get(cleanLog); }
 
 public:
     const char* GetAuthor() { return m_author.c_str(); }
@@ -41,14 +41,14 @@ public:
     bool GetAutoExtentSchema() { return m_autoExtentSchema; }
     bool GetValidateIfcGuids() { return m_validateIfcGuids; }
 
-    Extensions& GetExtensionsImpl() { return m_extensions; }
+    Extensions& GetExtensions_() { return m_extensions; }
 
     Documents& GetDocuments() { return m_documents; }
 
     Topic* TopicByGuid(const char* guid);
 
 public: //internal
-    Log& GetLog() { return m_log; }
+    Log& Log_() { return m_log; }
 
 private:
     bool Validate(bool fix);

@@ -23,10 +23,9 @@ extern "C" {
     /// </summary>
     struct BCFProject;
     struct BCFTopic;
-    struct BCFFile;
+    struct BCFBimFile;
     struct BCFViewPoint;
     struct BCFComment;
-    struct BCFFile;
     struct BCFDocumentReference;
     struct BCFComponent;
     struct BCFColoring;

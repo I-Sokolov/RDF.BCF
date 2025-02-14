@@ -31,6 +31,6 @@
 typedef std::list<std::string> StringList;
 typedef std::set<std::string> StringSet;
 
-#define NULL_CHECK(x) if (!x) { m_project.GetLog().add(Log::Level::error, "NULL argument", "NULL argument"); return false; }
+#define NULL_CHECK(x) if (!x) { m_project.Log_().add(Log::Level::error, "NULL argument", "NULL argument"); return false; }
 
 #endif //PCH_H

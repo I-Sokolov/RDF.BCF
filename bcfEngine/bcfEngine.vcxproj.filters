@@ -84,7 +84,7 @@
     <ClInclude Include="Implementation\DocumentReference.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Implementation\File.h">
+    <ClInclude Include="Implementation\BimFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\Line.h">
@@ -185,7 +185,7 @@
     <ClCompile Include="Implementation\bcfEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Implementation\File.cpp">
+    <ClCompile Include="Implementation\BimFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Implementation\Line.cpp">

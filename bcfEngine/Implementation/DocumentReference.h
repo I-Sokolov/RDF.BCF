@@ -26,6 +26,7 @@ public:
     virtual bool SetFilePath(const char* filePath, bool isExternal) override;
     virtual bool SetDescription(const char* val) override { UNNULL; m_Description.assign(val); return true; }
 
+    virtual BCFTopic& GetTopic() override;
     virtual bool Remove() override { return RemoveImpl(); }
 
 private:

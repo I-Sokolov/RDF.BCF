@@ -32,9 +32,12 @@ public:
     virtual bool SetUp(BCFPoint* pt) override { return m_Up.SetPoint(pt); }
     virtual bool SetHeight(double val) override { return RealToStr(val, m_Height); }
     
+    virtual BCFViewPoint& GetViewPoint() override;
     virtual bool Remove() override { return RemoveImpl(); }
 
 private:
+    ViewPoint& m_viewPoint;
+
     std::string m_Format;
     std::string m_Reference;
     XMLPoint    m_Location;

@@ -89,6 +89,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)libzip\libzip.1.1.2.7\build\native\include\;$(ProjectDir)ifcEngine\include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -121,7 +122,7 @@
     <ClInclude Include="Implementation\Comment.h" />
     <ClInclude Include="Implementation\Component.h" />
     <ClInclude Include="Implementation\DocumentReference.h" />
-    <ClInclude Include="Implementation\File.h" />
+    <ClInclude Include="Implementation\BimFile.h" />
     <ClInclude Include="Implementation\Line.h" />
     <ClInclude Include="Implementation\BCFObject.h" />
     <ClInclude Include="Implementation\Project.h" />
@@ -162,7 +163,7 @@
     <ClCompile Include="Implementation\Component.cpp" />
     <ClCompile Include="Implementation\DocumentReference.cpp" />
     <ClCompile Include="Implementation\bcfEngine.cpp" />
-    <ClCompile Include="Implementation\File.cpp" />
+    <ClCompile Include="Implementation\BimFile.cpp" />
     <ClCompile Include="Implementation\Line.cpp" />
     <ClCompile Include="Implementation\BCFObject.cpp" />
     <ClCompile Include="Implementation\Project.cpp" />

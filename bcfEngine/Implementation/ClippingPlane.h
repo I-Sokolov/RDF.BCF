@@ -23,9 +23,12 @@ public:
     virtual bool SetLocation(BCFPoint* pt) override { return m_Location.SetPoint(pt); }
     virtual bool SetDirection(BCFPoint* pt) override { return m_Direction.SetPoint(pt); }
 
+    virtual BCFViewPoint& GetViewPoint() override;
     virtual bool Remove() override { return RemoveImpl(); }
 
 private:
+    ViewPoint& m_viewPoint;
+
     XMLPoint m_Location;
     XMLPoint m_Direction;
 };

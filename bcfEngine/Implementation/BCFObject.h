@@ -19,8 +19,8 @@ public:
     virtual ~BCFObject();
    
 public:
-    Project& GetProject() { return m_project; }
-    Log& GetLog();
+    Project& Project_() { return m_project; }
+    Log& Log_();
 
 protected:
     bool IntToStr(int val, std::string& prop);

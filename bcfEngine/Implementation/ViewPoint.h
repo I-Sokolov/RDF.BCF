@@ -46,29 +46,31 @@ public:
     virtual bool        SetFieldOfView(double val) override { return RealToStr (val, m_FieldOfView); }
     virtual bool        SetAspectRatio(double val) override { return RealToStr (val, m_AspectRatio); }
 
-    virtual BCFComponent* SelectionAdd(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL) override;
-    virtual BCFComponent* SelectionGetAt(uint16_t ind) override;
+    virtual BCFComponent* AddSelection(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL) override;
+    virtual BCFComponent* GetSelection(uint16_t ind) override;
 
-    virtual BCFComponent* ExceptionsAdd(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL) override;
-    virtual BCFComponent* ExceptionsGetAt(uint16_t ind) override;
+    virtual BCFComponent* AddException(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL) override;
+    virtual BCFComponent* GetException(uint16_t ind) override;
 
-    virtual BCFBitmap* BitmapAdd(const char* filePath, BCFBitmapFormat format, BCFPoint* location, BCFPoint* normal, BCFPoint* up, double height) override;
-    virtual BCFBitmap* BitmapGetAt(uint16_t ind) override;
+    virtual BCFBitmap* AddBitmap(const char* filePath, BCFBitmapFormat format, BCFPoint* location, BCFPoint* normal, BCFPoint* up, double height) override;
+    virtual BCFBitmap* GetBitmap(uint16_t ind) override;
 
-    virtual BCFColoring* ColoringAdd(const char* color) override;
-    virtual BCFColoring* ColoringGetAt(uint16_t ind) override;
+    virtual BCFColoring* AddColoring(const char* color) override;
+    virtual BCFColoring* GetColoring(uint16_t ind) override;
 
-    virtual BCFLine* LineAdd(BCFPoint* start, BCFPoint* end) override;
-    virtual BCFLine* LineGetAt(uint16_t ind) override;
+    virtual BCFLine* AddLine(BCFPoint* start, BCFPoint* end) override;
+    virtual BCFLine* GetLine(uint16_t ind) override;
 
-    virtual BCFClippingPlane* ClippingPlaneAdd(BCFPoint* location, BCFPoint* direction) override;
-    virtual BCFClippingPlane* ClippingPlaneGetAt(uint16_t ind) override;
+    virtual BCFClippingPlane* AddClippingPlane(BCFPoint* location, BCFPoint* direction) override;
+    virtual BCFClippingPlane* GetClippingPlane(uint16_t ind) override;
+
+    virtual BCFTopic& GetTopic() override;
 
 public:
     void Read(_xml::_element& elem, const std::string& folder);
     void Write(_xml_writer& writer, const std::string& folder, const char* tag);
     bool Validate(bool fix);
-    Topic& GetTopic() { return m_topic; }
+    Topic& Topic_() { return m_topic; }
 
 public:
     //XMLFile implementation

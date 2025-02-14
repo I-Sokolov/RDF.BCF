@@ -48,9 +48,9 @@ std::string BCFObject::TimeToStr(time_t tm_)
 /// <summary>
 /// 
 /// </summary>
-Log& BCFObject::GetLog()
+Log& BCFObject::Log_()
 {
-    return m_project.GetLog();
+    return m_project.Log_();
 }
 
 /// <summary>
@@ -80,13 +80,13 @@ bool BCFObject::RealToStr(double val, std::string& prop)
 /// </summary>
 bool BCFObject::UpdateAuthor(std::string& author, std::string& date)
 {
-    const char* user = GetProject().GetAuthor();
+    const char* user = Project_().GetAuthor();
     if (!*user) {
-        GetProject().GetLog().add(Log::Level::error, "Author is not set");
+        Project_().Log_().add(Log::Level::error, "Author is not set");
         return false;
     }
 
-    if (!GetProject().GetExtensionsImpl().CheckElement(BCFUsers, user)) {
+    if (!Project_().GetExtensions_().CheckElement(BCFUsers, user)) {
         return false;
     }
 
@@ -110,14 +110,14 @@ std::string BCFObject::AbsolutePath(const std::string& relativePath, const std::
         }
 
         //try to find in current folder (buildingSMART\BCF-XML\Test Cases\v2.0\Visualization\Bitmap\Bitmap.bcfzip)
-        auto fileName = FileSystem::GetFileName(relativePath.c_str(), GetLog());
+        auto fileName = FileSystem::GetFileName(relativePath.c_str(), Log_());
         filePath.assign(folder);
         FileSystem::AddPath(filePath, fileName.c_str());
         if (FileSystem::Exists(filePath.c_str())) {
             return filePath;
         }
 
-        GetLog().add(Log::Level::error, "File read", "File does not exist: %s", filePath.c_str());
+        Log_().add(Log::Level::error, "File read", "File does not exist: %s", filePath.c_str());
         throw std::exception("Failed to read viewpoint");
     }
     return "";
@@ -132,7 +132,7 @@ std::string BCFObject::CopyToRelative(const std::string& absolutePath, const std
     if (absolutePath.empty())
         return "";
 
-    auto filename = FileSystem::GetFileName(absolutePath.c_str(), GetLog());
+    auto filename = FileSystem::GetFileName(absolutePath.c_str(), Log_());
     if (!filename.empty()) {
 
         std::string target(folder);
@@ -143,7 +143,7 @@ std::string BCFObject::CopyToRelative(const std::string& absolutePath, const std
         FileSystem::AddPath(target, filename.c_str());
 
         if (FileSystem::Exists(target.c_str())
-            || FileSystem::CopyFile(absolutePath.c_str(), target.c_str(), GetLog())
+            || FileSystem::CopyFile(absolutePath.c_str(), target.c_str(), Log_())
             ) {
 
             std::string ret;
@@ -169,7 +169,7 @@ bool BCFObject::IsDateTimeValid (const char* str, const char* propName)
         return true;
     }
 
-    GetLog().add(Log::Level::error, "Invalid value", "'%s' is not correct ISO 8601 date-time and can not be used as %s", str, propName);
+    Log_().add(Log::Level::error, "Invalid value", "'%s' is not correct ISO 8601 date-time and can not be used as %s", str, propName);
     return false;
 }
 
@@ -184,7 +184,7 @@ bool BCFObject::IsIfcGuidValid(const char* str, const char* propName)
         return true;
     }
 
-    GetLog().add(Log::Level::error, "Invalid value", "'%s' is not correct IfcGuid and can not be used as %s", str, propName);
+    Log_().add(Log::Level::error, "Invalid value", "'%s' is not correct IfcGuid and can not be used as %s", str, propName);
     return false;
 }
 
@@ -200,7 +200,7 @@ bool BCFObject::IsFilePathValid(const char* str, const char* propName)
         return true;
     }
 
-    GetLog().add(Log::Level::error, "Invalid value", "'%s' is not existing file and can not be used as %s", str, propName);
+    Log_().add(Log::Level::error, "Invalid value", "'%s' is not existing file and can not be used as %s", str, propName);
     return false;
 }
 

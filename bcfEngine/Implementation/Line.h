@@ -23,9 +23,12 @@ public:
     virtual bool SetStartPoint(BCFPoint* pt) override { return m_StartPoint.SetPoint(pt); }
     virtual bool SetEndPoint(BCFPoint* pt) override { return m_EndPoint.SetPoint(pt); }
 
+    virtual BCFViewPoint& GetViewPoint() override;
     virtual bool Remove() override { return RemoveImpl(); }
 
 private:
+    ViewPoint&  m_viewPoint;
+
     XMLPoint    m_StartPoint;
     XMLPoint    m_EndPoint;
 };

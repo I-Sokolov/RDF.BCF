@@ -5,7 +5,7 @@
 #include "XMLFile.h"
 #include "GuidStr.h"
 
-struct File;
+struct BimFile;
 struct Comment;
 struct GuidReference;
 struct BimSnippet;
@@ -46,31 +46,33 @@ public:
     virtual bool SetDescription(const char* val) override;
     virtual bool SetStage(const char* val) override;
 
-    virtual BCFFile* FileAdd(const char* filePath, bool isExternal = true) override;
-    virtual BCFFile* FileGetAt(uint16_t ind) override;
+    virtual BCFBimFile* AddBimFile(const char* filePath, bool isExternal = true) override;
+    virtual BCFBimFile* GetBimFile(uint16_t ind) override;
 
-    virtual BCFViewPoint* ViewPointAdd(const char* guid = NULL) override;
-    virtual BCFViewPoint* ViewPointGetAt(uint16_t ind) override;
+    virtual BCFViewPoint* AddViewPoint(const char* guid = NULL) override;
+    virtual BCFViewPoint* GetViewPoint(uint16_t ind) override;
 
-    virtual BCFComment* CommentAdd(const char* guid = NULL) override;
-    virtual BCFComment* CommentGetAt(uint16_t ind) override;
+    virtual BCFComment* AddComment(const char* guid = NULL) override;
+    virtual BCFComment* GetComment(uint16_t ind) override;
 
-    virtual BCFDocumentReference* DocumentReferenceAdd(const char* filePath, bool isExternal = true, const char* guid = NULL) override;
-    virtual BCFDocumentReference* DocumentReferenceGetAt(uint16_t ind) override;
+    virtual BCFDocumentReference* AddDocumentReference(const char* filePath, bool isExternal = true, const char* guid = NULL) override;
+    virtual BCFDocumentReference* GetDocumentReference(uint16_t ind) override;
 
     virtual BCFBimSnippet* GetBimSnippet(bool forceCreate) override;
 
-    virtual bool ReferenceLinkAdd(const char* val) override;
-    virtual const char* ReferenceLinkGetAt(uint16_t ind) override;
-    virtual bool ReferenceLinkRemove(const char* val) override;
+    virtual bool AddReferenceLink(const char* val) override;
+    virtual const char* GetReferenceLink(uint16_t ind) override;
+    virtual bool RemoveReferenceLink(const char* val) override;
 
-    virtual bool LabelAdd(const char* val) override;
-    virtual const char* LabelGetAt(uint16_t ind) override;
-    virtual bool LabelRemove(const char* val) override;
+    virtual bool AddLabel(const char* val) override;
+    virtual const char* GetLabel(uint16_t ind) override;
+    virtual bool RemoveLabel(const char* val) override;
 
-    virtual bool RelatedTopicAdd(BCFTopic* topic) override;
-    virtual BCFTopic* RelatedTopicGetAt(uint16_t ind) override;
-    virtual bool RelatedTopicRemove(BCFTopic* topic) override;
+    virtual bool AddRelatedTopic(BCFTopic* topic) override;
+    virtual BCFTopic* GetRelatedTopic(uint16_t ind) override;
+    virtual bool RemoveRelatedTopic(BCFTopic* topic) override;
+
+    virtual BCFProject& GetProject() override;
 
 public:
     ViewPoint* ViewPointByGuid(const char* guid);
@@ -98,7 +100,7 @@ private:
 
 private:
     GuidStr                         m_Guid;
-    ListOf<File>                    m_Files;
+    ListOf<BimFile>                    m_Files;
     std::string                     m_ServerAssignedId;
     std::string                     m_TopicStatus;
     std::string                     m_TopicType;

@@ -125,7 +125,7 @@ namespace RDF.BCF
             var ret = new List<Component>();
             IntPtr handle = IntPtr.Zero;
             UInt16 ind = 0;
-            while ((handle = Interop.ViewPointExceptionsGetAt(m_handle, ind++)) != IntPtr.Zero)
+            while ((handle = Interop.ViewPointExceptionGetAt(m_handle, ind++)) != IntPtr.Zero)
             {
                 ret.Add(new Component(Project, handle));
             }
@@ -137,7 +137,7 @@ namespace RDF.BCF
         /// </summary>
         public Component AddException(string? ifcGuid = null)
         {
-            IntPtr handle = Interop.ViewPointExceptionsAdd(m_handle, ifcGuid);
+            IntPtr handle = Interop.ViewPointExceptionAdd(m_handle, ifcGuid);
             if (handle == IntPtr.Zero)
                 throw new ApplicationException("Fail to add exception: " + Interop.GetErrors(Project.Handle));
             return new Component(Project, handle);

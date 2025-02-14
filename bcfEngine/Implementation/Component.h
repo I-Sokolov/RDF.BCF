@@ -28,6 +28,8 @@ public:
     virtual bool SetOriginatingSystem(const char* val) override { UNNULL; m_OriginatingSystem.assign(val); return true; }
     virtual bool SetAuthoringToolId(const char* val) override { UNNULL; m_AuthoringToolId.assign(val); return true; }
 
+    virtual BCFViewPoint& GetViewPoint() override;
+    virtual BCFColoring* GetColoring() override;
     virtual bool Remove() override { return RemoveImpl(); }
 
 private:

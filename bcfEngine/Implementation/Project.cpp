@@ -195,7 +195,7 @@ bool Project::WriteTopics(const std::string& bcfFolder)
         std::string topicFolder(bcfFolder);
         FileSystem::AddPath(topicFolder, topic->GetGuid());
 
-        ok = ok && FileSystem::CreateDir(topicFolder.c_str(), GetLog());
+        ok = ok && FileSystem::CreateDir(topicFolder.c_str(), Log_());
 
         ok = ok && topic->WriteFile(topicFolder);
     }
@@ -206,7 +206,7 @@ bool Project::WriteTopics(const std::string& bcfFolder)
 /// <summary>
 /// 
 /// </summary>
-BCFTopic* Project::TopicAdd(const char* type, const char* title, const char* status, const char* guid)
+BCFTopic* Project::AddTopic(const char* type, const char* title, const char* status, const char* guid)
 {
     auto topic = new Topic(*this, &m_topics, guid ? guid : "");
 
@@ -234,7 +234,7 @@ BCFTopic* Project::TopicAdd(const char* type, const char* title, const char* sta
 /// <summary>
 /// 
 /// </summary>
-BCFTopic* Project::TopicGetAt(uint16_t ind)
+BCFTopic* Project::GetTopic(uint16_t ind)
 { 
     return m_topics.GetAt(ind);
 }

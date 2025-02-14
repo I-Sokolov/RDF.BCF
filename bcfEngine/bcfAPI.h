@@ -8,7 +8,7 @@ struct BCFExtensions;
 // and can be used to runtime type checks
 #define BCFTypeCheck_Project             102030 
 #define BCFTypeCheck_Topic               102031
-#define BCFTypeCheck_File                102032
+#define BCFTypeCheck_BimFile             102032
 #define BCFTypeCheck_ViewPoint           102033
 #define BCFTypeCheck_Comment             102034
 #define BCFTypeCheck_DocumentReference   102036
@@ -56,8 +56,8 @@ struct BCFProject
     BCF_PROPERTY_RO(const char*, ProjectId);
     BCF_PROPERTY_RW(const char*, Name);
 
-    virtual BCFTopic* TopicGetAt(uint16_t ind) = NULL;
-    virtual BCFTopic* TopicAdd(const char* type, const char* title, const char* status, const char* guid = NULL) = NULL;
+    virtual BCFTopic* GetTopic(uint16_t ind) = NULL;
+    virtual BCFTopic* AddTopic(const char* type, const char* title, const char* status, const char* guid = NULL) = NULL;
 };
 
 
@@ -84,31 +84,33 @@ struct BCFTopic
     BCF_PROPERTY_RW(const char*, Stage);
     BCF_PROPERTY_RW(int,         Index);
 
-    virtual BCFFile* FileGetAt(uint16_t ind) = NULL;
-    virtual BCFFile* FileAdd(const char* filePath, bool isExternal) = NULL;
+    virtual BCFBimFile* GetBimFile(uint16_t ind) = NULL;
+    virtual BCFBimFile* AddBimFile(const char* filePath, bool isExternal) = NULL;
 
-    virtual BCFComment* CommentGetAt(uint16_t ind) = NULL;
-    virtual BCFComment* CommentAdd(const char* guid = NULL) = NULL;
+    virtual BCFComment* GetComment(uint16_t ind) = NULL;
+    virtual BCFComment* AddComment(const char* guid = NULL) = NULL;
 
-    virtual BCFViewPoint* ViewPointGetAt(uint16_t ind) = NULL;
-    virtual BCFViewPoint* ViewPointAdd(const char* guid = NULL) = NULL;
+    virtual BCFViewPoint* GetViewPoint(uint16_t ind) = NULL;
+    virtual BCFViewPoint* AddViewPoint(const char* guid = NULL) = NULL;
 
-    virtual BCFDocumentReference* DocumentReferenceGetAt(uint16_t ind) = NULL;
-    virtual BCFDocumentReference* DocumentReferenceAdd(const char* filePath, bool isExternal, const char* guid = NULL) = NULL;
+    virtual BCFDocumentReference* GetDocumentReference(uint16_t ind) = NULL;
+    virtual BCFDocumentReference* AddDocumentReference(const char* filePath, bool isExternal, const char* guid = NULL) = NULL;
 
     virtual BCFBimSnippet* GetBimSnippet(bool forceCreate) = NULL;
 
-    virtual const char* ReferenceLinkGetAt(uint16_t ind) = NULL;
-    virtual bool ReferenceLinkAdd(const char* value) = NULL;
-    virtual bool ReferenceLinkRemove(const char* value) = NULL;
+    virtual const char* GetReferenceLink(uint16_t ind) = NULL;
+    virtual bool AddReferenceLink(const char* value) = NULL;
+    virtual bool RemoveReferenceLink(const char* value) = NULL;
 
-    virtual const char* LabelGetAt(uint16_t ind) = NULL;
-    virtual bool LabelAdd(const char* value) = NULL;
-    virtual bool LabelRemove(const char* value) = NULL;
+    virtual const char* GetLabel(uint16_t ind) = NULL;
+    virtual bool AddLabel(const char* value) = NULL;
+    virtual bool RemoveLabel(const char* value) = NULL;
 
-    virtual BCFTopic* RelatedTopicGetAt(uint16_t ind) = NULL;
-    virtual bool RelatedTopicAdd(BCFTopic* value) = NULL;
-    virtual bool RelatedTopicRemove(BCFTopic* value) = NULL;
+    virtual BCFTopic* GetRelatedTopic(uint16_t ind) = NULL;
+    virtual bool AddRelatedTopic(BCFTopic* value) = NULL;
+    virtual bool RemoveRelatedTopic(BCFTopic* value) = NULL;
+
+    virtual BCFProject& GetProject() = NULL;
 
     virtual bool Remove() = NULL;
 };
@@ -127,6 +129,8 @@ struct BCFComment
     BCF_PROPERTY_RO(const char*, ModifiedAuthor);
     BCF_PROPERTY_RW(const char*, Text);
     BCF_PROPERTY_RW(BCFViewPoint*, ViewPoint);
+
+    virtual BCFTopic& GetTopic() = NULL;
 
     virtual bool Remove() = NULL;
 };
@@ -152,23 +156,25 @@ struct BCFViewPoint
     BCF_PROPERTY_PT(CameraDirection);
     BCF_PROPERTY_PT(CameraUpVector);
 
-    virtual BCFComponent* SelectionGetAt(uint16_t ind) = NULL;
-    virtual BCFComponent* SelectionAdd(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL) = NULL;
+    virtual BCFComponent* GetSelection(uint16_t ind) = NULL;
+    virtual BCFComponent* AddSelection(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL) = NULL;
 
-    virtual BCFComponent* ExceptionsGetAt(uint16_t ind) = NULL;
-    virtual BCFComponent* ExceptionsAdd(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL) = NULL;
+    virtual BCFComponent* GetException(uint16_t ind) = NULL;
+    virtual BCFComponent* AddException(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL) = NULL;
 
-    virtual BCFColoring* ColoringGetAt(uint16_t ind) = NULL;
-    virtual BCFColoring* ColoringAdd(const char* color) = NULL;
+    virtual BCFColoring* GetColoring(uint16_t ind) = NULL;
+    virtual BCFColoring* AddColoring(const char* color) = NULL;
 
-    virtual BCFBitmap* BitmapGetAt(uint16_t ind) = NULL;
-    virtual BCFBitmap* BitmapAdd(const char* filePath, BCFBitmapFormat format, BCFPoint* location, BCFPoint* normal, BCFPoint* up, double height) = NULL;
+    virtual BCFBitmap* GetBitmap(uint16_t ind) = NULL;
+    virtual BCFBitmap* AddBitmap(const char* filePath, BCFBitmapFormat format, BCFPoint* location, BCFPoint* normal, BCFPoint* up, double height) = NULL;
 
-    virtual BCFLine* LineGetAt(uint16_t ind) = NULL;
-    virtual BCFLine* LineAdd(BCFPoint* start, BCFPoint* end) = NULL;
+    virtual BCFLine* GetLine(uint16_t ind) = NULL;
+    virtual BCFLine* AddLine(BCFPoint* start, BCFPoint* end) = NULL;
 
-    virtual BCFClippingPlane* ClippingPlaneGetAt(uint16_t ind) = NULL;
-    virtual BCFClippingPlane* ClippingPlaneAdd(BCFPoint* start, BCFPoint* end) = NULL;
+    virtual BCFClippingPlane* GetClippingPlane(uint16_t ind) = NULL;
+    virtual BCFClippingPlane* AddClippingPlane(BCFPoint* start, BCFPoint* end) = NULL;
+
+    virtual BCFTopic& GetTopic() = NULL;
 
     virtual bool Remove() = NULL;
 };
@@ -187,6 +193,8 @@ struct BCFDocumentReference
 
     virtual bool SetFilePath(const char* filePath, bool isExternal) = NULL;
 
+    virtual BCFTopic& GetTopic() = NULL;
+
     virtual bool Remove() = NULL;
 };
 
@@ -201,6 +209,9 @@ struct BCFComponent
     BCF_PROPERTY_RW(const char*, OriginatingSystem);
     BCF_PROPERTY_RW(const char*, AuthoringToolId);
 
+    virtual BCFViewPoint& GetViewPoint() = NULL;
+    virtual BCFColoring* GetColoring() = NULL;
+
     virtual bool Remove() = NULL;
 };
 
@@ -213,8 +224,10 @@ struct BCFColoring
 
     BCF_PROPERTY_RW(const char*, Color)
 
-    virtual BCFComponent* ComponentGetAt(uint16_t ind) = NULL;
-    virtual BCFComponent* ComponentAdd(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL) = NULL;
+    virtual BCFComponent* GetComponent(uint16_t ind) = NULL;
+    virtual BCFComponent* AddComponent(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL) = NULL;
+
+    virtual BCFViewPoint& GetViewPoint() = NULL;
 
     virtual bool Remove() = NULL;
 };
@@ -222,9 +235,9 @@ struct BCFColoring
 /// <summary>
 /// 
 /// </summary>
-struct BCFFile
+struct BCFBimFile
 {
-    long TypeCheck = BCFTypeCheck_File;
+    long TypeCheck = BCFTypeCheck_BimFile;
 
     BCF_PROPERTY_RW(bool, IsExternal);
     BCF_PROPERTY_RW(const char*, Filename);
@@ -232,6 +245,8 @@ struct BCFFile
     BCF_PROPERTY_RW(const char*, Reference);
     BCF_PROPERTY_RW(const char*, IfcProject);
     BCF_PROPERTY_RW(const char*, IfcSpatialStructureElement);
+
+    virtual BCFTopic& GetTopic() = NULL;
 
     virtual bool Remove() = NULL;
 };
@@ -246,6 +261,8 @@ struct BCFLine
     BCF_PROPERTY_PT(StartPoint);
     BCF_PROPERTY_PT(EndPoint);
 
+    virtual BCFViewPoint& GetViewPoint() = NULL;
+
     virtual bool Remove() = NULL;
 };
 
@@ -258,6 +275,8 @@ struct BCFClippingPlane
 
     BCF_PROPERTY_PT(Location);
     BCF_PROPERTY_PT(Direction);
+
+    virtual BCFViewPoint& GetViewPoint() = NULL;
 
     virtual bool Remove() = NULL;
 };
@@ -276,6 +295,8 @@ struct BCFBitmap
     BCF_PROPERTY_PT(Up);
     BCF_PROPERTY_RW(double, Height);
 
+    virtual BCFViewPoint& GetViewPoint() = NULL;
+
     virtual bool Remove() = NULL;
 };
 
@@ -291,6 +312,8 @@ struct BCFBimSnippet
     BCF_PROPERTY_RW(const char*, Reference);
     BCF_PROPERTY_RW(const char*, ReferenceSchema);
 
+    virtual BCFTopic& GetTopic() = NULL;
+
     virtual bool Remove() = NULL;
 };
 
@@ -304,4 +327,6 @@ struct BCFExtensions
     virtual const char* GetElement(BCFEnumeration enumeration, uint16_t ind) = NULL;
     virtual bool        AddElement(BCFEnumeration enumeration, const char* value) = NULL;
     virtual bool        RemoveElement(BCFEnumeration enumeration, const char* element) = NULL;
+
+    virtual BCFProject& GetProject() = NULL;
 };

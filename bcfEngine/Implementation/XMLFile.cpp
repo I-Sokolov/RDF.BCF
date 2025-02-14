@@ -30,7 +30,7 @@ bool XMLFile::ReadFile(const std::string& bcfFolder)
         }
     }
     catch (std::exception& ex) {
-        m_project.GetLog().add(Log::Level::error, "Read file error", "Failed to read %s file. %s", path.c_str(), ex.what());
+        m_project.Log_().add(Log::Level::error, "Read file error", "Failed to read %s file. %s", path.c_str(), ex.what());
     }
 
     if (ok) {
@@ -68,7 +68,7 @@ bool XMLFile::WriteFile(const std::string& bcfFolder)
         ok = true;
     }
     catch (std::exception& ex) {
-        m_project.GetLog().add(Log::Level::error, "Write file error", "Failed to write %s file. %s", xmlpath.c_str(), ex.what());
+        m_project.Log_().add(Log::Level::error, "Write file error", "Failed to write %s file. %s", xmlpath.c_str(), ex.what());
     }
 
 #ifdef SMOKE_TEST
@@ -101,7 +101,7 @@ void XMLFile::WriteRootElem(_xml_writer& writer, const std::string& folder, Attr
 /// 
 /// </summary>
 XMLText::XMLText(Topic& topic, ListOfBCFObjects* parentList)
-    : BCFObject(topic.GetProject(), parentList)
+    : BCFObject(topic.Project_(), parentList)
 {
 }
 

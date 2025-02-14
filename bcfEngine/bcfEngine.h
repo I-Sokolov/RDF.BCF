@@ -113,26 +113,26 @@ extern "C" {
     /// <summary>
     ///
     /// </summary>
-    RDFBCF_EXPORT BCFFile* bcfFileGetAt(BCFTopic* topic, uint16_t ind);
-    RDFBCF_EXPORT BCFFile* bcfFileAdd(BCFTopic* topic, const char* filePath, bool isExternal);
-    RDFBCF_EXPORT bool bcfFileRemove(BCFFile* file);
+    RDFBCF_EXPORT BCFBimFile* bcfBimFileGetAt(BCFTopic* topic, uint16_t ind);
+    RDFBCF_EXPORT BCFBimFile* bcfBimFileAdd(BCFTopic* topic, const char* filePath, bool isExternal);
+    RDFBCF_EXPORT bool bcfBimFileRemove(BCFBimFile* file);
 
     /// <summary>
     ///
     /// </summary>
-    RDFBCF_EXPORT bool        bcfFileGetIsExternal                   (BCFFile* file);
-    RDFBCF_EXPORT const char* bcfFileGetFilename                     (BCFFile* file);
-    RDFBCF_EXPORT const char* bcfFileGetDate                         (BCFFile* file);
-    RDFBCF_EXPORT const char* bcfFileGetReference                    (BCFFile* file);
-    RDFBCF_EXPORT const char* bcfFileGetIfcProject                   (BCFFile* file);
-    RDFBCF_EXPORT const char* bcfFileGetIfcSpatialStructureElement   (BCFFile* file);
+    RDFBCF_EXPORT bool        bcfBimFileGetIsExternal                   (BCFBimFile* file);
+    RDFBCF_EXPORT const char* bcfBimFileGetFilename                     (BCFBimFile* file);
+    RDFBCF_EXPORT const char* bcfBimFileGetDate                         (BCFBimFile* file);
+    RDFBCF_EXPORT const char* bcfBimFileGetReference                    (BCFBimFile* file);
+    RDFBCF_EXPORT const char* bcfBimFileGetIfcProject                   (BCFBimFile* file);
+    RDFBCF_EXPORT const char* bcfBimFileGetIfcSpatialStructureElement   (BCFBimFile* file);
 
-    RDFBCF_EXPORT bool bcfFileSetIsExternal                   (BCFFile* file, bool        val);
-    RDFBCF_EXPORT bool bcfFileSetFilename                     (BCFFile* file, const char* val);
-    RDFBCF_EXPORT bool bcfFileSetDate                         (BCFFile* file, const char* val);
-    RDFBCF_EXPORT bool bcfFileSetReference                    (BCFFile* file, const char* val);
-    RDFBCF_EXPORT bool bcfFileSetIfcProject                   (BCFFile* file, const char* val);
-    RDFBCF_EXPORT bool bcfFileSetIfcSpatialStructureElement   (BCFFile* file, const char* val);
+    RDFBCF_EXPORT bool bcfBimFileSetIsExternal                   (BCFBimFile* file, bool        val);
+    RDFBCF_EXPORT bool bcfBimFileSetFilename                     (BCFBimFile* file, const char* val);
+    RDFBCF_EXPORT bool bcfBimFileSetDate                         (BCFBimFile* file, const char* val);
+    RDFBCF_EXPORT bool bcfBimFileSetReference                    (BCFBimFile* file, const char* val);
+    RDFBCF_EXPORT bool bcfBimFileSetIfcProject                   (BCFBimFile* file, const char* val);
+    RDFBCF_EXPORT bool bcfBimFileSetIfcSpatialStructureElement   (BCFBimFile* file, const char* val);
 
     /// <summary>
     ///
@@ -222,8 +222,8 @@ extern "C" {
     /// <summary>
     ///
     /// </summary>
-    RDFBCF_EXPORT BCFComponent* bcfViewPointExceptionsAdd(BCFViewPoint* viewPoint, const char* ifcGuid);
-    RDFBCF_EXPORT BCFComponent* bcfViewPointExceptionsGetAt(BCFViewPoint* viewPoint, uint16_t ind);
+    RDFBCF_EXPORT BCFComponent* bcfViewPointExceptionAdd(BCFViewPoint* viewPoint, const char* ifcGuid);
+    RDFBCF_EXPORT BCFComponent* bcfViewPointExceptionGetAt(BCFViewPoint* viewPoint, uint16_t ind);
 
     /// <summary>
     /// 

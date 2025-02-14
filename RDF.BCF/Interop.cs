@@ -259,60 +259,63 @@ namespace RDF.BCF
         public static extern bool TopicSetIndex(IntPtr topic, int val);
 
 
-        [DllImport(DLL, EntryPoint = "bcfFileGetAt")]
-        public static extern IntPtr FileGetAt(IntPtr topic, UInt16 ind);
+        [DllImport(DLL, EntryPoint = "bcfBimFileGetAt")]
+        public static extern IntPtr BimFileGetAt(IntPtr topic, UInt16 ind);
 
-        [DllImport(DLL, EntryPoint = "bcfFileAdd")]
-        public static extern IntPtr FileAdd(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? filePath, [param: MarshalAs(UnmanagedType.U1)] bool isExternal = true);
+        [DllImport(DLL, EntryPoint = "bcfBimFileAdd")]
+        public static extern IntPtr BimFileAdd(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? filePath, [param: MarshalAs(UnmanagedType.U1)] bool isExternal = true);
 
-        [DllImport(DLL, EntryPoint = "bcfFileRemove")]
+        [DllImport(DLL, EntryPoint = "bcfBimFileRemove")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool FileRemove(IntPtr file);
+        public static extern bool BimFileRemove(IntPtr file);
 
-        [DllImport(DLL, EntryPoint = "bcfFileGetIsExternal")]
+        [DllImport(DLL, EntryPoint = "bcfBimFileGetIsExternal")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool FileGetIsExternal(IntPtr file);
-        [DllImport(DLL, EntryPoint = "bcfFileGetFilename")]
-        private static extern IntPtr _FileGetFilename(IntPtr file);
-        public static string FileGetFilename(IntPtr file) { return PtrToString(_FileGetFilename(file)); }
+        public static extern bool BimFileGetIsExternal(IntPtr file);
 
-        [DllImport(DLL, EntryPoint = "bcfFileGetDate")]
-        private static extern IntPtr _FileGetDate(IntPtr file);
-        public static string FileGetDate(IntPtr file) { return PtrToString(_FileGetDate(file)); }
+        [DllImport(DLL, EntryPoint = "bcfBimFileGetFilename")]
+        private static extern IntPtr _BimFileGetFilename(IntPtr file);
+        public static string BimFileGetFilename(IntPtr file) { return PtrToString(_BimFileGetFilename(file)); }
 
-        [DllImport(DLL, EntryPoint = "bcfFileGetReference")]
-        private static extern IntPtr _FileGetReference(IntPtr file);
-        public static string FileGetReference(IntPtr file) { return PtrToString(_FileGetReference(file)); }
+        [DllImport(DLL, EntryPoint = "bcfBimFileGetDate")]
+        private static extern IntPtr _BimFileGetDate(IntPtr file);
+        public static string BimFileGetDate(IntPtr file) { return PtrToString(_BimFileGetDate(file)); }
 
-        [DllImport(DLL, EntryPoint = "bcfFileGetIfcProject")]
-        private static extern IntPtr _FileGetIfcProject(IntPtr file);
-        public static string FileGetIfcProject(IntPtr file) { return PtrToString(_FileGetIfcProject(file)); }
+        [DllImport(DLL, EntryPoint = "bcfBimFileGetReference")]
+        private static extern IntPtr _BimFileGetReference(IntPtr file);
+        public static string BimFileGetReference(IntPtr file) { return PtrToString(_BimFileGetReference(file)); }
 
-        [DllImport(DLL, EntryPoint = "bcfFileGetIfcSpatialStructureElement")]
-        private static extern IntPtr _FileGetIfcSpatialStructureElement(IntPtr file); public static string FileGetIfcSpatialStructureElement(IntPtr file) { return PtrToString(_FileGetIfcSpatialStructureElement(file)); }
+        [DllImport(DLL, EntryPoint = "bcfBimFileGetIfcProject")]
+        private static extern IntPtr _BimFileGetIfcProject(IntPtr file);
+        public static string BimFileGetIfcProject(IntPtr file) { return PtrToString(_BimFileGetIfcProject(file)); }
 
-        [DllImport(DLL, EntryPoint = "bcfFileSetIsExternal")]
+        [DllImport(DLL, EntryPoint = "bcfBimFileGetIfcSpatialStructureElement")]
+        private static extern IntPtr _BimFileGetIfcSpatialStructureElement(IntPtr file); 
+        public static string BimFileGetIfcSpatialStructureElement(IntPtr file) { return PtrToString(_BimFileGetIfcSpatialStructureElement(file)); }
+
+        [DllImport(DLL, EntryPoint = "bcfBimFileSetIsExternal")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool FileSetIsExternal(IntPtr file, bool val);
+        public static extern bool BimFileSetIsExternal(IntPtr file, bool val);
 
-        [DllImport(DLL, EntryPoint = "bcfFileSetFilename")]
+        [DllImport(DLL, EntryPoint = "bcfBimFileSetFilename")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool FileSetFilename(IntPtr file, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
-        [DllImport(DLL, EntryPoint = "bcfFileSetDate")]
-        [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool FileSetDate(IntPtr file, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
+        public static extern bool BimFileSetFilename(IntPtr file, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
 
-        [DllImport(DLL, EntryPoint = "bcfFileSetReference")]
+        [DllImport(DLL, EntryPoint = "bcfBimFileSetDate")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool FileSetReference(IntPtr file, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
+        public static extern bool BimFileSetDate(IntPtr file, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
 
-        [DllImport(DLL, EntryPoint = "bcfFileSetIfcProject")]
+        [DllImport(DLL, EntryPoint = "bcfBimFileSetReference")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool FileSetIfcProject(IntPtr file, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
+        public static extern bool BimFileSetReference(IntPtr file, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
 
-        [DllImport(DLL, EntryPoint = "bcfFileSetIfcSpatialStructureElement")]
+        [DllImport(DLL, EntryPoint = "bcfBimFileSetIfcProject")]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool FileSetIfcSpatialStructureElement(IntPtr file, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
+        public static extern bool BimFileSetIfcProject(IntPtr file, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
+
+        [DllImport(DLL, EntryPoint = "bcfBimFileSetIfcSpatialStructureElement")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool BimFileSetIfcSpatialStructureElement(IntPtr file, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string val);
 
         [DllImport(DLL, EntryPoint = "bcfCommentGetAt")]
         public static extern IntPtr CommentGetAt(IntPtr topic, UInt16 ind);
@@ -475,11 +478,11 @@ namespace RDF.BCF
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ViewPointComponentRemove(IntPtr component);
 
-        [DllImport(DLL, EntryPoint = "bcfViewPointExceptionsGetAt")]
-        public static extern IntPtr ViewPointExceptionsGetAt(IntPtr viewPoint, UInt16 ind);
+        [DllImport(DLL, EntryPoint = "bcfViewPointExceptionGetAt")]
+        public static extern IntPtr ViewPointExceptionGetAt(IntPtr viewPoint, UInt16 ind);
 
-        [DllImport(DLL, EntryPoint = "bcfViewPointExceptionsAdd")]
-        public static extern IntPtr ViewPointExceptionsAdd(IntPtr viewPoint, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? ifcGuid = null);
+        [DllImport(DLL, EntryPoint = "bcfViewPointExceptionAdd")]
+        public static extern IntPtr ViewPointExceptionAdd(IntPtr viewPoint, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? ifcGuid = null);
 
         [DllImport(DLL, EntryPoint = "bcfComponentGetIfcGuid")]
         private static extern IntPtr ComponentGetIfcGuid_(IntPtr component);

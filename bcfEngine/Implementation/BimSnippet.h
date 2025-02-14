@@ -8,7 +8,7 @@ struct Topic;
 struct BimSnippet : public BCFObject, public BCFBimSnippet
 {
 public:
-    BimSnippet(Topic& project, ListOfBCFObjects* parentList);
+    BimSnippet(Topic& topic, ListOfBCFObjects* parentList);
 
 public:
     //BCFBimSnippet
@@ -22,6 +22,8 @@ public:
     virtual bool SetReference(const char* val) override;
     virtual bool SetReferenceSchema(const char* val) override;
 
+    virtual BCFTopic& GetTopic() override;
+
     virtual bool Remove() override { return RemoveImpl(); }
 
 public:
@@ -30,6 +32,8 @@ public:
     bool Validate(bool fix);
 
 private:
+    Topic&      m_topic;
+
     std::string m_SnippetType;
     std::string m_IsExternal;
     std::string m_Reference;

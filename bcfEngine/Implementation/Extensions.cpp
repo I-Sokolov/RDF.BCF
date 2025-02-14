@@ -77,7 +77,7 @@ StringSet* Extensions::GetList(BCFEnumeration enumeration)
         return &m_elements[ind];
     }
     else {
-        m_project.GetLog().add(Log::Level::error, "Extension schema", "Index %d is out of extensions types range [0..%d]", (int)ind, (int)m_elements.size());
+        m_project.Log_().add(Log::Level::error, "Extension schema", "Index %d is out of extensions types range [0..%d]", (int)ind, (int)m_elements.size());
         return NULL;
     }
 }
@@ -165,12 +165,12 @@ bool Extensions::CheckElement(BCFEnumeration enumeration, const char* element)
         return true;
     }
 
-    if (GetProject().GetAutoExtentSchema()) {
+    if (Project_().GetAutoExtentSchema()) {
         list->insert(element);
         return true;
     }
 
-    m_project.GetLog().add(Log::Level::error, "Extension schema", "%s is not in enumeration", element);
+    m_project.Log_().add(Log::Level::error, "Extension schema", "%s is not in enumeration", element);
     return false;
 }
 
@@ -198,12 +198,12 @@ void Extensions::ReadExtensionSchema(_xml::_element& extensionSchemaElem, const 
                 }
             }
             catch (std::exception& ex) {
-                m_project.GetLog().add(Log::Level::error, "Read file error", "Failed to read %s file. %s", path.c_str(), ex.what());
+                m_project.Log_().add(Log::Level::error, "Read file error", "Failed to read %s file. %s", path.c_str(), ex.what());
                 throw;
             }
         }
         else {
-            m_project.GetLog().add(Log::Level::warning, "File not exists", "File is referenced but not exists: %s", path.c_str());
+            m_project.Log_().add(Log::Level::warning, "File not exists", "File is referenced but not exists: %s", path.c_str());
         }
     }
 }
@@ -282,4 +282,12 @@ void Extensions::ReadExtensionSchema_enumeration(_xml::_element& elem, const std
     }
 
     m_currentList->insert(value);
+}
+
+/// <summary>
+/// 
+/// </summary>
+BCFProject& Extensions::GetProject()
+{
+    return m_project;
 }

@@ -62,7 +62,7 @@ ListOfBCFObjects::Iterator ListOfBCFObjects::Find(BCFObject* item)
             return it;
         }
     }
-    m_project.GetLog().add(Log::Level::error, "Item not found in the list");
+    m_project.Log_().add(Log::Level::error, "Item not found in the list");
     return m_items.end();
 }
 
@@ -71,14 +71,14 @@ ListOfBCFObjects::Iterator ListOfBCFObjects::Find(BCFObject* item)
 /// </summary>
 void ListOfBCFObjects::LogDuplicatedGuid(const char* guid)
 {
-    m_project.GetLog().add(Log::Level::error, "Duplicated GUID");
+    m_project.Log_().add(Log::Level::error, "Duplicated GUID");
 }
 
 /// <summary>
 /// 
 /// </summary>
 SetOfXMLText::SetOfXMLText(Topic& topic) 
-    : ListOf<XMLText>(topic.GetProject()) 
+    : ListOf<XMLText>(topic.Project_()) 
     , m_topic(topic)
 {
 }
@@ -147,7 +147,7 @@ const char* SetOfXMLText::GetAt(uint16_t ind)
         return txtNext->string().c_str();
     }
     else {
-        return "";
+        return NULL;
     }
 }
 

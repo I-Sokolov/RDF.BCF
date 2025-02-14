@@ -14,19 +14,19 @@
 /// 
 /// </summary>
 ViewPoint::ViewPoint(Topic& topic, ListOfBCFObjects* parentList, const char* guid)
-    : XMLFile(topic.GetProject(), parentList)
+    : XMLFile(topic.Project_(), parentList)
     , m_topic(topic)
-    , m_Guid(topic.GetProject(), guid)
+    , m_Guid(topic.Project_(), guid)
     , m_cameraType(BCFCameraPerspective)
-    , m_CameraViewPoint(topic.GetProject())
-    , m_CameraDirection(topic.GetProject())
-    , m_CameraUpVector(topic.GetProject())
-    , m_Selection(topic.GetProject())
-    , m_Exceptions(topic.GetProject())
-    , m_Coloring(topic.GetProject())
-    , m_Lines(topic.GetProject())
-    , m_ClippingPlanes(topic.GetProject())
-    , m_Bitmaps(topic.GetProject())
+    , m_CameraViewPoint(topic.Project_())
+    , m_CameraDirection(topic.Project_())
+    , m_CameraUpVector(topic.Project_())
+    , m_Selection(topic.Project_())
+    , m_Exceptions(topic.Project_())
+    , m_Coloring(topic.Project_())
+    , m_Lines(topic.Project_())
+    , m_ClippingPlanes(topic.Project_())
+    , m_Bitmaps(topic.Project_())
 {
 }
 
@@ -162,8 +162,8 @@ void ViewPoint::ReadRoot(_xml::_element& elem, const std::string& folder)
         CHILD_READ(OrthogonalCamera)
         CHILD_GET_LIST(Lines, Line)
         CHILD_GET_LIST(ClippingPlanes, ClippingPlane)
-        CHILD_GET_LIST_CONDITIONAL(Bitmaps, Bitmap, GetProject().GetVersion() > BCFVer_2_0)
-        CHILD_ADD_TO_LIST_CONDITIONAL(Bitmaps, Bitmaps, GetProject().GetVersion() == BCFVer_2_0)
+        CHILD_GET_LIST_CONDITIONAL(Bitmaps, Bitmap, Project_().GetVersion() > BCFVer_2_0)
+        CHILD_ADD_TO_LIST_CONDITIONAL(Bitmaps, Bitmaps, Project_().GetVersion() == BCFVer_2_0)
     CHILDREN_END
 }
 
@@ -322,7 +322,7 @@ void ViewPoint::Write_OrthogonalCamera(_xml_writer& writer, const std::string& f
 /// <summary>
 /// 
 /// </summary>
-BCFComponent* ViewPoint::SelectionAdd(const char* ifcGuid, const char* authoringToolId, const char* originatingSystem)
+BCFComponent* ViewPoint::AddSelection(const char* ifcGuid, const char* authoringToolId, const char* originatingSystem)
 {
     return m_Selection.Add(*this, ifcGuid, authoringToolId, originatingSystem);
 }
@@ -330,7 +330,7 @@ BCFComponent* ViewPoint::SelectionAdd(const char* ifcGuid, const char* authoring
 /// <summary>
 /// 
 /// </summary>
-BCFComponent* ViewPoint::SelectionGetAt(uint16_t ind)
+BCFComponent* ViewPoint::GetSelection(uint16_t ind)
 {
     return m_Selection.GetAt(ind);
 }
@@ -338,7 +338,7 @@ BCFComponent* ViewPoint::SelectionGetAt(uint16_t ind)
 /// <summary>
 /// 
 /// </summary>
-BCFComponent* ViewPoint::ExceptionsAdd(const char* ifcGuid, const char* authoringToolId, const char* originatingSystem)
+BCFComponent* ViewPoint::AddException(const char* ifcGuid, const char* authoringToolId, const char* originatingSystem)
 {
     return m_Exceptions.Add(*this, ifcGuid, authoringToolId, originatingSystem);
 }
@@ -346,7 +346,7 @@ BCFComponent* ViewPoint::ExceptionsAdd(const char* ifcGuid, const char* authorin
 /// <summary>
 /// 
 /// </summary>
-BCFComponent* ViewPoint::ExceptionsGetAt(uint16_t ind)
+BCFComponent* ViewPoint::GetException(uint16_t ind)
 {
     return m_Exceptions.GetAt(ind);
 }
@@ -354,7 +354,7 @@ BCFComponent* ViewPoint::ExceptionsGetAt(uint16_t ind)
 /// <summary>
 /// 
 /// </summary>
-BCFBitmap* ViewPoint::BitmapAdd(const char* filePath, BCFBitmapFormat format, BCFPoint* location, BCFPoint* normal, BCFPoint* up, double height)
+BCFBitmap* ViewPoint::AddBitmap(const char* filePath, BCFBitmapFormat format, BCFPoint* location, BCFPoint* normal, BCFPoint* up, double height)
 {
     auto bitmap = new Bitmap(*this, &m_Bitmaps);
 
@@ -385,7 +385,7 @@ BCFBitmap* ViewPoint::BitmapAdd(const char* filePath, BCFBitmapFormat format, BC
 /// <summary>
 /// 
 /// </summary>
-BCFBitmap* ViewPoint::BitmapGetAt(uint16_t ind)
+BCFBitmap* ViewPoint::GetBitmap(uint16_t ind)
 {
     return m_Bitmaps.GetAt(ind);
 }
@@ -393,7 +393,7 @@ BCFBitmap* ViewPoint::BitmapGetAt(uint16_t ind)
 /// <summary>
 /// 
 /// </summary>
-BCFColoring* ViewPoint::ColoringAdd(const char* color)
+BCFColoring* ViewPoint::AddColoring(const char* color)
 {
     auto obj = new Coloring(*this, &m_Coloring);
 
@@ -414,7 +414,7 @@ BCFColoring* ViewPoint::ColoringAdd(const char* color)
 /// <summary>
 /// 
 /// </summary>
-BCFColoring* ViewPoint::ColoringGetAt(uint16_t ind)
+BCFColoring* ViewPoint::GetColoring(uint16_t ind)
 {
     return m_Coloring.GetAt(ind);
 }
@@ -422,7 +422,7 @@ BCFColoring* ViewPoint::ColoringGetAt(uint16_t ind)
 /// <summary>
 /// 
 /// </summary>
-BCFLine* ViewPoint::LineAdd(BCFPoint* start, BCFPoint* end)
+BCFLine* ViewPoint::AddLine(BCFPoint* start, BCFPoint* end)
 {
     auto obj = new Line(*this, &m_Lines);
 
@@ -444,7 +444,7 @@ BCFLine* ViewPoint::LineAdd(BCFPoint* start, BCFPoint* end)
 /// <summary>
 /// 
 /// </summary>
-BCFLine* ViewPoint::LineGetAt(uint16_t ind)
+BCFLine* ViewPoint::GetLine(uint16_t ind)
 {
     return m_Lines.GetAt(ind);
 }
@@ -452,7 +452,7 @@ BCFLine* ViewPoint::LineGetAt(uint16_t ind)
 /// <summary>
 /// 
 /// </summary>
-BCFClippingPlane* ViewPoint::ClippingPlaneAdd(BCFPoint* location, BCFPoint* direction)
+BCFClippingPlane* ViewPoint::AddClippingPlane(BCFPoint* location, BCFPoint* direction)
 {
     auto obj = new ClippingPlane(*this, &m_ClippingPlanes);
 
@@ -474,7 +474,7 @@ BCFClippingPlane* ViewPoint::ClippingPlaneAdd(BCFPoint* location, BCFPoint* dire
 /// <summary>
 /// 
 /// </summary>
-BCFClippingPlane* ViewPoint::ClippingPlaneGetAt(uint16_t ind)
+BCFClippingPlane* ViewPoint::GetClippingPlane(uint16_t ind)
 {
     return m_ClippingPlanes.GetAt(ind);
 }
@@ -484,7 +484,7 @@ BCFClippingPlane* ViewPoint::ClippingPlaneGetAt(uint16_t ind)
 /// </summary>
 void ViewPoint::AfterRead(const std::string& folder)
 {
-    if (GetProject().GetVersion() < BCFVer_3_0) {
+    if (Project_().GetVersion() < BCFVer_3_0) {
         if (m_AspectRatio.empty()) {
             m_AspectRatio.assign("1");
         }
@@ -502,13 +502,18 @@ bool ViewPoint::Remove()
     //check references
     BCFComment* comment = NULL;
     uint16_t ind = 0;
-    while (NULL != (comment = m_topic.CommentGetAt(ind++))) {
+    while (NULL != (comment = m_topic.GetComment(ind++))) {
         if (this == comment->GetViewPoint()) {
-            GetLog().add(Log::Level::error, "ViewPoint is used", "Can not delete used viewpoint %s", m_Guid.c_str());
+            Log_().add(Log::Level::error, "ViewPoint is used", "Can not delete used viewpoint %s", m_Guid.c_str());
             return false;
         }
     }
 
     //
     return RemoveImpl();
+}
+
+BCFTopic& ViewPoint::GetTopic()
+{
+    return m_topic;
 }

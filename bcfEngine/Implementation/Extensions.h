@@ -13,6 +13,7 @@ public:
     virtual const char* GetElement(BCFEnumeration enumeration, uint16_t ind) override;
     virtual bool AddElement(BCFEnumeration enumeration, const char* element) override;
     virtual bool RemoveElement(BCFEnumeration enumeration, const char* element) override;
+    virtual BCFProject& GetProject() override;
 
 public:
     bool CheckElement(BCFEnumeration enumeration, const char* element);

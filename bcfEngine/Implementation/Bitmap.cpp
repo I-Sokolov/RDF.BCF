@@ -9,10 +9,11 @@
 /// 
 /// </summary>
 Bitmap::Bitmap(ViewPoint& viewPoint, ListOfBCFObjects* parentList) 
-    : BCFObject(viewPoint.GetProject(), parentList) 
-    , m_Location(viewPoint.GetProject())
-    , m_Normal(viewPoint.GetProject())
-    , m_Up(viewPoint.GetProject())
+    : BCFObject(viewPoint.Project_(), parentList)
+    , m_viewPoint(viewPoint)
+    , m_Location(viewPoint.Project_())
+    , m_Normal(viewPoint.Project_())
+    , m_Up(viewPoint.Project_())
 {
 }
 
@@ -128,7 +129,15 @@ bool Bitmap::SetReference(const char* val)
 /// </summary>
 void Bitmap::AfterRead(const std::string&)
 {
-    if (GetProject().GetVersion() < BCFVer_3_0) {
+    if (Project_().GetVersion() < BCFVer_3_0) {
         std::transform(m_Format.begin(), m_Format.end(), m_Format.begin(), [](unsigned char c) { return std::tolower(c); });
     }
+}
+
+/// <summary>
+/// 
+/// </summary>
+BCFViewPoint& Bitmap::GetViewPoint()
+{
+    return m_viewPoint; 
 }

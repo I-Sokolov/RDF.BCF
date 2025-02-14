@@ -61,7 +61,7 @@ RDFBCF_EXPORT BCF##OBJ* bcf##OBJ##GetAt(BCF##CONTAINER* container, uint16_t ind)
 {                                                                                       \
     if (container) {                                                                    \
         TYPE_CHECK(container, CONTAINER, NULL)                                          \
-        return container->##OBJ##GetAt(ind);                                            \
+        return container->Get##OBJ##(ind);                                              \
     }                                                                                   \
     return NULL;                                                                        \
 }                                                                                       
@@ -239,7 +239,7 @@ RDFBCF_EXPORT BCFTopic* bcfTopicAdd(BCFProject* project, const char* type, const
 {
     if (project) {
         TYPE_CHECK(project, Project, NULL);
-        return project->TopicAdd(type, title, status, guid);
+        return project->AddTopic(type, title, status, guid);
     }
     return NULL;
 }
@@ -277,13 +277,13 @@ OBJ_SET_ATTR(Int, Topic, Index)
 /// <summary>
 /// 
 /// </summary>
-OBJ_ITERATE(File, Topic)
-OBJ_REMOVE(File)
-RDFBCF_EXPORT BCFFile* bcfFileAdd(BCFTopic* topic, const char* filePath, bool isExternal)
+OBJ_ITERATE(BimFile, Topic)
+OBJ_REMOVE(BimFile)
+RDFBCF_EXPORT BCFBimFile* bcfBimFileAdd(BCFTopic* topic, const char* filePath, bool isExternal)
 {
     if (topic) {
         TYPE_CHECK(topic, Topic, NULL);
-        return topic->FileAdd(filePath, isExternal);
+        return topic->AddBimFile(filePath, isExternal);
     }
     return NULL;
 }
@@ -291,19 +291,19 @@ RDFBCF_EXPORT BCFFile* bcfFileAdd(BCFTopic* topic, const char* filePath, bool is
 /// <summary>
 /// 
 /// </summary>
-OBJ_GET_ATTR(Bool,File, IsExternal                   )
-OBJ_GET_ATTR(Str, File, Filename                     )
-OBJ_GET_ATTR(Str, File, Date                         )
-OBJ_GET_ATTR(Str, File, Reference                    )
-OBJ_GET_ATTR(Str, File, IfcProject                   )
-OBJ_GET_ATTR(Str, File, IfcSpatialStructureElement   )
+OBJ_GET_ATTR(Bool,BimFile, IsExternal                   )
+OBJ_GET_ATTR(Str, BimFile, Filename                     )
+OBJ_GET_ATTR(Str, BimFile, Date                         )
+OBJ_GET_ATTR(Str, BimFile, Reference                    )
+OBJ_GET_ATTR(Str, BimFile, IfcProject                   )
+OBJ_GET_ATTR(Str, BimFile, IfcSpatialStructureElement   )
 
-OBJ_SET_ATTR(Bool,File, IsExternal                   )
-OBJ_SET_ATTR(Str, File, Filename                     )
-OBJ_SET_ATTR(Str, File, Date                         )
-OBJ_SET_ATTR(Str, File, Reference                    )
-OBJ_SET_ATTR(Str, File, IfcProject                   )
-OBJ_SET_ATTR(Str, File, IfcSpatialStructureElement   )
+OBJ_SET_ATTR(Bool,BimFile, IsExternal                   )
+OBJ_SET_ATTR(Str, BimFile, Filename                     )
+OBJ_SET_ATTR(Str, BimFile, Date                         )
+OBJ_SET_ATTR(Str, BimFile, Reference                    )
+OBJ_SET_ATTR(Str, BimFile, IfcProject                   )
+OBJ_SET_ATTR(Str, BimFile, IfcSpatialStructureElement   )
 
 
 /// <summary>
@@ -315,7 +315,7 @@ RDFBCF_EXPORT BCFComment* bcfCommentAdd(BCFTopic* topic, const char* guid)
 {
     if (topic) {
         TYPE_CHECK(topic, Topic, NULL);
-        return topic->CommentAdd(guid);
+        return topic->AddComment(guid);
     }
     return 0;
 }
@@ -344,7 +344,7 @@ RDFBCF_EXPORT BCFDocumentReference* bcfDocumentReferenceAdd(BCFTopic* topic, con
 {
     if (topic) {
         TYPE_CHECK(topic, Topic, NULL);
-        return topic->DocumentReferenceAdd(filePath, isExternal, guid);
+        return topic->AddDocumentReference(filePath, isExternal, guid);
     }
     return 0;
 }
@@ -374,7 +374,7 @@ RDFBCF_EXPORT BCFViewPoint* bcfViewPointAdd(BCFTopic* topic, const char* guid)
 {
     if (topic) {
         TYPE_CHECK(topic, Topic, NULL);
-        return topic->ViewPointAdd(guid);
+        return topic->AddViewPoint(guid);
     }
     return 0;
 }
@@ -421,7 +421,7 @@ RDFBCF_EXPORT BCFColoring* bcfColoringAdd(BCFViewPoint* viewPoint, const char* c
 {
     if (viewPoint) {
         TYPE_CHECK(viewPoint, ViewPoint, NULL);
-        return viewPoint->ColoringAdd(color);
+        return viewPoint->AddColoring(color);
     }
     return NULL;
 }
@@ -438,7 +438,7 @@ RDFBCF_EXPORT BCFComponent* bcf##Parent##List##Add(BCF##Parent* parent, const ch
 {                                                                                               \
     if (parent) {                                                                               \
         TYPE_CHECK(parent, Parent, NULL);                                                       \
-        return parent->##List##Add(ifcGuid);                                                    \
+        return parent->Add##List##(ifcGuid);                                                    \
     }                                                                                           \
     return NULL;                                                                                \
 }                                                                                               \
@@ -446,13 +446,13 @@ RDFBCF_EXPORT BCFComponent* bcf##Parent##List##GetAt(BCF##Parent* parent, uint16
 {                                                                                               \
     if (parent) {                                                                               \
         TYPE_CHECK(parent, Parent, NULL);                                                       \
-        return parent->##List##GetAt(ind);                                                      \
+        return parent->Get##List##(ind);                                                        \
     }                                                                                           \
     return NULL;                                                                                \
 }                                                                                               \
 
 COMPONENT_LIST(ViewPoint, Selection)
-COMPONENT_LIST(ViewPoint, Exceptions)
+COMPONENT_LIST(ViewPoint, Exception)
 COMPONENT_LIST(Coloring, Component)
 
 /// <summary>
@@ -510,7 +510,7 @@ RDFBCF_EXPORT bool          bcf##ListName##Add   (BCFTopic* topic, t##ElemType v
 {                                                                                       \
     if (topic) {                                                                        \
         TYPE_CHECK(topic, Topic, false);                                                \
-        return topic->##ListName##Add(val);                                             \
+        return topic->Add##ListName##(val);                                             \
     }                                                                                   \
     return false;                                                                       \
 }                                                                                       \
@@ -518,7 +518,7 @@ RDFBCF_EXPORT t##ElemType   bcf##ListName##GetAt(BCFTopic* topic, uint16_t ind) 
 {                                                                                       \
     if (topic) {                                                                        \
         TYPE_CHECK(topic, Topic, NULL);                                                 \
-        return topic->##ListName##GetAt(ind);                                           \
+        return topic->Get##ListName##(ind);                                             \
     }                                                                                   \
     return NULL;                                                                        \
 }                                                                                       \
@@ -526,7 +526,7 @@ RDFBCF_EXPORT bool          bcf##ListName##Remove(BCFTopic* topic, t##ElemType v
 {                                                                                       \
     if (topic) {                                                                        \
         TYPE_CHECK(topic, Topic, false);                                                \
-        topic->##ListName##Remove(val);                                                 \
+        topic->Remove##ListName##(val);                                                 \
     }                                                                                   \
     return false;                                                                       \
 }
@@ -544,7 +544,7 @@ RDFBCF_EXPORT BCFBitmap* bcfBitmapAdd(BCFViewPoint* viewPoint, const char* fileP
 {
     if (viewPoint) {
         TYPE_CHECK(viewPoint, ViewPoint, NULL);
-        return viewPoint->BitmapAdd(filePath, format, location, normal, up, height);
+        return viewPoint->AddBitmap(filePath, format, location, normal, up, height);
     }
     return NULL;
 }
@@ -575,7 +575,7 @@ RDFBCF_EXPORT BCFLine* bcfLineAdd(BCFViewPoint* viewPoint, BCFPoint* start, BCFP
 {
     if (viewPoint) {
         TYPE_CHECK(viewPoint, ViewPoint, NULL);
-        return viewPoint->LineAdd(start, end);
+        return viewPoint->AddLine(start, end);
     }
     return NULL;
 }
@@ -595,7 +595,7 @@ RDFBCF_EXPORT BCFClippingPlane* bcfClippingPlaneAdd(BCFViewPoint* viewPoint, BCF
 {
     if (viewPoint) {
         TYPE_CHECK(viewPoint, ViewPoint, NULL);
-        return viewPoint->ClippingPlaneAdd(location, direction);
+        return viewPoint->AddClippingPlane(location, direction);
     }
     return NULL;
 }

@@ -8,9 +8,9 @@
 /// 
 /// </summary>
 DocumentReference::DocumentReference(Topic& topic, ListOfBCFObjects* parentList, const char* guid)
-        : BCFObject(topic.GetProject(), parentList) 
+        : BCFObject(topic.Project_(), parentList) 
         , m_topic(topic)
-        , m_Guid(topic.GetProject(), guid)
+        , m_Guid(topic.Project_(), guid)
 {
 }
 
@@ -37,7 +37,7 @@ void DocumentReference::Read(_xml::_element& elem, const std::string& folder)
 /// </summary>
 void DocumentReference::AfterRead(const std::string& folder)
 {
-    if (GetProject().GetVersion() < BCFVer_3_0) {
+    if (Project_().GetVersion() < BCFVer_3_0) {
 
         if (StrToBool(m_isExternal)) {
             SetFilePath(m_ReferencedDocument.c_str(), true);
@@ -111,7 +111,7 @@ const char* DocumentReference::GetFilePath()
         return m_Url.c_str();
     }
     else if (!m_DocumentGuid.empty()) {
-        return GetProject().GetDocuments().GetFilePath(m_DocumentGuid.c_str());
+        return Project_().GetDocuments().GetFilePath(m_DocumentGuid.c_str());
     }
     else {
         return "";
@@ -134,9 +134,16 @@ bool DocumentReference::SetFilePath(const char* filePath, bool isExternal)
         return true;
     }
     else {
-        m_DocumentGuid = GetProject().GetDocuments().Add (filePath);
+        m_DocumentGuid = Project_().GetDocuments().Add (filePath);
         m_Url.clear();
         return !m_DocumentGuid.empty();
     }
 }
 
+/// <summary>
+/// 
+/// </summary>
+BCFTopic& DocumentReference::GetTopic()
+{ 
+    return m_topic; 
+}

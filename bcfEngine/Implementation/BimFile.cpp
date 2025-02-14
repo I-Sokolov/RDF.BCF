@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "File.h"
+#include "BimFile.h"
 #include "XMLFile.h"
 #include "Project.h"
 #include "Topic.h"
@@ -9,8 +9,8 @@
 /// <summary>
 /// 
 /// </summary>
-File::File(Topic& topic, ListOfBCFObjects* parentList)
-    : BCFObject(topic.GetProject(), parentList)
+BimFile::BimFile(Topic& topic, ListOfBCFObjects* parentList)
+    : BCFObject(topic.Project_(), parentList)
     , m_topic(topic)
     , m_IsExternal("true")
     , m_pIfcGuids(NULL)
@@ -20,7 +20,7 @@ File::File(Topic& topic, ListOfBCFObjects* parentList)
 /// <summary>
 /// 
 /// </summary>
-File::~File()
+BimFile::~BimFile()
 {
     ClearContent();
 }
@@ -28,7 +28,7 @@ File::~File()
 /// <summary>
 /// 
 /// </summary>
-void File::ClearContent()
+void BimFile::ClearContent()
 {
     if (m_pIfcGuids) {
         delete m_pIfcGuids;
@@ -39,7 +39,7 @@ void File::ClearContent()
 /// <summary>
 /// 
 /// </summary>
-void File::Read(_xml::_element& elem, const std::string& folder)
+void BimFile::Read(_xml::_element& elem, const std::string& folder)
 {
     ATTRS_START
         ATTR_GET(IsExternal)
@@ -65,7 +65,7 @@ void File::Read(_xml::_element& elem, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-bool File::Validate(bool)
+bool BimFile::Validate(bool)
 {
     return true;
 }
@@ -73,7 +73,7 @@ bool File::Validate(bool)
 /// <summary>
 /// 
 /// </summary>
-void File::Write(_xml_writer& writer, const std::string& folder, const char* /*tag*/)
+void BimFile::Write(_xml_writer& writer, const std::string& folder, const char* /*tag*/)
 {
     if (!GetIsExternal()) {
         m_Reference = CopyToRelative(m_Reference, folder, "..");
@@ -94,7 +94,7 @@ void File::Write(_xml_writer& writer, const std::string& folder, const char* /*t
 /// <summary>
 /// 
 /// </summary>
-void File::Write_File(_xml_writer& writer, const std::string& folder)
+void BimFile::Write_File(_xml_writer& writer, const std::string& folder)
 {
     WRITE_CONTENT(Filename);
     WRITE_CONTENT(Date);
@@ -104,7 +104,7 @@ void File::Write_File(_xml_writer& writer, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-bool File::SetReference(const char* val)
+bool BimFile::SetReference(const char* val)
 { 
     UNNULL;
     VALIDATE(Reference, FilePath);
@@ -121,11 +121,11 @@ bool File::SetReference(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool File::UpdateFileInfo()
+bool BimFile::UpdateFileInfo()
 {
     if (!m_Reference.empty()) {
 
-        m_Filename = FileSystem::GetFileName(m_Reference.c_str(), GetLog());
+        m_Filename = FileSystem::GetFileName(m_Reference.c_str(), Log_());
 
         if (FileSystem::Exists(m_Reference.c_str())) {
 
@@ -133,7 +133,7 @@ bool File::UpdateFileInfo()
                 return UpdateFileInfoIFC();
             }
             else {
-                auto tm = FileSystem::GetFileModificationTime(m_Reference.c_str(), GetLog());
+                auto tm = FileSystem::GetFileModificationTime(m_Reference.c_str(), Log_());
                 if (tm) {
                     m_Date = TimeToStr(tm);
                 }
@@ -147,7 +147,7 @@ bool File::UpdateFileInfo()
 /// <summary>
 /// 
 /// </summary>
-bool File::IsIFC()
+bool BimFile::IsIFC()
 {
     auto len = m_Reference.length();
     if (len > 4) {
@@ -162,7 +162,7 @@ bool File::IsIFC()
 /// <summary>
 /// 
 /// </summary>
-bool File::UpdateFileInfoIFC()
+bool BimFile::UpdateFileInfoIFC()
 {
     auto model = sdaiOpenModelBN(0, m_Reference.c_str(), NULL);
     if (model) {
@@ -187,7 +187,7 @@ bool File::UpdateFileInfoIFC()
 /// <summary>
 /// 
 /// </summary>
-bool File::HasComponent(const std::string& ifcGuid)
+bool BimFile::HasComponent(const std::string& ifcGuid)
 {
     if (!IsIFC()) {
         return false;
@@ -220,4 +220,9 @@ bool File::HasComponent(const std::string& ifcGuid)
     }
 
     return m_pIfcGuids->find(ifcGuid) != m_pIfcGuids->end();
+}
+
+BCFTopic& BimFile::GetTopic()
+{
+    return m_topic;
 }

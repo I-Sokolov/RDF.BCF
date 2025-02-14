@@ -8,7 +8,8 @@
 /// 
 /// </summary>
 BimSnippet::BimSnippet(Topic& topic, ListOfBCFObjects* parentList)
-    : BCFObject(topic.GetProject(), parentList)
+    : BCFObject(topic.Project_(), parentList)
+    , m_topic(topic)
     , m_IsExternal("false")
 {
 }
@@ -46,7 +47,7 @@ bool BimSnippet::Validate(bool fix)
     if (fix) {
         if (m_SnippetType.empty()) {
             auto NOT_SET = "Not set";
-            GetProject().GetExtensions().AddElement(BCFSnippetTypes, NOT_SET);
+            Project_().GetExtensions().AddElement(BCFSnippetTypes, NOT_SET);
             m_SnippetType.assign(NOT_SET);
         }
     }
@@ -97,7 +98,7 @@ bool BimSnippet::SetSnippetType(const char* val)
 {
     UNNULL;
 
-    if (GetProject().GetExtensionsImpl().CheckElement(BCFSnippetTypes, val)) {
+    if (Project_().GetExtensions_().CheckElement(BCFSnippetTypes, val)) {
         m_SnippetType.assign(val);
         return true;
     }
@@ -129,4 +130,12 @@ bool BimSnippet::SetReferenceSchema(const char* val)
     m_ReferenceSchema.assign(val);
 
     return true;
+}
+
+/// <summary>
+/// 
+/// </summary>
+BCFTopic& BimSnippet::GetTopic()
+{ 
+    return m_topic; 
 }

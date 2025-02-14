@@ -4,7 +4,7 @@
 #include "Project.h"
 #include "ViewPoint.h"
 #include "Comment.h"
-#include "File.h"
+#include "BimFile.h"
 #include "DocumentReference.h"
 #include "BimSnippet.h"
 #include "FileSystem.h"
@@ -174,8 +174,8 @@ void Topic::Read_Topic(_xml::_element& elem, const std::string& folder)
         CHILD_GET_CONTENT(AssignedTo)
         CHILD_GET_CONTENT(Description)
         CHILD_GET_CONTENT(Stage)
-        CHILD_GET_LIST_CONDITIONAL(DocumentReferences, DocumentReference, GetProject().GetVersion() > BCFVer_2_0)
-        CHILD_ADD_TO_LIST_CONDITIONAL(DocumentReferences, DocumentReferences, GetProject().GetVersion() == BCFVer_2_0)
+        CHILD_GET_LIST_CONDITIONAL(DocumentReferences, DocumentReference, Project_().GetVersion() > BCFVer_2_0)
+        CHILD_ADD_TO_LIST_CONDITIONAL(DocumentReferences, DocumentReferences, Project_().GetVersion() == BCFVer_2_0)
         CHILD_GET_LIST(RelatedTopics, RelatedTopic)
         CHILD_GET_LIST(Comments, Comment)
         CHILD_GET_LIST(Viewpoints, ViewPoint)
@@ -229,7 +229,7 @@ bool Topic::SetTopicStatus(const char* val)
 {
     UNNULL;
 
-    if (GetProject().GetExtensionsImpl().CheckElement(BCFTopicStatuses, val)) {
+    if (Project_().GetExtensions_().CheckElement(BCFTopicStatuses, val)) {
         if (UpdateAuthor()) {
             m_TopicStatus.assign(val);
             return true;
@@ -245,7 +245,7 @@ bool Topic::SetTopicType(const char* val)
 {
     UNNULL;
 
-    if (GetProject().GetExtensionsImpl().CheckElement(BCFTopicTypes, val)) {
+    if (Project_().GetExtensions_().CheckElement(BCFTopicTypes, val)) {
         if (UpdateAuthor()) {
             m_TopicType.assign(val);
             return true;
@@ -275,7 +275,7 @@ bool Topic::SetPriority(const char* val)
 {
     UNNULL;
 
-    if (GetProject().GetExtensionsImpl().CheckElement(BCFPriorities, val)) {
+    if (Project_().GetExtensions_().CheckElement(BCFPriorities, val)) {
         if (UpdateAuthor()) {
             m_Priority.assign(val);
             return true;
@@ -317,7 +317,7 @@ bool Topic::SetAssignedTo(const char* val)
 {
     UNNULL;
 
-    if (GetProject().GetExtensionsImpl().CheckElement(BCFUsers, val)) {
+    if (Project_().GetExtensions_().CheckElement(BCFUsers, val)) {
         if (UpdateAuthor()) {
             m_AssignedTo.assign(val);
             return true;
@@ -347,7 +347,7 @@ bool Topic::SetStage(const char* val)
 {
     UNNULL;
 
-    if (GetProject().GetExtensionsImpl().CheckElement(BCFStages, val)) {
+    if (Project_().GetExtensions_().CheckElement(BCFStages, val)) {
         if (UpdateAuthor()) {
             m_Stage.assign(val);
             return true;
@@ -367,7 +367,7 @@ bool Topic::UpdateAuthor()
 /// <summary>
 /// 
 /// </summary>
-BCFViewPoint* Topic::ViewPointAdd(const char* guid)
+BCFViewPoint* Topic::AddViewPoint(const char* guid)
 {
     if (UpdateAuthor()) {
         auto viewPoint = new ViewPoint(*this, &m_Viewpoints, guid ? guid : "");
@@ -383,7 +383,7 @@ BCFViewPoint* Topic::ViewPointAdd(const char* guid)
 /// <summary>
 /// 
 /// </summary>
-BCFViewPoint* Topic::ViewPointGetAt(uint16_t ind)
+BCFViewPoint* Topic::GetViewPoint(uint16_t ind)
 {
     return m_Viewpoints.GetAt(ind);
 }
@@ -392,9 +392,9 @@ BCFViewPoint* Topic::ViewPointGetAt(uint16_t ind)
 /// <summary>
 /// 
 /// </summary>
-BCFFile* Topic::FileAdd(const char* filePath, bool isExternal)
+BCFBimFile* Topic::AddBimFile(const char* filePath, bool isExternal)
 {
-    auto file = new File(*this, &m_Files);
+    auto file = new BimFile(*this, &m_Files);
 
     bool ok = true;
 
@@ -422,7 +422,7 @@ BCFFile* Topic::FileAdd(const char* filePath, bool isExternal)
 /// <summary>
 /// 
 /// </summary>
-BCFFile* Topic::FileGetAt(uint16_t ind)
+BCFBimFile* Topic::GetBimFile(uint16_t ind)
 {
     return m_Files.GetAt(ind);
 }
@@ -439,7 +439,7 @@ ViewPoint* Topic::ViewPointByGuid(const char* guid)
 /// <summary>
 /// 
 /// </summary>
-BCFComment* Topic::CommentAdd(const char* guid)
+BCFComment* Topic::AddComment(const char* guid)
 {
     if (UpdateAuthor()) {
         auto comment = new Comment(*this, &m_Comments, guid ? guid : "");//"" forces generate guid
@@ -455,7 +455,7 @@ BCFComment* Topic::CommentAdd(const char* guid)
 /// <summary>
 /// 
 /// </summary>
-BCFComment* Topic::CommentGetAt(uint16_t ind)
+BCFComment* Topic::GetComment(uint16_t ind)
 {
     return m_Comments.GetAt(ind);
 }
@@ -463,7 +463,7 @@ BCFComment* Topic::CommentGetAt(uint16_t ind)
 /// <summary>
 /// 
 /// </summary>
-BCFDocumentReference* Topic::DocumentReferenceAdd(const char* path, bool isExternal, const char* guid)
+BCFDocumentReference* Topic::AddDocumentReference(const char* path, bool isExternal, const char* guid)
 {
     auto ref = new DocumentReference(*this, &m_DocumentReferences, guid ? guid : "");
 
@@ -488,7 +488,7 @@ BCFDocumentReference* Topic::DocumentReferenceAdd(const char* path, bool isExter
 /// <summary>
 /// 
 /// </summary>
-BCFDocumentReference* Topic::DocumentReferenceGetAt(uint16_t ind)
+BCFDocumentReference* Topic::GetDocumentReference(uint16_t ind)
 {
     return m_DocumentReferences.GetAt(ind);
 }
@@ -516,7 +516,7 @@ BCFBimSnippet* Topic::GetBimSnippet(bool forceCreate)
 /// <summary>
 /// 
 /// </summary>
-bool Topic::ReferenceLinkAdd(const char* val)
+bool Topic::AddReferenceLink(const char* val)
 {
     if (val && *val) {
         if (UpdateAuthor()) {
@@ -530,7 +530,7 @@ bool Topic::ReferenceLinkAdd(const char* val)
 /// <summary>
 /// 
 /// </summary>
-const char* Topic::ReferenceLinkGetAt(uint16_t ind)
+const char* Topic::GetReferenceLink(uint16_t ind)
 {
     return m_ReferenceLinks.GetAt(ind);
 }
@@ -538,7 +538,7 @@ const char* Topic::ReferenceLinkGetAt(uint16_t ind)
 /// <summary>
 /// 
 /// </summary>
-bool Topic::ReferenceLinkRemove(const char* val)
+bool Topic::RemoveReferenceLink(const char* val)
 {
     if (UpdateAuthor()) {
         return m_ReferenceLinks.Remove(val);
@@ -549,10 +549,10 @@ bool Topic::ReferenceLinkRemove(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool Topic::LabelAdd(const char* val)
+bool Topic::AddLabel(const char* val)
 {
     if (val && *val) {
-        if (GetProject().GetExtensionsImpl().CheckElement(BCFTopicLabels, val)) {
+        if (Project_().GetExtensions_().CheckElement(BCFTopicLabels, val)) {
             if (UpdateAuthor()) {
                 m_Labels.Add(val);
                 return true;
@@ -566,7 +566,7 @@ bool Topic::LabelAdd(const char* val)
 /// <summary>
 /// 
 /// </summary>
-const char* Topic::LabelGetAt(uint16_t ind)
+const char* Topic::GetLabel(uint16_t ind)
 {
     return m_Labels.GetAt(ind);
 }
@@ -574,7 +574,7 @@ const char* Topic::LabelGetAt(uint16_t ind)
 /// <summary>
 /// 
 /// </summary>
-bool Topic::LabelRemove(const char* val)
+bool Topic::RemoveLabel(const char* val)
 {
     if (UpdateAuthor()) {
         return m_Labels.Remove(val);
@@ -585,7 +585,7 @@ bool Topic::LabelRemove(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool Topic::RelatedTopicAdd(BCFTopic* topic)
+bool Topic::AddRelatedTopic(BCFTopic* topic)
 {
     if (topic) {
         auto guid = topic->GetGuid();
@@ -607,11 +607,11 @@ bool Topic::RelatedTopicAdd(BCFTopic* topic)
 /// <summary>
 /// 
 /// </summary>
-BCFTopic* Topic::RelatedTopicGetAt(uint16_t ind)
+BCFTopic* Topic::GetRelatedTopic(uint16_t ind)
 {
     auto guidRef = m_RelatedTopics.GetAt(ind);
     if (guidRef)
-        return GetProject().TopicByGuid(guidRef->GetGuid());
+        return Project_().TopicByGuid(guidRef->GetGuid());
     else
         return NULL;
 }
@@ -619,7 +619,7 @@ BCFTopic* Topic::RelatedTopicGetAt(uint16_t ind)
 /// <summary>
 /// 
 /// </summary>
-bool Topic::RelatedTopicRemove(BCFTopic* topic)
+bool Topic::RemoveRelatedTopic(BCFTopic* topic)
 {
     if (topic) {
         if (UpdateAuthor()) {
@@ -642,16 +642,16 @@ bool Topic::Remove()
     //remove references
     BCFTopic* topic = NULL;
     uint16_t ind = 0;
-    while (NULL != (topic = GetProject().TopicGetAt(ind++))) {
+    while (NULL != (topic = Project_().GetTopic(ind++))) {
 
         if (topic != this) {
 
             BCFTopic* related = NULL;
             uint16_t ind2 = 0;
-            while (NULL != (related = topic->RelatedTopicGetAt(ind2++))) {
+            while (NULL != (related = topic->GetRelatedTopic(ind2++))) {
 
                 if (related == this) {
-                    topic->RelatedTopicRemove(this);
+                    topic->RemoveRelatedTopic(this);
                     break;
                 }
             }
@@ -661,3 +661,12 @@ bool Topic::Remove()
     //
     return RemoveImpl();
 }
+
+/// <summary>
+/// 
+/// </summary>
+BCFProject& Topic::GetProject()
+{ 
+    return Project_(); 
+}
+

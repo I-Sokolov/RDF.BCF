@@ -18,7 +18,7 @@ void ProjectInfo::ReadRoot(_xml::_element& elem, const std::string& folder)
 {
     CHILDREN_START
         CHILD_READ(Project)
-        CHILD_READ_FUNC(ExtensionSchema, GetProject().GetExtensionsImpl().ReadExtensionSchema)
+        CHILD_READ_FUNC(ExtensionSchema, Project_().GetExtensions_().ReadExtensionSchema)
     CHILDREN_END;
 }
 
@@ -41,7 +41,7 @@ void ProjectInfo::Read_Project(_xml::_element& elem, const std::string& /*folder
 /// </summary>
 void ProjectInfo::AfterRead(const std::string&)
 {
-    if (GetProject().GetVersion() < BCFVer_3_0) {
+    if (Project_().GetVersion() < BCFVer_3_0) {
         if (m_ProjectId.empty()) {
             m_ProjectId = GuidStr::New();
         }
@@ -62,7 +62,7 @@ bool ProjectInfo::Validate(bool)
 void ProjectInfo::WriteRootContent(_xml_writer& writer, const std::string& folder)
 {
     if (m_ProjectId.empty()) {
-        GetLog().add(Log::Level::warning, "Invalid value", "ProjectId must be set");
+        //GetLog().add(Log::Level::warning, "Missed value fixed", "ProjectId was not set and was generated");
         m_ProjectId = GuidStr::New();
     }
 

@@ -70,7 +70,7 @@ private:
 /// 
 #define REQUIRED(prop, condition)                                                   \
     if (!(condition)) {                                                             \
-        GetLog().add(Log::Level::error, "Missed property or wrong value", #prop);   \
+        Log_().add(Log::Level::error, "Missed property or wrong value", #prop);   \
         valid = false;                                                              \
     }
 
@@ -130,7 +130,7 @@ enum class UnknownNames : bool
 #define ATTR_GET(name) ATTR_GET_STR(name, m_##name)
 
 #define ATTRS_END(onUnknownNames)           \
-        if ((bool)onUnknownNames) { GetProject().GetLog().add(Log::Level::warning, "XML parsing", "Unknown attribute '%s' in " __FUNCTION__, attrName.c_str()); assert(!"TODO?"); } } }
+        if ((bool)onUnknownNames) { Project_().Log_().add(Log::Level::warning, "XML parsing", "Unknown attribute '%s' in " __FUNCTION__, attrName.c_str()); assert(!"TODO?"); } } }
 
 
 static inline bool IsEmpty(_xml::_element* elem)
@@ -176,10 +176,10 @@ static inline bool IsEmpty(_xml::_element* elem)
 
 #define CHILD_GET_LIST_CONDITIONAL(listName, elemName, condition)                                   \
             if ((tag == #elemName) && (condition)) {                                                \
-                ReadList(m_##listName, *this, *child, folder, NULL, m_project.GetLog());            \
+                ReadList(m_##listName, *this, *child, folder, NULL, m_project.Log_());            \
             }                                                                                       \
             else if((tag == #listName) && (condition)) {                                            \
-                ReadList(m_##listName, *this, *child, folder, #elemName, m_project.GetLog());       \
+                ReadList(m_##listName, *this, *child, folder, #elemName, m_project.Log_());       \
             } else
 
 #define CHILD_GET_LIST(listName, elemName)       CHILD_GET_LIST_CONDITIONAL(listName, elemName, true)
@@ -191,7 +191,7 @@ static inline bool IsEmpty(_xml::_element* elem)
 
 #define CHILD_ADD_TO_LIST(listName, elemName)   CHILD_ADD_TO_LIST_CONDITIONAL(listName, elemName, true)
 
-#define CHILD_UNEXPECTED(tag) { GetProject().GetLog().add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str()); assert(!"TODO?"); }
+#define CHILD_UNEXPECTED(tag) { Project_().Log_().add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str()); assert(!"TODO?"); }
 
 #define CHILDREN_END CHILD_UNEXPECTED(tag) } }
 

@@ -25,6 +25,7 @@ public:
     virtual bool SetText(const char* value) override;
     virtual bool SetViewPoint(BCFViewPoint* viewPoint) override;
 
+    virtual BCFTopic& GetTopic() override;
     virtual bool Remove() override { return RemoveImpl(); }
 
 private:
@@ -41,7 +42,7 @@ private:
 
 private:
     Topic&                  m_topic;
-    bool                       m_readFromFile;
+    bool                    m_readFromFile;
 
 private:
     GuidStr                    m_Guid;

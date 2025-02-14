@@ -5,11 +5,11 @@
 
 struct Topic;
 
-struct File : public BCFObject, public BCFFile
+struct BimFile : public BCFObject, public BCFBimFile
 {
 public:
-    File(Topic& topic, ListOfBCFObjects* parentList);
-    ~File();
+    BimFile(Topic& topic, ListOfBCFObjects* parentList);
+    ~BimFile();
 
 public:
     //BCFFile
@@ -27,6 +27,7 @@ public:
     virtual bool SetIfcProject                   (const char* val) override { UNNULL; VALIDATE(IfcProject, IfcGuid); m_IfcProject.assign(val); return true;}
     virtual bool SetIfcSpatialStructureElement   (const char* val) override { UNNULL; VALIDATE(m_IfcSpatialStructureElement, IfcGuid); m_IfcSpatialStructureElement.assign(val); return true;}
 
+    virtual BCFTopic& GetTopic() override;
     virtual bool Remove() override { return RemoveImpl(); }
 
 public:

@@ -9,7 +9,7 @@ GuidStr::GuidStr(Project& project, const char* guid)
     : m_project(project)
 {
     if (guid) {
-        if (*guid && IsGUIDValid(guid, &project.GetLog())) {
+        if (*guid && IsGUIDValid(guid, &project.Log_())) {
             value.assign(guid);
         }
         else {
@@ -80,7 +80,7 @@ std::string GuidStr::New()
 void GuidStr::assign(const std::string& s)
 { 
     if (value.empty()) {
-        if (IsGUIDValid(s.c_str(), &m_project.GetLog())) {
+        if (IsGUIDValid(s.c_str(), &m_project.Log_())) {
             value.assign(s);
         }
         else {
@@ -88,7 +88,7 @@ void GuidStr::assign(const std::string& s)
         }
     }
     else if (value!=s) {
-        m_project.GetLog().add(Log::Level::warning, "Inconsistent GUIDs",  "%s is also referenced as %s", value.c_str(), s.c_str());
+        m_project.Log_().add(Log::Level::warning, "Inconsistent GUIDs",  "%s is also referenced as %s", value.c_str(), s.c_str());
     }
 }
 
