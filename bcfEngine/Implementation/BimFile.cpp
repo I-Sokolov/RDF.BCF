@@ -167,6 +167,8 @@ bool BimFile::UpdateFileInfoIFC()
     auto model = sdaiOpenModelBN(0, m_Reference.c_str(), NULL);
     if (model) {
 
+        engiSetStringEncoding(model, enum_string_encoding::UTF8);
+
         const char* value = NULL;
         GetSPFFHeaderItem(model, 3, 0, sdaiSTRING, &value);
         if (value && *value){
