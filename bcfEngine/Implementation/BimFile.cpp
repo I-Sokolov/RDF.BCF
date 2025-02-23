@@ -106,15 +106,19 @@ void BimFile::Write_File(_xml_writer& writer, const std::string& folder)
 /// </summary>
 bool BimFile::SetReference(const char* val)
 { 
-    UNNULL;
     VALIDATE(Reference, FilePath);
 
-    ClearContent();
+    if (0!=strcmp(val, m_Reference.c_str())) {
 
-    m_Reference.assign(val);
-    if (!m_Reference.empty()) {
-        return UpdateFileInfo();
+        ClearContent();
+
+        SetPropertyString(val, m_Reference);
+
+        if (!m_Reference.empty()) {
+            return UpdateFileInfo();
+        }
     }
+
     return true; 
 }
 

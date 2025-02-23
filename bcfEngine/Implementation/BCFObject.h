@@ -23,12 +23,14 @@ public:
     Log& Log_();
 
 protected:
-    bool IntToStr(int val, std::string& prop);
+    bool SetPropertyString(const char* val, std::string& prop);
 
-    bool RealToStr(double val, std::string& prop);
+    bool SetPropertyInt(int val, std::string& prop);
 
-    bool StrToBool(const std::string& prop) { return 0 == _stricmp(prop.c_str(), "true"); }
-    bool BoolToStr(bool val, std::string& prop) { prop.assign(val ? "true" : "false"); return true; }
+    bool SetPropertyReal(double val, std::string& prop);
+
+    bool GetPropertyBool(const std::string& prop) { return 0 == _stricmp(prop.c_str(), "true"); }
+    bool SetPropertyBool(bool val, std::string& prop);
 
     std::string AbsolutePath(const std::string& relativePath, const std::string& folder);
     std::string CopyToRelative(const std::string& absolutePath, const std::string& folder, const char* relativePath);
@@ -55,5 +57,5 @@ protected:
     ListOfBCFObjects*   m_parentList;
 };
 
-#define UNNULL                      {if(!val) val = "";}
-#define VALIDATE(Prop,Predicate)    {if (*val && !Is##Predicate##Valid(val, #Prop)) return false;}
+#define VALIDATE(Prop,Predicate)    {if (val && *val && !Is##Predicate##Valid(val, #Prop)) return false;}
+#define MARK_DIRTY                  Project_().MarkDirty()

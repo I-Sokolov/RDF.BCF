@@ -56,23 +56,45 @@ Log& BCFObject::Log_()
 /// <summary>
 /// 
 /// </summary>
-bool BCFObject::IntToStr(int val, std::string& prop)
+bool BCFObject::SetPropertyString(const char* val, std::string& prop)
 {
-    char sz[80];
-    sprintf(sz, "%d", val);
-    prop.assign(sz);
+    if (!val)
+        val = "";
+
+    if (0!=strcmp(val, prop.c_str())) {
+        prop.assign(val);
+        MARK_DIRTY;
+    }
     return true;
 }
 
 /// <summary>
 /// 
 /// </summary>
-bool BCFObject::RealToStr(double val, std::string& prop)
+bool BCFObject::SetPropertyInt(int val, std::string& prop)
+{
+    char sz[80];
+    sprintf(sz, "%d", val);
+    return SetPropertyString(sz, prop);
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFObject::SetPropertyReal(double val, std::string& prop)
 {
     char sz[80];
     sprintf(sz, "%g", val);
-    prop.assign(sz);
-    return true;
+    return SetPropertyString(sz, prop);
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool BCFObject::SetPropertyBool(bool val, std::string& prop) 
+{
+    std::string sval(val ? "true" : "false");
+    return SetPropertyString(sval.c_str(), prop); 
 }
 
 /// <summary>
@@ -90,8 +112,8 @@ bool BCFObject::UpdateAuthor(std::string& author, std::string& date)
         return false;
     }
 
-    author.assign(user);
-    date.assign(GetCurrentDate());
+    SetPropertyString(user, author);
+    SetPropertyString(GetCurrentDate().c_str(), date);
 
     return true;
 }

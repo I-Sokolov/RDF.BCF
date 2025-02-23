@@ -27,11 +27,24 @@ BCFObject* ListOfBCFObjects::GetAt(uint16_t ind)
 /// <summary>
 /// 
 /// </summary>
+void ListOfBCFObjects::Add(BCFObject* item)
+{
+    assert(item);
+    if (item) {
+        m_items.push_back(item);
+        MARK_DIRTY;
+    }
+}
+
+/// <summary>
+/// 
+/// </summary>
 bool ListOfBCFObjects::Remove(BCFObject* item)
 {
     auto it = Find(item);
 
     if (it != m_items.end()) {
+        MARK_DIRTY;
         m_removed.push_back(*it);
         m_items.erase(it);
         return true;

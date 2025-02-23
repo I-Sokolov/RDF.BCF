@@ -17,7 +17,7 @@ public:
     bool Validate(bool fix);
 
     const char* GetGuid() { return m_Guid.c_str(); }
-    void SetGuid(const char* guid) { if (guid && *guid) m_Guid.assign(guid); else m_Guid.clear(); }
+    bool SetGuid(const char* val) { return SetPropertyString(val, m_Guid); }
 
     bool Remove() { return RemoveImpl(); }
 private:

@@ -13,19 +13,19 @@ public:
 
 public:
     //BCFFile
-    virtual bool        GetIsExternal                   () override { return StrToBool (m_IsExternal); }
+    virtual bool        GetIsExternal                   () override { return GetPropertyBool (m_IsExternal); }
     virtual const char* GetFilename                     () override { return m_Filename.c_str(); }
     virtual const char* GetDate                         () override { return m_Date.c_str(); }
     virtual const char* GetReference                    () override { return m_Reference.c_str(); }
     virtual const char* GetIfcProject                   () override { return m_IfcProject.c_str(); }
     virtual const char* GetIfcSpatialStructureElement   () override { return m_IfcSpatialStructureElement.c_str(); }
 
-    virtual bool SetIsExternal                   (bool        val) override { return BoolToStr(val, m_IsExternal);}
-    virtual bool SetFilename                     (const char* val) override { UNNULL; m_Filename.assign(val); return true;}
-    virtual bool SetDate                         (const char* val) override { UNNULL; VALIDATE(Date, DateTime); m_Date.assign(val); return true;}
+    virtual bool SetIsExternal                   (bool        val) override { return SetPropertyBool(val, m_IsExternal);}
+    virtual bool SetFilename                     (const char* val) override { return SetPropertyString(val, m_Filename);}
+    virtual bool SetDate                         (const char* val) override { VALIDATE(Date, DateTime); return SetPropertyString(val, m_Date);}
     virtual bool SetReference                    (const char* val) override;
-    virtual bool SetIfcProject                   (const char* val) override { UNNULL; VALIDATE(IfcProject, IfcGuid); m_IfcProject.assign(val); return true;}
-    virtual bool SetIfcSpatialStructureElement   (const char* val) override { UNNULL; VALIDATE(m_IfcSpatialStructureElement, IfcGuid); m_IfcSpatialStructureElement.assign(val); return true;}
+    virtual bool SetIfcProject                   (const char* val) override { VALIDATE(IfcProject, IfcGuid); return SetPropertyString(val, m_IfcProject);}
+    virtual bool SetIfcSpatialStructureElement   (const char* val) override { VALIDATE(m_IfcSpatialStructureElement, IfcGuid); return SetPropertyString(val, m_IfcSpatialStructureElement);}
 
     virtual BCFTopic& GetTopic() override;
     virtual bool Remove() override { return RemoveImpl(); }

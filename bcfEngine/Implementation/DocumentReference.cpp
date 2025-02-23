@@ -39,7 +39,7 @@ void DocumentReference::AfterRead(const std::string& folder)
 {
     if (Project_().GetVersion() < BCFVer_3_0) {
 
-        if (StrToBool(m_isExternal)) {
+        if (GetPropertyBool(m_isExternal)) {
             SetFilePath(m_ReferencedDocument.c_str(), true);
         }
         else {
@@ -124,18 +124,17 @@ const char* DocumentReference::GetFilePath()
 bool DocumentReference::SetFilePath(const char* filePath, bool isExternal)
 {
     if (!filePath || !*filePath) {
-        m_DocumentGuid.clear();
-        m_Url.clear();
-        return true;
+        SetPropertyString(NULL, m_DocumentGuid);
+        return SetPropertyString("", m_Url);
     }
     else if (isExternal) {
-        m_DocumentGuid.clear();
-        m_Url.assign(filePath);
-        return true;
+        SetPropertyString(NULL, m_DocumentGuid);
+        return SetPropertyString(filePath, m_Url);
     }
     else {
-        m_DocumentGuid = Project_().GetDocuments().Add (filePath);
-        m_Url.clear();
+        auto docGuid = Project_().GetDocuments().Add (filePath);
+        SetPropertyString(NULL, m_Url);
+        SetPropertyString(docGuid, m_DocumentGuid);
         return !m_DocumentGuid.empty();
     }
 }

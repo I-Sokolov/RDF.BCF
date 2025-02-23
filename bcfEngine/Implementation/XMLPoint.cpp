@@ -57,7 +57,7 @@ bool XMLPoint::SetPoint(const BCFPoint* bcfpt)
 {
     if (bcfpt) {
         for (int i = 0; i < 3; i++) {
-            RealToStr(bcfpt->xyz[i], XYZ[i]);
+            SetPropertyReal(bcfpt->xyz[i], XYZ[i]);
         }
         return true;
     }
@@ -72,7 +72,7 @@ bool XMLPoint::SetPoint(const BCFPoint* bcfpt)
 /// </summary>
 void XMLPoint::SetPoint(double x, double y, double z)
 {
-    RealToStr(x, m_X);
-    RealToStr(y, m_Y);
-    RealToStr(z, m_Z);
+    SetPropertyReal(x, m_X);
+    SetPropertyReal(y, m_Y);
+    SetPropertyReal(z, m_Z);
 }

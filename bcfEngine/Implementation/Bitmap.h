@@ -30,7 +30,7 @@ public:
     virtual bool SetLocation(BCFPoint* pt) override { return m_Location.SetPoint(pt); }
     virtual bool SetNormal(BCFPoint* pt) override { return m_Normal.SetPoint(pt); }
     virtual bool SetUp(BCFPoint* pt) override { return m_Up.SetPoint(pt); }
-    virtual bool SetHeight(double val) override { return RealToStr(val, m_Height); }
+    virtual bool SetHeight(double val) override { return SetPropertyReal(val, m_Height); }
     
     virtual BCFViewPoint& GetViewPoint() override;
     virtual bool Remove() override { return RemoveImpl(); }

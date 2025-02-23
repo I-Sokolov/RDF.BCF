@@ -517,3 +517,12 @@ BCFTopic& ViewPoint::GetTopic()
 {
     return m_topic;
 }
+
+bool ViewPoint::SetCameraType(BCFCamera val) 
+{ 
+    if (m_cameraType != val){ 
+        m_cameraType = val; 
+        MARK_DIRTY; 
+    } 
+    return true; 
+}

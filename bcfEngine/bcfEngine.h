@@ -21,6 +21,11 @@ extern "C" {
     RDFBCF_EXPORT bool bcfProjectDelete(BCFProject* project);
 
     /// <summary>
+    /// 
+    /// </summary>
+    RDFBCF_EXPORT bool bcfProjectIsDirty(BCFProject* project);
+
+    /// <summary>
     ///
     /// </summary>
     RDFBCF_EXPORT const char* bcfGetErrors(BCFProject* project, bool cleanLog);

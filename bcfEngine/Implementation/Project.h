@@ -25,13 +25,14 @@ public:
     virtual bool ReadFile(const char* bcfFilePath, bool autofix) override;
     virtual bool WriteFile(const char* bcfFilePath, BCFVersion version) override;
     virtual bool SetOptions(const char* user, bool autoExtentSchema, bool validateIfcGuids) override { if (user) m_author.assign(user); m_autoExtentSchema = autoExtentSchema; m_validateIfcGuids = validateIfcGuids;  return true; }
-    virtual const char* GetProjectId() override { return m_projectInfo.m_ProjectId.c_str(); }
-    virtual const char* GetName() override { return m_projectInfo.m_Name.c_str(); }
-    virtual bool SetName(const char* name) override { m_projectInfo.m_Name = name; return true; }
+    virtual const char* GetProjectId() override { return m_projectInfo.GetProjectId(); }
+    virtual const char* GetName() override { return m_projectInfo.GetName(); }
+    virtual bool SetName(const char* val) override { return m_projectInfo.SetName(val); }
     virtual BCFTopic* AddTopic(const char* type, const char* title, const char* status, const char* guid = NULL) override;
     virtual BCFTopic* GetTopic(uint16_t ind) override;
     virtual BCFExtensions& GetExtensions() override { return GetExtensions_(); }
     virtual const char* GetErrors(bool cleanLog) override { return Log_().get(cleanLog); }
+    virtual bool IsDirty() override { return m_isDirty; }
 
 public:
     const char* GetAuthor() { return m_author.c_str(); }
@@ -47,6 +48,8 @@ public:
 
     Topic* TopicByGuid(const char* guid);
 
+    void MarkDirty() { m_isDirty = true; }
+
 public: //internal
     Log& Log_() { return m_log; }
 
@@ -58,7 +61,9 @@ private:
 
 private:
     Log         m_log;
-    
+    StringList  m_workingFolders;
+    bool        m_isDirty;
+
     Version     m_version;
     ProjectInfo m_projectInfo;
     Extensions  m_extensions;
@@ -70,6 +75,5 @@ private:
 
     SetByGuid<Topic>  m_topics;
 
-    StringList  m_workingFolders;
 };
 

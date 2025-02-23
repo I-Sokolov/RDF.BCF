@@ -213,11 +213,8 @@ void Topic::Write_Topic(_xml_writer& writer, const std::string& folder)
 /// </summary>
 bool Topic::SetServerAssignedId(const char* val) 
 {
-    UNNULL;
-
     if (UpdateAuthor()) {
-        m_ServerAssignedId.assign(val);
-        return true;
+        return SetPropertyString (val, m_ServerAssignedId);
     }
     return false;
 }
@@ -227,12 +224,9 @@ bool Topic::SetServerAssignedId(const char* val)
 /// </summary>
 bool Topic::SetTopicStatus(const char* val)
 {
-    UNNULL;
-
     if (Project_().GetExtensions_().CheckElement(BCFTopicStatuses, val)) {
         if (UpdateAuthor()) {
-            m_TopicStatus.assign(val);
-            return true;
+            return SetPropertyString(val, m_TopicStatus);
         }
     }
     return false;
@@ -243,12 +237,9 @@ bool Topic::SetTopicStatus(const char* val)
 /// </summary>
 bool Topic::SetTopicType(const char* val)
 {
-    UNNULL;
-
     if (Project_().GetExtensions_().CheckElement(BCFTopicTypes, val)) {
         if (UpdateAuthor()) {
-            m_TopicType.assign(val);
-            return true;
+            return SetPropertyString(val, m_TopicType);
         }
     }
     return false;
@@ -259,11 +250,8 @@ bool Topic::SetTopicType(const char* val)
 /// </summary>
 bool Topic::SetTitle(const char* val)
 {
-    UNNULL;
-
     if (UpdateAuthor()) {
-        m_Title.assign(val);
-        return true;
+        return SetPropertyString(val, m_Title);
     }
     return false;
 }
@@ -273,12 +261,9 @@ bool Topic::SetTitle(const char* val)
 /// </summary>
 bool Topic::SetPriority(const char* val)
 {
-    UNNULL;
-
     if (Project_().GetExtensions_().CheckElement(BCFPriorities, val)) {
         if (UpdateAuthor()) {
-            m_Priority.assign(val);
-            return true;
+            return SetPropertyString(val, m_Priority);
         }
     }
     return false;
@@ -290,7 +275,7 @@ bool Topic::SetPriority(const char* val)
 bool Topic::SetIndex(int val)
 {
     if (UpdateAuthor()) {
-        return IntToStr(val, m_Index);
+        return SetPropertyInt(val, m_Index);
     }
     return false;
 }
@@ -300,12 +285,10 @@ bool Topic::SetIndex(int val)
 /// </summary>
 bool Topic::SetDueDate(const char* val)
 {
-    UNNULL;
     VALIDATE(DueDate, DateTime);
 
     if (UpdateAuthor()) {
-        m_DueDate.assign(val);
-        return true;
+        return SetPropertyString(val, m_DueDate);
     }
     return false;
 }
@@ -315,12 +298,9 @@ bool Topic::SetDueDate(const char* val)
 /// </summary>
 bool Topic::SetAssignedTo(const char* val)
 {
-    UNNULL;
-
     if (Project_().GetExtensions_().CheckElement(BCFUsers, val)) {
         if (UpdateAuthor()) {
-            m_AssignedTo.assign(val);
-            return true;
+            return SetPropertyString(val, m_AssignedTo);
         }
     }
     return false;
@@ -331,11 +311,8 @@ bool Topic::SetAssignedTo(const char* val)
 /// </summary>
 bool Topic::SetDescription(const char* val)
 {
-    UNNULL;
-
     if (UpdateAuthor()) {
-        m_Description.assign(val);
-        return true;
+        return SetPropertyString(val, m_Description);
     }
     return false;
 }
@@ -345,12 +322,9 @@ bool Topic::SetDescription(const char* val)
 /// </summary>
 bool Topic::SetStage(const char* val)
 {
-    UNNULL;
-
     if (Project_().GetExtensions_().CheckElement(BCFStages, val)) {
         if (UpdateAuthor()) {
-            m_Stage.assign(val);
-            return true;
+            return SetPropertyString(val, m_Stage);
         }
     }
     return false;

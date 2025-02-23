@@ -141,8 +141,7 @@ bool Comment::SetViewPoint(BCFViewPoint* viewPoint)
         return false;
     }
 
-    m_Viewpoint.SetGuid(guid);
-    return ok;
+    return m_Viewpoint.SetGuid(guid);
 }
 
 /// <summary>
@@ -150,14 +149,11 @@ bool Comment::SetViewPoint(BCFViewPoint* viewPoint)
 /// </summary>
 bool Comment::SetText(const char* val)
 {
-    UNNULL;
-
     if (!UpdateAuthor()) {
         return false;
     }
 
-    m_Comment.assign(val);
-    return true;
+    return SetPropertyString(val, m_Comment);
 }
 
 /// <summary>

@@ -96,11 +96,8 @@ void BimSnippet::Write(_xml_writer& writer, const std::string& folder, const cha
 /// </summary>
 bool BimSnippet::SetSnippetType(const char* val)
 {
-    UNNULL;
-
     if (Project_().GetExtensions_().CheckElement(BCFSnippetTypes, val)) {
-        m_SnippetType.assign(val);
-        return true;
+        return SetPropertyString(val, m_SnippetType);
     }
 
     return false;
@@ -111,12 +108,9 @@ bool BimSnippet::SetSnippetType(const char* val)
 /// </summary>
 bool BimSnippet::SetReference(const char* val)
 {
-    UNNULL;
     VALIDATE(Reference, FilePath);
 
-    m_Reference.assign(val);
-
-    return true;
+    return SetPropertyString(val, m_Reference);
 }
 
 /// <summary>
@@ -124,12 +118,9 @@ bool BimSnippet::SetReference(const char* val)
 /// </summary>
 bool BimSnippet::SetReferenceSchema(const char* val) 
 {
-    UNNULL;
     VALIDATE(ReferenceSchema, FilePath);
 
-    m_ReferenceSchema.assign(val);
-
-    return true;
+    return SetPropertyString(val, m_ReferenceSchema);
 }
 
 /// <summary>

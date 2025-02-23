@@ -17,7 +17,7 @@ public:
 public:
     //BCFColoring
     virtual const char* GetColor() override { return m_Color.c_str(); }
-    virtual bool SetColor(const char* val) override { UNNULL; VALIDATE(Color, Color); m_Color.assign(val); return true; }
+    virtual bool SetColor(const char* val) override { VALIDATE(Color, Color); return SetPropertyString(val, m_Color); }
     
     virtual BCFComponent* AddComponent(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL) override;
     virtual BCFComponent* GetComponent(uint16_t ind) override;

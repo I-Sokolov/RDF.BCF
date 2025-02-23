@@ -75,6 +75,10 @@ namespace RDF.BCF
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ProjectDelete(IntPtr project);
 
+        [DllImport(DLL, EntryPoint = "bcfProjectIsDirty")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool ProjectIsDirty(IntPtr project);
+
         [DllImport(DLL, EntryPoint = "bcfGetErrors")]
         private static extern IntPtr GetErrors_(IntPtr project, [param: MarshalAs(UnmanagedType.U1)] bool cleanLog);
 

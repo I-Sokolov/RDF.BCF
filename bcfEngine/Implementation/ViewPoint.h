@@ -21,10 +21,10 @@ public:
     //BCFViewPoint
     virtual const char* GetGuid() override { return m_Guid.c_str(); }
     virtual const char* GetSnapshot() override { return m_Snapshot.c_str(); }
-    virtual bool        GetDefaultVisibility() override { return StrToBool(m_DefaultVisibility); }
-    virtual bool        GetSpaceVisible() override { return StrToBool(m_SpacesVisible); }
-    virtual bool        GetSpaceBoundariesVisible() override { return StrToBool(m_SpaceBoundariesVisible); }
-    virtual bool        GetOpeningsVisible() override { return StrToBool(m_OpeningsVisible); }
+    virtual bool        GetDefaultVisibility() override { return GetPropertyBool(m_DefaultVisibility); }
+    virtual bool        GetSpaceVisible() override { return GetPropertyBool(m_SpacesVisible); }
+    virtual bool        GetSpaceBoundariesVisible() override { return GetPropertyBool(m_SpaceBoundariesVisible); }
+    virtual bool        GetOpeningsVisible() override { return GetPropertyBool(m_OpeningsVisible); }
     virtual BCFCamera   GetCameraType() override { return m_cameraType; }
     virtual bool        GetCameraViewPoint(BCFPoint& pt) override { return m_CameraViewPoint.GetPoint(pt); }
     virtual bool        GetCameraDirection(BCFPoint& pt) override { return m_CameraDirection.GetPoint(pt); }
@@ -33,18 +33,18 @@ public:
     virtual double      GetFieldOfView() override { return atof(m_FieldOfView.c_str()); }
     virtual double      GetAspectRatio() override { return atof(m_AspectRatio.c_str()); }
 
-    virtual bool        SetSnapshot(const char* val) override { UNNULL; VALIDATE(Snapshot, FilePath); m_Snapshot.assign(val); return true; }
-    virtual bool        SetDefaultVisibility(bool val) override { return BoolToStr(val, m_DefaultVisibility); }
-    virtual bool        SetSpaceVisible(bool val) override { return BoolToStr(val, m_SpacesVisible); }
-    virtual bool        SetSpaceBoundariesVisible(bool val) override { return BoolToStr(val, m_SpaceBoundariesVisible); }
-    virtual bool        SetOpeningsVisible(bool val) override { return BoolToStr(val, m_OpeningsVisible); }
-    virtual bool        SetCameraType(BCFCamera val) override { m_cameraType = val; return true; }
+    virtual bool        SetSnapshot(const char* val) override { VALIDATE(Snapshot, FilePath); return SetPropertyString(val, m_Snapshot); }
+    virtual bool        SetDefaultVisibility(bool val) override { return SetPropertyBool(val, m_DefaultVisibility); }
+    virtual bool        SetSpaceVisible(bool val) override { return SetPropertyBool(val, m_SpacesVisible); }
+    virtual bool        SetSpaceBoundariesVisible(bool val) override { return SetPropertyBool(val, m_SpaceBoundariesVisible); }
+    virtual bool        SetOpeningsVisible(bool val) override { return SetPropertyBool(val, m_OpeningsVisible); }
+    virtual bool        SetCameraType(BCFCamera val);
     virtual bool        SetCameraViewPoint(BCFPoint* pt) override { return m_CameraViewPoint.SetPoint(pt); }
     virtual bool        SetCameraDirection(BCFPoint* pt) override { return m_CameraDirection.SetPoint(pt); }
     virtual bool        SetCameraUpVector(BCFPoint* pt) override { return m_CameraUpVector.SetPoint(pt); }
-    virtual bool        SetViewToWorldScale(double val) override { return RealToStr(val,m_ViewToWorldScale); }
-    virtual bool        SetFieldOfView(double val) override { return RealToStr (val, m_FieldOfView); }
-    virtual bool        SetAspectRatio(double val) override { return RealToStr (val, m_AspectRatio); }
+    virtual bool        SetViewToWorldScale(double val) override { return SetPropertyReal(val,m_ViewToWorldScale); }
+    virtual bool        SetFieldOfView(double val) override { return SetPropertyReal (val, m_FieldOfView); }
+    virtual bool        SetAspectRatio(double val) override { return SetPropertyReal (val, m_AspectRatio); }
 
     virtual BCFComponent* AddSelection(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL) override;
     virtual BCFComponent* GetSelection(uint16_t ind) override;

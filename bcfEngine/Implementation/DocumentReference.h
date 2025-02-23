@@ -24,7 +24,7 @@ public:
     virtual const char* GetDescription() override { return m_Description.c_str(); }
 
     virtual bool SetFilePath(const char* filePath, bool isExternal) override;
-    virtual bool SetDescription(const char* val) override { UNNULL; m_Description.assign(val); return true; }
+    virtual bool SetDescription(const char* val) override { return SetPropertyString (val, m_Description); }
 
     virtual BCFTopic& GetTopic() override;
     virtual bool Remove() override { return RemoveImpl(); }

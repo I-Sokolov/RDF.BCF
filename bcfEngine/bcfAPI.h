@@ -53,11 +53,14 @@ struct BCFProject
     virtual bool            SetOptions(const char* user, bool autoExtent = true, bool validateIfcGuids = false) = NULL;
     virtual BCFExtensions&  GetExtensions() = NULL;
 
+    virtual BCFTopic*       GetTopic(uint16_t ind) = NULL;
+    virtual BCFTopic*       AddTopic(const char* type, const char* title, const char* status, const char* guid = NULL) = NULL;
+
+    virtual bool            IsDirty() = NULL;
+
     BCF_PROPERTY_RO(const char*, ProjectId);
     BCF_PROPERTY_RW(const char*, Name);
 
-    virtual BCFTopic* GetTopic(uint16_t ind) = NULL;
-    virtual BCFTopic* AddTopic(const char* type, const char* title, const char* status, const char* guid = NULL) = NULL;
 };
 
 

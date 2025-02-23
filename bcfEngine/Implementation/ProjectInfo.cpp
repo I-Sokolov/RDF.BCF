@@ -79,3 +79,4 @@ void ProjectInfo::Write_Project(_xml_writer& writer, const std::string& folder)
 {
     WRITE_CONTENT(Name);
 }
+

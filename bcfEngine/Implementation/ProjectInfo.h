@@ -11,6 +11,12 @@ public:
     bool Validate(bool fix);
 
 public:
+    const char* GetProjectId() { return m_ProjectId.c_str(); }
+    const char* GetName() { return m_Name.c_str(); }
+
+    bool SetName(const char* val) { return SetPropertyString(val, m_Name); }
+
+private:
     std::string m_ProjectId;
     std::string m_Name;
 

@@ -3,6 +3,11 @@
     public class Project : IDisposable
     {
         /// <summary>
+        /// Was the project modified since read, write or create
+        /// </summary>
+        public bool IsDirty { get { return Interop.ProjectIsDirty(m_handle); } }
+
+        /// <summary>
         /// Creates new empty BCF data.
         /// </summary>
         public Project(string? projectId = null)

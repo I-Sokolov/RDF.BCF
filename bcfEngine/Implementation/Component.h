@@ -24,9 +24,9 @@ public:
     virtual const char* GetOriginatingSystem() override {return m_OriginatingSystem.c_str();}
     virtual const char* GetAuthoringToolId() override { return m_AuthoringToolId.c_str(); }
 
-    virtual bool SetIfcGuid(const char* val) override { UNNULL; VALIDATE(IfcGuid, IfcGuid); m_IfcGuid.assign(val); return true; }
-    virtual bool SetOriginatingSystem(const char* val) override { UNNULL; m_OriginatingSystem.assign(val); return true; }
-    virtual bool SetAuthoringToolId(const char* val) override { UNNULL; m_AuthoringToolId.assign(val); return true; }
+    virtual bool SetIfcGuid(const char* val) override { VALIDATE(IfcGuid, IfcGuid); return SetPropertyString (val, m_IfcGuid); }
+    virtual bool SetOriginatingSystem(const char* val) override { return SetPropertyString(val, m_OriginatingSystem); }
+    virtual bool SetAuthoringToolId(const char* val) override { return SetPropertyString(val, m_AuthoringToolId);}
 
     virtual BCFViewPoint& GetViewPoint() override;
     virtual BCFColoring* GetColoring() override;

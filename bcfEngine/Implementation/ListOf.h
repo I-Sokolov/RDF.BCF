@@ -14,7 +14,9 @@ class ListOfBCFObjects
 {
 public:
     bool Remove(BCFObject* item);
-    void Add(BCFObject* item) { assert(item); if (item) m_items.push_back(item); }
+    void Add(BCFObject* item);
+
+    Project& Project_() { return m_project; }
 
 protected:
     ListOfBCFObjects(Project& project) : m_project(project) {}

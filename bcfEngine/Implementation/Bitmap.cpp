@@ -102,13 +102,14 @@ bool Bitmap::SetFormat(BCFBitmapFormat val)
 {
     switch (val) {
         case BCFBitmapPNG:
-            m_Format.assign("png");
+            return SetPropertyString("png", m_Format);
             break;
         default:
-            m_Format.assign("jpg");
+            return SetPropertyString("jpg", m_Format);
             break;
     }
-    return true;
+    Log_().add(Log::Level::error, "Invalid value", "Invalids BCF bitmap format value");
+    return false;
 }
 
 /// <summary>
@@ -116,12 +117,9 @@ bool Bitmap::SetFormat(BCFBitmapFormat val)
 /// </summary>
 bool Bitmap::SetReference(const char* val)
 {
-    UNNULL;
     VALIDATE(Reference, FilePath);
 
-    m_Reference.assign(val);
-
-    return true;
+    return SetPropertyString(val, m_Reference);
 }
 
 /// <summary>

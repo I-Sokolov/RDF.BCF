@@ -25,6 +25,7 @@ Project::Project(const char* projectId)
     , m_autoExtentSchema(true)
     , m_validateIfcGuids(false)
     , m_topics(*this)
+    , m_isDirty(false)
 {
     gProjectCounter++;
 }
@@ -104,6 +105,7 @@ bool Project::ReadFile(const char* bcfFilePath, bool autofix)
         Validate(true);
     }
 
+    m_isDirty = false;
     return ok;
 }
 
@@ -154,6 +156,7 @@ bool Project::WriteFile(const char* bcfFilePath, BCFVersion version)
     //on successfull write we can free old working folders
     if (ok) {
         ok = CleanWorkingFolders(true);
+        m_isDirty = false;
     }
 
     return ok;

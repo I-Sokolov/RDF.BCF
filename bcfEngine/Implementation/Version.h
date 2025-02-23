@@ -23,6 +23,7 @@ private:
     virtual void AfterRead(const std::string&) override {}
     virtual void WriteRootElem(_xml_writer& writer, const std::string& folder, Attributes& attr) override;
     virtual void WriteRootContent(_xml_writer& writer, const std::string& folder) override {}
+
 private:
     std::string m_VersionId;
 };

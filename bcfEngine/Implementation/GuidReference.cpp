@@ -31,6 +31,7 @@ bool GuidReference::Validate(bool)
     return true;
 }
 
+
 /// <summary>
 /// 
 /// </summary>

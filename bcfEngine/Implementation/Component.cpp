@@ -98,7 +98,7 @@ void Component::AfterRead(const std::string&)
     if (Project_().GetVersion() < BCFVer_2_1) {
         assert(m_pViewPoint);
 
-        if (!StrToBool(m_Visible) && m_pViewPoint) {
+        if (!GetPropertyBool(m_Visible) && m_pViewPoint) {
             m_pViewPoint->AddException(m_IfcGuid.c_str(), m_AuthoringToolId.c_str(), m_OriginatingSystem.c_str());
         }
 
@@ -118,7 +118,7 @@ void Component::AfterRead(const std::string&)
             coloring->AddComponent(m_IfcGuid.c_str(), m_AuthoringToolId.c_str(), m_OriginatingSystem.c_str());
         }
 
-        if (!StrToBool(m_Selected)) {
+        if (!GetPropertyBool(m_Selected)) {
             Remove();
         }
     }
