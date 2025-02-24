@@ -160,6 +160,10 @@ void Extensions::WriteEnumeration(_xml_writer& writer, const std::string& tag, B
 /// </summary>
 bool Extensions::CheckElement(BCFEnumeration enumeration, const char* element)
 {
+    if (!element || !*element) {
+        return true; //assume empty element is always in the list
+    }
+
     auto list = GetList(enumeration);
     if (!list) {
         return false;
