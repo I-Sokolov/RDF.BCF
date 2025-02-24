@@ -33,4 +33,6 @@ typedef std::set<std::string> StringSet;
 
 #define NULL_CHECK(x) if (!x) { m_project.Log_().add(Log::Level::error, "NULL argument", "NULL argument"); return false; }
 
+#define EPS 1e-8
+
 #endif //PCH_H

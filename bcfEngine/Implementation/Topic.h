@@ -103,7 +103,7 @@ private:
 
 private:
     GuidStr                         m_Guid;
-    ListOf<BimFile>                    m_Files;
+    ListOf<BimFile>                 m_Files;
     std::string                     m_ServerAssignedId;
     std::string                     m_TopicStatus;
     std::string                     m_TopicType;

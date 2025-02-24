@@ -66,14 +66,14 @@ bool ViewPoint::Validate(bool fix)
             m_CameraDirection.SetPoint(1, 0, 0);
         if (!m_CameraUpVector.IsSet())
             m_CameraUpVector.SetPoint(0, 0, 1);
-        if (GetAspectRatio() < 1e-8)
+        if (GetAspectRatio() < EPS)
             SetAspectRatio(1);
         if (GetCameraType() == BCFCameraPerspective) {
-            if (GetFieldOfView() < 1e-8 || GetFieldOfView() > 180 - 1e-8)
+            if (GetFieldOfView() < EPS || GetFieldOfView() > 180 - EPS)
                 SetFieldOfView(90);
         }
         else {
-            if (GetViewToWorldScale() < 1e-8)
+            if (GetViewToWorldScale() < EPS)
                 SetViewToWorldScale(1);
         }
     }
