@@ -31,18 +31,17 @@ Component::Component(Coloring& coloring, ListOfBCFObjects* parentList)
 /// <summary>
 /// 
 /// </summary>
-Topic& Component::GetTopic()
+Topic* Component::Topic_()
 {
     if (m_pViewPoint) {
         return m_pViewPoint->Topic_();
     }
     else if (m_pColoring) {
-        return m_pColoring->GetTopic();
+        return m_pColoring->Topic_();
     }
-    else {
-        assert(false);
-        return *(new Topic(Project_(), NULL, NULL));
-    }
+
+    assert(false);
+    return NULL;
 }
 
 /// <summary>
@@ -58,7 +57,7 @@ BCFViewPoint& Component::GetViewPoint()
     }
     else {
         assert(false);
-        return *(new ViewPoint(GetTopic(), NULL));
+        return *(new ViewPoint(*(new Topic(Project_(), NULL, NULL)), NULL));
     }
 }
 
@@ -158,17 +157,18 @@ bool Component::ValidateIfcGuid()
     if (!Project_().GetValidateIfcGuids())
         return true;
 
-    auto& topic = GetTopic();
-    BCFBimFile* bcffile = NULL;
-    uint16_t ind = 0;
-    while (NULL != (bcffile = topic.GetBimFile(ind++))) {
-        
-        auto file = dynamic_cast<BimFile*>(bcffile);
-        assert(file);
-        if (file) {
+    if (auto topic = Topic_()) {
+        BCFBimFile* bcffile = NULL;
+        uint16_t ind = 0;
+        while (NULL != (bcffile = topic->GetBimFile(ind++))) {
 
-            if (file->HasComponent(m_IfcGuid)) {
-                return true;
+            auto file = dynamic_cast<BimFile*>(bcffile);
+            assert(file);
+            if (file) {
+
+                if (file->HasComponent(m_IfcGuid)) {
+                    return true;
+                }
             }
         }
     }

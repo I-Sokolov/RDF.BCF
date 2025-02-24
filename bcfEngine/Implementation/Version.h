@@ -24,6 +24,9 @@ private:
     virtual void WriteRootElem(_xml_writer& writer, const std::string& folder, Attributes& attr) override;
     virtual void WriteRootContent(_xml_writer& writer, const std::string& folder) override {}
 
+    virtual Topic* Topic_() override { return NULL; }
+    virtual Comment* Comment_() override { return NULL; }
+
 private:
     std::string m_VersionId;
 };

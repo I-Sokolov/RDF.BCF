@@ -102,6 +102,7 @@ void XMLFile::WriteRootElem(_xml_writer& writer, const std::string& folder, Attr
 /// </summary>
 XMLText::XMLText(Topic& topic, ListOfBCFObjects* parentList)
     : BCFObject(topic.Project_(), parentList)
+    , m_topic (topic)
 {
 }
 

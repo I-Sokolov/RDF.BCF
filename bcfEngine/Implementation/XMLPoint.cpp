@@ -6,9 +6,12 @@
 /// <summary>
 /// 
 /// </summary>
-XMLPoint::XMLPoint(Project& project) 
-    : BCFObject(project, NULL)
-    , m_X(XYZ[0]), m_Y(XYZ[1]), m_Z(XYZ[2]) {}
+XMLPoint::XMLPoint(BCFObject& owner) 
+    : BCFObject(owner.Project_(), NULL)
+    , m_owner(owner)
+    , m_X(m_XYZ[0]), m_Y(m_XYZ[1]), m_Z(m_XYZ[2]) 
+{
+}
 
 /// <summary>
 /// 
@@ -44,7 +47,7 @@ void XMLPoint::Write(_xml_writer& writer, const std::string& folder, const char*
 bool XMLPoint::GetPoint(BCFPoint& bcfpt)
 {
     for (int i = 0; i < 3; i++) {
-        bcfpt.xyz[i] = atof(XYZ[i].c_str());
+        bcfpt.xyz[i] = atof(m_XYZ[i].c_str());
     }
 
     return true;
@@ -57,7 +60,7 @@ bool XMLPoint::SetPoint(const BCFPoint* bcfpt)
 {
     if (bcfpt) {
         for (int i = 0; i < 3; i++) {
-            SetPropertyReal(bcfpt->xyz[i], XYZ[i]);
+            SetPropertyReal(bcfpt->xyz[i], m_XYZ[i]);
         }
         return true;
     }

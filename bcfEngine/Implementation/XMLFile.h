@@ -60,7 +60,12 @@ public:
 
     std::string& string() { return m_str; }
 
+    virtual Topic* Topic_() override { return &m_topic; }
+    virtual Comment* Comment_() override { return NULL; }
+
 private:
+    Topic&      m_topic;
+
     std::string m_str;
 };
 

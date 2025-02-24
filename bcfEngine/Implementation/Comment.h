@@ -28,14 +28,19 @@ public:
     virtual BCFTopic& GetTopic() override;
     virtual bool Remove() override { return RemoveImpl(); }
 
-private:
-    bool UpdateAuthor();
+    virtual Topic* Topic_() override { return &m_topic; }
+    virtual Comment* Comment_() override { return this; }
 
 public:
     void Read(_xml::_element& elem, const std::string& folder);
     void Write(_xml_writer& writer, const std::string& folder, const char* tag);
     void AfterRead(const std::string& folder);
+
     bool Validate(bool fix);
+
+    bool SetEditorAndDate();
+
+    Topic& TopicR() { return m_topic; }
 
 private:
     void Write_Comment(_xml_writer& writer, const std::string& folder);

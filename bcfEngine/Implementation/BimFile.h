@@ -30,6 +30,9 @@ public:
     virtual BCFTopic& GetTopic() override;
     virtual bool Remove() override { return RemoveImpl(); }
 
+    virtual Topic* Topic_() override { return &m_topic; }
+    virtual Comment* Comment_() override { return NULL; }
+
 public:
     void Read(_xml::_element& elem, const std::string& folder);
     void Write(_xml_writer& writer, const std::string& folder, const char* tag);

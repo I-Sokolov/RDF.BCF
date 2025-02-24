@@ -56,7 +56,7 @@ struct BCFProject
     virtual BCFTopic*       GetTopic(uint16_t ind) = NULL;
     virtual BCFTopic*       AddTopic(const char* type, const char* title, const char* status, const char* guid = NULL) = NULL;
 
-    virtual bool            IsDirty() = NULL;
+    virtual bool            IsModified() = NULL;
 
     BCF_PROPERTY_RO(const char*, ProjectId);
     BCF_PROPERTY_RW(const char*, Name);

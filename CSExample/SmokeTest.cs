@@ -70,7 +70,7 @@ namespace CSExample
         {
             using (var bcf = new RDF.BCF.Project())
             {
-                ASSERT(!bcf.IsDirty);
+                ASSERT(!bcf.IsModified);
 
                 var errors = bcf.GetErrors();
                 ASSERT(errors.Length == 0);
@@ -121,7 +121,7 @@ namespace CSExample
             {
                 var res = bcf.FileRead("..\\TestCases\\кИрилица.bcf", false);
                 ASSERT(res);
-                ASSERT(!bcf.IsDirty);
+                ASSERT(!bcf.IsModified);
 
                 var name = bcf.Name;
                 ASSERT(name == "BCF 3.0 test cases");
@@ -131,10 +131,10 @@ namespace CSExample
                 TestTopics(bcf);
                 CheckExtensions(bcf);
 
-                ASSERT(bcf.IsDirty);
+                ASSERT(bcf.IsModified);
                 var ok = bcf.FileWrite("Кирилица.bcf");
                 ASSERT(ok);
-                ASSERT(!bcf.IsDirty);
+                ASSERT(!bcf.IsModified);
             }
 
             using (var bcf = new Project())

@@ -70,7 +70,9 @@ public:
     void Read(_xml::_element& elem, const std::string& folder);
     void Write(_xml_writer& writer, const std::string& folder, const char* tag);
     bool Validate(bool fix);
-    Topic& Topic_() { return m_topic; }
+
+    virtual Topic* Topic_() override { return &m_topic; }
+    virtual Comment* Comment_() override { return NULL; }
 
 public:
     //XMLFile implementation

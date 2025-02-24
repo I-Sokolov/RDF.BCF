@@ -35,6 +35,9 @@ public:
     virtual BCFViewPoint& GetViewPoint() override;
     virtual bool Remove() override { return RemoveImpl(); }
 
+    virtual Topic* Topic_() override;
+    virtual Comment* Comment_() override { return NULL; }
+
 private:
     ViewPoint& m_viewPoint;
 

@@ -12,14 +12,14 @@
 Coloring::Coloring(ViewPoint& viewPoint, ListOfBCFObjects* parentList)
     : BCFObject(viewPoint.Project_(), parentList) 
     , m_viewPoint(viewPoint)
-    , m_Components(viewPoint.Project_())
+    , m_Components(viewPoint)
 { 
 }
 
 /// <summary>
 /// 
 /// </summary>
-Topic& Coloring::GetTopic()
+Topic* Coloring::Topic_()
 {
     return m_viewPoint.Topic_();
 }

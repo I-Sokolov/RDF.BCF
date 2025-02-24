@@ -10,8 +10,8 @@
 Line::Line(ViewPoint& viewPoint, ListOfBCFObjects* parentList)
     : BCFObject(viewPoint.Project_(), parentList)
     , m_viewPoint(viewPoint)
-    , m_StartPoint(viewPoint.Project_())
-    , m_EndPoint(viewPoint.Project_())
+    , m_StartPoint(*this)
+    , m_EndPoint(*this)
 { 
 }
 
@@ -65,4 +65,12 @@ void Line::Write(_xml_writer& writer, const std::string& folder, const char* tag
 BCFViewPoint& Line::GetViewPoint() 
 { 
     return m_viewPoint; 
+}
+
+/// <summary>
+/// 
+/// </summary>
+Topic* Line::Topic_()
+{
+    return m_viewPoint.Topic_();
 }

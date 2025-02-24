@@ -23,7 +23,7 @@ extern "C" {
     /// <summary>
     /// 
     /// </summary>
-    RDFBCF_EXPORT bool bcfProjectIsDirty(BCFProject* project);
+    RDFBCF_EXPORT bool bcfProjectIsModified(BCFProject* project);
 
     /// <summary>
     ///

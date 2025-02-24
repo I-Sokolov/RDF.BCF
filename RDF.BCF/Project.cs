@@ -5,7 +5,7 @@
         /// <summary>
         /// Was the project modified since read, write or create
         /// </summary>
-        public bool IsDirty { get { return Interop.ProjectIsDirty(m_handle); } }
+        public bool IsModified { get { return Interop.ProjectIsModified(m_handle); } }
 
         /// <summary>
         /// Creates new empty BCF data.

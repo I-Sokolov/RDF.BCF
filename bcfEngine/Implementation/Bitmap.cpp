@@ -11,9 +11,9 @@
 Bitmap::Bitmap(ViewPoint& viewPoint, ListOfBCFObjects* parentList) 
     : BCFObject(viewPoint.Project_(), parentList)
     , m_viewPoint(viewPoint)
-    , m_Location(viewPoint.Project_())
-    , m_Normal(viewPoint.Project_())
-    , m_Up(viewPoint.Project_())
+    , m_Location(*this)
+    , m_Normal(*this)
+    , m_Up(*this)
 {
 }
 
@@ -138,4 +138,12 @@ void Bitmap::AfterRead(const std::string&)
 BCFViewPoint& Bitmap::GetViewPoint()
 {
     return m_viewPoint; 
+}
+
+/// <summary>
+/// 
+/// </summary>
+Topic* Bitmap::Topic_()
+{ 
+    return m_viewPoint.Topic_(); 
 }

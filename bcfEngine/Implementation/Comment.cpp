@@ -11,7 +11,7 @@ Comment::Comment(Topic& topic, ListOfBCFObjects* parentList, const char* guid)
     : BCFObject(topic.Project_(), parentList)
     , m_topic(topic)
     , m_Guid(topic.Project_(), guid)
-    , m_Viewpoint(topic, NULL)
+    , m_Viewpoint(*this, NULL)
     , m_readFromFile(false)
 {
 }
@@ -137,10 +137,6 @@ bool Comment::SetViewPoint(BCFViewPoint* viewPoint)
         }
     }
 
-    if (!UpdateAuthor()) {
-        return false;
-    }
-
     return m_Viewpoint.SetGuid(guid);
 }
 
@@ -149,19 +145,15 @@ bool Comment::SetViewPoint(BCFViewPoint* viewPoint)
 /// </summary>
 bool Comment::SetText(const char* val)
 {
-    if (!UpdateAuthor()) {
-        return false;
-    }
-
     return SetPropertyString(val, m_Comment);
 }
 
 /// <summary>
 /// 
 /// </summary>
-bool Comment::UpdateAuthor()
+bool Comment::SetEditorAndDate()
 {
-    return __super::UpdateAuthor(m_readFromFile ? m_ModifiedAuthor : m_Author, m_readFromFile ? m_ModifiedDate : m_Date);
+    return __super::SetEditorAndDate(m_readFromFile ? m_ModifiedAuthor : m_Author, m_readFromFile ? m_ModifiedDate : m_Date);
 }
 
 /// <summary>

@@ -32,9 +32,10 @@ public:
     virtual BCFColoring* GetColoring() override;
     virtual bool Remove() override { return RemoveImpl(); }
 
-private:
-    Topic& GetTopic();
+    virtual Topic* Topic_() override;
+    virtual Comment* Comment_() override { return NULL; }
 
+private:
     bool ValidateIfcGuid();
 
 private:

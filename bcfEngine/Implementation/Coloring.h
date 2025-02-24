@@ -12,7 +12,6 @@ public:
     void Read(_xml::_element& elem, const std::string& folder);
     void Write(_xml_writer& writer, const std::string& folder, const char* tag);
     bool Validate(bool fix);
-    Topic& GetTopic();
 
 public:
     //BCFColoring
@@ -24,6 +23,9 @@ public:
 
     virtual BCFViewPoint& GetViewPoint() override;
     virtual bool Remove() override { return RemoveImpl(); }
+
+    virtual Topic* Topic_() override;
+    virtual Comment* Comment_() override { return NULL; }
 
 private:
     bool IsColorValid(const char* str, const char* propName);

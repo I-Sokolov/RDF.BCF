@@ -27,13 +27,22 @@ BCFObject* ListOfBCFObjects::GetAt(uint16_t ind)
 /// <summary>
 /// 
 /// </summary>
-void ListOfBCFObjects::Add(BCFObject* item)
+Project& ListOfBCFObjects::Project_()
+{ 
+    return m_container.Project_(); 
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool ListOfBCFObjects::Add(BCFObject* item)
 {
     assert(item);
     if (item) {
         m_items.push_back(item);
-        MARK_DIRTY;
+        return m_container.MarkModified();
     }
+    return true;
 }
 
 /// <summary>
@@ -44,10 +53,9 @@ bool ListOfBCFObjects::Remove(BCFObject* item)
     auto it = Find(item);
 
     if (it != m_items.end()) {
-        MARK_DIRTY;
         m_removed.push_back(*it);
         m_items.erase(it);
-        return true;
+        return m_container.MarkModified();
     }
     else {
         return false;
@@ -75,7 +83,7 @@ ListOfBCFObjects::Iterator ListOfBCFObjects::Find(BCFObject* item)
             return it;
         }
     }
-    m_project.Log_().add(Log::Level::error, "Item not found in the list");
+    Project_().Log_().add(Log::Level::error, "Item not found in the list");
     return m_items.end();
 }
 
@@ -84,14 +92,14 @@ ListOfBCFObjects::Iterator ListOfBCFObjects::Find(BCFObject* item)
 /// </summary>
 void ListOfBCFObjects::LogDuplicatedGuid(const char* guid)
 {
-    m_project.Log_().add(Log::Level::error, "Duplicated GUID");
+    Project_().Log_().add(Log::Level::error, "Duplicated GUID");
 }
 
 /// <summary>
 /// 
 /// </summary>
 SetOfXMLText::SetOfXMLText(Topic& topic) 
-    : ListOf<XMLText>(topic.Project_()) 
+    : ListOf<XMLText>(topic) 
     , m_topic(topic)
 {
 }
@@ -122,15 +130,16 @@ Component* ListOfComponents::Add(ViewPoint& viewPoint, const char* ifcGuid, cons
 /// <summary>
 /// 
 /// </summary>
-void SetOfXMLText::Add(const char* val)
+bool SetOfXMLText::Add(const char* val)
 {
     if (val && *val) {
         if (!Find(val)) {
             auto txt = new XMLText(m_topic, this);
             txt->string().assign(val);
-            __super::Add(txt);
+            return __super::Add(txt);
         }
     }
+    return false;
 }
 
 /// <summary>

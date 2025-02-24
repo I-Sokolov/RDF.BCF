@@ -18,14 +18,16 @@ BCFProject* BCFProject::Create(const char* projectId)
 /// 
 /// </summary>
 Project::Project(const char* projectId)
-    : m_version(*this)
+    : BCFObject(*this, NULL)
+    , m_version(*this)
     , m_projectInfo(*this, projectId)
     , m_extensions (*this)
     , m_documents(*this)
     , m_autoExtentSchema(true)
     , m_validateIfcGuids(false)
     , m_topics(*this)
-    , m_isDirty(false)
+    , m_isModified(false)
+    , m_isReading(false)
 {
     gProjectCounter++;
 }
@@ -84,6 +86,8 @@ bool Project::CleanWorkingFolders(bool keepLast)
 /// </summary>
 bool Project::ReadFile(const char* bcfFilePath, bool autofix)
 {
+    m_isReading = true;
+
     std::string bcfFolder;
     bool ok = FileSystem::CreateTempDir(bcfFolder, m_log);
 
@@ -105,7 +109,8 @@ bool Project::ReadFile(const char* bcfFilePath, bool autofix)
         Validate(true);
     }
 
-    m_isDirty = false;
+    m_isReading = false;
+    m_isModified = false;
     return ok;
 }
 
@@ -153,10 +158,10 @@ bool Project::WriteFile(const char* bcfFilePath, BCFVersion version)
         }
     }
 
-    //on successfull write we can free old working folders
     if (ok) {
-        ok = CleanWorkingFolders(true);
-        m_isDirty = false;
+        m_isModified = false;
+
+        ok = CleanWorkingFolders(true);//on successfull write we can free old working folders
     }
 
     return ok;

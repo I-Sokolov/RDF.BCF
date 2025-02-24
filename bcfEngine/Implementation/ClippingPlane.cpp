@@ -11,8 +11,8 @@
 ClippingPlane::ClippingPlane(ViewPoint& viewPoint, ListOfBCFObjects* parentList)
     : BCFObject(viewPoint.Project_(), parentList)
     , m_viewPoint(viewPoint)
-    , m_Location(viewPoint.Project_())
-    , m_Direction(viewPoint.Project_())
+    , m_Location(*this)
+    , m_Direction(*this)
 {
 }
 
@@ -65,4 +65,12 @@ void ClippingPlane::Write(_xml_writer& writer, const std::string& folder, const 
 BCFViewPoint& ClippingPlane::GetViewPoint() 
 { 
     return m_viewPoint; 
+}
+
+/// <summary>
+/// 
+/// </summary>
+Topic* ClippingPlane::Topic_()
+{
+    return m_viewPoint.Topic_();
 }

@@ -14,12 +14,12 @@ class ListOfBCFObjects
 {
 public:
     bool Remove(BCFObject* item);
-    void Add(BCFObject* item);
+    bool Add(BCFObject* item);
 
-    Project& Project_() { return m_project; }
+    Project& Project_();
 
 protected:
-    ListOfBCFObjects(Project& project) : m_project(project) {}
+    ListOfBCFObjects(BCFObject& container) : m_container(container) {}
     ~ListOfBCFObjects();
 
     BCFObject* GetAt(uint16_t ind);
@@ -35,7 +35,7 @@ private:
     Iterator Find(BCFObject* item);
 
 protected:
-    Project& m_project;
+    BCFObject&  m_container;
 
     Items       m_items;
     Items       m_removed;
@@ -50,7 +50,7 @@ template <class Item>
 class ListOf : public ListOfBCFObjects
 {
 public:
-    ListOf (Project& project) : ListOfBCFObjects(project) {}
+    ListOf (BCFObject& container) : ListOfBCFObjects(container) {}
 
 public:
     Item* GetAt(uint16_t ind)
@@ -90,10 +90,10 @@ template <class Item>
 class SetByGuid : public ListOf<Item>
 {
 public:
-    SetByGuid(Project& project) : ListOf<Item>(project) {}
+    SetByGuid(BCFObject& container) : ListOf<Item>(container) {}
 
 public:
-    void Add(Item* item)
+    bool Add(Item* item)
     {
         if (item && *item->GetGuid()) {
 
@@ -102,10 +102,11 @@ public:
                 found->Remove();
             }
 
-            __super::Add(item);
+            return __super::Add(item);
         }
         else {
             assert(false);
+            return false;
         }
     }
 
@@ -128,7 +129,7 @@ public:
 class ListOfComponents : public ListOf<Component>
 {
 public:
-    ListOfComponents(Project& project) : ListOf<Component>(project) {}
+    ListOfComponents(BCFObject& container) : ListOf<Component>(container) {}
 
     Component* Add(ViewPoint& viewPoint, const char* ifcGuid, const char* authoringToolId, const char* originatingSystem);
 };
@@ -142,7 +143,7 @@ class SetOfXMLText : public ListOf<XMLText>
 public:
     SetOfXMLText(Topic& topic);
 
-    void Add(const char* val);
+    bool Add(const char* val);
     XMLText* Find(const char* val);
     const char* GetAt(uint16_t ind);
     bool Remove(const char* val);

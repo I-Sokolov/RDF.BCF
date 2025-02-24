@@ -6,12 +6,10 @@
 struct XMLPoint : public BCFObject
 {
 public:
-    XMLPoint(Project& project);
+    XMLPoint(BCFObject& owner);
 
     void Read(_xml::_element& elem, const std::string& folder);
     void Write(_xml_writer& writer, const std::string& folder, const char* tag);
-
-    Project& GetProject() { return m_project; }
 
     bool IsSet() { return !m_X.empty() && !m_Y.empty() && !m_Z.empty(); }
 
@@ -19,8 +17,12 @@ public:
     bool SetPoint(const BCFPoint* bcfpt);
     void SetPoint(double x, double y, double z);
 
+    virtual Topic* Topic_() override { return m_owner.Topic_(); }
+    virtual Comment* Comment_() override { return m_owner.Comment_(); }
+
 private:
-    std::string XYZ[3];
+    BCFObject&  m_owner;
+    std::string m_XYZ[3];
 
     std::string& m_X;
     std::string& m_Y;

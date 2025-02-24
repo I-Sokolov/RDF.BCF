@@ -15,15 +15,15 @@
 Topic::Topic(Project& project, ListOfBCFObjects* parentList, const char* guid)
     : XMLFile(project, parentList)
     , m_Guid(project, guid)
-    , m_BimSnippets(project)
+    , m_BimSnippets(*this)
     , m_bReadFromFile (false)
-    , m_Files(project)
+    , m_Files(*this)
     , m_ReferenceLinks(*this)
     , m_Labels(*this)
-    , m_DocumentReferences(project)
-    , m_RelatedTopics(project)
-    , m_Comments(project)
-    , m_Viewpoints(project)
+    , m_DocumentReferences(*this)
+    , m_RelatedTopics(*this)
+    , m_Comments(*this)
+    , m_Viewpoints(*this)
 {
 }
 
@@ -211,12 +211,9 @@ void Topic::Write_Topic(_xml_writer& writer, const std::string& folder)
 /// <summary>
 /// 
 /// </summary>
-bool Topic::SetServerAssignedId(const char* val) 
+bool Topic::SetServerAssignedId(const char* val)
 {
-    if (UpdateAuthor()) {
-        return SetPropertyString (val, m_ServerAssignedId);
-    }
-    return false;
+    return SetPropertyString(val, m_ServerAssignedId);
 }
 
 /// <summary>
@@ -225,9 +222,7 @@ bool Topic::SetServerAssignedId(const char* val)
 bool Topic::SetTopicStatus(const char* val)
 {
     if (Project_().GetExtensions_().CheckElement(BCFTopicStatuses, val)) {
-        if (UpdateAuthor()) {
-            return SetPropertyString(val, m_TopicStatus);
-        }
+        return SetPropertyString(val, m_TopicStatus);
     }
     return false;
 }
@@ -238,9 +233,7 @@ bool Topic::SetTopicStatus(const char* val)
 bool Topic::SetTopicType(const char* val)
 {
     if (Project_().GetExtensions_().CheckElement(BCFTopicTypes, val)) {
-        if (UpdateAuthor()) {
-            return SetPropertyString(val, m_TopicType);
-        }
+        return SetPropertyString(val, m_TopicType);
     }
     return false;
 }
@@ -250,10 +243,7 @@ bool Topic::SetTopicType(const char* val)
 /// </summary>
 bool Topic::SetTitle(const char* val)
 {
-    if (UpdateAuthor()) {
-        return SetPropertyString(val, m_Title);
-    }
-    return false;
+    return SetPropertyString(val, m_Title);
 }
 
 /// <summary>
@@ -262,9 +252,7 @@ bool Topic::SetTitle(const char* val)
 bool Topic::SetPriority(const char* val)
 {
     if (Project_().GetExtensions_().CheckElement(BCFPriorities, val)) {
-        if (UpdateAuthor()) {
-            return SetPropertyString(val, m_Priority);
-        }
+        return SetPropertyString(val, m_Priority);
     }
     return false;
 }
@@ -274,10 +262,7 @@ bool Topic::SetPriority(const char* val)
 /// </summary>
 bool Topic::SetIndex(int val)
 {
-    if (UpdateAuthor()) {
-        return SetPropertyInt(val, m_Index);
-    }
-    return false;
+    return SetPropertyInt(val, m_Index);
 }
 
 /// <summary>
@@ -287,10 +272,7 @@ bool Topic::SetDueDate(const char* val)
 {
     VALIDATE(DueDate, DateTime);
 
-    if (UpdateAuthor()) {
-        return SetPropertyString(val, m_DueDate);
-    }
-    return false;
+    return SetPropertyString(val, m_DueDate);
 }
 
 /// <summary>
@@ -299,9 +281,7 @@ bool Topic::SetDueDate(const char* val)
 bool Topic::SetAssignedTo(const char* val)
 {
     if (Project_().GetExtensions_().CheckElement(BCFUsers, val)) {
-        if (UpdateAuthor()) {
-            return SetPropertyString(val, m_AssignedTo);
-        }
+        return SetPropertyString(val, m_AssignedTo);
     }
     return false;
 }
@@ -311,10 +291,7 @@ bool Topic::SetAssignedTo(const char* val)
 /// </summary>
 bool Topic::SetDescription(const char* val)
 {
-    if (UpdateAuthor()) {
-        return SetPropertyString(val, m_Description);
-    }
-    return false;
+    return SetPropertyString(val, m_Description);
 }
 
 /// <summary>
@@ -323,9 +300,7 @@ bool Topic::SetDescription(const char* val)
 bool Topic::SetStage(const char* val)
 {
     if (Project_().GetExtensions_().CheckElement(BCFStages, val)) {
-        if (UpdateAuthor()) {
-            return SetPropertyString(val, m_Stage);
-        }
+        return SetPropertyString(val, m_Stage);
     }
     return false;
 }
@@ -333,9 +308,9 @@ bool Topic::SetStage(const char* val)
 /// <summary>
 /// 
 /// </summary>
-bool Topic::UpdateAuthor()
+bool Topic::SetEditorAndDate()
 {
-    return __super::UpdateAuthor(m_bReadFromFile ? m_ModifiedAuthor : m_CreationAuthor, m_bReadFromFile ? m_ModifiedDate : m_CreationDate);
+    return __super::SetEditorAndDate(m_bReadFromFile ? m_ModifiedAuthor : m_CreationAuthor, m_bReadFromFile ? m_ModifiedDate : m_CreationDate);
 }
 
 /// <summary>
@@ -343,14 +318,13 @@ bool Topic::UpdateAuthor()
 /// </summary>
 BCFViewPoint* Topic::AddViewPoint(const char* guid)
 {
-    if (UpdateAuthor()) {
-        auto viewPoint = new ViewPoint(*this, &m_Viewpoints, guid ? guid : "");
+    auto viewPoint = new ViewPoint(*this, &m_Viewpoints, guid ? guid : "");
 
-        if (viewPoint) {
-            m_Viewpoints.Add(viewPoint);
-            return viewPoint;
-        }
+    if (viewPoint) {
+        m_Viewpoints.Add(viewPoint);
+        return viewPoint;
     }
+
     return NULL;
 }
 
@@ -375,7 +349,6 @@ BCFBimFile* Topic::AddBimFile(const char* filePath, bool isExternal)
     if (file && filePath && *filePath) {
         ok = ok && file->SetIsExternal(isExternal);
         ok = ok && file->SetReference(filePath);
-        ok = ok && UpdateAuthor();
     }
 
     if (!ok) {
@@ -415,14 +388,13 @@ ViewPoint* Topic::ViewPointByGuid(const char* guid)
 /// </summary>
 BCFComment* Topic::AddComment(const char* guid)
 {
-    if (UpdateAuthor()) {
-        auto comment = new Comment(*this, &m_Comments, guid ? guid : "");//"" forces generate guid
+    auto comment = new Comment(*this, &m_Comments, guid ? guid : "");//"" forces generate guid
 
-        if (comment) {
-            m_Comments.Add(comment);
-            return comment;
-        }
+    if (comment) {
+        m_Comments.Add(comment);
+        return comment;
     }
+
     return NULL;
 }
 
@@ -442,7 +414,6 @@ BCFDocumentReference* Topic::AddDocumentReference(const char* path, bool isExter
     auto ref = new DocumentReference(*this, &m_DocumentReferences, guid ? guid : "");
 
     bool ok = ref->SetFilePath(path, isExternal);
-    ok = ok && UpdateAuthor();
 
     if (!ok){
         delete ref;
@@ -473,10 +444,8 @@ BCFDocumentReference* Topic::GetDocumentReference(uint16_t ind)
 BCFBimSnippet* Topic::GetBimSnippet(bool forceCreate)
 {
     if (forceCreate && m_BimSnippets.Items().empty()) {
-        if (UpdateAuthor()) {
-            auto snippet = new BimSnippet(*this, &m_BimSnippets);
-            m_BimSnippets.Add(snippet);
-        }
+        auto snippet = new BimSnippet(*this, &m_BimSnippets);
+        m_BimSnippets.Add(snippet);
     }
 
     if (m_BimSnippets.Items().empty()) {
@@ -493,10 +462,7 @@ BCFBimSnippet* Topic::GetBimSnippet(bool forceCreate)
 bool Topic::AddReferenceLink(const char* val)
 {
     if (val && *val) {
-        if (UpdateAuthor()) {
-            m_ReferenceLinks.Add(val);
-            return true;
-        }
+        return m_ReferenceLinks.Add(val);
     }
     return false;
 }
@@ -514,10 +480,7 @@ const char* Topic::GetReferenceLink(uint16_t ind)
 /// </summary>
 bool Topic::RemoveReferenceLink(const char* val)
 {
-    if (UpdateAuthor()) {
-        return m_ReferenceLinks.Remove(val);
-    }
-    return false;
+    return m_ReferenceLinks.Remove(val);
 }
 
 /// <summary>
@@ -527,14 +490,10 @@ bool Topic::AddLabel(const char* val)
 {
     if (val && *val) {
         if (Project_().GetExtensions_().CheckElement(BCFTopicLabels, val)) {
-            if (UpdateAuthor()) {
-                m_Labels.Add(val);
-                return true;
-            }
+            return m_Labels.Add(val);
         }
     }
     return false;
-
 }
 
 /// <summary>
@@ -550,10 +509,7 @@ const char* Topic::GetLabel(uint16_t ind)
 /// </summary>
 bool Topic::RemoveLabel(const char* val)
 {
-    if (UpdateAuthor()) {
-        return m_Labels.Remove(val);
-    }
-    return false;
+    return m_Labels.Remove(val);
 }
 
 /// <summary>
@@ -565,15 +521,13 @@ bool Topic::AddRelatedTopic(BCFTopic* topic)
         auto guid = topic->GetGuid();
         if (guid) {
             if (!m_RelatedTopics.FindByGuid(guid)) {
-                if (UpdateAuthor()) {
-                    auto ref = new GuidReference(*this, &m_RelatedTopics);
-                    ref->SetGuid(guid);
-                    m_RelatedTopics.Add(ref);
-                    return true;
-                }
+                auto ref = new GuidReference(*this, &m_RelatedTopics);
+                ref->SetGuid(guid);
+                return m_RelatedTopics.Add(ref);
             }
         }
     }
+
     return false;
 }
 
@@ -596,14 +550,12 @@ BCFTopic* Topic::GetRelatedTopic(uint16_t ind)
 bool Topic::RemoveRelatedTopic(BCFTopic* topic)
 {
     if (topic) {
-        if (UpdateAuthor()) {
-            auto guid = topic->GetGuid();
-            auto ref = m_RelatedTopics.FindByGuid(guid);
-            if (ref) {
-                return ref->Remove();
-            }
-            return true;
+        auto guid = topic->GetGuid();
+        auto ref = m_RelatedTopics.FindByGuid(guid);
+        if (ref) {
+            return ref->Remove();
         }
+        return true;
     }
     return false;
 }

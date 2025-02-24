@@ -74,10 +74,13 @@ public:
 
     virtual BCFProject& GetProject() override;
 
+    virtual Topic* Topic_() override { return this; }
+    virtual Comment* Comment_() override { return NULL; }
+
 public:
     ViewPoint* ViewPointByGuid(const char* guid);
 
-    bool UpdateAuthor();
+    bool SetEditorAndDate();
 
     bool Validate(bool fix);
 

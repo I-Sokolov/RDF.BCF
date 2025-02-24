@@ -111,11 +111,11 @@ RDFBCF_EXPORT bool bcfProjectDelete(BCFProject* project)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT bool bcfProjectIsDirty(BCFProject* project)
+RDFBCF_EXPORT bool bcfProjectIsModified(BCFProject* project)
 {
     if (project) {
         TYPE_CHECK(project, Project, false);
-        return project->IsDirty();
+        return project->IsModified();
     }
     return false;
 }

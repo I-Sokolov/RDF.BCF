@@ -2,6 +2,8 @@
 
 class  Log;
 struct Project;
+struct Topic;
+struct Comment;
 struct XMLPoint;
 struct BCFPoint;
 class  ListOfBCFObjects;
@@ -20,7 +22,12 @@ public:
    
 public:
     Project& Project_() { return m_project; }
+    virtual Topic* Topic_() = NULL;
+    virtual Comment* Comment_() = NULL;
+    
     Log& Log_();
+
+    bool MarkModified();
 
 protected:
     bool SetPropertyString(const char* val, std::string& prop);
@@ -35,7 +42,7 @@ protected:
     std::string AbsolutePath(const std::string& relativePath, const std::string& folder);
     std::string CopyToRelative(const std::string& absolutePath, const std::string& folder, const char* relativePath);
 
-    bool UpdateAuthor(std::string& author, std::string& date);
+    bool SetEditorAndDate(std::string& author, std::string& date);
 
     static std::string TimeToStr(time_t tm);
 
@@ -58,4 +65,3 @@ protected:
 };
 
 #define VALIDATE(Prop,Predicate)    {if (val && *val && !Is##Predicate##Valid(val, #Prop)) return false;}
-#define MARK_DIRTY                  Project_().MarkDirty()

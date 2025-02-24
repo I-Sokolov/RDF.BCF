@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "GuidReference.h"
 #include "Topic.h"
+#include "Comment.h"
 #include "Project.h"
 #include "XMLFile.h"
 
@@ -9,9 +10,20 @@
 /// </summary>
 GuidReference::GuidReference(Topic& topic, ListOfBCFObjects* parentList) 
     : BCFObject(topic.Project_(), parentList)
+    , m_topic(topic)
+    , m_comment(NULL)
 {
 }
 
+/// <summary>
+/// 
+/// </summary>
+GuidReference::GuidReference(Comment& comment, ListOfBCFObjects* parentList)
+    : BCFObject(comment.Project_(), parentList)
+    , m_topic(comment.TopicR())
+    , m_comment(&comment)
+{
+}
 
 /// <summary>
 /// 

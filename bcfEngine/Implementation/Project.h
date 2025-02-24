@@ -1,6 +1,7 @@
 #pragma once
 
 #include "bcfAPI.h"
+#include "BCFObject.h"
 #include "Log.h"
 #include "Version.h"
 #include "ProjectInfo.h"
@@ -9,7 +10,7 @@
 
 struct Topic;
 
-struct Project : public BCFProject
+struct Project : public BCFObject, public BCFProject
 {
 public:
     static long gProjectCounter;
@@ -32,7 +33,7 @@ public:
     virtual BCFTopic* GetTopic(uint16_t ind) override;
     virtual BCFExtensions& GetExtensions() override { return GetExtensions_(); }
     virtual const char* GetErrors(bool cleanLog) override { return Log_().get(cleanLog); }
-    virtual bool IsDirty() override { return m_isDirty; }
+    virtual bool IsModified() override { return m_isModified; }
 
 public:
     const char* GetAuthor() { return m_author.c_str(); }
@@ -48,10 +49,14 @@ public:
 
     Topic* TopicByGuid(const char* guid);
 
-    void MarkDirty() { m_isDirty = true; }
+    void SetModified() { m_isModified = true; }
 
 public: //internal
     Log& Log_() { return m_log; }
+    bool IsReading() { return m_isReading; }
+
+    virtual Topic* Topic_() override { return NULL; }
+    virtual Comment* Comment_() override { return NULL; }
 
 private:
     bool Validate(bool fix);
@@ -62,7 +67,8 @@ private:
 private:
     Log         m_log;
     StringList  m_workingFolders;
-    bool        m_isDirty;
+    bool        m_isModified;
+    bool        m_isReading;
 
     Version     m_version;
     ProjectInfo m_projectInfo;

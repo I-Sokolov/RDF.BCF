@@ -6,6 +6,7 @@
 #include "Topic.h"
 #include "DocumentReference.h"
 
+
 /// <summary>
 /// 
 /// </summary>
@@ -14,6 +15,7 @@ Documents::Documents(Project& project)
     , m_Documents(project)
 {
 }
+
 
 /// <summary>
 /// 

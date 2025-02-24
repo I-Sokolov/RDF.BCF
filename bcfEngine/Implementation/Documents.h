@@ -21,6 +21,9 @@ private:
     virtual void AfterRead(const std::string& folder) override;
     virtual void WriteRootContent(_xml_writer& writer, const std::string& folder) override;
 
+    virtual Topic* Topic_() override { return NULL; }
+    virtual Comment* Comment_() override { return NULL; }
+
     void MarkUsedDocuments();
 
 private:
@@ -37,6 +40,9 @@ private:
         bool Validate(bool fix);
 
         bool Remove() { return RemoveImpl(); }
+
+        virtual Topic* Topic_() override { return NULL; }
+        virtual Comment* Comment_() override { return NULL; }
 
     public:
         bool used;

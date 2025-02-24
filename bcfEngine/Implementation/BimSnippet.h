@@ -23,8 +23,10 @@ public:
     virtual bool SetReferenceSchema(const char* val) override;
 
     virtual BCFTopic& GetTopic() override;
-
     virtual bool Remove() override { return RemoveImpl(); }
+
+    virtual Topic* Topic_() override { return &m_topic; }
+    virtual Comment* Comment_() override { return NULL; }
 
 public:
     void Read(_xml::_element& elem, const std::string& folder);

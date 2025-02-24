@@ -15,6 +15,9 @@ public:
     virtual bool RemoveElement(BCFEnumeration enumeration, const char* element) override;
     virtual BCFProject& GetProject() override;
 
+    virtual Topic* Topic_() override { return NULL; }
+    virtual Comment* Comment_() override { return NULL; }
+
 public:
     bool CheckElement(BCFEnumeration enumeration, const char* element);
     void ReadExtensionSchema(_xml::_element& elem, const std::string& folder); //v2.1

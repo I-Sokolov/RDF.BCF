@@ -27,7 +27,7 @@ bool Extensions::AddElement(BCFEnumeration enumeration, const char* element)
     }
 
     list->insert(element);
-    MARK_DIRTY;
+    Project_().SetModified();
 
     return true;
 }
@@ -64,7 +64,7 @@ bool Extensions::RemoveElement(BCFEnumeration enumeration, const char* element)
     }
 
     list->erase(element);
-    MARK_DIRTY;
+    Project_().SetModified();
 
     return true;
 }

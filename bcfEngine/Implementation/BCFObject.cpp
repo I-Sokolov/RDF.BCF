@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "BCFObject.h"
 #include "Project.h"
+#include "Topic.h"
+#include "Comment.h"
 #include "XMLPoint.h"
 #include "FileSystem.h"
 
@@ -63,7 +65,7 @@ bool BCFObject::SetPropertyString(const char* val, std::string& prop)
 
     if (0!=strcmp(val, prop.c_str())) {
         prop.assign(val);
-        MARK_DIRTY;
+        return MarkModified();
     }
     return true;
 }
@@ -100,7 +102,7 @@ bool BCFObject::SetPropertyBool(bool val, std::string& prop)
 /// <summary>
 /// 
 /// </summary>
-bool BCFObject::UpdateAuthor(std::string& author, std::string& date)
+bool BCFObject::SetEditorAndDate(std::string& author, std::string& date)
 {
     const char* user = Project_().GetAuthor();
     if (!*user) {
@@ -112,8 +114,8 @@ bool BCFObject::UpdateAuthor(std::string& author, std::string& date)
         return false;
     }
 
-    SetPropertyString(user, author);
-    SetPropertyString(GetCurrentDate().c_str(), date);
+    author.assign(user);
+    date.assign(GetCurrentDate());
 
     return true;
 }
@@ -255,4 +257,23 @@ bool BCFObject::RemoveImpl()
         assert(false);
         return true;
     }
+}
+
+bool BCFObject::MarkModified()
+{
+    bool ok = true;
+
+    if (!Project_().IsReading()) {
+
+        Project_().SetModified();
+
+        if (auto topic = Topic_()) {
+            ok = topic->SetEditorAndDate() && ok;
+        }
+
+        if (auto comment = Comment_()) {
+            ok = comment->SetEditorAndDate() && ok;
+        }
+    }
+    return ok;
 }

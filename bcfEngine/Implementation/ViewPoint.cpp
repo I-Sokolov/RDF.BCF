@@ -18,15 +18,15 @@ ViewPoint::ViewPoint(Topic& topic, ListOfBCFObjects* parentList, const char* gui
     , m_topic(topic)
     , m_Guid(topic.Project_(), guid)
     , m_cameraType(BCFCameraPerspective)
-    , m_CameraViewPoint(topic.Project_())
-    , m_CameraDirection(topic.Project_())
-    , m_CameraUpVector(topic.Project_())
-    , m_Selection(topic.Project_())
-    , m_Exceptions(topic.Project_())
-    , m_Coloring(topic.Project_())
-    , m_Lines(topic.Project_())
-    , m_ClippingPlanes(topic.Project_())
-    , m_Bitmaps(topic.Project_())
+    , m_CameraViewPoint(*this)
+    , m_CameraDirection(*this)
+    , m_CameraUpVector(*this)
+    , m_Selection(*this)
+    , m_Exceptions(*this)
+    , m_Coloring(*this)
+    , m_Lines(*this)
+    , m_ClippingPlanes(*this)
+    , m_Bitmaps(*this)
 {
 }
 
@@ -366,7 +366,6 @@ BCFBitmap* ViewPoint::AddBitmap(const char* filePath, BCFBitmapFormat format, BC
         ok = ok && bitmap->SetNormal(normal);
         ok = ok && bitmap->SetUp(up);
         ok = ok && bitmap->SetHeight(height);
-        ok = ok && m_topic.UpdateAuthor();
 
     if (!ok) {
         delete bitmap;
@@ -522,7 +521,7 @@ bool ViewPoint::SetCameraType(BCFCamera val)
 { 
     if (m_cameraType != val){ 
         m_cameraType = val; 
-        MARK_DIRTY; 
+        return MarkModified(); 
     } 
     return true; 
 }
