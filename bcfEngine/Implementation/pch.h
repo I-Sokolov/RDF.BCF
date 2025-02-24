@@ -7,7 +7,7 @@
 #ifndef PCH_H
 #define PCH_H
 
-#ifdef _WINDOWS
+#ifdef _USRDLL
 #define RDFBCF_EXPORT __declspec(dllexport)
 #else
 #define RDFBCF_EXPORT 

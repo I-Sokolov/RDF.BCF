@@ -4,7 +4,7 @@
 
 
 #ifndef RDFBCF_EXPORT
-    #ifdef _WINDOWS
+    #if defined(_WINDOWS) && !defined(RDFBCF_STATIC)
         #define RDFBCF_EXPORT __declspec(dllimport) 
     #else
         #define RDFBCF_EXPORT  

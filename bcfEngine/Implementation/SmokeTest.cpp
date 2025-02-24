@@ -29,13 +29,13 @@ extern void SmokeTest_ValidateXSD(const char* xsdName, const char* xmlFilePath)
     char cmdLine[1024];
     sprintf_s(cmdLine, "%s val -e -s %s %s", exeFilePath.c_str(), xsdFilePath.c_str(), xmlFilePath);
 
-    STARTUPINFO si;
+    STARTUPINFOA si;
     PROCESS_INFORMATION pi;
     ZeroMemory(&si, sizeof(si));
     ZeroMemory(&pi, sizeof(pi));
     si.cb = sizeof(si);
 
-    if (!CreateProcess(NULL, cmdLine, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
+    if (!CreateProcessA(NULL, cmdLine, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
         std::cerr << "Failed to create process. Error code: " << GetLastError() << std::endl;
         exit(13);
     }
