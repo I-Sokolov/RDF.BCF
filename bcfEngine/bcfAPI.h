@@ -86,6 +86,7 @@ struct BCFTopic
     BCF_PROPERTY_RW(const char*, Description);
     BCF_PROPERTY_RW(const char*, Stage);
     BCF_PROPERTY_RW(int,         Index);
+    BCF_PROPERTY_RW(const char*, IndexStr);
 
     virtual BCFBimFile* GetBimFile(uint16_t ind) = NULL;
     virtual BCFBimFile* AddBimFile(const char* filePath, bool isExternal) = NULL;

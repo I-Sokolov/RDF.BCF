@@ -265,6 +265,11 @@ bool Topic::SetIndex(int val)
     return SetPropertyInt(val, m_Index);
 }
 
+bool Topic::SetIndexStr(const char* val)
+{
+    return SetPropertyString(val, m_Index);
+}
+
 /// <summary>
 /// 
 /// </summary>

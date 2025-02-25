@@ -25,7 +25,8 @@ public:
     virtual const char* GetTopicType() override { return m_TopicType.c_str(); }
     virtual const char* GetTitle() override { return m_Title.c_str(); }
     virtual const char* GetPriority() override { return m_Priority.c_str(); }
-    virtual int GetIndex() override { return atoi(m_Index.c_str()); }
+    virtual int         GetIndex() override { return atoi(m_Index.c_str()); }
+    virtual const char* GetIndexStr() override { return m_Index.c_str(); }
     virtual const char* GetCreationDate() override { return m_CreationDate.c_str(); }
     virtual const char* GetCreationAuthor() override { return m_CreationAuthor.c_str(); }
     virtual const char* GetModifiedDate() override { return m_ModifiedDate.c_str(); }
@@ -41,6 +42,7 @@ public:
     virtual bool SetTitle(const char* val) override;
     virtual bool SetPriority(const char* val) override;
     virtual bool SetIndex(int val) override;
+    virtual bool SetIndexStr(const char* val) override;
     virtual bool SetDueDate(const char* val) override;
     virtual bool SetAssignedTo(const char* val) override;
     virtual bool SetDescription(const char* val) override;
