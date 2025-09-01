@@ -3,6 +3,8 @@
 #ifndef __RDF_LTF_BCF_ENGINE_H
 #define __RDF_LTF_BCF_ENGINE_H
 
+//This is C API. See bcfAPI.h for C++ API 
+
 
 #include "bcfTypes.h"
 

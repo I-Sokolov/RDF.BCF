@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "TSExample", "TSExample.njsproj", "{9183EA63-6A32-4BED-A8B7-602BABB329C3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "References", "References", "{3532FBB1-1AB9-412B-9220-BD39BDA16F0B}"
+	ProjectSection(SolutionItems) = preProject
+		RDF.BCF.js = RDF.BCF.js
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9183EA63-6A32-4BED-A8B7-602BABB329C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9183EA63-6A32-4BED-A8B7-602BABB329C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9183EA63-6A32-4BED-A8B7-602BABB329C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9183EA63-6A32-4BED-A8B7-602BABB329C3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

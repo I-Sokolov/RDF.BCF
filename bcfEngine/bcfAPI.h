@@ -1,5 +1,7 @@
 #pragma once
 
+//This is C++ API. Use bcfEngine.h for C API
+
 #include "bcfTypes.h"
 
 struct BCFExtensions;
