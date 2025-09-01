@@ -432,6 +432,8 @@
     <ClInclude Include="Implementation\Version.h" />
     <ClInclude Include="Implementation\XMLFile.h" />
     <ClInclude Include="Implementation\XMLPoint.h" />
+    <ClInclude Include="kubazip\miniz.h" />
+    <ClInclude Include="kubazip\zip.h" />
     <ClInclude Include="XMLparser\_errors.h" />
     <ClInclude Include="XMLparser\_io.h" />
     <ClInclude Include="XMLparser\_log.h" />
@@ -487,6 +489,16 @@
     <ClCompile Include="Implementation\Version.cpp" />
     <ClCompile Include="Implementation\XMLFile.cpp" />
     <ClCompile Include="Implementation\XMLPoint.cpp" />
+    <ClCompile Include="kubazip\zip.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Static_Rel|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Static_Dbg|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Static_Rel|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Static_Dbg|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="XMLparser\_net.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>

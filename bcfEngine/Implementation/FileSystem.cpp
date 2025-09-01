@@ -2,9 +2,14 @@
 #include "FileSystem.h"
 
 #include <filesystem>
+#include <sys/stat.h>
 #include "Log.h"
 
+#ifdef __EMSCRIPTEN__
+#define OS_PATH_SEP  '/'
+#else
 #define OS_PATH_SEP  '\\'
+#endif
 
 /// <summary>
 /// 

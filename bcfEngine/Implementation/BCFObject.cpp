@@ -142,7 +142,7 @@ std::string BCFObject::AbsolutePath(const std::string& relativePath, const std::
         }
 
         Log_().add(Log::Level::error, "File read", "File does not exist: %s", filePath.c_str());
-        throw std::exception("Failed to read viewpoint");
+        throw std::runtime_error("Failed to read viewpoint");
     }
     return "";
 }
@@ -179,7 +179,7 @@ std::string BCFObject::CopyToRelative(const std::string& absolutePath, const std
             return ret;
         }
     }
-    throw std::exception("Failed to copy internal file to BCF package");
+    throw std::runtime_error("Failed to copy internal file to BCF package");
 }
 
 /// <summary>

@@ -24,7 +24,11 @@ void Log::add(Level level, const char* code, const char* detailsFormat, ...)
         char details[1024];
         va_list args;
         va_start(args, detailsFormat);
+#ifdef _WINDOWS
         vsprintf_s(details, detailsFormat, args);
+#else
+        vsnprintf(details, sizeof(details), detailsFormat, args);
+#endif
         va_end(args);
         message.details.assign(details);
     }
@@ -32,6 +36,9 @@ void Log::add(Level level, const char* code, const char* detailsFormat, ...)
 #ifdef DEBUG
     printf("Add to log %s\n", message.ToString().c_str());
 #endif // DEBUG
+#ifdef __EMSCRIPTEN__
+    printf("[BCF Engine] %s\n", message.ToString().c_str());
+#endif
 }
 
 std::string Log::Message::ToString()

@@ -2,7 +2,7 @@
 #include "Archivator.h"
 
 #include <filesystem>
-#include <zip.h>
+#include "../kubazip/zip.h"
 #include "Log.h"
 #include "FileSystem.h"
 
@@ -12,7 +12,8 @@
 /// </summary>
 bool Archivator::Pack(const char* folder, const char* archivePath)
 {
-    zip_t* zip = zip_open(archivePath, ZIP_CREATE | ZIP_TRUNCATE, nullptr);
+    //#todo
+    /*zip_t* zip = zip_open(archivePath, ZIP_CREATE | ZIP_TRUNCATE, nullptr);
     if (!zip) {
         m_log.add(Log::Level::error, "Write file error", "Can not open to write archive %s", archivePath);
         return false;
@@ -22,7 +23,8 @@ bool Archivator::Pack(const char* folder, const char* archivePath)
     
     zip_close(zip);
     
-    return ok;
+    return ok;*/
+    return true;
 }
 
 
@@ -36,7 +38,8 @@ bool Archivator::AddFolder(const char* osPath, const char* zipPath, struct zip* 
         return false;
     }
 
-    for (auto& elem : elems) {
+    //#todo
+    /*for (auto& elem : elems) {
 
         std::string ospath(osPath);
         FileSystem::AddPath(ospath, elem.name.c_str());
@@ -60,7 +63,7 @@ bool Archivator::AddFolder(const char* osPath, const char* zipPath, struct zip* 
                 return false;
             }
         }
-    }
+    }*/
 
     return true;
 }
@@ -71,59 +74,42 @@ bool Archivator::AddFolder(const char* osPath, const char* zipPath, struct zip* 
 /// </summary>
 bool Archivator::Unpack(const char* archivePath, const char* folder)
 {
-    struct zip* archive = zip_open(archivePath, 0, NULL);
-    if (archive == NULL) {
-        m_log.add(Log::Level::error, "File read",  "Failed to open archive %s", archivePath);
+    struct zip_t* zip = zip_open(archivePath, 0, 'r');
+    if (zip == NULL) {
+        m_log.add(Log::Level::error, "File read", "Failed to open archive %s", archivePath);
         return false;
     }
 
     bool ok = true;
 
-    int numFiles = zip_get_num_files(archive);
+    size_t i, n = zip_entries_total(zip);
+    for (i = 0; i < n; ++i) {
+        zip_entry_openbyindex(zip, i);
+        {
+            const char* name = zip_entry_name(zip);
+            if (zip_entry_isdir(zip))
+                continue;
 
-    for (int i = 0; i < numFiles && ok; ++i) {
-        struct zip_file* file = zip_fopen_index(archive, i, 0);
-        if (!file)
-            continue;
+            StringList folderNames;
+            std::string fileName;
+            SplitZipPath(name, folderNames, fileName);
 
-        struct zip_stat fileStat;
-        zip_stat_init(&fileStat);
-        zip_stat_index(archive, i, 0, &fileStat);
-
-        StringList folderNames;
-        std::string fileName;
-        SplitZipPath(fileStat.name, folderNames, fileName);
-
-        std::string path(folder);
-        if (!CreateFolders(path, folderNames)) {
-            ok = false;
-            break;
-        }
-
-        if (!fileName.empty()) {
-            FileSystem::AddPath(path, fileName.c_str());
-
-            FILE* outFile = fopen(path.c_str(), "wb");
-            if (!outFile) {
-                m_log.add(Log::Level::error, "File write error", "Can not open to write archive %s", path.c_str());
+            std::string path(folder);
+            if (!CreateFolders(path, folderNames)) {
                 ok = false;
                 break;
             }
 
-            if (fileStat.size > 0) {
-                std::vector<char> buffer((int)fileStat.size);
-                zip_fread(file, &buffer[0], fileStat.size);
+            if (!fileName.empty()) {
+                FileSystem::AddPath(path, fileName.c_str());
 
-                fwrite(&buffer[0], 1, (int)fileStat.size, outFile);
+                zip_entry_fread(zip, path.c_str());
+                zip_entry_close(zip);
             }
-
-            fclose(outFile);
         }
-        
-        zip_fclose(file);
-    }
-
-    zip_close(archive);
+        zip_entry_close(zip);
+    } // for (i = ...
+    zip_close(zip);
 
     return ok;
 }

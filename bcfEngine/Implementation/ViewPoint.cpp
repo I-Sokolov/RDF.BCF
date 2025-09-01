@@ -46,7 +46,7 @@ void ViewPoint::Read(_xml::_element& elem, const std::string& folder)
     CHILDREN_END
 
     if (!ReadFile(folder)) {
-        throw std::exception("Failed to read viewpoint");
+        throw std::runtime_error("Failed to read viewpoint");
     }
 
     //
@@ -173,7 +173,7 @@ void ViewPoint::ReadRoot(_xml::_element& elem, const std::string& folder)
 void ViewPoint::WriteRootElem(_xml_writer& writer, const std::string& folder, Attributes& attr)
 {
     ATTR_ADD(Guid);
-    __super::WriteRootElem(writer, folder, attr);
+    XMLFile::WriteRootElem(writer, folder, attr);
 }
 
 void ViewPoint::WriteRootContent(_xml_writer& writer, const std::string& folder)

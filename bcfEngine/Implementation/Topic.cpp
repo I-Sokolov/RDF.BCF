@@ -315,7 +315,7 @@ bool Topic::SetStage(const char* val)
 /// </summary>
 bool Topic::SetEditorAndDate()
 {
-    return __super::SetEditorAndDate(m_bReadFromFile ? m_ModifiedAuthor : m_CreationAuthor, m_bReadFromFile ? m_ModifiedDate : m_CreationDate);
+    return BCFObject::SetEditorAndDate(m_bReadFromFile ? m_ModifiedAuthor : m_CreationAuthor, m_bReadFromFile ? m_ModifiedDate : m_CreationDate);
 }
 
 /// <summary>

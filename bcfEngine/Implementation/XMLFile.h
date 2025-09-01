@@ -33,13 +33,13 @@ public:
     bool WriteFile(const std::string& folder);
 
 protected:
-    virtual const char* XMLFileName() = NULL;
-    virtual const char* XSDName() = NULL;
-    virtual const char* RootElemName() = NULL;
-    virtual void ReadRoot(_xml::_element& elem, const std::string& folder) = NULL;    
-    virtual void AfterRead(const std::string& folder) = NULL;
+    virtual const char* XMLFileName() = 0;
+    virtual const char* XSDName() = 0;
+    virtual const char* RootElemName() = 0;
+    virtual void ReadRoot(_xml::_element& elem, const std::string& folder) = 0;    
+    virtual void AfterRead(const std::string& folder) = 0;
     virtual void WriteRootElem(_xml_writer& writer, const std::string& folder, Attributes& attr);
-    virtual void WriteRootContent(_xml_writer& writer, const std::string& folder) = NULL;
+    virtual void WriteRootContent(_xml_writer& writer, const std::string& folder) = 0;
 
 };
 
@@ -111,7 +111,7 @@ private:
         writer.writeEndTag(#list);              \
     }
 
-#define WRITE_LIST(elem) WRITE_LIST_EX(##elem##s, elem)
+#define WRITE_LIST(elem) WRITE_LIST_EX(elem##s, elem)
 
 /// <summary>
 /// XML reading macros
@@ -135,7 +135,7 @@ enum class UnknownNames : bool
 #define ATTR_GET(name) ATTR_GET_STR(name, m_##name)
 
 #define ATTRS_END(onUnknownNames)           \
-        if ((bool)onUnknownNames) { Project_().Log_().add(Log::Level::warning, "XML parsing", "Unknown attribute '%s' in " __FUNCTION__, attrName.c_str()); assert(!"TODO?"); } } }
+        if ((bool)onUnknownNames) { Project_().Log_().add(Log::Level::warning, "XML parsing", "Unknown attribute '%s' in '%s'", attrName.c_str(), __FUNCTION__); assert(!"TODO?"); } } }
 
 
 static inline bool IsEmpty(_xml::_element* elem)
@@ -172,7 +172,7 @@ static inline bool IsEmpty(_xml::_element* elem)
 
 #define CHILD_READ_FUNC(name, func)                     \
             if (tag == #name) {                         \
-                ##func(*child, folder);                 \
+                func(*child, folder);                 \
             } else
 
 #define CHILD_READ(name)        CHILD_READ_FUNC(name, Read_##name)
@@ -196,7 +196,7 @@ static inline bool IsEmpty(_xml::_element* elem)
 
 #define CHILD_ADD_TO_LIST(listName, elemName)   CHILD_ADD_TO_LIST_CONDITIONAL(listName, elemName, true)
 
-#define CHILD_UNEXPECTED(tag) { Project_().Log_().add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str()); assert(!"TODO?"); }
+#define CHILD_UNEXPECTED(tag) { Project_().Log_().add(Log::Level::error, "XML parsing", "Unknown child element <%s> in '%s'", tag.c_str(), __FUNCTION__); assert(!"TODO?"); }
 
 #define CHILDREN_END CHILD_UNEXPECTED(tag) } }
 
@@ -233,7 +233,7 @@ void ReadList(ListOf<TReadable>& list, TContainer& container, _xml::_element& el
                     list.Add(item);
                 }
                 else {
-                    log.add(Log::Level::error, "XML parsing", "Unknown child element <%s> in " __FUNCTION__, tag.c_str());
+                    log.add(Log::Level::error, "XML parsing", "Unknown child element <%s> in ", __FUNCTION__, tag.c_str());
                     assert(false);
                 }
             }

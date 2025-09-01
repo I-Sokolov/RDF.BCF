@@ -19,6 +19,9 @@
     <Filter Include="Header Files">
       <UniqueIdentifier>{b8890f66-81f1-4ad7-b685-b932e099d450}</UniqueIdentifier>
     </Filter>
+    <Filter Include="kubazip">
+      <UniqueIdentifier>{97c11bb3-b780-4891-bb36-e827eb1af8e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bcfEngine.h">
@@ -144,6 +147,12 @@
     <ClInclude Include="Implementation\XMLPoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="kubazip\miniz.h">
+      <Filter>kubazip</Filter>
+    </ClInclude>
+    <ClInclude Include="kubazip\zip.h">
+      <Filter>kubazip</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="XMLparser\_net.cpp">
@@ -244,6 +253,9 @@
     </ClCompile>
     <ClCompile Include="Implementation\XMLPoint.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="kubazip\zip.c">
+      <Filter>kubazip</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

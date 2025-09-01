@@ -153,7 +153,7 @@ bool Comment::SetText(const char* val)
 /// </summary>
 bool Comment::SetEditorAndDate()
 {
-    return __super::SetEditorAndDate(m_readFromFile ? m_ModifiedAuthor : m_Author, m_readFromFile ? m_ModifiedDate : m_Date);
+    return BCFObject::SetEditorAndDate(m_readFromFile ? m_ModifiedAuthor : m_Author, m_readFromFile ? m_ModifiedDate : m_Date);
 }
 
 /// <summary>

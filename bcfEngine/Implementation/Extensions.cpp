@@ -126,7 +126,7 @@ void Extensions::ReadEnumeration(_xml::_element& elem, const std::string& /*fold
     auto list = GetList(enumeration);
     if (!list) {
         assert(false);
-        throw std::exception("Invalid BCF enumeration in " __FUNCTION__);
+        throw std::runtime_error(std::string("Invalid BCF enumeration in ") + __FUNCTION__);
     }
 
     for (auto child : elem.children()) {
@@ -145,7 +145,7 @@ void Extensions::WriteEnumeration(_xml_writer& writer, const std::string& tag, B
     auto list = GetList(enumeration);
     if (!list) {
         assert(false);
-        throw std::exception("Invalid BCF enumeration in " __FUNCTION__);
+        throw std::runtime_error(std::string("Invalid BCF enumeration in ") + __FUNCTION__);
     }
 
     for (auto& elem : *list) {
@@ -286,7 +286,7 @@ void Extensions::ReadExtensionSchema_enumeration(_xml::_element& elem, const std
 
     if (!m_currentList) {
         assert(false);
-        throw std::exception("Invalid BCF enumeration in " __FUNCTION__);
+        throw std::runtime_error(std::string("Invalid BCF enumeration in ") + __FUNCTION__);
     }
 
     m_currentList->insert(value);

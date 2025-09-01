@@ -61,7 +61,7 @@ RDFBCF_EXPORT BCF##OBJ* bcf##OBJ##GetAt(BCF##CONTAINER* container, uint16_t ind)
 {                                                                                       \
     if (container) {                                                                    \
         TYPE_CHECK(container, CONTAINER, NULL)                                          \
-        return container->Get##OBJ##(ind);                                              \
+        return container->Get##OBJ(ind);                                              \
     }                                                                                   \
     return NULL;                                                                        \
 }                                                                                       
@@ -450,7 +450,7 @@ RDFBCF_EXPORT BCFComponent* bcf##Parent##List##Add(BCF##Parent* parent, const ch
 {                                                                                               \
     if (parent) {                                                                               \
         TYPE_CHECK(parent, Parent, NULL);                                                       \
-        return parent->Add##List##(ifcGuid);                                                    \
+        return parent->Add##List(ifcGuid);                                                    \
     }                                                                                           \
     return NULL;                                                                                \
 }                                                                                               \
@@ -458,7 +458,7 @@ RDFBCF_EXPORT BCFComponent* bcf##Parent##List##GetAt(BCF##Parent* parent, uint16
 {                                                                                               \
     if (parent) {                                                                               \
         TYPE_CHECK(parent, Parent, NULL);                                                       \
-        return parent->Get##List##(ind);                                                        \
+        return parent->Get##List(ind);                                                        \
     }                                                                                           \
     return NULL;                                                                                \
 }                                                                                               \
@@ -522,7 +522,7 @@ RDFBCF_EXPORT bool          bcf##ListName##Add   (BCFTopic* topic, t##ElemType v
 {                                                                                       \
     if (topic) {                                                                        \
         TYPE_CHECK(topic, Topic, false);                                                \
-        return topic->Add##ListName##(val);                                             \
+        return topic->Add##ListName(val);                                             \
     }                                                                                   \
     return false;                                                                       \
 }                                                                                       \
@@ -530,7 +530,7 @@ RDFBCF_EXPORT t##ElemType   bcf##ListName##GetAt(BCFTopic* topic, uint16_t ind) 
 {                                                                                       \
     if (topic) {                                                                        \
         TYPE_CHECK(topic, Topic, NULL);                                                 \
-        return topic->Get##ListName##(ind);                                             \
+        return topic->Get##ListName(ind);                                             \
     }                                                                                   \
     return NULL;                                                                        \
 }                                                                                       \
@@ -538,7 +538,7 @@ RDFBCF_EXPORT bool          bcf##ListName##Remove(BCFTopic* topic, t##ElemType v
 {                                                                                       \
     if (topic) {                                                                        \
         TYPE_CHECK(topic, Topic, false);                                                \
-        topic->Remove##ListName##(val);                                                 \
+        topic->Remove##ListName(val);                                                 \
     }                                                                                   \
     return false;                                                                       \
 }
