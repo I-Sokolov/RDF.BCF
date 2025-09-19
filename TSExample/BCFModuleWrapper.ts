@@ -17,7 +17,7 @@ export class BCFModuleWrapper {
     }
 
     private stringToPtr(str: string): number {
-        const len = (str.length + 1) * 4; // достаточно для UTF-8
+        const len = (str.length + 1) * 4; //max for UTF-8
         const ptr = this.module._malloc(len);
         this.module.stringToUTF8(str, ptr, len);
         return ptr;

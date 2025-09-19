@@ -140,6 +140,14 @@ interface BCFModule extends EmscriptenModule {
     _bcfDocumentReferenceSetFilePath(documentRefPtr: number, filePathPtr: number, isExternal: boolean): boolean;
     _bcfDocumentReferenceSetDescription(documentRefPtr: number, valuePtr: number): boolean;
 
+    //selection
+    _bcfViewPointSelectionAdd(viewPoint: number, guidPtr: number): number;
+    _bcfViewPointSelectionGetAt(viewPoint: number, ind: number) : number;
+
+    //exceptions
+    _bcfViewPointExceptionAdd(viewPoint: number, guidPtr: number): number;
+    _bcfViewPointExceptionGetAt(viewPoint: number, ind: number): number;
+
     // Component functions
     _bcfViewComponentRemove(componentPtr: number): boolean;
     _bcfComponentGetIfcGuid(componentPtr: number): number;
