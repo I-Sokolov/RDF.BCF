@@ -12,7 +12,7 @@ public:
     bool Unpack(const char* archivePath, const char* folder);
 
 private:
-    bool AddFolder(const char* osPath, const char* zipPath, struct zip* zip);
+    bool AddFolder(const char* osPath, const char* zipPath, struct zip_t* zip);
 
     void SplitZipPath(const std::string& zipPath, StringList& folders, std::string& file);
     bool CreateFolders(std::string& path, StringList& folders);

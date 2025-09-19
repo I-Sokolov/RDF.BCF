@@ -12,34 +12,31 @@
 /// </summary>
 bool Archivator::Pack(const char* folder, const char* archivePath)
 {
-    //#todo
-    /*zip_t* zip = zip_open(archivePath, ZIP_CREATE | ZIP_TRUNCATE, nullptr);
-    if (!zip) {
+    struct zip_t* zip = zip_open(archivePath, ZIP_DEFAULT_COMPRESSION_LEVEL, 'w');
+    if (zip == NULL) {
         m_log.add(Log::Level::error, "Write file error", "Can not open to write archive %s", archivePath);
         return false;
     }
 
     auto ok = AddFolder(folder, "", zip);
-    
-    zip_close(zip);
-    
-    return ok;*/
-    return true;
+
+	zip_close(zip);
+
+    return ok;
 }
 
 
 /// <summary>
 /// 
 /// </summary>
-bool Archivator::AddFolder(const char* osPath, const char* zipPath, struct zip* zip)
+bool Archivator::AddFolder(const char* osPath, const char* zipPath, struct zip_t* zip)
 {
     FileSystem::DirList elems;
     if (!FileSystem::GetDirContent(osPath, elems, m_log)) {
         return false;
     }
 
-    //#todo
-    /*for (auto& elem : elems) {
+    for (auto& elem : elems) {
 
         std::string ospath(osPath);
         FileSystem::AddPath(ospath, elem.name.c_str());
@@ -51,19 +48,17 @@ bool Archivator::AddFolder(const char* osPath, const char* zipPath, struct zip* 
             AddFolder(ospath.c_str(), zippath.c_str(), zip);
         }
         else {
-            zip_source_t* source = zip_source_file(zip, ospath.c_str(), 0, 0);
-            if (source) {
-                if (0 > zip_file_add(zip, zippath.c_str(), source, ZIP_FL_ENC_GUESS)) {
-                    m_log.add(Log::Level::error, "Zip error", "Fail zip add file %s", ospath.c_str());
-                    return false;
-                }
-            }
-            else {
-                m_log.add(Log::Level::error, "Zip error", "Fail zip source file %s", ospath.c_str());
+            if (zip_entry_open(zip, zippath.c_str()) < 0) {
+                m_log.add(Log::Level::error, "Zip error", "Fail zip open file %s", zippath.c_str());
                 return false;
-            }
+			}
+            if (zip_entry_fwrite(zip, ospath.c_str()) < 0) {
+                m_log.add(Log::Level::error, "Zip error", "Fail zip write file %s", ospath.c_str());
+                return false;
+			}
+            zip_entry_close(zip);
         }
-    }*/
+    }
 
     return true;
 }
