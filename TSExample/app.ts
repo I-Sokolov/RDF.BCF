@@ -8,10 +8,11 @@
 //
 // 
 
-import { readFile } from "fs/promises";
+import { readFile, writeFile } from "fs/promises";
 import { BCFModuleWrapper } from "./BCFModuleWrapper.js";
 
 const BCF_FILE_PATH = "W:\\DevArea\\buildingSMART\\BCF-XML\\Test Cases\\v3.0\\Visualization\\Orthogonal camera\\orthogonal camera.bcf";
+const BCF_FILE_PATH_SAVE = "W:\\DevArea\\WriteTest.bcf";
 
 //
 //
@@ -80,6 +81,12 @@ async function ExampleBCFWrapper() {
 
     const projId = bcf.bcfProjectIdGet(bcfData);
     console.log("Project ID:", projId);
+
+    ok = bcf.bcfFileWrite(bcfData, BCF_FILE_PATH_SAVE, 30);
+    console.log("Write file:", ok);
+
+    const writtenData = Module.FS.readFile(BCF_FILE_PATH_SAVE);
+    await writeFile(BCF_FILE_PATH_SAVE, writtenData);
 
     ok = bcf.bcfProjectDelete(bcfData);
     console.log("Cleanup:", ok);
