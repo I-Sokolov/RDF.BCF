@@ -168,22 +168,16 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)libzip\libzip.1.1.2.7\build\native\include\;$(ProjectDir)ifcEngine\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)ifcEngine\include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(ProjectDir)libzip\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\Release;$(ProjectDir)ifcEngine\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>zip.lib;ifcEngine.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)ifcEngine\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ifcEngine.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PostBuildEvent>
-      <Command>InstallZipLib.bat "$(ProjectDir)" $(Platform) "$(OutputPath)"</Command>
-    </PostBuildEvent>
-    <PostBuildEvent>
-      <Message>Install libzip</Message>
-    </PostBuildEvent>
     <PreBuildEvent>
       <Command>InstallIfcEngine.bat "$(ProjectDir)" $(Platform) "$(OutputPath)"</Command>
     </PreBuildEvent>
@@ -196,22 +190,16 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)libzip\libzip.1.1.2.7\build\native\include\;$(ProjectDir)ifcEngine\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)ifcEngine\include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(ProjectDir)libzip\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\Release;$(ProjectDir)ifcEngine\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>zip.lib;ifcEngine.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)ifcEngine\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ifcEngine.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PostBuildEvent>
-      <Command>InstallZipLib.bat "$(ProjectDir)" $(Platform) "$(OutputPath)"</Command>
-    </PostBuildEvent>
-    <PostBuildEvent>
-      <Message>Install libzip</Message>
-    </PostBuildEvent>
     <PreBuildEvent>
       <Command>InstallIfcEngine.bat "$(ProjectDir)" $(Platform) "$(OutputPath)"</Command>
     </PreBuildEvent>
@@ -224,7 +212,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)libzip\libzip.1.1.2.7\build\native\include\;$(ProjectDir)ifcEngine\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)ifcEngine\include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
@@ -232,15 +220,9 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(ProjectDir)libzip\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\Release;$(ProjectDir)ifcEngine\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>zip.lib;ifcEngine.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)ifcEngine\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ifcEngine.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PostBuildEvent>
-      <Command>InstallZipLib.bat "$(ProjectDir)" $(Platform) "$(OutputPath)"</Command>
-    </PostBuildEvent>
-    <PostBuildEvent>
-      <Message>Install libzip</Message>
-    </PostBuildEvent>
     <PreBuildEvent>
       <Command>InstallIfcEngine.bat "$(ProjectDir)" $(Platform) "$(OutputPath)"</Command>
     </PreBuildEvent>
@@ -253,7 +235,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)libzip\libzip.1.1.2.7\build\native\include\;$(ProjectDir)ifcEngine\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)ifcEngine\include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
@@ -261,15 +243,9 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(ProjectDir)libzip\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\Release;$(ProjectDir)ifcEngine\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>zip.lib;ifcEngine.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)ifcEngine\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ifcEngine.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PostBuildEvent>
-      <Command>InstallZipLib.bat "$(ProjectDir)" $(Platform) "$(OutputPath)"</Command>
-    </PostBuildEvent>
-    <PostBuildEvent>
-      <Message>Install libzip</Message>
-    </PostBuildEvent>
     <PreBuildEvent>
       <Command>InstallIfcEngine.bat "$(ProjectDir)" $(Platform) "$(OutputPath)"</Command>
     </PreBuildEvent>
@@ -282,7 +258,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)libzip\libzip.1.1.2.7\build\native\include\;$(ProjectDir)ifcEngine\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)ifcEngine\include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -291,15 +267,9 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(ProjectDir)libzip\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\Release;$(ProjectDir)ifcEngine\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>zip.lib;ifcEngine.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)ifcEngine\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ifcEngine.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PostBuildEvent>
-      <Command>InstallZipLib.bat "$(ProjectDir)" $(Platform) "$(OutputPath)"</Command>
-    </PostBuildEvent>
-    <PostBuildEvent>
-      <Message>Install libzip</Message>
-    </PostBuildEvent>
     <PreBuildEvent>
       <Command>InstallIfcEngine.bat "$(ProjectDir)" $(Platform) "$(OutputPath)"</Command>
     </PreBuildEvent>
@@ -312,7 +282,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)libzip\libzip.1.1.2.7\build\native\include\;$(ProjectDir)ifcEngine\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)ifcEngine\include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -321,15 +291,9 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(ProjectDir)libzip\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\Release;$(ProjectDir)ifcEngine\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>zip.lib;ifcEngine.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)ifcEngine\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ifcEngine.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PostBuildEvent>
-      <Command>InstallZipLib.bat "$(ProjectDir)" $(Platform) "$(OutputPath)"</Command>
-    </PostBuildEvent>
-    <PostBuildEvent>
-      <Message>Install libzip</Message>
-    </PostBuildEvent>
     <PreBuildEvent>
       <Command>InstallIfcEngine.bat "$(ProjectDir)" $(Platform) "$(OutputPath)"</Command>
     </PreBuildEvent>
@@ -344,7 +308,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)libzip\libzip.1.1.2.7\build\native\include\;$(ProjectDir)ifcEngine\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)ifcEngine\include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <Optimization>Disabled</Optimization>
     </ClCompile>
@@ -354,15 +318,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(ProjectDir)libzip\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\Release;$(ProjectDir)ifcEngine\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>zip.lib;ifcEngine.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)ifcEngine\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ifcEngine.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PostBuildEvent>
-      <Command>InstallZipLib.bat "$(ProjectDir)" $(Platform) "$(OutputPath)"</Command>
-    </PostBuildEvent>
-    <PostBuildEvent>
-      <Message>Install libzip</Message>
-    </PostBuildEvent>
     <PreBuildEvent>
       <Command>InstallIfcEngine.bat "$(ProjectDir)" $(Platform) "$(OutputPath)"</Command>
     </PreBuildEvent>
@@ -377,7 +335,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)libzip\libzip.1.1.2.7\build\native\include\;$(ProjectDir)ifcEngine\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)ifcEngine\include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <Optimization>Disabled</Optimization>
     </ClCompile>
@@ -387,15 +345,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(ProjectDir)libzip\libzip.1.1.2.7\build\native\lib\$(Platform)\v140\Release;$(ProjectDir)ifcEngine\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>zip.lib;ifcEngine.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)ifcEngine\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ifcEngine.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PostBuildEvent>
-      <Command>InstallZipLib.bat "$(ProjectDir)" $(Platform) "$(OutputPath)"</Command>
-    </PostBuildEvent>
-    <PostBuildEvent>
-      <Message>Install libzip</Message>
-    </PostBuildEvent>
     <PreBuildEvent>
       <Command>InstallIfcEngine.bat "$(ProjectDir)" $(Platform) "$(OutputPath)"</Command>
     </PreBuildEvent>
