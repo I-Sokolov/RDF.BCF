@@ -195,6 +195,7 @@ struct BCFDocumentReference
     BCF_PROPERTY_RO(const char*, Guid);
     BCF_PROPERTY_RO(const char*, DocumentGuid);
     BCF_PROPERTY_RO(const char*, FilePath);
+    BCF_PROPERTY_RO(bool,        IsExternal);
     BCF_PROPERTY_RW(const char*, Description);
 
     virtual bool SetFilePath(const char* filePath, bool isExternal) = 0;

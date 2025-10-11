@@ -371,6 +371,7 @@ RDFBCF_EXPORT_IMPL(BCFDocumentReference*, bcfDocumentReferenceAdd) (BCFTopic* to
 
 OBJ_GET_ATTR(Str, DocumentReference, Guid)
 OBJ_GET_ATTR(Str, DocumentReference, FilePath)
+OBJ_GET_ATTR(Bool,DocumentReference, IsExternal)
 OBJ_GET_ATTR(Str, DocumentReference, Description)
 
 OBJ_SET_ATTR(Str, DocumentReference, Description)

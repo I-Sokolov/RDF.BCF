@@ -215,6 +215,7 @@ extern "C" {
     /// </summary>
     RDFBCF_EXPORT const char* bcfDocumentReferenceGetGuid       (BCFDocumentReference* documentReferece);
     RDFBCF_EXPORT const char* bcfDocumentReferenceGetFilePath   (BCFDocumentReference* documentReferece);
+    RDFBCF_EXPORT bool        bcfDocumentReferenceGetIsExternal (BCFDocumentReference* documentReferece);
     RDFBCF_EXPORT const char* bcfDocumentReferenceGetDescription(BCFDocumentReference* documentReferece);
 
     RDFBCF_EXPORT bool bcfDocumentReferenceSetFilePath          (BCFDocumentReference* documentReferece, const char* filePath, bool isExternal);
