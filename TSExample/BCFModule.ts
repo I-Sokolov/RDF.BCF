@@ -135,6 +135,7 @@ interface BCFModule extends EmscriptenModule {
 
     _bcfDocumentReferenceGetGuid(documentRefPtr: number): number;
     _bcfDocumentReferenceGetFilePath(documentRefPtr: number): number;
+    _bcfDocumentReferenceGetIsExternal(documentRefPtr: number): boolean;
     _bcfDocumentReferenceGetDescription(documentRefPtr: number): number;
 
     _bcfDocumentReferenceSetFilePath(documentRefPtr: number, filePathPtr: number, isExternal: boolean): boolean;
