@@ -501,12 +501,15 @@ namespace RDF.BCF
         public static string ComponentGetAuthoringToolId(IntPtr component) { return PtrToString(ComponentGetAuthoringToolId_(component)); }
 
         [DllImport(DLL, EntryPoint = "bcfComponentSetIfcGuid")]
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ComponentSetIfcGuid(IntPtr component, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string value);
 
         [DllImport(DLL, EntryPoint = "bcfComponentSetOriginatingSystem")]
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ComponentSetOriginatingSystem(IntPtr component, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string value);
 
         [DllImport(DLL, EntryPoint = "bcfComponentSetAuthoringToolId")]
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ComponentSetAuthoringToolId(IntPtr component, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string value);
 
         [DllImport(DLL, EntryPoint = "bcfDocumentReferenceGetAt")]
@@ -515,6 +518,7 @@ namespace RDF.BCF
         [DllImport(DLL, EntryPoint = "bcfDocumentReferenceAdd")]
         public static extern IntPtr DocumentReferenceAdd(IntPtr topic, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string filePath, [param: MarshalAs(UnmanagedType.U1)] bool isExternal, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string? guid = null);
         [DllImport(DLL, EntryPoint = "bcfDocumentReferenceRemove")]
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool DocumentReferenceRemove(IntPtr comment);
 
         /// <summary>
@@ -524,12 +528,17 @@ namespace RDF.BCF
         private static extern IntPtr _DocumentReferenceGetGuid(IntPtr documentReferece); public static string DocumentReferenceGetGuid(IntPtr documentReference) { return PtrToString(_DocumentReferenceGetGuid(documentReference)); }
         [DllImport(DLL, EntryPoint = "bcfDocumentReferenceGetFilePath")]
         private static extern IntPtr _DocumentReferenceGetUrlPath(IntPtr documentReferece); public static string DocumentReferenceGetFilePath(IntPtr documentReference) { return PtrToString(_DocumentReferenceGetUrlPath(documentReference)); }
+        [DllImport(DLL, EntryPoint = "bcfDocumentReferenceGetIsExternal")]
+        [return: MarshalAs(UnmanagedType.U1)] 
+        public static extern bool DocumentReferenceGetIsExternal(IntPtr documentReferece);
         [DllImport(DLL, EntryPoint = "bcfDocumentReferenceGetDescription")]
         private static extern IntPtr _DocumentReferenceGetDescription(IntPtr documentReferece); public static string DocumentReferenceGetDescription(IntPtr documentReference) { return PtrToString(_DocumentReferenceGetDescription(documentReference)); }
 
         [DllImport(DLL, EntryPoint = "bcfDocumentReferenceSetFilePath")]
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool DocumentReferenceSetFilePath(IntPtr documentReferece, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string value, [param: MarshalAs(UnmanagedType.U1)] bool isExternal);
         [DllImport(DLL, EntryPoint = "bcfDocumentReferenceSetDescription")]
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool DocumentReferenceSetDescription(IntPtr documentReferece, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string value);
 
         [DllImport(DLL, EntryPoint = "bcfTopicGetBimSnippet")]
@@ -676,6 +685,7 @@ namespace RDF.BCF
         public static extern IntPtr ColoringGetAt(IntPtr viewPoint, UInt16 ind);
 
         [DllImport(DLL, EntryPoint = "bcfColoringRemove")]
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool ColoringRemove(IntPtr color);
 
         [DllImport(DLL, EntryPoint = "bcfColoringGetColor")]

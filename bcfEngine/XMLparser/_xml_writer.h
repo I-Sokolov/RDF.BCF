@@ -35,7 +35,7 @@ public: // Methods
 		m_pOutputStream = new wofstream(szOutputFile, std::ios::out | std::ios::app);
 
 		// UTF-8 locale
-		std::locale loc(std::locale(), new std::codecvt_utf8<char>);
+		std::locale loc(std::locale::classic());
 		m_pOutputStream->imbue(loc);
 	}
 

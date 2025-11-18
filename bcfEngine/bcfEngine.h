@@ -3,6 +3,8 @@
 #ifndef __RDF_LTF_BCF_ENGINE_H
 #define __RDF_LTF_BCF_ENGINE_H
 
+//This is C API. See bcfAPI.h for C++ API 
+
 
 #include "bcfTypes.h"
 
@@ -213,6 +215,7 @@ extern "C" {
     /// </summary>
     RDFBCF_EXPORT const char* bcfDocumentReferenceGetGuid       (BCFDocumentReference* documentReferece);
     RDFBCF_EXPORT const char* bcfDocumentReferenceGetFilePath   (BCFDocumentReference* documentReferece);
+    RDFBCF_EXPORT bool        bcfDocumentReferenceGetIsExternal (BCFDocumentReference* documentReferece);
     RDFBCF_EXPORT const char* bcfDocumentReferenceGetDescription(BCFDocumentReference* documentReferece);
 
     RDFBCF_EXPORT bool bcfDocumentReferenceSetFilePath          (BCFDocumentReference* documentReferece, const char* filePath, bool isExternal);

@@ -118,7 +118,7 @@ Component* ListOfComponents::Add(ViewPoint& viewPoint, const char* ifcGuid, cons
     if (originatingSystem) ok = ok && comp->SetOriginatingSystem(originatingSystem);
 
     if (ok) {
-        __super::Add(comp);
+        ListOfBCFObjects::Add(comp);
         return comp;
     }
     else {
@@ -136,7 +136,7 @@ bool SetOfXMLText::Add(const char* val)
         if (!Find(val)) {
             auto txt = new XMLText(m_topic, this);
             txt->string().assign(val);
-            return __super::Add(txt);
+            return ListOfBCFObjects::Add(txt);
         }
     }
     return false;
@@ -163,7 +163,7 @@ XMLText* SetOfXMLText::Find(const char* val)
 /// </summary>
 const char* SetOfXMLText::GetAt(uint16_t ind)
 {
-    auto txtNext = __super::GetAt(ind);
+    auto txtNext = ListOf::GetAt(ind);
 
     if (txtNext) {
         return txtNext->string().c_str();

@@ -55,7 +55,7 @@ public:
 public:
     Item* GetAt(uint16_t ind)
     {
-        return dynamic_cast<Item*> (__super::GetAt(ind));
+        return dynamic_cast<Item*> (ListOfBCFObjects::GetAt(ind));
     }
 
     std::vector<Item*>& Items()
@@ -102,7 +102,7 @@ public:
                 found->Remove();
             }
 
-            return __super::Add(item);
+            return ListOf<Item>::Add(item);
         }
         else {
             assert(false);

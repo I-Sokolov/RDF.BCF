@@ -22,8 +22,8 @@ public:
    
 public:
     Project& Project_() { return m_project; }
-    virtual Topic* Topic_() = NULL;
-    virtual Comment* Comment_() = NULL;
+    virtual Topic* Topic_() = 0;
+    virtual Comment* Comment_() = 0;
     
     Log& Log_();
 
@@ -36,7 +36,11 @@ protected:
 
     bool SetPropertyReal(double val, std::string& prop);
 
+#ifdef _WINDOWS
     bool GetPropertyBool(const std::string& prop) { return 0 == _stricmp(prop.c_str(), "true"); }
+#else
+    bool GetPropertyBool(const std::string& prop) { return 0 == strcasecmp(prop.c_str(), "true"); }
+#endif
     bool SetPropertyBool(bool val, std::string& prop);
 
     std::string AbsolutePath(const std::string& relativePath, const std::string& folder);

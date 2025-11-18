@@ -4,7 +4,11 @@
 #include "Project.h"
 #include "Topic.h"
 #include "FileSystem.h"
+#ifndef __EMSCRIPTEN__
 #include "ifcengine.h"
+#else
+#include "../include/ifcengine.h"
+#endif
 
 /// <summary>
 /// 
@@ -156,7 +160,11 @@ bool BimFile::IsIFC()
     auto len = m_Reference.length();
     if (len > 4) {
         auto ext = m_Reference.c_str() + len - 4;
+#ifdef _WINDOWS
         if (0 == _stricmp(".ifc", ext)) {
+#else
+		if (0 == strcasecmp(".ifc", ext)) {
+#endif
             return true;
         }
     }

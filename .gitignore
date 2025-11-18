@@ -2,3 +2,11 @@
 output/
 **/.vs/
 packages/
+TSExample/app.js
+TSExample/app.js.map
+TSExample/bin/
+TSExample/node_modules/
+TSExample/BCFModule.js
+TSExample/BCFModule.js.map
+TSExample/BCFModuleWrapper.js
+TSExample/BCFModuleWrapper.js.map

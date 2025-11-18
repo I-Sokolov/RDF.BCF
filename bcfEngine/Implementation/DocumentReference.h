@@ -21,6 +21,7 @@ public:
     virtual const char* GetGuid() override { return m_Guid.c_str(); }
     virtual const char* GetFilePath() override;
     virtual const char* GetDocumentGuid() override { return m_DocumentGuid.c_str(); }
+    virtual bool        GetIsExternal() override;
     virtual const char* GetDescription() override { return m_Description.c_str(); }
 
     virtual bool SetFilePath(const char* filePath, bool isExternal) override;

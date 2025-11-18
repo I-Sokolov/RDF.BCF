@@ -14,7 +14,9 @@
 #endif
 
 // add headers that you want to pre-compile here
+#ifndef __EMSCRIPTEN__
 #include "framework.h"
+#endif
 
 #include <assert.h>
 
@@ -25,8 +27,8 @@
 #include <regex>
 #include <unordered_set>
 
-#include "XMLparser/_xml.h"
-#include "XMLparser/_xml_writer.h"
+#include "../XMLparser/_xml.h"
+#include "../XMLparser/_xml_writer.h"
 
 typedef std::list<std::string> StringList;
 typedef std::set<std::string> StringSet;

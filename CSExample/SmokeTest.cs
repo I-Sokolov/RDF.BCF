@@ -384,14 +384,20 @@ namespace CSExample
                     if (j % 2 == 0)
                     {
                         var reference = topic.AddDocumentRefernce(filePath, isExternal, TestGuid(j));
+                        ASSERT(reference.IsExternal == isExternal);
                         reference.Description = ($"Descr {j}");
                     }
                     else
                     {
                         var reference = topic.AddDocumentRefernce("ftp://ee");
+                        ASSERT(reference.IsExternal == true);
+
                         reference.SetFilePath("");
+                        ASSERT(reference.IsExternal == false);
                         ASSERT(reference.FilePath.Length==0);
+
                         reference.SetFilePath (filePath, isExternal);
+                        ASSERT(reference.IsExternal == isExternal);
                     }
                 }
                 ASSERT(topic.GetDocumentReferences().Count == 12);
@@ -490,6 +496,7 @@ namespace CSExample
                     bool isExternal = (j % 5 == 0);
 
                     var reference = topic.GetDocumentReferences()[j];
+                    ASSERT(reference.IsExternal == isExternal);
                     if (isExternal)
                     {
                         ASSERT(reference.FilePath == filePath);

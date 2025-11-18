@@ -19,6 +19,9 @@ namespace RDF.BCF
         public string FilePath { get { return Interop.DocumentReferenceGetFilePath(m_handle); } }
 
         public bool SetFilePath(string filePath, bool isExternal = true) { return Interop.DocumentReferenceSetFilePath(m_handle, filePath, isExternal); }
+
+        public bool IsExternal { get { return Interop.DocumentReferenceGetIsExternal(m_handle); } }
+
         /// <summary>
         /// Human readable description of the document reference
         /// </summary>

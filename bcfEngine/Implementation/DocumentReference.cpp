@@ -139,6 +139,11 @@ bool DocumentReference::SetFilePath(const char* filePath, bool isExternal)
     }
 }
 
+bool DocumentReference::GetIsExternal()
+{
+    return !m_Url.empty();
+}
+
 /// <summary>
 /// 
 /// </summary>

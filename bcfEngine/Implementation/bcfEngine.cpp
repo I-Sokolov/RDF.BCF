@@ -3,15 +3,23 @@
 #include "bcfEngine.h"
 #include "bcfAPI.h"
 
+#ifdef __EMSCRIPTEN__
+#define RDFBCF_EXPORT_IMPL(ReturnType, FuncName)    \
+__attribute__((export_name(#FuncName)))             \
+RDFBCF_EXPORT ReturnType FuncName
+#else
+#define RDFBCF_EXPORT_IMPL(ReturnType, FuncName)  RDFBCF_EXPORT ReturnType FuncName
+#endif
+
 ///
 #define TYPE_CHECK(ptr, type, errVal) {if (!TypeCheck ((char*)ptr, BCFTypeCheck_##type)) return errVal;}
 
 static bool TypeCheck(char* ptr, long typeId)
 {
-    ptr += sizeof(char*); //skip vftable
+    ptr += sizeof(char*); //skip virtual functions table
     auto pl = (long*)ptr;
     if (*pl != typeId) {
-        printf("Inavlid type in the RDF.BCF: %ld. Expected %ld!\n", *pl, typeId);
+        printf("Invalid type in the RDF.BCF: %ld. Expected %ld!\n", *pl, typeId);
         assert(false);
         return false;
     }
@@ -24,7 +32,7 @@ static bool TypeCheck(char* ptr, long typeId)
 /// </summary>
 
 #define OBJ_GET_ATTR_R(VAL, OBJ, ATTR, errVal)                                      \
-RDFBCF_EXPORT t##VAL bcf##OBJ##Get##ATTR (BCF##OBJ* obj)                            \
+RDFBCF_EXPORT_IMPL(t##VAL, bcf##OBJ##Get##ATTR) (BCF##OBJ* obj)                     \
 {                                                                                   \
     if (obj) {                                                                      \
        TYPE_CHECK(obj, OBJ, errVal)                                                 \
@@ -36,7 +44,7 @@ RDFBCF_EXPORT t##VAL bcf##OBJ##Get##ATTR (BCF##OBJ* obj)                        
 #define OBJ_GET_ATTR(VAL, OBJ, ATTR)    OBJ_GET_ATTR_R(VAL, OBJ, ATTR, 0)                                             
 
 #define OBJ_GET_ATTR_PT(OBJ, ATTR)                                                  \
-RDFBCF_EXPORT bool bcf##OBJ##Get##ATTR(BCF##OBJ* obj, BCFPoint* retPt)              \
+RDFBCF_EXPORT_IMPL(bool, bcf##OBJ##Get##ATTR) (BCF##OBJ* obj, BCFPoint* retPt)      \
 {                                                                                   \
     if (obj && retPt) {                                                             \
         TYPE_CHECK(obj, OBJ, false)                                                 \
@@ -47,7 +55,7 @@ RDFBCF_EXPORT bool bcf##OBJ##Get##ATTR(BCF##OBJ* obj, BCFPoint* retPt)          
 
 
 #define OBJ_SET_ATTR(VAL, OBJ, ATTR)                                                \
-RDFBCF_EXPORT bool bcf  ##OBJ##Set##ATTR (BCF##OBJ* obj, t##VAL val)                \
+RDFBCF_EXPORT_IMPL(bool, bcf##OBJ##Set##ATTR) (BCF##OBJ* obj, t##VAL val)         \
 {                                                                                   \
     if (obj) {                                                                      \
         TYPE_CHECK(obj, OBJ, false)                                                 \
@@ -57,17 +65,17 @@ RDFBCF_EXPORT bool bcf  ##OBJ##Set##ATTR (BCF##OBJ* obj, t##VAL val)            
 }
 
 #define OBJ_ITERATE(OBJ, CONTAINER)                                                     \
-RDFBCF_EXPORT BCF##OBJ* bcf##OBJ##GetAt(BCF##CONTAINER* container, uint16_t ind)        \
+RDFBCF_EXPORT_IMPL(BCF##OBJ*, bcf##OBJ##GetAt) (BCF##CONTAINER* container, uint16_t ind)\
 {                                                                                       \
     if (container) {                                                                    \
         TYPE_CHECK(container, CONTAINER, NULL)                                          \
-        return container->Get##OBJ##(ind);                                              \
+        return container->Get##OBJ(ind);                                                \
     }                                                                                   \
     return NULL;                                                                        \
 }                                                                                       
    
 #define OBJ_REMOVE(OBJ)                                                                 \
-RDFBCF_EXPORT bool bcf##OBJ##Remove(BCF##OBJ* obj)                                      \
+RDFBCF_EXPORT_IMPL(bool, bcf##OBJ##Remove) (BCF##OBJ* obj)                              \
 {                                                                                       \
     if (obj) {                                                                          \
         TYPE_CHECK(obj, OBJ, false)                                                     \
@@ -90,7 +98,7 @@ typedef BCFBitmapFormat tBitmapFormat;
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT BCFProject* bcfProjectCreate(const char* projectId)
+RDFBCF_EXPORT_IMPL(BCFProject*, bcfProjectCreate) (const char* projectId)
 {
     return BCFProject::Create(projectId);
 }
@@ -99,7 +107,7 @@ RDFBCF_EXPORT BCFProject* bcfProjectCreate(const char* projectId)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT bool bcfProjectDelete(BCFProject* project)
+RDFBCF_EXPORT_IMPL(bool, bcfProjectDelete) (BCFProject* project)
 {
     if (project) {
         TYPE_CHECK(project, Project, false);
@@ -111,7 +119,7 @@ RDFBCF_EXPORT bool bcfProjectDelete(BCFProject* project)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT bool bcfProjectIsModified(BCFProject* project)
+RDFBCF_EXPORT_IMPL(bool, bcfProjectIsModified) (BCFProject* project)
 {
     if (project) {
         TYPE_CHECK(project, Project, false);
@@ -123,7 +131,7 @@ RDFBCF_EXPORT bool bcfProjectIsModified(BCFProject* project)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT const char* bcfGetErrors(BCFProject* project, bool cleanLog)
+RDFBCF_EXPORT_IMPL(const char*, bcfGetErrors) (BCFProject* project, bool cleanLog)
 {
     if (project) {
         TYPE_CHECK(project, Project, NULL);
@@ -135,7 +143,7 @@ RDFBCF_EXPORT const char* bcfGetErrors(BCFProject* project, bool cleanLog)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT bool bcfFileRead(BCFProject* project, const char* bcfFilePath, bool autofix)
+RDFBCF_EXPORT_IMPL(bool, bcfFileRead) (BCFProject* project, const char* bcfFilePath, bool autofix)
 {
     if (project) {
         TYPE_CHECK(project, Project, false);
@@ -147,7 +155,7 @@ RDFBCF_EXPORT bool bcfFileRead(BCFProject* project, const char* bcfFilePath, boo
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT bool bcfFileWrite(BCFProject* project, const char* bcfFilePath, BCFVersion version)
+RDFBCF_EXPORT_IMPL(bool, bcfFileWrite) (BCFProject* project, const char* bcfFilePath, BCFVersion version)
 {
     if (project) {
         TYPE_CHECK(project, Project, false);
@@ -159,7 +167,7 @@ RDFBCF_EXPORT bool bcfFileWrite(BCFProject* project, const char* bcfFilePath, BC
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT bool bcfSetOptions(BCFProject* project, const char* user, bool autoExtent, bool validateIfcGuids)
+RDFBCF_EXPORT_IMPL(bool, bcfSetOptions) (BCFProject* project, const char* user, bool autoExtent, bool validateIfcGuids)
 {
     if (project) {
         TYPE_CHECK(project, Project, false);
@@ -171,7 +179,7 @@ RDFBCF_EXPORT bool bcfSetOptions(BCFProject* project, const char* user, bool aut
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT const char* bcfProjectIdGet(BCFProject* project)
+RDFBCF_EXPORT_IMPL(const char*, bcfProjectIdGet) (BCFProject* project)
 {
     if (project) {
         TYPE_CHECK(project, Project, NULL);
@@ -183,7 +191,7 @@ RDFBCF_EXPORT const char* bcfProjectIdGet(BCFProject* project)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT const char* bcfProjectNameGet(BCFProject* project)
+RDFBCF_EXPORT_IMPL(const char*, bcfProjectNameGet) (BCFProject* project)
 {
     if (project) {
         TYPE_CHECK(project, Project, NULL);
@@ -195,7 +203,7 @@ RDFBCF_EXPORT const char* bcfProjectNameGet(BCFProject* project)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT bool bcfProjectNameSet(BCFProject* project, const char* name)
+RDFBCF_EXPORT_IMPL(bool, bcfProjectNameSet) (BCFProject* project, const char* name)
 {
     if (project) {
         TYPE_CHECK(project, Project, false);
@@ -209,7 +217,7 @@ RDFBCF_EXPORT bool bcfProjectNameSet(BCFProject* project, const char* name)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT const char* bcfEnumerationElementGet(BCFProject* project, BCFEnumeration enumeration, uint16_t ind)
+RDFBCF_EXPORT_IMPL(const char*, bcfEnumerationElementGet) (BCFProject* project, BCFEnumeration enumeration, uint16_t ind)
 {
     if (project) {
         TYPE_CHECK(project, Project, NULL);
@@ -221,7 +229,7 @@ RDFBCF_EXPORT const char* bcfEnumerationElementGet(BCFProject* project, BCFEnume
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT bool bcfEnumerationElementAdd(BCFProject* project, BCFEnumeration enumeration, const char* element)
+RDFBCF_EXPORT_IMPL(bool, bcfEnumerationElementAdd) (BCFProject* project, BCFEnumeration enumeration, const char* element)
 {
     if (project) {
         TYPE_CHECK(project, Project, false);
@@ -233,7 +241,7 @@ RDFBCF_EXPORT bool bcfEnumerationElementAdd(BCFProject* project, BCFEnumeration 
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT bool bcfEnumerationElementRemove(BCFProject* project, BCFEnumeration enumeration, const char* element)
+RDFBCF_EXPORT_IMPL(bool, bcfEnumerationElementRemove) (BCFProject* project, BCFEnumeration enumeration, const char* element)
 {
     if (project) {
         TYPE_CHECK(project, Project, false);
@@ -247,7 +255,7 @@ RDFBCF_EXPORT bool bcfEnumerationElementRemove(BCFProject* project, BCFEnumerati
 /// </summary>
 OBJ_ITERATE(Topic, Project)
 OBJ_REMOVE(Topic)
-RDFBCF_EXPORT BCFTopic* bcfTopicAdd(BCFProject* project, const char* type, const char* title, const char* status, const char* guid)
+RDFBCF_EXPORT_IMPL(BCFTopic*, bcfTopicAdd) (BCFProject* project, const char* type, const char* title, const char* status, const char* guid)
 {
     if (project) {
         TYPE_CHECK(project, Project, NULL);
@@ -291,7 +299,7 @@ OBJ_SET_ATTR(Int, Topic, Index)
 /// </summary>
 OBJ_ITERATE(BimFile, Topic)
 OBJ_REMOVE(BimFile)
-RDFBCF_EXPORT BCFBimFile* bcfBimFileAdd(BCFTopic* topic, const char* filePath, bool isExternal)
+RDFBCF_EXPORT_IMPL(BCFBimFile*, bcfBimFileAdd) (BCFTopic* topic, const char* filePath, bool isExternal)
 {
     if (topic) {
         TYPE_CHECK(topic, Topic, NULL);
@@ -323,7 +331,7 @@ OBJ_SET_ATTR(Str, BimFile, IfcSpatialStructureElement   )
 /// </summary>
 OBJ_ITERATE(Comment, Topic)
 OBJ_REMOVE(Comment)
-RDFBCF_EXPORT BCFComment* bcfCommentAdd(BCFTopic* topic, const char* guid)
+RDFBCF_EXPORT_IMPL(BCFComment*, bcfCommentAdd) (BCFTopic* topic, const char* guid)
 {
     if (topic) {
         TYPE_CHECK(topic, Topic, NULL);
@@ -352,7 +360,7 @@ OBJ_SET_ATTR(ViewPoint, Comment, ViewPoint)
 /// </summary>
 OBJ_ITERATE(DocumentReference, Topic)
 OBJ_REMOVE(DocumentReference)
-RDFBCF_EXPORT BCFDocumentReference* bcfDocumentReferenceAdd(BCFTopic* topic, const char* filePath, bool isExternal, const char* guid)
+RDFBCF_EXPORT_IMPL(BCFDocumentReference*, bcfDocumentReferenceAdd) (BCFTopic* topic, const char* filePath, bool isExternal, const char* guid)
 {
     if (topic) {
         TYPE_CHECK(topic, Topic, NULL);
@@ -363,11 +371,12 @@ RDFBCF_EXPORT BCFDocumentReference* bcfDocumentReferenceAdd(BCFTopic* topic, con
 
 OBJ_GET_ATTR(Str, DocumentReference, Guid)
 OBJ_GET_ATTR(Str, DocumentReference, FilePath)
+OBJ_GET_ATTR(Bool,DocumentReference, IsExternal)
 OBJ_GET_ATTR(Str, DocumentReference, Description)
 
 OBJ_SET_ATTR(Str, DocumentReference, Description)
 
-RDFBCF_EXPORT bool bcfDocumentReferenceSetFilePath(BCFDocumentReference* documentReference, const char* filePath, bool isExternal)
+RDFBCF_EXPORT_IMPL(bool, bcfDocumentReferenceSetFilePath) (BCFDocumentReference* documentReference, const char* filePath, bool isExternal)
 {
     if (documentReference) {
         TYPE_CHECK(documentReference, DocumentReference, NULL);
@@ -382,7 +391,7 @@ RDFBCF_EXPORT bool bcfDocumentReferenceSetFilePath(BCFDocumentReference* documen
 /// </summary>
 OBJ_ITERATE(ViewPoint, Topic)
 OBJ_REMOVE(ViewPoint)
-RDFBCF_EXPORT BCFViewPoint* bcfViewPointAdd(BCFTopic* topic, const char* guid)
+RDFBCF_EXPORT_IMPL(BCFViewPoint*, bcfViewPointAdd) (BCFTopic* topic, const char* guid)
 {
     if (topic) {
         TYPE_CHECK(topic, Topic, NULL);
@@ -429,7 +438,7 @@ OBJ_SET_ATTR(Real,   ViewPoint, AspectRatio)
 /// </summary>
 OBJ_ITERATE(Coloring, ViewPoint)
 OBJ_REMOVE(Coloring)
-RDFBCF_EXPORT BCFColoring* bcfColoringAdd(BCFViewPoint* viewPoint, const char* color)
+RDFBCF_EXPORT_IMPL(BCFColoring*, bcfColoringAdd) (BCFViewPoint* viewPoint, const char* color)
 {
     if (viewPoint) {
         TYPE_CHECK(viewPoint, ViewPoint, NULL);
@@ -446,19 +455,19 @@ OBJ_SET_ATTR(Str, Coloring, Color)
 /// 
 /// </summary>
 #define COMPONENT_LIST(Parent, List)                                                            \
-RDFBCF_EXPORT BCFComponent* bcf##Parent##List##Add(BCF##Parent* parent, const char* ifcGuid)    \
+RDFBCF_EXPORT_IMPL(BCFComponent*, bcf##Parent##List##Add) (BCF##Parent* parent, const char* ifcGuid)    \
 {                                                                                               \
     if (parent) {                                                                               \
         TYPE_CHECK(parent, Parent, NULL);                                                       \
-        return parent->Add##List##(ifcGuid);                                                    \
+        return parent->Add##List(ifcGuid);                                                      \
     }                                                                                           \
     return NULL;                                                                                \
 }                                                                                               \
-RDFBCF_EXPORT BCFComponent* bcf##Parent##List##GetAt(BCF##Parent* parent, uint16_t ind)         \
+RDFBCF_EXPORT_IMPL(BCFComponent*, bcf##Parent##List##GetAt) (BCF##Parent* parent, uint16_t ind) \
 {                                                                                               \
     if (parent) {                                                                               \
         TYPE_CHECK(parent, Parent, NULL);                                                       \
-        return parent->Get##List##(ind);                                                        \
+        return parent->Get##List(ind);                                                          \
     }                                                                                           \
     return NULL;                                                                                \
 }                                                                                               \
@@ -470,7 +479,7 @@ COMPONENT_LIST(Coloring, Component)
 /// <summary>
 /// 
 /// </summary>
-RDFBCF_EXPORT bool bcfViewComponentRemove(BCFComponent* component)
+RDFBCF_EXPORT_IMPL(bool, bcfViewComponentRemove) (BCFComponent* component)
 {
     if (component) {
         TYPE_CHECK(component, Component, false);
@@ -495,7 +504,7 @@ OBJ_SET_ATTR(Str, Component, AuthoringToolId)
 /// 
 /// </summary>
 OBJ_REMOVE(BimSnippet)
-RDFBCF_EXPORT BCFBimSnippet* bcfTopicGetBimSnippet(BCFTopic* topic, bool forceCreate)
+RDFBCF_EXPORT_IMPL(BCFBimSnippet*, bcfTopicGetBimSnippet) (BCFTopic* topic, bool forceCreate)
 {
     if (topic) {
         TYPE_CHECK(topic, Topic, NULL);
@@ -518,27 +527,27 @@ OBJ_SET_ATTR(Str, BimSnippet, ReferenceSchema)
 /// 
 /// </summary>
 #define TOPIC_LIST(ListName, ElemType)                                                  \
-RDFBCF_EXPORT bool          bcf##ListName##Add   (BCFTopic* topic, t##ElemType val)     \
+RDFBCF_EXPORT_IMPL(bool, bcf##ListName##Add)  (BCFTopic* topic, t##ElemType val)        \
 {                                                                                       \
     if (topic) {                                                                        \
         TYPE_CHECK(topic, Topic, false);                                                \
-        return topic->Add##ListName##(val);                                             \
+        return topic->Add##ListName(val);                                               \
     }                                                                                   \
     return false;                                                                       \
 }                                                                                       \
-RDFBCF_EXPORT t##ElemType   bcf##ListName##GetAt(BCFTopic* topic, uint16_t ind)         \
+RDFBCF_EXPORT_IMPL(t##ElemType, bcf##ListName##GetAt) (BCFTopic* topic, uint16_t ind)   \
 {                                                                                       \
     if (topic) {                                                                        \
         TYPE_CHECK(topic, Topic, NULL);                                                 \
-        return topic->Get##ListName##(ind);                                             \
+        return topic->Get##ListName(ind);                                               \
     }                                                                                   \
     return NULL;                                                                        \
 }                                                                                       \
-RDFBCF_EXPORT bool          bcf##ListName##Remove(BCFTopic* topic, t##ElemType val)     \
+RDFBCF_EXPORT_IMPL(bool, bcf##ListName##Remove) (BCFTopic* topic, t##ElemType val)      \
 {                                                                                       \
     if (topic) {                                                                        \
         TYPE_CHECK(topic, Topic, false);                                                \
-        topic->Remove##ListName##(val);                                                 \
+        topic->Remove##ListName(val);                                                   \
     }                                                                                   \
     return false;                                                                       \
 }
@@ -552,7 +561,7 @@ TOPIC_LIST(RelatedTopic, Topic)
 /// </summary>
 OBJ_REMOVE(Bitmap)
 OBJ_ITERATE(Bitmap, ViewPoint)
-RDFBCF_EXPORT BCFBitmap* bcfBitmapAdd(BCFViewPoint* viewPoint, const char* filePath, BCFBitmapFormat format, BCFPoint* location, BCFPoint* normal, BCFPoint* up, double height)
+RDFBCF_EXPORT_IMPL(BCFBitmap*, bcfBitmapAdd) (BCFViewPoint* viewPoint, const char* filePath, BCFBitmapFormat format, BCFPoint* location, BCFPoint* normal, BCFPoint* up, double height)
 {
     if (viewPoint) {
         TYPE_CHECK(viewPoint, ViewPoint, NULL);
@@ -583,7 +592,7 @@ OBJ_SET_ATTR(Real, Bitmap, Height);
 /// </summary>
 OBJ_REMOVE(Line)
 OBJ_ITERATE(Line, ViewPoint)
-RDFBCF_EXPORT BCFLine* bcfLineAdd(BCFViewPoint* viewPoint, BCFPoint* start, BCFPoint* end)
+RDFBCF_EXPORT_IMPL(BCFLine*, bcfLineAdd) (BCFViewPoint* viewPoint, BCFPoint* start, BCFPoint* end)
 {
     if (viewPoint) {
         TYPE_CHECK(viewPoint, ViewPoint, NULL);
@@ -603,7 +612,7 @@ OBJ_SET_ATTR(Point, Line, EndPoint);
 /// </summary>
 OBJ_REMOVE(ClippingPlane)
 OBJ_ITERATE(ClippingPlane, ViewPoint)
-RDFBCF_EXPORT BCFClippingPlane* bcfClippingPlaneAdd(BCFViewPoint* viewPoint, BCFPoint* location, BCFPoint* direction)
+RDFBCF_EXPORT_IMPL(BCFClippingPlane*, bcfClippingPlaneAdd) (BCFViewPoint* viewPoint, BCFPoint* location, BCFPoint* direction)
 {
     if (viewPoint) {
         TYPE_CHECK(viewPoint, ViewPoint, NULL);
