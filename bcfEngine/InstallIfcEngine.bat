@@ -13,8 +13,8 @@ xcopy %RDF_IFC_ENGINE_INCLUDE% %ProjectDir%IfcEngine\include /F /Y
 echo Check IFC engine binaries
 if .%RDF_IFC_ENGINE_LIB%.==.. goto LibUpdated
 echo Update lib and dll
-xcopy %RDF_IFC_ENGINE_LIB%Release\ifcengine.lib %ProjectDir%ifcengine\lib /F /Y
-xcopy %RDF_IFC_ENGINE_LIB%Release\ifcengine.dll %ProjectDir%ifcengine\lib /F /Y
+xcopy %RDF_IFC_ENGINE_LIB%x64\Release\ifcengine.lib %ProjectDir%ifcengine\lib /F /Y
+xcopy %RDF_IFC_ENGINE_LIB%x64\Release\ifcengine.dll %ProjectDir%ifcengine\lib /F /Y
 :LibUpdated
 
 echo Copy dll to output
