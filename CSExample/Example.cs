@@ -76,22 +76,38 @@ namespace CSExample
         /// </summary>
         static void ReadExample()
         {
+            string bcfFilePath = "MyTest.bcf";
             using (var bcfData = new RDF.BCF.Project())
             {
-                if (!bcfData.FileRead("MyTest.bcf", false)) {
+                Console.WriteLine($"Reading BCF file: {bcfFilePath}");
+
+                if (!bcfData.FileRead(bcfFilePath, false))
+                {
                     Console.WriteLine($"Failed to read BCF file: {bcfData.GetErrors()}");
                     return;
                 }
 
+                Console.WriteLine($"Read - project name '{bcfData.Name}', id: {bcfData.ProjectId}");
+
+                Console.WriteLine($"Topics count: {bcfData.GetTopics().Count}");
                 foreach (var topic in bcfData.GetTopics())
                 {
                     Console.WriteLine($"Topic '{topic.Title}', type: {topic.TopicType}, status: {topic.TopicStatus}");
                     Console.WriteLine($"By {topic.CreationAuthor} {topic.CreationDate} {topic.ModifiedAuthor} {topic.ModifiedDate}");
                     Console.WriteLine($"{topic.Description}");
 
+                    Console.WriteLine($"Comments count: {topic.GetComments().Count}");
                     foreach (var comment in topic.GetComments())
                     {
                         Console.WriteLine($"  Comment by {comment.Author} {comment.Date}: {comment.Text}");
+                    }
+
+                    Console.WriteLine($"Document count: {topic.GetDocumentReferences().Count}");
+                    foreach (var docRef in topic.GetDocumentReferences())
+                    {
+                        Console.WriteLine($"  Document GUID: {docRef.Guid}");
+                        Console.WriteLine($"       external: {docRef.IsExternal}, description: {docRef.Description}");
+                        Console.WriteLine($"       path: {docRef.FilePath}");
                     }
                 }
             }
