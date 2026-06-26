@@ -33,8 +33,11 @@ namespace CSExample
                     return;
                 }
 
-                topic.Description = "This topic is made to demonstate how to create BCF";
+                topic.Description = "This topic is made to demonstrate how to create BCF";
                 topic.AddFile("..\\TestCases\\Architectural.ifc");
+
+                topic.AddDocumentRefernce("https://example.com/spec.pdf");
+
 
                 //
                 // create comment
