@@ -299,3 +299,110 @@ BCFProject& Extensions::GetProject()
 {
     return m_project;
 }
+
+/// <summary>
+/// 
+/// </summary>
+bool Extensions::WriteExtension(const std::string& folder)
+{
+    if (Project_().GetVersion() < BCFVer_3_0) {
+        return WriteExtensionV21(folder);
+    }
+    else {
+        return WriteFile(folder);
+    }
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool Extensions::WriteExtensionV21(const std::string& folder)
+{
+    bool ok = false;
+
+    std::string xmlpath(folder);
+    FileSystem::AddPath(xmlpath, "extensions.xsd");
+
+    try {
+        _xml_writer writer(xmlpath.c_str());
+
+        writer.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+        writer.writeComment("RDF BCF engine build " __DATE__ ". http://rdf.bg.");
+
+        Attributes attr;
+        attr.Add("xmlns", "http://www.w3.org/2001/XMLSchema");
+        WRITE_ELEM(schema);
+
+        ok = true;
+    }
+    catch (std::exception& ex) {
+        m_project.Log_().add(Log::Level::error, "Write file error", "Failed to write %s file. %s", xmlpath.c_str(), ex.what());
+    }
+
+    return ok;
+}
+
+/// <summary>
+/// 
+/// </summary>
+void Extensions::Write_schema(_xml_writer& writer, const std::string& folder)
+{
+    Attributes attr;
+    attr.Add("schemaLocation", "markup.xsd");
+    WRITE_ELEM(redefine);
+}
+
+/// <summary>
+/// 
+/// </summary>
+void Extensions::Write_redefine(_xml_writer& writer, const std::string& folder)
+{
+    WriteEnumerationV21(writer, BCFTopicTypes, "TopicType");
+    WriteEnumerationV21(writer, BCFTopicStatuses, "TopicStatus");
+    WriteEnumerationV21(writer, BCFPriorities, "Priority");
+    WriteEnumerationV21(writer, BCFTopicLabels, "TopicLabel");
+    WriteEnumerationV21(writer, BCFUsers, "UserIdType");
+    WriteEnumerationV21(writer, BCFSnippetTypes, "SnippetType");
+    WriteEnumerationV21(writer, BCFStages, "Stage");
+}
+
+/// <summary>
+/// 
+/// </summary>
+void Extensions::WriteEnumerationV21(_xml_writer& writer, BCFEnumeration enumeration, const char* tag)
+{
+    auto list = GetList(enumeration);
+    if (!list) {
+        assert(false);
+        throw std::runtime_error(std::string("Invalid BCF enumeration in ") + __FUNCTION__);
+    }
+
+    if (!list->size()) {
+        return;
+    }
+
+
+    Attributes attr;
+    attr.Add("name", tag);
+    writer.writeStartTag("simpleType", attr);
+    writer.indent()++;
+
+    Attributes attr2;
+    attr2.Add("base", tag);
+    writer.writeStartTag("restriction", attr2);
+    writer.indent()++;
+
+    for (auto& elem : *list) {
+        if (!elem.empty()) {
+            Attributes attr3;
+            attr3.Add("value", elem.c_str());
+            writer.writeTag("enumeration", attr3);
+        }
+    }
+
+    writer.indent()--;
+    writer.writeEndTag("restriction");
+
+    writer.indent()--;
+    writer.writeEndTag("simpleType");
+}

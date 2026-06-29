@@ -83,7 +83,7 @@ void ProjectInfo::WriteRootContent(_xml_writer& writer, const std::string& folde
     WRITE_ELEM(Project);
 
     if (Project_().GetVersion() < BCFVer_3_0) {
-        writer.writeTag("ExtensionSchema", "");
+        writer.writeTag("ExtensionSchema", "extensions.xsd");
     }
 }
 

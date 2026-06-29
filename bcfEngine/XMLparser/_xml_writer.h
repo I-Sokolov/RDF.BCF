@@ -109,6 +109,20 @@ public: // Methods
 		writeEndTag(strTag, false);
 	}
 
+	void writeTag(const string& strTag, const vector<pair<string, string>>& vecAttributes)
+	{
+		VERIFY_STLOBJ_IS_NOT_EMPTY(strTag);
+
+		*getOutputStream() << "\n";
+		writeIndent();
+		*getOutputStream() << "<" << strTag.c_str();
+		for (auto prAttribute : vecAttributes)
+		{
+			*getOutputStream() << " " << prAttribute.first.c_str() << "=\"" << prAttribute.second.c_str() << "\"";
+		}
+		*getOutputStream() << " />";
+	}
+
 	void writeIndent()
 	{
 		for (int iTab = 0; iTab < m_iIndent; iTab++)

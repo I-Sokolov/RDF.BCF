@@ -22,6 +22,8 @@ public:
     bool CheckElement(BCFEnumeration enumeration, const char* element);
     void ReadExtensionSchema(_xml::_element& elem, const std::string& folder); //v2.1
     bool Validate(bool) { return true; }
+    
+    bool WriteExtension(const std::string& folder);
 
 private:
     //XMLFile implementation
@@ -31,6 +33,8 @@ private:
     virtual void ReadRoot(_xml::_element& elem, const std::string& folder) override;
     virtual void AfterRead(const std::string&) override  {}
     virtual void WriteRootContent(_xml_writer& writer, const std::string& folder) override;
+
+    bool WriteExtensionV21(const std::string& folder);
 
 private:
     StringSet* GetList(BCFEnumeration enumeration);
@@ -59,6 +63,11 @@ private:
     void ReadExtensionSchema_simpleType(_xml::_element& elem, const std::string& folder);
     void ReadExtensionSchema_restriction(_xml::_element& elem, const std::string& folder);
     void ReadExtensionSchema_enumeration(_xml::_element& elem, const std::string& folder);
+
+    //v2.1
+    void Write_schema(_xml_writer& writer, const std::string& folder);
+    void Write_redefine(_xml_writer& writer, const std::string& folder);
+    void WriteEnumerationV21(_xml_writer& writer, BCFEnumeration enumeration, const char* tag);
 
 private:
     std::vector<StringSet>  m_elements;
