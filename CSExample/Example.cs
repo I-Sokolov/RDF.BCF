@@ -63,12 +63,15 @@ namespace CSExample
 
                 //
                 //
-                bcfData.FileWrite("MyTest.bcf");
-
-                var errors = bcfData.GetErrors();
-                if(errors.Length != 0)
+                for (var version = RDF.BCF.Interop.Version._2_1; version <= RDF.BCF.Interop.Version._3_0; version++)
                 {
-                    Console.WriteLine("There were errors: " + errors);
+                    bcfData.FileWrite("MyTest.bcf", version);
+
+                    var errors = bcfData.GetErrors();
+                    if (errors.Length != 0)
+                    {
+                        Console.WriteLine("There were errors: " + errors);
+                    }
                 }
             }
         }

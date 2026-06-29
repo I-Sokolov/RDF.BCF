@@ -959,6 +959,19 @@ static	inline	void	GetInternalCheckIssueW(
 #endif
 
 //
+//		ValidateResource                                        (https://rdf.bg/gkdoc/CP64/ValidateResource.html)
+//				RdfsResource			rdfsResource						IN
+//
+//				int64_t					returns								OUT
+//
+//	This function starts an internal validation on a resource. Any rdfsResource can be used as input.
+//	If nothing unexpected is found the return value is 0.
+//
+int64_t			DECL STDC	ValidateResource(
+									RdfsResource			rdfsResource
+								);
+
+//
 //		CloseSession                                            (https://rdf.bg/gkdoc/CP64/CloseSession.html)
 //				int64_t					returns								OUT
 //
@@ -1843,7 +1856,11 @@ static	inline	char	* EncodeBase64(
 								int64_t					size
 							)
 {
+#ifdef _ALLOC
+	char	* output = (char*) malloc((int_t) EncodeBase64(nullptr, input, size) + sizeof(char));
+#else
 	char	* output = new char[(int_t) EncodeBase64(nullptr, input, size) / sizeof(char) + 1];
+#endif
 
 	EncodeBase64(
 			output,
@@ -1910,7 +1927,11 @@ static	inline	wchar_t	* EncodeBase64W(
 								int64_t					size
 							)
 {
+#ifdef _ALLOC
+	wchar_t * output = (wchar_t*) malloc((int_t) EncodeBase64(nullptr, input, size) + sizeof(wchar_t));
+#else
 	wchar_t * output = new wchar_t[(int_t) EncodeBase64(nullptr, input, size) / sizeof(wchar_t) + 1];
+#endif
 
 	EncodeBase64W(
 			output,
@@ -5679,7 +5700,7 @@ static	inline	int64_t	CalculateInstance(
 //
 //	This function prepares the content to be ready without filling the buffers
 //	as done within CalculateInstance(). CalculateInstance calls this function as a start.
-//	This function will also set the 'derived' values for the instance passed as argument.
+//	This function will also set the derived values for the instance passed as argument.
 //	For example the coordinates values of a MultiplicationMatrix will be set if the array is
 //	defined.
 //
@@ -5700,6 +5721,63 @@ int64_t			DECL STDC	UpdateInstance(
 //
 bool			DECL STDC	IsUpToDate(
 									OwlInstance				owlInstance
+								);
+
+//
+//		SetPropertyDerived                                      (https://rdf.bg/gkdoc/CP64/SetPropertyDerived.html)
+//				RdfsResource			rdfsResource						IN
+//				RdfProperty				rdfProperty							IN
+//				bool					derived								IN
+//
+//				void					returns
+//
+//	This function sets if the property of an instance, class or model is derived.
+//
+void			DECL STDC	SetPropertyDerived(
+									RdfsResource			rdfsResource,
+									RdfProperty				rdfProperty,
+									bool					derived
+								);
+
+//
+//		GetPropertyDerived                                      (https://rdf.bg/gkdoc/CP64/GetPropertyDerived.html)
+//				RdfsResource			rdfsResource						IN
+//				RdfProperty				rdfProperty							IN
+//
+//				bool					returns								OUT
+//
+//	This function returns true if instance, class or model has the property set as derived.
+//
+bool			DECL STDC	GetPropertyDerived(
+									RdfsResource			rdfsResource,
+									RdfProperty				rdfProperty
+								);
+
+//
+//		GetClassModificationMark                                (https://rdf.bg/gkdoc/CP64/GetClassModificationMark.html)
+//				OwlClass				owlClass							IN
+//
+//				int64_t					returns								OUT
+//
+//	This function returns value that indicated class modification time but it is not the time.
+//	If a class or any of its parents have been modified the value will increase.
+//	If a class or any of its parents have been modified later then another the value will be bigger.
+//
+int64_t			DECL STDC	GetClassModificationMark(
+									OwlClass				owlClass
+								);
+
+//
+//		UpdateClassModificationMark                             (https://rdf.bg/gkdoc/CP64/UpdateClassModificationMark.html)
+//				OwlClass				owlClass							IN
+//
+//				void					returns
+//
+//	This function informs class it has been changed externally.
+//	Application may want to call it when it changed its class external reference data. 
+//
+void			DECL STDC	UpdateClassModificationMark(
+									OwlClass				owlClass
 								);
 
 //
@@ -5864,6 +5942,124 @@ int64_t			DECL STDC	GetConceptualFaceCnt(
 								);
 
 //
+//		GetConceptualFaceDiscriminator                          (https://rdf.bg/gkdoc/CP64/GetConceptualFaceDiscriminator.html)
+//				OwlInstance				owlInstance							IN
+//				int64_t					index								IN
+//				const char				** name								IN / OUT
+//
+//				const char				* returns							OUT
+//
+//	This function returns a unique name for the conceptualFace.
+//	The name will be the same for each recalculation of the geometry.
+//	The return value (and optional argument name) have a valid content till the next call of this
+//	function or till the model is closed.
+//
+//	Note: This allows to keep track of conceptual faces if te number of conceptual faces changes.
+//	For example in case of a boolean operation where the type of placement of objects is changing. 
+//
+const char		DECL * STDC	GetConceptualFaceDiscriminator(
+									OwlInstance				owlInstance,
+									int64_t					index,
+									const char				** name
+								);
+
+#ifdef __cplusplus
+	}
+//{{ Begin C++ polymorphic versions
+
+//
+//
+static	inline	const char	* GetConceptualFaceDiscriminator(
+									OwlInstance				owlInstance,
+									int64_t					index,
+									char					** name
+								)
+{
+	return	GetConceptualFaceDiscriminator(
+					owlInstance,
+					index,
+					(const char**) name
+				);
+}
+
+//
+//
+static	inline	const char	* GetConceptualFaceDiscriminator(
+									OwlInstance				owlInstance,
+									int64_t					index
+								)
+{
+	return	GetConceptualFaceDiscriminator(
+					owlInstance,
+					index,
+					(const char**) nullptr				//	name
+				);
+}
+
+//}} End C++ polymorphic versions
+	extern "C" {
+#endif
+
+//
+//		GetConceptualFaceDiscriminatorW                         (https://rdf.bg/gkdoc/CP64/GetConceptualFaceDiscriminatorW.html)
+//				OwlInstance				owlInstance							IN
+//				int64_t					index								IN
+//				const wchar_t			** name								IN / OUT
+//
+//				const wchar_t			* returns							OUT
+//
+//	This function returns a unique name for the conceptualFace.
+//	The name will be the same for each recalculation of the geometry.
+//	The return value (and optional argument name) have a valid content till the next call of this
+//	function or till the model is closed.
+//
+//	Note: This allows to keep track of conceptual faces if te number of conceptual faces changes.
+//	For example in case of a boolean operation where the type of placement of objects is changing. 
+//
+const wchar_t	DECL * STDC	GetConceptualFaceDiscriminatorW(
+									OwlInstance				owlInstance,
+									int64_t					index,
+									const wchar_t			** name
+								);
+
+#ifdef __cplusplus
+	}
+//{{ Begin C++ polymorphic versions
+
+//
+//
+static	inline	const wchar_t	* GetConceptualFaceDiscriminatorW(
+										OwlInstance				owlInstance,
+										int64_t					index,
+										wchar_t					** name
+									)
+{
+	return	GetConceptualFaceDiscriminatorW(
+					owlInstance,
+					index,
+					(const wchar_t**) name
+				);
+}
+
+//
+//
+static	inline	const wchar_t	* GetConceptualFaceDiscriminatorW(
+										OwlInstance				owlInstance,
+										int64_t					index
+									)
+{
+	return	GetConceptualFaceDiscriminatorW(
+					owlInstance,
+					index,
+					(const wchar_t**) nullptr			//	name
+				);
+}
+
+//}} End C++ polymorphic versions
+	extern "C" {
+#endif
+
+//
 //		GetConceptualFace                                       (https://rdf.bg/gkdoc/CP64/GetConceptualFace.html)
 //				OwlInstance				owlInstance							IN
 //				int64_t					index								IN
@@ -5956,6 +6152,48 @@ static	inline	ConceptualFace	GetConceptualFace(
 #endif
 
 //
+//		GetConceptualFaceMatrix                                 (https://rdf.bg/gkdoc/CP64/GetConceptualFaceMatrix.html)
+//				OwlInstance				owlInstance							IN
+//				int64_t					index								IN
+//				double					* matrix							IN / OUT
+//
+//				double					* returns							OUT
+//
+//	This function returns the transformation matrix of the conceptual face.
+//
+//	The matrix is defined as a 12 element matrix.
+//
+//	In case matrix is not allocated by the host the matrix is outdated the moment the same call is called again.
+//
+double			DECL * STDC	GetConceptualFaceMatrix(
+									OwlInstance				owlInstance,
+									int64_t					index,
+									double					* matrix
+								);
+
+#ifdef __cplusplus
+	}
+//{{ Begin C++ polymorphic versions
+
+//
+//
+static	inline	double	* GetConceptualFaceMatrix(
+								OwlInstance				owlInstance,
+								int64_t					index
+							)
+{
+	return	GetConceptualFaceMatrix(
+					owlInstance,
+					index,
+					nullptr								//	matrix
+				);
+}
+
+//}} End C++ polymorphic versions
+	extern "C" {
+#endif
+
+//
 //		GetConceptualFaceMaterial                               (https://rdf.bg/gkdoc/CP64/GetConceptualFaceMaterial.html)
 //				ConceptualFace			conceptualFace						IN
 //
@@ -6014,114 +6252,9 @@ void			DECL STDC	GetConceptualFaceOriginEx(
 								);
 
 //
-//		GetConceptualFaceGUID                                   (https://rdf.bg/gkdoc/CP64/GetConceptualFaceGUID.html)
-//				ConceptualFace			conceptualFace						IN
-//				const char				** name								IN / OUT
-//
-//				const char				* returns							OUT
-//
-//	This function returns a unique name for the conceptualFace.
-//	The name will be the same for each recalculation of the geometry.
-//	The return value (and optional name argument) have a valid content till thhe next call of this
-//	function or till the model is closed.
-//
-//	Note: This allows to keep track of conceptual faces if te number of conceptual faces changes.
-//	For example in case of a boolean operation where the type of placement of objects is changing. 
-//
-const char		DECL * STDC	GetConceptualFaceGUID(
-									ConceptualFace			conceptualFace,
-									const char				** name
-								);
-
-#ifdef __cplusplus
-	}
-//{{ Begin C++ polymorphic versions
-
-//
-//
-static	inline	const char	* GetConceptualFaceGUID(
-									ConceptualFace			conceptualFace,
-									char					** name
-								)
-{
-	return	GetConceptualFaceGUID(
-					conceptualFace,
-					(const char**) name
-				);
-}
-
-//
-//
-static	inline	const char	* GetConceptualFaceGUID(
-									ConceptualFace			conceptualFace
-								)
-{
-	return	GetConceptualFaceGUID(
-					conceptualFace,
-					(const char**) nullptr				//	name
-				);
-}
-
-//}} End C++ polymorphic versions
-	extern "C" {
-#endif
-
-//
-//		GetConceptualFaceGUIDW                                  (https://rdf.bg/gkdoc/CP64/GetConceptualFaceGUIDW.html)
-//				ConceptualFace			conceptualFace						IN
-//				const wchar_t			** name								IN / OUT
-//
-//				const wchar_t			* returns							OUT
-//
-//	This function returns a unique name for the conceptualFace.
-//	The name will be the same for each recalculation of the geometry.
-//	The return value (and optional name argument) have a valid content till thhe next call of this
-//	function or till the model is closed.
-//
-//	Note: This allows to keep track of conceptual faces if te number of conceptual faces changes.
-//	For example in case of a boolean operation where the type of placement of objects is changing. 
-//
-const wchar_t	DECL * STDC	GetConceptualFaceGUIDW(
-									ConceptualFace			conceptualFace,
-									const wchar_t			** name
-								);
-
-#ifdef __cplusplus
-	}
-//{{ Begin C++ polymorphic versions
-
-//
-//
-static	inline	const wchar_t	* GetConceptualFaceGUIDW(
-										ConceptualFace			conceptualFace,
-										wchar_t					** name
-									)
-{
-	return	GetConceptualFaceGUIDW(
-					conceptualFace,
-					(const wchar_t**) name
-				);
-}
-
-//
-//
-static	inline	const wchar_t	* GetConceptualFaceGUIDW(
-										ConceptualFace			conceptualFace
-									)
-{
-	return	GetConceptualFaceGUIDW(
-					conceptualFace,
-					(const wchar_t**) nullptr			//	name
-				);
-}
-
-//}} End C++ polymorphic versions
-	extern "C" {
-#endif
-
-//
 //		GetConceptualFaceXYZ2UV                                 (https://rdf.bg/gkdoc/CP64/GetConceptualFaceXYZ2UV.html)
-//				ConceptualFace			conceptualFace						IN
+//				OwlInstance				owlInstance							IN
+//				int64_t					index								IN
 //				double					* u									IN / OUT
 //				double					* v									IN / OUT
 //				double					x									IN
@@ -6134,7 +6267,8 @@ static	inline	const wchar_t	* GetConceptualFaceGUIDW(
 //	The UV coordinates are expected to be both (inclusive) between 0. and 1., i.e. [0..1].
 //
 bool			DECL STDC	GetConceptualFaceXYZ2UV(
-									ConceptualFace			conceptualFace,
+									OwlInstance				owlInstance,
+									int64_t					index,
 									double					* u,
 									double					* v,
 									double					x,
@@ -6149,13 +6283,15 @@ bool			DECL STDC	GetConceptualFaceXYZ2UV(
 //
 //
 static	inline	bool	GetConceptualFaceXYZ2UV(
-								ConceptualFace			conceptualFace,
+								OwlInstance				owlInstance,
+								int64_t					index,
 								double					* out__VEC2,
 								const double			* in__VEC3
 							)
 {
 	return	GetConceptualFaceXYZ2UV(
-					conceptualFace,
+					owlInstance,
+					index,
 					&out__VEC2[0],						//	u
 					&out__VEC2[1],						//	v
 					in__VEC3[0],						//	x
@@ -6170,10 +6306,14 @@ static	inline	bool	GetConceptualFaceXYZ2UV(
 
 //
 //		GetConceptualFaceUV2XYZ                                 (https://rdf.bg/gkdoc/CP64/GetConceptualFaceUV2XYZ.html)
-//				ConceptualFace			conceptualFace						IN
+//				OwlInstance				owlInstance							IN
+//				int64_t					index								IN
 //				double					* x									IN / OUT
 //				double					* y									IN / OUT
 //				double					* z									IN / OUT
+//				double					* Nx								IN / OUT
+//				double					* Ny								IN / OUT
+//				double					* Nz								IN / OUT
 //				double					u									IN
 //				double					v									IN
 //
@@ -6199,10 +6339,14 @@ static	inline	bool	GetConceptualFaceXYZ2UV(
 //	    GetConceptualFaceUV2XYZ(conceptualFace, &x, &y, &z, u, v);
 //
 bool			DECL STDC	GetConceptualFaceUV2XYZ(
-									ConceptualFace			conceptualFace,
+									OwlInstance				owlInstance,
+									int64_t					index,
 									double					* x,
 									double					* y,
 									double					* z,
+									double					* Nx,
+									double					* Ny,
+									double					* Nz,
 									double					u,
 									double					v
 								);
@@ -6214,16 +6358,45 @@ bool			DECL STDC	GetConceptualFaceUV2XYZ(
 //
 //
 static	inline	bool	GetConceptualFaceUV2XYZ(
-								ConceptualFace			conceptualFace,
+								OwlInstance				owlInstance,
+								int64_t					index,
+								double					* vector__VEC3,
+								double					* normal__VEC3,
+								const double			* in__VEC2
+							)
+{
+	return	GetConceptualFaceUV2XYZ(
+					owlInstance,
+					index,
+					&vector__VEC3[0],					//	x
+					&vector__VEC3[1],					//	y
+					&vector__VEC3[2],					//	z
+					&normal__VEC3[0],					//	Nx
+					&normal__VEC3[1],					//	Ny
+					&normal__VEC3[2],					//	Nz
+					in__VEC2[0],						//	u
+					in__VEC2[1]							//	v
+				);
+}
+
+//
+//
+static	inline	bool	GetConceptualFaceUV2XYZ(
+								OwlInstance				owlInstance,
+								int64_t					index,
 								double					* out__VEC3,
 								const double			* in__VEC2
 							)
 {
 	return	GetConceptualFaceUV2XYZ(
-					conceptualFace,
+					owlInstance,
+					index,
 					&out__VEC3[0],						//	x
 					&out__VEC3[1],						//	y
 					&out__VEC3[2],						//	z
+					nullptr,							//	Nx
+					nullptr,							//	Ny
+					nullptr,							//	Nz
 					in__VEC2[0],						//	u
 					in__VEC2[1]							//	v
 				);

@@ -73,7 +73,7 @@ bool XMLFile::WriteFile(const std::string& bcfFolder)
 
 #ifdef SMOKE_TEST
     if (ok) {
-        SmokeTest_ValidateXSD(XSDName(), xmlpath.c_str());
+        SmokeTest_ValidateXSD(XSDName(), xmlpath.c_str(), Project_().GetVersion());
     }
 #endif
 

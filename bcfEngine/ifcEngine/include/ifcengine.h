@@ -159,7 +159,7 @@ enum class enum_express_declaration : unsigned char
 	__WHERE_RULE				= 8
 };
 
-enum class enum_express_attr_type : unsigned char
+enum class enum_express_data_type : unsigned char
 {
 	__NONE						= 0,					//	attribute type is unknown here but it may be defined by referenced domain entity
 	__BINARY					= 1,
@@ -202,7 +202,7 @@ enum class enum_validation_type : uint64_t
 	__ABSTRACT_ENTITY			= 1 << 11,  			//	abstract entity should not instantiate
 	__WHERE_RULE				= 1 << 12,  			//	where-rule check
 	__UNIQUE_RULE				= 1 << 13,				//	unique-rule check
-	__STAR_USAGE				= 1 << 14,  			//	* is used only for derived arguments
+	__STAR_USAGE				= 1 << 14,  			//	* must be used for and only for derived attributes
 	__CALL_ARGUMENT				= 1 << 15,  			//	validateModel/validateInstance function argument should be model/instance
 	__INVALID_TEXT_LITERAL		= 1 << 16,				//	invalid text literal string
 	__INTERNAL_ERROR			= UINT64_C(1) << 63   	//	unspecified error
@@ -220,7 +220,7 @@ enum class enum_validation_status : unsigned char
 	typedef unsigned char bool;
 	typedef unsigned char enum_string_encoding;
 	typedef unsigned char enum_express_declaration;
-	typedef unsigned char enum_express_attr_type;
+	typedef unsigned char enum_express_data_type;
 	typedef unsigned char enum_express_aggr;
 	typedef uint64_t	  enum_validation_type;
 	typedef unsigned char enum_validation_status;
@@ -1599,11 +1599,11 @@ SchemaDecl		DECL STDC	engiGetSelectElement(
 //				SchemaDecl				* referencedDeclaration				IN / OUT
 //				SchemaAggr				* aggregationDefinition				IN / OUT
 //
-//				enum_express_attr_type	returns								OUT
+//				enum_express_data_type	returns								OUT
 //
 //	This call returns a simple type for defined type handle and can inquire referenced type, if any.
 //
-enum_express_attr_type	DECL STDC	engiGetDefinedType(
+enum_express_data_type	DECL STDC	engiGetDefinedType(
 									SchemaDecl				definedType,
 									SchemaDecl				* referencedDeclaration,
 									SchemaAggr				* aggregationDefinition
@@ -1770,207 +1770,22 @@ SdaiModel		DECL STDC	engiGetEntityModel(
 								);
 
 //
-//		engiGetAttrIndex                                        (https://rdf.bg/ifcdoc/CP64/engiGetAttrIndex.html)
-//				SdaiAttr				attribute							IN
-//
-//				int_t					returns								OUT
-//
-//	This call works for non-complex entities and entities without multiple inheritance,
-//	it is advised not to use this call for other schemas.
-//
-int_t			DECL STDC	engiGetAttrIndex(
-									SdaiAttr				attribute
-								);
-
-//
-//		engiGetAttrIndexBN                                      (https://rdf.bg/ifcdoc/CP64/engiGetAttrIndexBN.html)
+//		engiGetEntityAttributePosition                          (https://rdf.bg/ifcdoc/CP64/engiGetEntityAttributePosition.html)
 //				SdaiEntity				entity								IN
-//				SdaiString				attributeName						IN
-//
-//				int_t					returns								OUT
-//
-//	This call works for non-complex entities and entities without multiple inheritance,
-//	it is advised not to use this call for other schemas.
-//
-//	Technically engiGetAttrIndexBN will transform into the following call
-//		engiGetAttrIndex(
-//				sdaiGetAttrDefinition(
-//						entity,
-//						attributeName
-//					)
-//			);
-//
-int_t			DECL STDC	engiGetAttrIndexBN(
-									SdaiEntity				entity,
-									SdaiString				attributeName
-								);
-
-#ifdef __cplusplus
-	}
-//{{ Begin C++ polymorphic versions
-
-//
-//
-static	inline	int_t	engiGetAttrIndexBN(
-								SdaiEntity				entity,
-								char					* attributeName
-							)
-{
-	return	engiGetAttrIndexBN(
-					entity,
-					(SdaiString) attributeName
-				);
-}
-
-//}} End C++ polymorphic versions
-	extern "C" {
-#endif
-
-//
-//		engiGetAttrIndexEx                                      (https://rdf.bg/ifcdoc/CP64/engiGetAttrIndexEx.html)
 //				SdaiAttr				attribute							IN
-//				bool					countedWithParents					IN
-//				bool					countedWithInverse					IN
+//				bool					forSimpleInstance					IN
 //
 //				int_t					returns								OUT
 //
-//	This call works for non-complex entities and entities without multiple inheritance,
-//	it is advised not to use this call for other schemas.
+//	Get a position in a step file record where the value of the attribute is stored for simple instance or for component of complex instance.
+//	In case of complex entities 'entity' is a component of the complex entity.
+//	The position is 0-based.
+//	Returns -1 if the attribute has no slot to store value (inverse, pure derived or irrelevant attribute) or when 'entity' is a complex entity.
 //
-int_t			DECL STDC	engiGetAttrIndexEx(
+int_t			DECL STDC	engiGetEntityAttributePosition(
+									SdaiEntity				entity,
 									SdaiAttr				attribute,
-									bool					countedWithParents,
-									bool					countedWithInverse
-								);
-
-//
-//		engiGetAttrIndexExBN                                    (https://rdf.bg/ifcdoc/CP64/engiGetAttrIndexExBN.html)
-//				SdaiEntity				entity								IN
-//				SdaiString				attributeName						IN
-//				bool					countedWithParents					IN
-//				bool					countedWithInverse					IN
-//
-//				int_t					returns								OUT
-//
-//	This call works for non-complex entities and entities without multiple inheritance,
-//	it is advised not to use this call for other schemas.
-//
-//	Technically engiGetAttrIndexExBN will transform into the following call
-//		engiGetAttrIndexEx(
-//				sdaiGetAttrDefinition(
-//						entity,
-//						attributeName
-//					),
-//				countedWithParents,
-//				countedWithInverse
-//			);
-//
-int_t			DECL STDC	engiGetAttrIndexExBN(
-									SdaiEntity				entity,
-									SdaiString				attributeName,
-									bool					countedWithParents,
-									bool					countedWithInverse
-								);
-
-#ifdef __cplusplus
-	}
-//{{ Begin C++ polymorphic versions
-
-//
-//
-static	inline	int_t	engiGetAttrIndexExBN(
-								SdaiEntity				entity,
-								char					* attributeName,
-								bool					countedWithParents,
-								bool					countedWithInverse
-							)
-{
-	return	engiGetAttrIndexExBN(
-					entity,
-					(SdaiString) attributeName,
-					countedWithParents,
-					countedWithInverse
-				);
-}
-
-//}} End C++ polymorphic versions
-	extern "C" {
-#endif
-
-//
-//		engiGetAttrNameByIndex                                  (https://rdf.bg/ifcdoc/CP64/engiGetAttrNameByIndex.html)
-//				SdaiEntity				entity								IN
-//				SdaiInteger				index								IN
-//				SdaiPrimitiveType		valueType							IN
-//				SdaiString				* attributeName						IN / OUT
-//
-//				SdaiString				returns								OUT
-//
-//	This call can be used to retrieve the name of the n-th argument of the given entity. Arguments of parent entities are included in the index. Both explicit and inverse attributes are included.
-//
-SdaiString		DECL STDC	engiGetAttrNameByIndex(
-									SdaiEntity				entity,
-									SdaiInteger				index,
-									SdaiPrimitiveType		valueType,
-									SdaiString				* attributeName
-								);
-
-#ifdef __cplusplus
-	}
-//{{ Begin C++ polymorphic versions
-
-//
-//
-static	inline	SdaiString	engiGetAttrNameByIndex(
-									SdaiEntity				entity,
-									SdaiInteger				index,
-									SdaiPrimitiveType		valueType,
-									char					** attributeName
-								)
-{
-	return	engiGetAttrNameByIndex(
-					entity,
-					index,
-					valueType,
-					(SdaiString*) attributeName
-				);
-}
-
-//
-//
-static	inline	SdaiString	engiGetAttrNameByIndex(
-									SdaiEntity				entity,
-									SdaiInteger				index,
-									SdaiPrimitiveType		valueType
-								)
-{
-	return	engiGetAttrNameByIndex(
-					entity,
-					index,
-					valueType,
-					(SdaiString*) nullptr				//	attributeName
-				);
-}
-
-//}} End C++ polymorphic versions
-	extern "C" {
-#endif
-
-//
-//		engiGetAttrTypeByIndex                                  (https://rdf.bg/ifcdoc/CP64/engiGetAttrTypeByIndex.html)
-//				SdaiEntity				entity								IN
-//				SdaiInteger				index								IN
-//				SdaiPrimitiveType		* attributeType						IN / OUT
-//
-//				void					returns
-//
-//	This call can be used to retrieve the type of the n-th argument of the given entity. In case of a select argument no relevant information is given by this call as it depends on the instance.
-//	Arguments of parent entities are included in the index. Both explicit and inverse attributes are included.
-//
-void			DECL STDC	engiGetAttrTypeByIndex(
-									SdaiEntity				entity,
-									SdaiInteger				index,
-									SdaiPrimitiveType		* attributeType
+									bool					forSimpleInstance
 								);
 
 //
@@ -2050,6 +1865,49 @@ static	inline	SdaiAggr	sdaiGetEntityExtentBN(
 	return	sdaiGetEntityExtentBN(
 					model,
 					(SdaiString) entityName
+				);
+}
+
+//}} End C++ polymorphic versions
+	extern "C" {
+#endif
+
+//
+//		engiGetEntityNameEx                                     (https://rdf.bg/ifcdoc/CP64/engiGetEntityNameEx.html)
+//				SdaiEntity				entity								IN
+//				SdaiPrimitiveType		valueType							IN
+//				SdaiString				* entityName						IN / OUT
+//				bool					displayName							IN
+//
+//				SdaiString				returns								OUT
+//
+//	This call can be used to get the name of the given entity.
+//
+SdaiString		DECL STDC	engiGetEntityNameEx(
+									SdaiEntity				entity,
+									SdaiPrimitiveType		valueType,
+									SdaiString				* entityName,
+									bool					displayName
+								);
+
+#ifdef __cplusplus
+	}
+//{{ Begin C++ polymorphic versions
+
+//
+//
+static	inline	SdaiString	engiGetEntityNameEx(
+									SdaiEntity				entity,
+									SdaiPrimitiveType		valueType,
+									char					** entityName,
+									bool					displayName
+								)
+{
+	return	engiGetEntityNameEx(
+					entity,
+					valueType,
+					(SdaiString*) entityName,
+					displayName
 				);
 }
 
@@ -2177,13 +2035,30 @@ SdaiEntity		DECL STDC	engiGetEntityParentEx(
 								);
 
 //
+//		engiIsParentOf                                          (https://rdf.bg/ifcdoc/CP64/engiIsParentOf.html)
+//				SdaiEntity				superType							IN
+//				SdaiEntity				subType								IN
+//
+//				SdaiBoolean				returns								OUT
+//
+//	Checks if the entity is a supertype of another entity.
+//	An entity is supertype of itself.
+//
+SdaiBoolean		DECL STDC	engiIsParentOf(
+									SdaiEntity				superType,
+									SdaiEntity				subType
+								);
+
+//
 //		engiGetAttrDerived                                      (https://rdf.bg/ifcdoc/CP64/engiGetAttrDerived.html)
 //				SdaiEntity				entity								IN
 //				const SdaiAttr			attribute							IN
 //
 //				ExpressScript			returns								OUT
 //
-//	This call can be used to check if an attribute is defined schema wise in the context of a certain entity.
+//	This function checks if the attribute is derived and returns a script to be used to calculate the value of the attribute.
+//	If entity is NULL it checks declaration in defining entity (the most common supertype where the attribute is first declared), 
+//	otherwise it also checks the actual redeclaration for specified entity. 
 //
 ExpressScript	DECL STDC	engiGetAttrDerived(
 									SdaiEntity				entity,
@@ -2343,6 +2218,23 @@ static	inline	SdaiBoolean	engiIsAttrOptionalBN(
 //}} End C++ polymorphic versions
 	extern "C" {
 #endif
+
+//
+//		engiGetAttrRedeclarationByIterator                      (https://rdf.bg/ifcdoc/CP64/engiGetAttrRedeclarationByIterator.html)
+//				SdaiEntity				entity								IN
+//				const SdaiAttr			attribute							IN
+//				const SdaiAttr			prevRedeclaration					IN
+//
+//				const SdaiAttr			returns								OUT
+//
+//	Iterates actual attribute redeclarations for given entity.
+//	sdaiGetAttrDefinition and other functions returns the first definition in the most common supertype. This function allow to explore redeclarations by subtypes.
+//
+const SdaiAttr	DECL STDC	engiGetAttrRedeclarationByIterator(
+									SdaiEntity				entity,
+									const SdaiAttr			attribute,
+									const SdaiAttr			prevRedeclaration
+								);
 
 //
 //		engiGetAttrDomainName                                   (https://rdf.bg/ifcdoc/CP64/engiGetAttrDomainName.html)
@@ -2609,6 +2501,8 @@ SdaiAttr		DECL STDC	engiGetEntityAttributeByIterator(
 //
 //	Return attribute definition from attribute index.
 //
+//	This call is deprecated, use SdaiAttr or attribute name as primary data and engiGetEntityAttributePosition.
+//
 SdaiAttr		DECL STDC	engiGetEntityAttributeByIndex(
 									SdaiEntity				entity,
 									SdaiAggrIndex			index,
@@ -2841,10 +2735,15 @@ SdaiString		DECL STDC	sdaiGetADBTypePath(
 //		  requested valueType is matching with the value argument, a mismatch will lead to unpredictable results.
 //
 //	The Table 2 shows what valueType can be fulfilled depending on actual model data.
-//	If a get-function cannot get a value it will return 0, it may happen when model item is unset ($) or incompatible with requested valueType.
-//	To separate these cases you can use engiGetInstanceAttrType(BN), sdaiGetADBType and engiGetAggrType.
 //	On success get-function will return non-zero. More precisely, according to ISO 10303-24-2001 on success they return content of
 //	value argument (*value) for sdaiADB, sdaiAGGR, or sdaiINSTANCE or value argument itself for other types (it has no useful meaning for C#).
+//	All get-functions return NULL and set value to 0 if model data are incompatible with requested valueType.
+//	Furthermore:
+//	- for unset ($) data all get-functions return NULL and set value to 0, except when valueType = sdaiEXPRESSSTRING
+//	- for derived (*), depending on engiEnableDerivedAttributes, and except valueType = sdaiEXPRESSSTRING:
+//	   -- either calculate and follow these rues for calculated value
+//	   -- or handles it as unset ($)
+//	- if valueType = sdaiEXPRESSSTRING and data is unset ($) or derived (*), get-function will return NULL but set value to "$" or "*" respectively for any engiEnableDerivedAttributes state
 //
 //
 //	Table 1 – Required value buffer depending on valueType (on the example of sdaiGetADBValue but valid for all get-functions)
@@ -2899,28 +2798,139 @@ SdaiString		DECL STDC	sdaiGetADBTypePath(
 //	Table 2 - valueType can be requested depending on actual model data.
 //
 //	valueType		Works for following values in the model
-//				 	  integer	   real		.T. or .F.	   .U.		other enum	  binary	  string	 instance	   list		 $ (empty)
-//	sdaiINTEGER			Yes			Yes *		 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiREAL			Yes			Yes			 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiNUMBER			Yes			Yes			 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiBOOLEAN			 .			 .			Yes			 .			 .			 .			 .			 .			 .			 .
-//	sdaiLOGICAL			 .			 .			Yes			Yes			 .			 .			 .			 .			 .			 .
-//	sdaiENUM			 .			 .			Yes			Yes			Yes			 .			 .			 .			 .			 .
-//	sdaiBINARY			 .			 .			 .			 .			 .			Yes			 .			 .			 .			 .
-//	sdaiSTRING			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiUNICODE			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiEXPRESSSTRING	Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiINSTANCE		 .			 .			 .			 .			 .			 .			 .			Yes			 .			 .
-//	sdaiAGGR			 .			 .			 .			 .			 .			 .			 .			 .			Yes			 .
-//	sdaiADB				Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .
-//	Note: sdaiGetAttr, stdaiGetAttrBN, engiGetElement will success with any model data, except non-set($)
-//		  (Non-standard extensions) sdaiGetADBValue: sdaiADB is allowed and will success when sdaiGetADBTypePath is not NULL, returning ABD value has type path element removed.
+//				 	  integer	   real		.T. or .F.	   .U.		other enum	  binary	  string	 instance	   list
+//	sdaiINTEGER			Yes			Yes *		 .			 .			 .			 .			 .			 .			 .
+//	sdaiREAL			Yes			Yes			 .			 .			 .			 .			 .			 .			 .
+//	sdaiNUMBER			Yes			Yes			 .			 .			 .			 .			 .			 .			 .
+//	sdaiBOOLEAN			 .			 .			Yes			 .			 .			 .			 .			 .			 .
+//	sdaiLOGICAL			 .			 .			Yes			Yes			 .			 .			 .			 .			 .
+//	sdaiENUM			 .			 .			Yes			Yes			Yes			 .			 .			 .			 .
+//	sdaiBINARY			 .			 .			 .			 .			 .			Yes			 .			 .			 .
+//	sdaiSTRING			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiUNICODE			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiEXPRESSSTRING	Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiINSTANCE		 .			 .			 .			 .			 .			 .			 .			Yes			 .
+//	sdaiAGGR			 .			 .			 .			 .			 .			 .			 .			 .			Yes
+//	sdaiADB				Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes
+//
+//	(Non-standard extensions) sdaiGetADBValue: sdaiADB is allowed and will success when sdaiGetADBTypePath is not NULL, returning ABD value has type path element removed.
 //
 void			DECL * STDC	sdaiGetADBValue(
 									const SdaiADB			ADB,
 									SdaiPrimitiveType		valueType,
 									void					* value
 								);
+
+//
+//		sdaiPutADBValue                                         (https://rdf.bg/ifcdoc/CP64/sdaiPutADBValue.html)
+//				const SdaiADB			ADB									IN
+//				SdaiPrimitiveType		valueType							IN
+//				const void				* value								IN
+//
+//				void					returns
+//
+//	valueType argument to specify what type of data caller wants to put
+//	Table 1 shows type of buffer the caller should provide depending on the valueType for sdaiPutADBValue, and it works similarly for all put-functions.
+//	Note: with SDAI API it is impossible to check buffer type at compilation or execution time and this is responsibility of a caller to ensure that
+//		  requested valueType is matching with the value argument, a mismatch will lead to unpredictable results.
+//
+//
+//	Table 1 – Required value buffer depending on valueType (on the example of sdaiPutADBValue but valid for all put-functions)
+//
+//	valueType				C/C++														C#
+//
+//	sdaiINTEGER				int_t val = 123;											int_t val = 123;
+//							sdaiPutADBValue (ADB, sdaiINTEGER, &val);					ifcengine.sdaiPutADBValue (ADB, ifcengine.sdaiINTEGER, ref val);
+//
+//	sdaiREAL or sdaiNUMBER	double val = 123.456;										double val = 123.456;
+//							sdaiPutADBValue (ADB, sdaiREAL, &val);						ifcengine.sdaiPutADBValue (ADB, ifcengine.sdaiREAL, ref val);
+//
+//	sdaiBOOLEAN				SdaiBoolean val = sdaiTRUE;									bool val = true;
+//							sdaiPutADBValue (ADB, sdaiBOOLEAN, &val);					ifcengine.sdaiPutADBValue (ADB, ifcengine.sdaiBOOLEAN, ref val);
+//
+//	sdaiLOGICAL				const TCHAR* val = "U";										string val = "U";
+//							sdaiPutADBValue (ADB, sdaiLOGICAL, val);					ifcengine.sdaiPutADBValue (ADB, ifcengine.sdaiLOGICAL, val);
+//
+//	sdaiENUM				const TCHAR* val = "NOTDEFINED";							string val = "NOTDEFINED";
+//							sdaiPutADBValue (ADB, sdaiENUM, val);						ifcengine.sdaiPutADBValue (ADB, ifcengine.sdaiENUM, val);
+//
+//	sdaiBINARY				const TCHAR* val = "0123456ABC";							string val = "0123456ABC";
+//							sdaiPutADBValue (ADB, sdaiBINARY, val);						ifcengine.sdaiPutADBValue (ADB, ifcengine.sdaiBINARY, val);
+//
+//	sdaiSTRING				const char* val = "My Simple String";						string val = "My Simple String";
+//							sdaiPutADBValue (ADB, sdaiSTRING, val);						ifcengine.sdaiPutADBValue (ADB, ifcengine.sdaiSTRING, val);
+//
+//	sdaiUNICODE				const wchar_t* val = L"Any Unicode String";					string val = "Any Unicode String";
+//							sdaiPutADBValue (ADB, sdaiUNICODE, val);					ifcengine.sdaiPutADBValue (ADB, ifcengine.sdaiUNICODE, val);
+//
+//	sdaiEXPRESSSTRING		const char* val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";	string val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";
+//							sdaiPutADBValue (ADB, sdaiEXPRESSSTRING, val);				ifcengine.sdaiPutADBValue (ADB, ifcengine.sdaiEXPRESSSTRING, val);
+//
+//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "IFCSITE");	int_t val = ifcengine.sdaiCreateInstanceBN (model, "IFCSITE");
+//							sdaiPutADBValue (ADB, sdaiINSTANCE, val);					ifcengine.sdaiPutADBValue (ADB, ifcengine.sdaiINSTANCE, val);
+//
+//	sdaiAGGR				SdaiAggr val = sdaiCreateAggr (inst, 0);					int_t val = sdaiCreateAggr (inst, 0);
+//							sdaiPutAttr (val, sdaiINSTANCE, inst);						ifcengine.sdaiPutAttr (val, ifcengine.sdaiINSTANCE, inst);
+//							sdaiPutADBValue (ADB, sdaiAGGR, val);						ifcengine.sdaiPutADBValue (ADB, ifcengine.sdaiAGGR, val);
+//
+//	sdaiADB					int_t integerValue = 123;									int_t integerValue = 123;	
+//							SdaiADB val = sdaiCreateADB (sdaiINTEGER, &integerValue);	int_t val = ifcengine.sdaiCreateADB (ifcengine.sdaiINTEGER, ref integerValue);
+//							sdaiPutADBTypePath (val, 1, "IFCINTEGER");					ifcengine.sdaiPutADBTypePath (val, 1, "IFCINTEGER");
+//							sdaiPutADBValue (ADB, sdaiADB, val);						ifcengine.sdaiPutADBValue (ADB, ifcengine.sdaiADB, val);	
+//							sdaiDeleteADB (val);										ifcengine.sdaiDeleteADB (val);
+//
+//	TCHAR is “char” or “wchar_t” depending on setStringUnicode.
+//	(Non-standard behavior) sdaiLOGICAL behaves differently from ISO 10303-24-2001: it expects char* while standard declares int_t.
+//	(Non-standard extension) sdiADB in C++ has an option to work without sdaiCreateEmptyADB and sdaiDeleteADB as shown in the table.
+//
+//
+//	Table 2 - valueType can be requested depending on actual model data.
+//
+//	valueType		Works for following values in the model
+//				 	  integer	   real		.T. or .F.	   .U.		other enum	  binary	  string	 instance	   list		 $ (empty)
+//	sdaiINTEGER			Yes			 .			 .			 .			 .			 .			 .			 .			 .			 .
+//	sdaiREAL			 .			Yes			 .			 .			 .			 .			 .			 .			 .			 .
+//	sdaiNUMBER			 . 			Yes			 .			 .			 .			 .			 .			 .			 .			 .
+//	sdaiBOOLEAN			 .			 .			Yes			 .			 .			 .			 .			 .			 .			 .
+//	sdaiLOGICAL			 .			 .			Yes			Yes			 .			 .			 .			 .			 .			 .
+//	sdaiENUM			 .			 .			Yes			Yes			Yes			 .			 .			 .			 .			 .
+//	sdaiBINARY			 .			 .			 .			 .			 .			Yes			 .			 .			 .			 .
+//	sdaiSTRING			 .			 .			 .			 .			 .			 .			Yes			 .			 .			 .
+//	sdaiUNICODE			 .			 .			 .			 .			 .			 .			Yes			 .			 .			 .
+//	sdaiEXPRESSSTRING	 .			 .			 .			 .			 .			 .			Yes			 .			 .			 .
+//	sdaiINSTANCE		 .			 .			 .			 .			 .			 .			 .			Yes			 .			 .
+//	sdaiAGGR			 .			 .			 .			 .			 .			 .			 .			 .			Yes			 .
+//	sdaiADB				Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .
+//
+void			DECL STDC	sdaiPutADBValue(
+									const SdaiADB			ADB,
+									SdaiPrimitiveType		valueType,
+									const void				* value
+								);
+
+#ifdef __cplusplus
+	}
+	//{{ Begin C++ polymorphic versions
+
+	//
+	//
+	static	inline	void	sdaiPutADBValue(
+		SdaiADB					instance,
+		SdaiPrimitiveType		valueType,
+		SdaiInstance			sdaiInstance
+	)
+	{
+		assert(valueType == sdaiINSTANCE);
+		sdaiPutADBValue(
+			instance,
+			valueType,
+			(const void*)sdaiInstance			//	value
+		);
+	}
+
+	//}} End C++ polymorphic versions
+	extern "C" {
+#endif
 
 //
 //		sdaiCreateEmptyADB                                      (https://rdf.bg/ifcdoc/CP64/sdaiCreateEmptyADB.html)
@@ -2960,10 +2970,15 @@ void			DECL STDC	sdaiDeleteADB(
 //		  requested valueType is matching with the value argument, a mismatch will lead to unpredictable results.
 //
 //	The Table 2 shows what valueType can be fulfilled depending on actual model data.
-//	If a get-function cannot get a value it will return 0, it may happen when model item is unset ($) or incompatible with requested valueType.
-//	To separate these cases you can use engiGetInstanceAttrType(BN), sdaiGetADBType and engiGetAggrType.
 //	On success get-function will return non-zero. More precisely, according to ISO 10303-24-2001 on success they return content of
 //	value argument (*value) for sdaiADB, sdaiAGGR, or sdaiINSTANCE or value argument itself for other types (it has no useful meaning for C#).
+//	All get-functions return NULL and set value to 0 if model data are incompatible with requested valueType.
+//	Furthermore:
+//	- for unset ($) data all get-functions return NULL and set value to 0, except when valueType = sdaiEXPRESSSTRING
+//	- for derived (*), depending on engiEnableDerivedAttributes, and except valueType = sdaiEXPRESSSTRING:
+//	   -- either calculate and follow these rues for calculated value
+//	   -- or handles it as unset ($)
+//	- if valueType = sdaiEXPRESSSTRING and data is unset ($) or derived (*), get-function will return NULL but set value to "$" or "*" respectively for any engiEnableDerivedAttributes state
 //
 //
 //	Table 1 – Required value buffer depending on valueType (on the example of sdaiGetAggrByIndex but valid for all get-functions)
@@ -3018,22 +3033,22 @@ void			DECL STDC	sdaiDeleteADB(
 //	Table 2 - valueType can be requested depending on actual model data.
 //
 //	valueType		Works for following values in the model
-//				 	  integer	   real		.T. or .F.	   .U.		other enum	  binary	  string	 instance	   list		 $ (empty)
-//	sdaiINTEGER			Yes			Yes *		 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiREAL			Yes			Yes			 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiNUMBER			Yes			Yes			 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiBOOLEAN			 .			 .			Yes			 .			 .			 .			 .			 .			 .			 .
-//	sdaiLOGICAL			 .			 .			Yes			Yes			 .			 .			 .			 .			 .			 .
-//	sdaiENUM			 .			 .			Yes			Yes			Yes			 .			 .			 .			 .			 .
-//	sdaiBINARY			 .			 .			 .			 .			 .			Yes			 .			 .			 .			 .
-//	sdaiSTRING			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiUNICODE			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiEXPRESSSTRING	Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiINSTANCE		 .			 .			 .			 .			 .			 .			 .			Yes			 .			 .
-//	sdaiAGGR			 .			 .			 .			 .			 .			 .			 .			 .			Yes			 .
-//	sdaiADB				Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .
-//	Note: sdaiGetAttr, stdaiGetAttrBN, engiGetElement will success with any model data, except non-set($)
-//		  (Non-standard extensions) sdaiGetADBValue: sdaiADB is allowed and will success when sdaiGetADBTypePath is not NULL, returning ABD value has type path element removed.
+//				 	  integer	   real		.T. or .F.	   .U.		other enum	  binary	  string	 instance	   list
+//	sdaiINTEGER			Yes			Yes *		 .			 .			 .			 .			 .			 .			 .
+//	sdaiREAL			Yes			Yes			 .			 .			 .			 .			 .			 .			 .
+//	sdaiNUMBER			Yes			Yes			 .			 .			 .			 .			 .			 .			 .
+//	sdaiBOOLEAN			 .			 .			Yes			 .			 .			 .			 .			 .			 .
+//	sdaiLOGICAL			 .			 .			Yes			Yes			 .			 .			 .			 .			 .
+//	sdaiENUM			 .			 .			Yes			Yes			Yes			 .			 .			 .			 .
+//	sdaiBINARY			 .			 .			 .			 .			 .			Yes			 .			 .			 .
+//	sdaiSTRING			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiUNICODE			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiEXPRESSSTRING	Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiINSTANCE		 .			 .			 .			 .			 .			 .			 .			Yes			 .
+//	sdaiAGGR			 .			 .			 .			 .			 .			 .			 .			 .			Yes
+//	sdaiADB				Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes
+//
+//	(Non-standard extensions) sdaiGetADBValue: sdaiADB is allowed and will success when sdaiGetADBTypePath is not NULL, returning ABD value has type path element removed.
 //
 void			DECL * STDC	sdaiGetAggrByIndex(
 									const SdaiAggr			aggregate,
@@ -3257,10 +3272,15 @@ void			DECL STDC	engiGetAggrTypex(
 //		  requested valueType is matching with the value argument, a mismatch will lead to unpredictable results.
 //
 //	The Table 2 shows what valueType can be fulfilled depending on actual model data.
-//	If a get-function cannot get a value it will return 0, it may happen when model item is unset ($) or incompatible with requested valueType.
-//	To separate these cases you can use engiGetInstanceAttrType(BN), sdaiGetADBType and engiGetAggrType.
 //	On success get-function will return non-zero. More precisely, according to ISO 10303-24-2001 on success they return content of
 //	value argument (*value) for sdaiADB, sdaiAGGR, or sdaiINSTANCE or value argument itself for other types (it has no useful meaning for C#).
+//	All get-functions return NULL and set value to 0 if model data are incompatible with requested valueType.
+//	Furthermore:
+//	- for unset ($) data all get-functions return NULL and set value to 0, except when valueType = sdaiEXPRESSSTRING
+//	- for derived (*), depending on engiEnableDerivedAttributes, and except valueType = sdaiEXPRESSSTRING:
+//	   -- either calculate and follow these rues for calculated value
+//	   -- or handles it as unset ($)
+//	- if valueType = sdaiEXPRESSSTRING and data is unset ($) or derived (*), get-function will return NULL but set value to "$" or "*" respectively for any engiEnableDerivedAttributes state
 //
 //
 //	Table 1 – Required value buffer depending on valueType (on the example of sdaiGetAttr but valid for all get-functions)
@@ -3315,22 +3335,22 @@ void			DECL STDC	engiGetAggrTypex(
 //	Table 2 - valueType can be requested depending on actual model data.
 //
 //	valueType		Works for following values in the model
-//				 	  integer	   real		.T. or .F.	   .U.		other enum	  binary	  string	 instance	   list		 $ (empty)
-//	sdaiINTEGER			Yes			Yes *		 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiREAL			Yes			Yes			 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiNUMBER			Yes			Yes			 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiBOOLEAN			 .			 .			Yes			 .			 .			 .			 .			 .			 .			 .
-//	sdaiLOGICAL			 .			 .			Yes			Yes			 .			 .			 .			 .			 .			 .
-//	sdaiENUM			 .			 .			Yes			Yes			Yes			 .			 .			 .			 .			 .
-//	sdaiBINARY			 .			 .			 .			 .			 .			Yes			 .			 .			 .			 .
-//	sdaiSTRING			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiUNICODE			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiEXPRESSSTRING	Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiINSTANCE		 .			 .			 .			 .			 .			 .			 .			Yes			 .			 .
-//	sdaiAGGR			 .			 .			 .			 .			 .			 .			 .			 .			Yes			 .
-//	sdaiADB				Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .
-//	Note: sdaiGetAttr, stdaiGetAttrBN, engiGetElement will success with any model data, except non-set($)
-//		  (Non-standard extensions) sdaiGetADBValue: sdaiADB is allowed and will success when sdaiGetADBTypePath is not NULL, returning ABD value has type path element removed.
+//				 	  integer	   real		.T. or .F.	   .U.		other enum	  binary	  string	 instance	   list
+//	sdaiINTEGER			Yes			Yes *		 .			 .			 .			 .			 .			 .			 .
+//	sdaiREAL			Yes			Yes			 .			 .			 .			 .			 .			 .			 .
+//	sdaiNUMBER			Yes			Yes			 .			 .			 .			 .			 .			 .			 .
+//	sdaiBOOLEAN			 .			 .			Yes			 .			 .			 .			 .			 .			 .
+//	sdaiLOGICAL			 .			 .			Yes			Yes			 .			 .			 .			 .			 .
+//	sdaiENUM			 .			 .			Yes			Yes			Yes			 .			 .			 .			 .
+//	sdaiBINARY			 .			 .			 .			 .			 .			Yes			 .			 .			 .
+//	sdaiSTRING			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiUNICODE			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiEXPRESSSTRING	Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiINSTANCE		 .			 .			 .			 .			 .			 .			 .			Yes			 .
+//	sdaiAGGR			 .			 .			 .			 .			 .			 .			 .			 .			Yes
+//	sdaiADB				Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes
+//
+//	(Non-standard extensions) sdaiGetADBValue: sdaiADB is allowed and will success when sdaiGetADBTypePath is not NULL, returning ABD value has type path element removed.
 //
 void			DECL * STDC	sdaiGetAttr(
 									SdaiInstance			instance,
@@ -3395,10 +3415,15 @@ static	inline	SdaiInstance	sdaiGetAttr(
 //		  requested valueType is matching with the value argument, a mismatch will lead to unpredictable results.
 //
 //	The Table 2 shows what valueType can be fulfilled depending on actual model data.
-//	If a get-function cannot get a value it will return 0, it may happen when model item is unset ($) or incompatible with requested valueType.
-//	To separate these cases you can use engiGetInstanceAttrType(BN), sdaiGetADBType and engiGetAggrType.
 //	On success get-function will return non-zero. More precisely, according to ISO 10303-24-2001 on success they return content of
 //	value argument (*value) for sdaiADB, sdaiAGGR, or sdaiINSTANCE or value argument itself for other types (it has no useful meaning for C#).
+//	All get-functions return NULL and set value to 0 if model data are incompatible with requested valueType.
+//	Furthermore:
+//	- for unset ($) data all get-functions return NULL and set value to 0, except when valueType = sdaiEXPRESSSTRING
+//	- for derived (*), depending on engiEnableDerivedAttributes, and except valueType = sdaiEXPRESSSTRING:
+//	   -- either calculate and follow these rues for calculated value
+//	   -- or handles it as unset ($)
+//	- if valueType = sdaiEXPRESSSTRING and data is unset ($) or derived (*), get-function will return NULL but set value to "$" or "*" respectively for any engiEnableDerivedAttributes state
 //
 //
 //	Table 1 – Required value buffer depending on valueType (on the example of sdaiGetAttrBN but valid for all get-functions)
@@ -3453,22 +3478,22 @@ static	inline	SdaiInstance	sdaiGetAttr(
 //	Table 2 - valueType can be requested depending on actual model data.
 //
 //	valueType		Works for following values in the model
-//				 	  integer	   real		.T. or .F.	   .U.		other enum	  binary	  string	 instance	   list		 $ (empty)
-//	sdaiINTEGER			Yes			Yes *		 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiREAL			Yes			Yes			 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiNUMBER			Yes			Yes			 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiBOOLEAN			 .			 .			Yes			 .			 .			 .			 .			 .			 .			 .
-//	sdaiLOGICAL			 .			 .			Yes			Yes			 .			 .			 .			 .			 .			 .
-//	sdaiENUM			 .			 .			Yes			Yes			Yes			 .			 .			 .			 .			 .
-//	sdaiBINARY			 .			 .			 .			 .			 .			Yes			 .			 .			 .			 .
-//	sdaiSTRING			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiUNICODE			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiEXPRESSSTRING	Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiINSTANCE		 .			 .			 .			 .			 .			 .			 .			Yes			 .			 .
-//	sdaiAGGR			 .			 .			 .			 .			 .			 .			 .			 .			Yes			 .
-//	sdaiADB				Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .
-//	Note: sdaiGetAttr, stdaiGetAttrBN, engiGetElement will success with any model data, except non-set($)
-//		  (Non-standard extensions) sdaiGetADBValue: sdaiADB is allowed and will success when sdaiGetADBTypePath is not NULL, returning ABD value has type path element removed.
+//				 	  integer	   real		.T. or .F.	   .U.		other enum	  binary	  string	 instance	   list
+//	sdaiINTEGER			Yes			Yes *		 .			 .			 .			 .			 .			 .			 .
+//	sdaiREAL			Yes			Yes			 .			 .			 .			 .			 .			 .			 .
+//	sdaiNUMBER			Yes			Yes			 .			 .			 .			 .			 .			 .			 .
+//	sdaiBOOLEAN			 .			 .			Yes			 .			 .			 .			 .			 .			 .
+//	sdaiLOGICAL			 .			 .			Yes			Yes			 .			 .			 .			 .			 .
+//	sdaiENUM			 .			 .			Yes			Yes			Yes			 .			 .			 .			 .
+//	sdaiBINARY			 .			 .			 .			 .			 .			Yes			 .			 .			 .
+//	sdaiSTRING			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiUNICODE			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiEXPRESSSTRING	Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiINSTANCE		 .			 .			 .			 .			 .			 .			 .			Yes			 .
+//	sdaiAGGR			 .			 .			 .			 .			 .			 .			 .			 .			Yes
+//	sdaiADB				Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes
+//
+//	(Non-standard extensions) sdaiGetADBValue: sdaiADB is allowed and will success when sdaiGetADBTypePath is not NULL, returning ABD value has type path element removed.
 //
 //	Technically sdaiGetAttrBN will transform into the following call
 //		sdaiGetAttr(
@@ -3815,14 +3840,16 @@ static	inline	SdaiAttr	sdaiGetAttrDefinition(
 //				SdaiEntity				* definingEntity					IN / OUT
 //				SdaiBoolean				* isExplicit						IN / OUT
 //				SdaiBoolean				* isInverse							IN / OUT
-//				enum_express_attr_type	* attrType							IN / OUT
+//				enum_express_data_type	* attrType							IN / OUT
 //				SdaiEntity				* domainEntity						IN / OUT
 //				SchemaAggr				* aggregationDefinition				IN / OUT
 //				SdaiBoolean				* isOptional						IN / OUT
 //
 //				void					returns
 //
-//	...
+//	The function returns information how the attribute is declared in the schema.
+//	'attribute' may by a base declaration received by sdaiGetAttrDefinition, engiGetEntityAttributeByIterator, etc. or redeclaration by engiGetAttrRedeclarationByIterator.
+//	'definingEntity' is the entity which declares or re-decelerates the attribute.
 //
 void			DECL STDC	engiGetAttrTraits(
 									const SdaiAttr			attribute,
@@ -3830,7 +3857,7 @@ void			DECL STDC	engiGetAttrTraits(
 									SdaiEntity				* definingEntity,
 									SdaiBoolean				* isExplicit,
 									SdaiBoolean				* isInverse,
-									enum_express_attr_type	* attrType,
+									enum_express_data_type	* attrType,
 									SdaiEntity				* domainEntity,
 									SchemaAggr				* aggregationDefinition,
 									SdaiBoolean				* isOptional
@@ -3848,7 +3875,7 @@ static	inline	void	engiGetAttrTraits(
 								SdaiEntity				* definingEntity,
 								SdaiBoolean				* isExplicit,
 								SdaiBoolean				* isInverse,
-								enum_express_attr_type	* attrType,
+								enum_express_data_type	* attrType,
 								SdaiEntity				* domainEntity,
 								SchemaAggr				* aggregationDefinition,
 								SdaiBoolean				* isOptional
@@ -4053,6 +4080,8 @@ static	inline	int_t	sdaiIsKindOfBN(
 //	In case of SELECT and sdaiINSTANCE, return value will be combined with engiTypeFlagAggrOption if some options are aggregation
 //	or engiTypeFlagAggr if all options are aggregations of instances
 //
+//	Comparing with engiGetExpressAttrType this function drills down into defined type to find base primitive type.
+//
 //	It works for explicit and inverse attributes
 //
 SdaiPrimitiveType	DECL STDC	engiGetAttrType(
@@ -4103,13 +4132,38 @@ static	inline	SdaiPrimitiveType	engiGetAttrTypeBN(
 #endif
 
 //
+//		engiGetExpressAttrType                                  (https://rdf.bg/ifcdoc/CP64/engiGetExpressAttrType.html)
+//				const SdaiAttr			attribute							IN
+//
+//				enum_express_data_type	returns								OUT
+//
+//	...
+//
+enum_express_data_type	DECL STDC	engiGetExpressAttrType(
+									const SdaiAttr			attribute
+								);
+
+//
+//		engiGetAttrAggregation                                  (https://rdf.bg/ifcdoc/CP64/engiGetAttrAggregation.html)
+//				const SdaiAttr			attribute							IN
+//
+//				SchemaAggr				returns								OUT
+//
+//	...
+//
+SchemaAggr		DECL STDC	engiGetAttrAggregation(
+									const SdaiAttr			attribute
+								);
+
+//
 //		engiGetInstanceAttrType                                 (https://rdf.bg/ifcdoc/CP64/engiGetInstanceAttrType.html)
 //				SdaiInstance			instance							IN
 //				const SdaiAttr			attribute							IN
 //
 //				SdaiPrimitiveType		returns								OUT
 //
-//	Returns SDAI type for actual data stored in the instance for the attribute.
+//	Returns SDAI type for actual data stored in the instance for the attribute,
+//	compare with engiGetAttrType that returns type according to schema.
 //	It may be primitive type, sdaiAGGR or sdaiADB.
 //	Returns 0 for $ and *.
 //
@@ -6856,6 +6910,19 @@ void			DECL STDC	engiEvaluateAllDerivedAttributes(
 								);
 
 //
+//		engiIsComplexEntity                                     (https://rdf.bg/ifcdoc/CP64/engiIsComplexEntity.html)
+//				SdaiEntity				entity								IN
+//
+//				bool					returns								OUT
+//
+//	The function checks if instances of the specified entity are complex instances.
+//	You can use engiGetEntityParentEx to list components.
+//
+bool			DECL STDC	engiIsComplexEntity(
+									SdaiEntity				entity
+								);
+
+//
 //		setSegmentation                                         (https://rdf.bg/ifcdoc/CP64/setSegmentation.html)
 //				SdaiModel				model								IN
 //				int_t					segmentationParts					IN
@@ -7024,8 +7091,56 @@ static	inline	double	getProjectUnitConversionFactor(
 #endif
 
 //
+//		getProjectUnitConversionFactorW                         (https://rdf.bg/ifcdoc/CP64/getProjectUnitConversionFactorW.html)
+//				SdaiModel				model								IN
+//				const wchar_t			* unitType							IN
+//				const wchar_t			** unitPrefix						IN / OUT
+//				const wchar_t			** unitName							IN / OUT
+//				const wchar_t			** SIUnitName						IN / OUT
+//
+//				double					returns								OUT
+//
+//	...
+//
+double			DECL STDC	getProjectUnitConversionFactorW(
+									SdaiModel				model,
+									const wchar_t			* unitType,
+									const wchar_t			** unitPrefix,
+									const wchar_t			** unitName,
+									const wchar_t			** SIUnitName
+								);
+
+#ifdef __cplusplus
+	}
+//{{ Begin C++ polymorphic versions
+
+//
+//
+static	inline	double	getProjectUnitConversionFactorW(
+								SdaiModel				model,
+								wchar_t					* unitType,
+								wchar_t					** unitPrefix,
+								wchar_t					** unitName,
+								wchar_t					** SIUnitName
+							)
+{
+	return	getProjectUnitConversionFactorW(
+					model,
+					(const wchar_t*) unitType,
+					(const wchar_t**) unitPrefix,
+					(const wchar_t**) unitName,
+					(const wchar_t**) SIUnitName
+				);
+}
+
+//}} End C++ polymorphic versions
+	extern "C" {
+#endif
+
+//
 //		getUnitInstanceConversionFactor                         (https://rdf.bg/ifcdoc/CP64/getUnitInstanceConversionFactor.html)
 //				SdaiInstance			unitInstance						IN
+//				SdaiString				* unitType							IN / OUT
 //				SdaiString				* unitPrefix						IN / OUT
 //				SdaiString				* unitName							IN / OUT
 //				SdaiString				* SIUnitName						IN / OUT
@@ -7036,6 +7151,7 @@ static	inline	double	getProjectUnitConversionFactor(
 //
 double			DECL STDC	getUnitInstanceConversionFactor(
 									SdaiInstance			unitInstance,
+									SdaiString				* unitType,
 									SdaiString				* unitPrefix,
 									SdaiString				* unitName,
 									SdaiString				* SIUnitName
@@ -7049,6 +7165,7 @@ double			DECL STDC	getUnitInstanceConversionFactor(
 //
 static	inline	double	getUnitInstanceConversionFactor(
 								SdaiInstance			unitInstance,
+								char					** unitType,
 								char					** unitPrefix,
 								char					** unitName,
 								char					** SIUnitName
@@ -7056,9 +7173,57 @@ static	inline	double	getUnitInstanceConversionFactor(
 {
 	return	getUnitInstanceConversionFactor(
 					unitInstance,
+					(SdaiString*) unitType,
 					(SdaiString*) unitPrefix,
 					(SdaiString*) unitName,
 					(SdaiString*) SIUnitName
+				);
+}
+
+//}} End C++ polymorphic versions
+	extern "C" {
+#endif
+
+//
+//		getUnitInstanceConversionFactorW                        (https://rdf.bg/ifcdoc/CP64/getUnitInstanceConversionFactorW.html)
+//				SdaiInstance			unitInstance						IN
+//				const wchar_t			** unitType							IN / OUT
+//				const wchar_t			** unitPrefix						IN / OUT
+//				const wchar_t			** unitName							IN / OUT
+//				const wchar_t			** SIUnitName						IN / OUT
+//
+//				double					returns								OUT
+//
+//	...
+//
+double			DECL STDC	getUnitInstanceConversionFactorW(
+									SdaiInstance			unitInstance,
+									const wchar_t			** unitType,
+									const wchar_t			** unitPrefix,
+									const wchar_t			** unitName,
+									const wchar_t			** SIUnitName
+								);
+
+#ifdef __cplusplus
+	}
+//{{ Begin C++ polymorphic versions
+
+//
+//
+static	inline	double	getUnitInstanceConversionFactorW(
+								SdaiInstance			unitInstance,
+								wchar_t					** unitType,
+								wchar_t					** unitPrefix,
+								wchar_t					** unitName,
+								wchar_t					** SIUnitName
+							)
+{
+	return	getUnitInstanceConversionFactorW(
+					unitInstance,
+					(const wchar_t**) unitType,
+					(const wchar_t**) unitPrefix,
+					(const wchar_t**) unitName,
+					(const wchar_t**) SIUnitName
 				);
 }
 
@@ -7289,6 +7454,36 @@ int_t			DECL STDC	getFilter(
 								);
 
 //
+//		setSerialization                                        (https://rdf.bg/ifcdoc/CP64/setSerialization.html)
+//				SdaiModel				model								IN
+//				int_t					setting								IN
+//				int_t					mask								IN
+//
+//				void					returns
+//
+//	...
+//
+void			DECL STDC	setSerialization(
+									SdaiModel				model,
+									int_t					setting,
+									int_t					mask
+								);
+
+//
+//		getSerialization                                        (https://rdf.bg/ifcdoc/CP64/getSerialization.html)
+//				SdaiModel				model								IN
+//				int_t					mask								IN
+//
+//				int_t					returns								OUT
+//
+//	...
+//
+int_t			DECL STDC	getSerialization(
+									SdaiModel				model,
+									int_t					mask
+								);
+
+//
 //  Uncategorized API Calls
 //
 
@@ -7405,59 +7600,6 @@ SdaiAttr		DECL STDC	xxxxGetAttrDefinitionByValue(
 								);
 
 //
-//		xxxxGetAttrNameByIndex                                  (https://rdf.bg/ifcdoc/CP64/xxxxGetAttrNameByIndex.html)
-//				SdaiInstance			instance							IN
-//				SdaiInteger				index								IN
-//				SdaiString				* name								IN / OUT
-//
-//				SdaiString				returns								OUT
-//
-//	...
-//
-SdaiString		DECL STDC	xxxxGetAttrNameByIndex(
-									SdaiInstance			instance,
-									SdaiInteger				index,
-									SdaiString				* name
-								);
-
-#ifdef __cplusplus
-	}
-//{{ Begin C++ polymorphic versions
-
-//
-//
-static	inline	SdaiString	xxxxGetAttrNameByIndex(
-									SdaiInstance			instance,
-									SdaiInteger				index,
-									char					** name
-								)
-{
-	return	xxxxGetAttrNameByIndex(
-					instance,
-					index,
-					(SdaiString*) name
-				);
-}
-
-//
-//
-static	inline	SdaiString	xxxxGetAttrNameByIndex(
-									SdaiInstance			instance,
-									SdaiInteger				index
-								)
-{
-	return	xxxxGetAttrNameByIndex(
-					instance,
-					index,
-					(SdaiString*) nullptr				//	name
-				);
-}
-
-//}} End C++ polymorphic versions
-	extern "C" {
-#endif
-
-//
 //		iterateOverInstances                                    (https://rdf.bg/ifcdoc/CP64/iterateOverInstances.html)
 //				SdaiModel				model								IN
 //				SdaiInstance			instance							IN
@@ -7511,6 +7653,8 @@ static	inline	SdaiInstance	iterateOverInstances(
 //	This function iterated over all available attributes of a specific given entity.
 //	This call is typically used in combination with iterateOverInstances(..).
 //
+//	This call is deprecated, use engiGetEntityAttributeByIterator.
+//
 int_t			DECL STDC	iterateOverProperties(
 									SdaiEntity				entity,
 									SdaiInteger				index
@@ -7532,10 +7676,15 @@ int_t			DECL STDC	iterateOverProperties(
 //		  requested valueType is matching with the value argument, a mismatch will lead to unpredictable results.
 //
 //	The Table 2 shows what valueType can be fulfilled depending on actual model data.
-//	If a get-function cannot get a value it will return 0, it may happen when model item is unset ($) or incompatible with requested valueType.
-//	To separate these cases you can use engiGetInstanceAttrType(BN), sdaiGetADBType and engiGetAggrType.
 //	On success get-function will return non-zero. More precisely, according to ISO 10303-24-2001 on success they return content of
 //	value argument (*value) for sdaiADB, sdaiAGGR, or sdaiINSTANCE or value argument itself for other types (it has no useful meaning for C#).
+//	All get-functions return NULL and set value to 0 if model data are incompatible with requested valueType.
+//	Furthermore:
+//	- for unset ($) data all get-functions return NULL and set value to 0, except when valueType = sdaiEXPRESSSTRING
+//	- for derived (*), depending on engiEnableDerivedAttributes, and except valueType = sdaiEXPRESSSTRING:
+//	   -- either calculate and follow these rues for calculated value
+//	   -- or handles it as unset ($)
+//	- if valueType = sdaiEXPRESSSTRING and data is unset ($) or derived (*), get-function will return NULL but set value to "$" or "*" respectively for any engiEnableDerivedAttributes state
 //
 //
 //	Table 1 – Required value buffer depending on valueType (on the example of sdaiGetAggrByIterator but valid for all get-functions)
@@ -7590,22 +7739,22 @@ int_t			DECL STDC	iterateOverProperties(
 //	Table 2 - valueType can be requested depending on actual model data.
 //
 //	valueType		Works for following values in the model
-//				 	  integer	   real		.T. or .F.	   .U.		other enum	  binary	  string	 instance	   list		 $ (empty)
-//	sdaiINTEGER			Yes			Yes *		 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiREAL			Yes			Yes			 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiNUMBER			Yes			Yes			 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiBOOLEAN			 .			 .			Yes			 .			 .			 .			 .			 .			 .			 .
-//	sdaiLOGICAL			 .			 .			Yes			Yes			 .			 .			 .			 .			 .			 .
-//	sdaiENUM			 .			 .			Yes			Yes			Yes			 .			 .			 .			 .			 .
-//	sdaiBINARY			 .			 .			 .			 .			 .			Yes			 .			 .			 .			 .
-//	sdaiSTRING			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiUNICODE			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiEXPRESSSTRING	Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiINSTANCE		 .			 .			 .			 .			 .			 .			 .			Yes			 .			 .
-//	sdaiAGGR			 .			 .			 .			 .			 .			 .			 .			 .			Yes			 .
-//	sdaiADB				Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .
-//	Note: sdaiGetAttr, stdaiGetAttrBN, engiGetElement will success with any model data, except non-set($)
-//		  (Non-standard extensions) sdaiGetADBValue: sdaiADB is allowed and will success when sdaiGetADBTypePath is not NULL, returning ABD value has type path element removed.
+//				 	  integer	   real		.T. or .F.	   .U.		other enum	  binary	  string	 instance	   list
+//	sdaiINTEGER			Yes			Yes *		 .			 .			 .			 .			 .			 .			 .
+//	sdaiREAL			Yes			Yes			 .			 .			 .			 .			 .			 .			 .
+//	sdaiNUMBER			Yes			Yes			 .			 .			 .			 .			 .			 .			 .
+//	sdaiBOOLEAN			 .			 .			Yes			 .			 .			 .			 .			 .			 .
+//	sdaiLOGICAL			 .			 .			Yes			Yes			 .			 .			 .			 .			 .
+//	sdaiENUM			 .			 .			Yes			Yes			Yes			 .			 .			 .			 .
+//	sdaiBINARY			 .			 .			 .			 .			 .			Yes			 .			 .			 .
+//	sdaiSTRING			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiUNICODE			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiEXPRESSSTRING	Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiINSTANCE		 .			 .			 .			 .			 .			 .			 .			Yes			 .
+//	sdaiAGGR			 .			 .			 .			 .			 .			 .			 .			 .			Yes
+//	sdaiADB				Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes
+//
+//	(Non-standard extensions) sdaiGetADBValue: sdaiADB is allowed and will success when sdaiGetADBTypePath is not NULL, returning ABD value has type path element removed.
 //
 void			DECL * STDC	sdaiGetAggrByIterator(
 									SdaiIterator			iterator,
@@ -7903,7 +8052,18 @@ void			DECL STDC	owlGetModel(
 									int64_t					* owlModel
 								);
 
-
+//
+//		owlConnectModel                                         (https://rdf.bg/ifcdoc/CP64/owlConnectModel.html)
+//				SdaiModel				model								IN
+//				int64_t					owlModel							IN
+//
+//				bool					returns								OUT
+//
+//	By default a model for the Geometry Modelling Kernel will be created once required on-the-fly.
+//
+//	This call allows a user to use an existing model that will be connected. This connected model
+//	will not be destroyed at closing of the STEP model, i.e. within sdaiCloseModel().
+//
 bool			DECL STDC	owlConnectModel(
 									SdaiModel				model,
 									int64_t					owlModel
@@ -7964,6 +8124,22 @@ void			DECL STDC	owlBuildInstance(
 									SdaiModel				model,
 									SdaiInstance			instance,
 									int64_t					* owlInstance
+								);
+
+int_t			DECL STDC	connectOwlModel(
+									int64_t					owlModel
+								);
+
+int_t			DECL STDC	owlBuildInstanceMultiThreading(
+									int64_t					* owlInstance,
+									SdaiInstance			instance,
+									int_t					modelMT
+								);
+
+void			DECL STDC	cleanMemoryMultiThreading(
+									SdaiModel				model,
+									int_t					modelMT,
+									int_t					mode
 								);
 
 //
@@ -8331,7 +8507,7 @@ int_t			DECL STDC	sdaiValidateSchemaInstance(
 //
 //				int_t					returns								OUT
 //
-//	This call is deprecated, please use call engiGetAttrIndexBN(..) instead.
+//	This call is deprecated, use engiGetEntityAttributePosition.
 //
 int_t			DECL STDC	engiGetEntityAttributeIndex(
 									SdaiEntity				entity,
@@ -8368,7 +8544,7 @@ static	inline	int_t	engiGetEntityAttributeIndex(
 //
 //				int_t					returns								OUT
 //
-//	This call is deprecated, please use call engiGetAttrIndexExBN(..) instead.
+//	This call is deprecated, use engiGetEntityAttributePosition.
 //
 int_t			DECL STDC	engiGetEntityAttributeIndexEx(
 									SdaiEntity				entity,
@@ -8411,7 +8587,7 @@ static	inline	int_t	engiGetEntityAttributeIndexEx(
 //
 //				SdaiString				returns								OUT
 //
-//	This call is deprecated, please use call engiGetAttrNameByIndex(..) instead.
+//	This call is deprecated, use engiGetEntityAttributeByIterator, engiGetAttrName.
 //
 SdaiString		DECL STDC	engiGetEntityArgumentName(
 									SdaiEntity				entity,
@@ -8469,7 +8645,7 @@ static	inline	SdaiString	engiGetEntityArgumentName(
 //
 //				void					returns
 //
-//	This call is deprecated, please use call engiGetAttrTypeByIndex(..) instead.
+//	This call is deprecated, use engiGetEntityAttributeByIterator, engiGetAttrType.
 //
 void			DECL STDC	engiGetEntityArgumentType(
 									SdaiEntity				entity,
@@ -8783,7 +8959,7 @@ static	inline	int_t	engiGetEntityIsAbstractBN(
 //				SdaiEntity				* definingEntity					IN / OUT
 //				bool					* isExplicit						IN / OUT
 //				bool					* isInverse							IN / OUT
-//				enum_express_attr_type	* attrType							IN / OUT
+//				enum_express_data_type	* attrType							IN / OUT
 //				SdaiEntity				* domainEntity						IN / OUT
 //				SchemaAggr				* aggregationDefinition				IN / OUT
 //				bool					* isOptional						IN / OUT
@@ -8798,7 +8974,7 @@ void			DECL STDC	engiGetAttributeTraits(
 									SdaiEntity				* definingEntity,
 									bool					* isExplicit,
 									bool					* isInverse,
-									enum_express_attr_type	* attrType,
+									enum_express_data_type	* attrType,
 									SdaiEntity				* domainEntity,
 									SchemaAggr				* aggregationDefinition,
 									bool					* isOptional
@@ -8816,7 +8992,7 @@ static	inline	void	engiGetAttributeTraits(
 								SdaiEntity				* definingEntity,
 								bool					* isExplicit,
 								bool					* isInverse,
-								enum_express_attr_type	* attrType,
+								enum_express_data_type	* attrType,
 								SdaiEntity				* domainEntity,
 								SchemaAggr				* aggregationDefinition,
 								bool					* isOptional
@@ -8882,7 +9058,7 @@ SdaiPrimitiveType	DECL STDC	engiGetAttributeType(
 //
 //				int_t					returns								OUT
 //
-//	This call is deprecated, please use call engiGetAttrIndexBN(..) instead.
+//	This call is deprecated, use engiGetEntityAttributePosition instead.
 //
 int_t			DECL STDC	engiGetEntityArgumentIndex(
 									SdaiEntity				entity,
@@ -9062,7 +9238,7 @@ static	inline	int_t	xxxxOpenModelByStream(
 //
 //				int_t					returns								OUT
 //
-//	This call is deprecated, please use call .... instead.
+//	This call is deprecated, please use call engiGetAttrType(..) instead.
 //
 int_t			DECL STDC	sdaiplusGetAggregationType(
 									SdaiInstance			instance,
@@ -9077,7 +9253,7 @@ int_t			DECL STDC	sdaiplusGetAggregationType(
 //
 //				int_t					returns								OUT
 //
-//	This call is deprecated, please use calls engiGetAttrType(..) instead.
+//	This call is deprecated, please use call engiGetAttrType(..) instead.
 //
 int_t			DECL STDC	xxxxGetAttrType(
 									SdaiInstance			instance,
@@ -9178,6 +9354,275 @@ int_t			DECL STDC	GetSPFFHeaderItemUnicode(
 									unsigned char			* buffer,
 									int_t					bufferLength
 								);
+
+//
+//		engiGetAttrIndex                                        (https://rdf.bg/ifcdoc/CP64/engiGetAttrIndex.html)
+//				SdaiAttr				attribute							IN
+//
+//				int_t					returns								OUT
+//
+//	This call works for non-complex entities and entities without multiple inheritance,
+//	it is advised not to use this call for other schemas.
+//
+//	This call is deprecated, use call engiGetEntityAttributePosition instead.
+//
+int_t			DECL STDC	engiGetAttrIndex(
+									SdaiAttr				attribute
+								);
+
+//
+//		engiGetAttrIndexBN                                      (https://rdf.bg/ifcdoc/CP64/engiGetAttrIndexBN.html)
+//				SdaiEntity				entity								IN
+//				SdaiString				attributeName						IN
+//
+//				int_t					returns								OUT
+//
+//	This call works for non-complex entities and entities without multiple inheritance,
+//	it is advised not to use this call for other schemas.
+//
+//	Technically engiGetAttrIndexBN will transform into the following call
+//		engiGetAttrIndex(
+//				sdaiGetAttrDefinition(
+//						entity,
+//						attributeName
+//					)
+//			);
+//
+//	This call is deprecated, use call engiGetEntityAttributePosition instead.
+//
+int_t			DECL STDC	engiGetAttrIndexBN(
+									SdaiEntity				entity,
+									SdaiString				attributeName
+								);
+
+#ifdef __cplusplus
+	}
+//{{ Begin C++ polymorphic versions
+
+//
+//
+static	inline	int_t	engiGetAttrIndexBN(
+								SdaiEntity				entity,
+								char					* attributeName
+							)
+{
+	return	engiGetAttrIndexBN(
+					entity,
+					(SdaiString) attributeName
+				);
+}
+
+//}} End C++ polymorphic versions
+	extern "C" {
+#endif
+
+//
+//		engiGetAttrIndexEx                                      (https://rdf.bg/ifcdoc/CP64/engiGetAttrIndexEx.html)
+//				SdaiAttr				attribute							IN
+//				bool					countedWithParents					IN
+//				bool					countedWithInverse					IN
+//
+//				int_t					returns								OUT
+//
+//	This call works for non-complex entities and entities without multiple inheritance,
+//	it is advised not to use this call for other schemas.
+//
+//	This call is deprecated, use call engiGetEntityAttributePosition instead.
+//
+int_t			DECL STDC	engiGetAttrIndexEx(
+									SdaiAttr				attribute,
+									bool					countedWithParents,
+									bool					countedWithInverse
+								);
+
+//
+//		engiGetAttrIndexExBN                                    (https://rdf.bg/ifcdoc/CP64/engiGetAttrIndexExBN.html)
+//				SdaiEntity				entity								IN
+//				SdaiString				attributeName						IN
+//				bool					countedWithParents					IN
+//				bool					countedWithInverse					IN
+//
+//				int_t					returns								OUT
+//
+//	This call works for non-complex entities and entities without multiple inheritance,
+//	it is advised not to use this call for other schemas.
+//
+//	Technically engiGetAttrIndexExBN will transform into the following call
+//		engiGetAttrIndexEx(
+//				sdaiGetAttrDefinition(
+//						entity,
+//						attributeName
+//					),
+//				countedWithParents,
+//				countedWithInverse
+//			);
+//
+//	This call is deprecated, use call engiGetEntityAttributePosition instead.
+//
+int_t			DECL STDC	engiGetAttrIndexExBN(
+									SdaiEntity				entity,
+									SdaiString				attributeName,
+									bool					countedWithParents,
+									bool					countedWithInverse
+								);
+
+#ifdef __cplusplus
+	}
+//{{ Begin C++ polymorphic versions
+
+//
+//
+static	inline	int_t	engiGetAttrIndexExBN(
+								SdaiEntity				entity,
+								char					* attributeName,
+								bool					countedWithParents,
+								bool					countedWithInverse
+							)
+{
+	return	engiGetAttrIndexExBN(
+					entity,
+					(SdaiString) attributeName,
+					countedWithParents,
+					countedWithInverse
+				);
+}
+
+//}} End C++ polymorphic versions
+	extern "C" {
+#endif
+
+//
+//		engiGetAttrNameByIndex                                  (https://rdf.bg/ifcdoc/CP64/engiGetAttrNameByIndex.html)
+//				SdaiEntity				entity								IN
+//				SdaiInteger				index								IN
+//				SdaiPrimitiveType		valueType							IN
+//				SdaiString				* attributeName						IN / OUT
+//
+//				SdaiString				returns								OUT
+//
+//	This call can be used to retrieve the name of the n-th argument of the given entity. Arguments of parent entities are included in the index. Both explicit and inverse attributes are included.
+//
+//	This call is deprecated, use SdaiAttr or attribute name as primary data and engiGetEntityAttributePosition.
+//
+SdaiString		DECL STDC	engiGetAttrNameByIndex(
+									SdaiEntity				entity,
+									SdaiInteger				index,
+									SdaiPrimitiveType		valueType,
+									SdaiString				* attributeName
+								);
+
+#ifdef __cplusplus
+	}
+//{{ Begin C++ polymorphic versions
+
+//
+//
+static	inline	SdaiString	engiGetAttrNameByIndex(
+									SdaiEntity				entity,
+									SdaiInteger				index,
+									SdaiPrimitiveType		valueType,
+									char					** attributeName
+								)
+{
+	return	engiGetAttrNameByIndex(
+					entity,
+					index,
+					valueType,
+					(SdaiString*) attributeName
+				);
+}
+
+//
+//
+static	inline	SdaiString	engiGetAttrNameByIndex(
+									SdaiEntity				entity,
+									SdaiInteger				index,
+									SdaiPrimitiveType		valueType
+								)
+{
+	return	engiGetAttrNameByIndex(
+					entity,
+					index,
+					valueType,
+					(SdaiString*) nullptr				//	attributeName
+				);
+}
+
+//}} End C++ polymorphic versions
+	extern "C" {
+#endif
+
+//
+//		engiGetAttrTypeByIndex                                  (https://rdf.bg/ifcdoc/CP64/engiGetAttrTypeByIndex.html)
+//				SdaiEntity				entity								IN
+//				SdaiInteger				index								IN
+//				SdaiPrimitiveType		* attributeType						IN / OUT
+//
+//				void					returns
+//
+//	This call can be used to retrieve the type of the n-th argument of the given entity. In case of a select argument no relevant information is given by this call as it depends on the instance.
+//	Arguments of parent entities are included in the index. Both explicit and inverse attributes are included.
+//
+//	This call is deprecated, use engiGetEntityAttributePosition, engiGetEntityAttributeByIterator, engiGetAttrType.
+//
+void			DECL STDC	engiGetAttrTypeByIndex(
+									SdaiEntity				entity,
+									SdaiInteger				index,
+									SdaiPrimitiveType		* attributeType
+								);
+
+//
+//		xxxxGetAttrNameByIndex                                  (https://rdf.bg/ifcdoc/CP64/xxxxGetAttrNameByIndex.html)
+//				SdaiInstance			instance							IN
+//				SdaiInteger				index								IN
+//				SdaiString				* name								IN / OUT
+//
+//				SdaiString				returns								OUT
+//
+//	This call is deprecated, use SdaiAttr or attribute name as primary data and engiGetEntityAttributePosition, engiGetEntityAttributeByIterator, engiGetAttrName.
+//
+SdaiString		DECL STDC	xxxxGetAttrNameByIndex(
+									SdaiInstance			instance,
+									SdaiInteger				index,
+									SdaiString				* name
+								);
+
+#ifdef __cplusplus
+	}
+//{{ Begin C++ polymorphic versions
+
+//
+//
+static	inline	SdaiString	xxxxGetAttrNameByIndex(
+									SdaiInstance			instance,
+									SdaiInteger				index,
+									char					** name
+								)
+{
+	return	xxxxGetAttrNameByIndex(
+					instance,
+					index,
+					(SdaiString*) name
+				);
+}
+
+//
+//
+static	inline	SdaiString	xxxxGetAttrNameByIndex(
+									SdaiInstance			instance,
+									SdaiInteger				index
+								)
+{
+	return	xxxxGetAttrNameByIndex(
+					instance,
+					index,
+					(SdaiString*) nullptr				//	name
+				);
+}
+
+//}} End C++ polymorphic versions
+	extern "C" {
+#endif
 
 //
 //  Validation

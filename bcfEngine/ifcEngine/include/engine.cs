@@ -225,7 +225,7 @@ namespace RDF
 		///
 		///	This call is required to be called to enable the DLL to work if protection is active.
 		///
-		///	Returns the number of days (incl. this one) that this version is still active or 0 if no protection is embedded.
+		///	Returns the number of days (including this one) that this version is still active or 0 if no protection is embedded.
 		///	In case no days are left and protection is active this call will return -1.
 		/// </summary>
 		[DllImport(enginedll, EntryPoint = "GetProtection")]
@@ -470,9 +470,9 @@ namespace RDF
 		///
 		///	This function returns the smoothness of a line or surface.
 		///	In case the smoothness can be defined the degree will get assigned either
-		///		0 - continuous curve / surface (i.e. degree 9)
-		///		1 - the direction of the curve / surface is gradually changing (i.e. degree 1)
-		///		2 - the change of direction of the curve / surface is gradually changing (i.e. degree 2)
+		///		0 - continuous curve/surface (i.e. degree 9)
+		///		1 - the direction of the curve/surface is gradually changing (i.e. degree 1)
+		///		2 - the change of direction of the curve/surface is gradually changing (i.e. degree 2)
 		///	In return value of this function returns the dimension of the found smoothness:
 		///		0 - smoothness could not be defined
 		///		1 - found the smoothness of a curve
@@ -507,7 +507,7 @@ namespace RDF
 		///
 		///	This call can be used in two ways. The optional arguments classCnt,
 		///	propertyCnt and instanceCnt can be used to get the total amount of active classes,
-		///	properies and instances available within the model.
+		///	properties and instances available within the model.
 		///
 		///	The setting and mask can be used to order the handles given for classes,
 		///	properties and instances.
@@ -519,7 +519,7 @@ namespace RDF
 		///		  can share the same handles, using the correct argument cannot be checked anymore
 		///		  by the library itself. This could result in crashes in case of incorrect assignments
 		///		  by the hosting application.
-		///	Note: internally there is no performance gain / loss. This is purely meant for situations
+		///	Note: internally there is no performance gain/loss. This is purely meant for situations
 		///		  where the hosting application can benefit performance wise from having an ordered list.
 		///	Note: use in combination with other libraries is not advised, i.e. when combined with the
 		///		  IFC generation from the IFC Engine component for example
@@ -554,7 +554,7 @@ namespace RDF
 		///	This function introduces functionality that is missing or complicated in some programming languages.
 		///	The attribute inValue is a reference to an array of references. The attribute outValue is a reference to the same array,
 		///	however a number of elements earlier or further, i.e. number of elements being attribute elementSize. Be aware that as
-		///	we are talking about references the offset is depending on 32 bit / 64 bit compilation.
+		///	we are talking about references the offset is depending on 32 bit/64 bit compilation.
 		/// </summary>
 		[DllImport(enginedll, EntryPoint = "PeelArray")]
 		public static extern void PeelArray(ref IntPtr inValue, out IntPtr outValue, Int64 elementSize);
@@ -583,7 +583,7 @@ namespace RDF
 		///		GetInternalCheckIssueCnt                                (https://rdf.bg/gkdoc/CS64/GetInternalCheckIssueCnt.html)
 		///
 		///	This function returns all issues found and not retrieved by the hosting application through 
-		///	GetInternalCheckIssue() / GetInternalCheckIssueW().
+		///	GetInternalCheckIssue()/GetInternalCheckIssueW().
 		/// </summary>
 		[DllImport(enginedll, EntryPoint = "GetInternalCheckIssueCnt")]
 		public static extern Int64 GetInternalCheckIssueCnt(Int64 model);
@@ -675,7 +675,7 @@ namespace RDF
 		public static extern Int64 GetExternalReferenceDataId(Int64 model, byte[] uniqueAppName);
 
         //
-        //  File IO / Stream / Copy API Calls
+        //  File IO/Stream/Copy API Calls
         //
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
@@ -911,8 +911,8 @@ namespace RDF
 		/// <summary>
 		///		SetOverrideFileIO                                       (https://rdf.bg/gkdoc/CS64/SetOverrideFileIO.html)
 		///
-		///	This function overrides the type of file saved / exported independent of the extension given.
-		///	By default the extension of the file name will define the type saved / exported:
+		///	This function overrides the type of file saved/exported independent of the extension given.
+		///	By default the extension of the file name will define the type saved/exported:
 		///		.rdf => generated RDF serialized content
 		///		.ttl => generated TTL serialized content
 		///		.bin => generated BIN/X serialized content
@@ -920,7 +920,7 @@ namespace RDF
 		///	Available formats
 		///		RDF
 		///		TTL
-		///		BIN/L - readible but large BIN format
+		///		BIN/L - readable but large BIN format
 		///		BIN/S - Optimized Binary, only running within given revision 
 		///		BIN/X - Optimized Binary, running in all revisions supporting BIN/X
 		///
@@ -946,8 +946,8 @@ namespace RDF
 		/// <summary>
 		///		GetOverrideFileIO                                       (https://rdf.bg/gkdoc/CS64/GetOverrideFileIO.html)
 		///
-		///	This function get the current overrides for type of file saved / exported independent of the extension given.
-		///	By default the extension of the file name will define the type saved / exported:
+		///	This function get the current overrides for type of file saved/exported independent of the extension given.
+		///	By default the extension of the file name will define the type saved/exported:
 		///		.rdf => generated RDF serialized content
 		///		.ttl => generated TTL serialized content
 		///		.bin => generated BIN/X serialized content
@@ -984,7 +984,7 @@ namespace RDF
 		///	This function copies the instance tree towards a new model.
 		///	In case model is empty a new model will be created (the handle to this new model can be retrieved through
 		///	the call GetModel() based on the return value of this call).
-		///	The model can be any opem model, it can be zero (a new model will be created on-the-fly) and it can be
+		///	The model can be any open model, it can be zero (a new model will be created on-the-fly) and it can be
 		///	the same model as the model owlInstance is defined within, in this case just a perfect copy of the
 		///	original instance tree.
 		///
@@ -998,7 +998,7 @@ namespace RDF
 		///
 		///	This function copies the instance network towards a new model.
 		///	An instance network is different from an instance tree in that it can contain 'loops', the performance
-		///	from this call will be slower in case the tree / network is sparse.
+		///	from this call will be slower in case the tree/network is sparse.
 		///	In case model is empty a new model will be created (the handle to this new model can be retrieved through
 		///	the call GetModel() based on the return value of this call).
 		///	The model can be any open model, it can be zero (a new model will be created on-the-fly) and it can be
@@ -1194,16 +1194,23 @@ namespace RDF
 		/// <summary>
 		///		SetClassParent                                          (https://rdf.bg/gkdoc/CS64/SetClassParent.html)
 		///
-		///	Defines (set/unset) the parent class of a given class. Multiple-inheritance is supported and behavior
+		///	Defines a parent class relation of a given class. Multiple-inheritance is supported and behavior
 		///	of parent classes is also inherited as well as cardinality restrictions on datatype properties and
 		///	object properties (relations).
 		///
-		///	When set: it adds parentOwlClass as immediate parent of owlClass if and only if 
-		///	parentOwlClass is not ancestor of owlClass and owlClass is not ancestor of parentOwlClass.
-		///	Returns the same value as IsClassAncestor after the call.
+		///	It adds parentOwlClass as immediate parent of owlClass if and only if parentOwlClass is not an
+		///	ancestor of owlClass and owlClass is not an ancestor of parentOwlClass.
 		///
-		///	When unset: it removes parentOwlClass from immediate parents and returns 1, 
-		///	or returns 0 if parentOwlClass is not immediate parent
+		///	Returns owlClass if this call made any change to the parent class relation of owlClass.
+		///
+		///	It will return 0 in case:
+		///		owlClass and/or parentOwlClass are 0
+		///		owlClass equals parentOwlClass
+		///		parentOwlClass is already (indirectly) a parent of owlClass
+		///		owlClass is (indirectly) a parent of parentOwlClass
+		///
+		///	It will return owlClass in case:
+		///		parentOwlClass became a direct parent of owlClass and they were not related this manner before
 		/// </summary>
 		[DllImport(enginedll, EntryPoint = "SetClassParent")]
 		public static extern Int64 SetClassParent(Int64 owlClass, Int64 parentOwlClass, Int64 setting);
@@ -1211,16 +1218,23 @@ namespace RDF
 		/// <summary>
 		///		SetClassParentEx                                        (https://rdf.bg/gkdoc/CS64/SetClassParentEx.html)
 		///
-		///	Defines (set/unset) the parent class of a given class. Multiple-inheritance is supported and behavior
+		///	Defines a parent class relation of a given class. Multiple-inheritance is supported and behavior
 		///	of parent classes is also inherited as well as cardinality restrictions on datatype properties and
 		///	object properties (relations).
 		///
-		///	When set: it adds parentOwlClass as immediate parent of owlClass if and only if 
-		///	parentOwlClass is not ancestor of owlClass and owlClass is not ancestor of parentOwlClass.
-		///	Returns the same value as IsClassAncestor after the call.
+		///	It adds parentOwlClass as immediate parent of owlClass if and only if parentOwlClass is not an
+		///	ancestor of owlClass and owlClass is not an ancestor of parentOwlClass.
 		///
-		///	When unset: it removes parentOwlClass from immediate parents and returns 1, 
-		///	or returns 0 if parentOwlClass is not immediate parent
+		///	Returns owlClass if this call made any change to the parent class relation of owlClass.
+		///
+		///	It will return 0 in case:
+		///		owlClass and/or parentOwlClass are 0
+		///		owlClass equals parentOwlClass
+		///		parentOwlClass is already (indirectly) a parent of owlClass
+		///		owlClass is (indirectly) a parent of parentOwlClass
+		///
+		///	It will return owlClass in case:
+		///		parentOwlClass became a direct parent of owlClass and they were not related this manner before
 		///
 		///	This call has the same behavior as SetClassParent, however needs to be
 		///	used in case classes are exchanged as a successive series of integers.
@@ -1437,7 +1451,7 @@ namespace RDF
 		///	Note: this function does not return inherited restrictions.
 		///
 		///	This call has the same behavior as GetClassPropertyByIterator, however needs to be
-		///	used in case classes and / or properties are exchanged as a successive series of integers.
+		///	used in case classes and/or properties are exchanged as a successive series of integers.
 		/// </summary>
 		[DllImport(enginedll, EntryPoint = "GetClassPropertyByIteratorEx")]
 		public static extern Int64 GetClassPropertyByIteratorEx(Int64 model, Int64 owlClass, Int64 rdfProperty, out Int64 minCard, out Int64 maxCard);
@@ -1544,7 +1558,7 @@ namespace RDF
 		///
 		///	Returns non-zero if the owlClass is a geometry type. This call will return the input class
 		///	for all classes initially available. It will return as well non-for all classes created by the
-		///	user or loaded / imported through a model that (indirectly) inherit one of the
+		///	user or loaded/imported through a model that (indirectly) inherit one of the
 		///	original classes available. in this case it returns the original available class
 		///	it inherits the behavior from.
 		/// </summary>
@@ -1556,7 +1570,7 @@ namespace RDF
 		///
 		///	Returns non-zero if the owlClass is a geometry type. This call will return the input class
 		///	for all classes initially available. It will return as well non-for all classes created by the
-		///	user or loaded / imported through a model that (indirectly) inherit one of the
+		///	user or loaded/imported through a model that (indirectly) inherit one of the
 		///	original classes available. in this case it returns the original available class
 		///	it inherits the behavior from.
 		///
@@ -1655,9 +1669,9 @@ namespace RDF
 		/// <summary>
 		///		SetPropertyRangeRestriction                             (https://rdf.bg/gkdoc/CS64/SetPropertyRangeRestriction.html)
 		///
-		///	Sets or unsets a specific owlClass as range restriction to an rdfProperty. The property is expected to
+		///	Sets or unsets a specific owlClass as range restriction to an property. The property is expected to
 		///	be an object[property, i.e. relation.]
-		///	If rdfProperty is not an object property this call has no effect.
+		///	If property is not an object property this call has no effect.
 		/// </summary>
 		[DllImport(enginedll, EntryPoint = "SetPropertyRangeRestriction")]
 		public static extern void SetPropertyRangeRestriction(Int64 rdfProperty, Int64 owlClass, Int64 setting);
@@ -1665,9 +1679,9 @@ namespace RDF
 		/// <summary>
 		///		SetPropertyRangeRestrictionEx                           (https://rdf.bg/gkdoc/CS64/SetPropertyRangeRestrictionEx.html)
 		///
-		///	Sets or unsets a specific owlClass as range restriction to an rdfProperty. The property is expected to
+		///	Sets or unsets a specific owlClass as range restriction to an property. The property is expected to
 		///	be an object[property, i.e. relation.]
-		///	If rdfProperty is not an object property this call has no effect.
+		///	If property is not an object property this call has no effect.
 		/// </summary>
 		[DllImport(enginedll, EntryPoint = "SetPropertyRangeRestrictionEx")]
 		public static extern void SetPropertyRangeRestrictionEx(Int64 model, Int64 rdfProperty, Int64 owlClass, Int64 setting);
@@ -1709,9 +1723,9 @@ namespace RDF
 		///
 		///	Error return codes:
 		///		0	successful
-		///		1	argument rdfProperty is incorrect (not a proper handle to an active property)
+		///		1	argument property is incorrect (not a proper handle to an active property)
 		///		2	argument name is incorrect (nullptr or zero length name)
-		///		3	the name of rdfProperty is locked
+		///		3	the name of property is locked
 		///		4	name is already used by another class
 		///		5	name is already used by a property
 		///		6	name is already used by an instance
@@ -1730,9 +1744,9 @@ namespace RDF
 		///
 		///	Error return codes:
 		///		0	successful
-		///		1	argument rdfProperty is incorrect (not a proper handle to an active property)
+		///		1	argument property is incorrect (not a proper handle to an active property)
 		///		2	argument name is incorrect (nullptr or zero length name)
-		///		3	the name of rdfProperty is locked
+		///		3	the name of property is locked
 		///		4	name is already used by another class
 		///		5	name is already used by a property
 		///		6	name is already used by an instance
@@ -1751,9 +1765,9 @@ namespace RDF
 		///
 		///	Error return codes:
 		///		0	successful
-		///		1	argument model or rdfProperty is incorrect (not a proper handle to an active property)
+		///		1	argument model or property is incorrect (not a proper handle to an active property)
 		///		2	argument name is incorrect (nullptr or zero length name)
-		///		3	the name of rdfProperty is locked
+		///		3	the name of property is locked
 		///		4	name is already used by another class
 		///		5	name is already used by a property
 		///		6	name is already used by an instance
@@ -1775,9 +1789,9 @@ namespace RDF
 		///
 		///	Error return codes:
 		///		0	successful
-		///		1	argument model or rdfProperty is incorrect (not a proper handle to an active property)
+		///		1	argument model or property is incorrect (not a proper handle to an active property)
 		///		2	argument name is incorrect (nullptr or zero length name)
-		///		3	the name of rdfProperty is locked
+		///		3	the name of property is locked
 		///		4	name is already used by another class
 		///		5	name is already used by a property
 		///		6	name is already used by an instance
@@ -1905,33 +1919,11 @@ namespace RDF
 		/// <summary>
 		///		RemoveProperty                                          (https://rdf.bg/gkdoc/CS64/RemoveProperty.html)
 		///
-		///	This call is named remove property instead of a at first sight more logical name delete property as all content depending on this property is not lost per se.
-		///	Each properties having the removed property as a parent will now inherit ther parents of the removed property.
-		///	All property values in the context of an instance will become property values of the parent property, or in case no parent property is defined the values are lost.
-		///	The return value represents a bit set defining findings during the removal, if a clean removal with no side effects was possible the return value is 0. In all other cases 
-		///	the following bits represent the findings during removal:
-		///		bit 0:
-		///			0	Input as expected
-		///			1	Encountered an issue on input value, i.e. property was not recognized as property
-		///		bit 1:
-		///			0	No 'child' properties found
-		///			1	Properties found that had this property as a parent, they are adjusted by inheriting directly removed properties parents if present
-		///		bit 2:
-		///			0	No instances found with value restrictions for this property
-		///			1	Vertex does contain 3D point info
-		///		bit 3:
-		///			0	No instances found with values for this property
-		///			1	Vertex does contain 3D normal vector info => if set, bit 4 will also be set
-		///		bit 6:
-		///			0	Vertex does not contain first 2D texture info
-		///			1	Vertex does contain first 2D texture info
-		///		bit 7:
-		///			0	Vertex does not contain second 2D texture info
-		///			1	Vertex does contain second 2D texture info => if set, bit 6 will also be set
+		///	Removes property from model.
 		///
-		///	Error return codes:
+		///	Return codes:
 		///		0	successful
-		///		1	argument rdfProperty is incorrect (not a proper handle to an active property)
+		///		1	argument property is invalid (wrong type or embedded property)
 		///		2	another property is dependent on the property to be deleted (for example through an inheritance relation)
 		///		3	an instance has a non-zero cardinality for the property to be deleted
 		///		4	undefined error
@@ -1942,39 +1934,16 @@ namespace RDF
 		/// <summary>
 		///		RemovePropertyEx                                        (https://rdf.bg/gkdoc/CS64/RemovePropertyEx.html)
 		///
-		///	This call is named remove property instead of a at first sight more logical name delete property as all content depending on this property is not lost per se.
-		///	Each properties having the removed property as a parent will now inherit ther parents of the removed property.
-		///	All property values in the context of an instance will become property values of the parent property, or in case no parent property is defined the values are lost.
-		///	The return value represents a bit set defining findings during the removal, if a clean removal with no side effects was possible the return value is 0. In all other cases 
-		///	the following bits represent the findings during removal:
-		///		bit 0:
-		///			0	Input as expected
-		///			1	Encountered an issue on input value, i.e. property was not recognized as property
-		///		bit 1:
-		///			0	No 'child' properties found
-		///			1	Properties found that had this property as a parent, they are adjusted by inheriting directly removed properties parents if present
-		///		bit 2:
-		///			0	No instances found with value restrictions for this property
-		///			1	Vertex does contain 3D point info
-		///		bit 3:
-		///			0	No instances found with values for this property
-		///			1	Vertex does contain 3D normal vector info => if set, bit 4 will also be set
-		///		bit 6:
-		///			0	Vertex does not contain first 2D texture info
-		///			1	Vertex does contain first 2D texture info
-		///		bit 7:
-		///			0	Vertex does not contain second 2D texture info
-		///			1	Vertex does contain second 2D texture info => if set, bit 6 will also be set
+		///	Removes property from model.
+		///	This call has the same behavior as RemoveProperty, however needs to be
+		///	used in case properties are exchanged as a successive series of integers.
 		///
-		///	Error return codes:
+		///	Return codes:
 		///		0	successful
-		///		1	argument model or rdfProperty is incorrect (not a proper handle to an active model)
+		///		1	argument property is invalid (wrong type or embedded property)
 		///		2	another property is dependent on the property to be deleted (for example through an inheritance relation)
 		///		3	an instance has a non-zero cardinality for the property to be deleted
 		///		4	undefined error
-		///
-		///	This call has the same behavior as RemoveProperty, however needs to be
-		///	used in case properties are exchanged as a successive series of integers.
 		/// </summary>
 		[DllImport(enginedll, EntryPoint = "RemovePropertyEx")]
 		public static extern Int64 RemovePropertyEx(Int64 model, Int64 rdfProperty);
@@ -1982,7 +1951,7 @@ namespace RDF
 		/// <summary>
 		///		IsProperty                                              (https://rdf.bg/gkdoc/CS64/IsProperty.html)
 		///
-		///	Returns RdfProperty if the argument rdfsResource is an actual active property in an active model. It returns 0 in all other cases,
+		///	Returns property if the argument rdfsResource is an actual active property in an active model. It returns 0 in all other cases,
 		///	i.e. this could mean the model is already closed, the property is inactive or removed or the session is closed.
 		///	It could also mean it represents a handle to another resource, for example a class, instance or model.
 		/// </summary>
@@ -2163,6 +2132,9 @@ namespace RDF
 		///
 		///	If one of the classes this instance is instantiated from or one of its parents is a geometry class,
 		///	this class is returned. In all other cases the return value is 0.
+		///
+		///	This call has the same behavior as SetNameOfInstance, however needs to be
+		///	used in case instance are exchanged as a successive series of integers.
 		/// </summary>
 		[DllImport(enginedll, EntryPoint = "GetInstanceGeometryClassEx")]
 		public static extern Int64 GetInstanceGeometryClassEx(Int64 model, Int64 owlInstance);
@@ -2171,7 +2143,7 @@ namespace RDF
 		///		GetInstancePropertyByIterator                           (https://rdf.bg/gkdoc/CS64/GetInstancePropertyByIterator.html)
 		///
 		///	Returns a handle to the objectTypeProperty or dataTypeProperty connected to
-		///	the instance, this property can also contain a value, but for example also
+		///	the instance, class or model. This property can also contain a value, but for example also
 		///	the knowledge about cardinality restrictions in the context of this instance's class
 		///	and the exact cardinality in context of its instance.
 		/// </summary>
@@ -2188,7 +2160,7 @@ namespace RDF
 		/// <summary>
 		///		GetInstanceInverseReferencesByIterator                  (https://rdf.bg/gkdoc/CS64/GetInstanceInverseReferencesByIterator.html)
 		///
-		///	Returns a handle to the owlInstances refering this instance
+		///	Returns a handle to the owlInstances referring this instance
 		/// </summary>
 		[DllImport(enginedll, EntryPoint = "GetInstanceInverseReferencesByIterator")]
 		public static extern Int64 GetInstanceInverseReferencesByIterator(Int64 owlInstance, Int64 referencingOwlInstance);
@@ -2196,7 +2168,7 @@ namespace RDF
 		/// <summary>
 		///		GetInstanceReferencesByIterator                         (https://rdf.bg/gkdoc/CS64/GetInstanceReferencesByIterator.html)
 		///
-		///	Returns a handle to the owlInstance refered by this instance
+		///	Returns a handle to the owlInstance referred by this instance
 		/// </summary>
 		[DllImport(enginedll, EntryPoint = "GetInstanceReferencesByIterator")]
 		public static extern Int64 GetInstanceReferencesByIterator(Int64 owlInstance, Int64 referencedOwlInstance);
@@ -2354,8 +2326,7 @@ namespace RDF
 		/// <summary>
 		///		SetDatatypeProperty                                     (https://rdf.bg/gkdoc/CS64/SetDatatypeProperty.html)
 		///
-		///	This function sets the value(s) of a certain datatypeTypeProperty
-		///	in the context of an instance.
+		///	This function sets the value(s) of a certain datatypeTypeProperty of an instance, class or model.
 		///	The value of card gives the actual card of the values list.
 		///	The list values of undefined (void) items is a list of booleans, chars, integers
 		///	or doubles, this list has a length as given in the values card. The actual used type
@@ -2640,8 +2611,8 @@ namespace RDF
 		/// <summary>
 		///		SetObjectProperty                                       (https://rdf.bg/gkdoc/CS64/SetObjectProperty.html)
 		///
-		///	This function sets the value(s) of a certain objectTypeProperty
-		///	in the context of an instance.
+		///	This function sets the value(s) of a certain objectTypeProperty of an instance, class or model.
+		///	A value can be OwlInstance, OwlClass, RdfProperty, OwlObjectProperty or OwlDatatypeProperty.
 		///	The value of card gives the actual card of the values list.
 		///	The list values of integers is a list of handles to instances, this list
 		///	has a length as given in the values card.
@@ -2695,11 +2666,11 @@ namespace RDF
 		/// <summary>
 		///		GetObjectProperty                                       (https://rdf.bg/gkdoc/CS64/GetObjectProperty.html)
 		///
-		///	This function gets the value(s) of a certain objectProperty
-		///	in the context of an instance.
+		///	This function gets the value(s) of a certain property of an instance, class or model.
 		///	The value of card gives the actual card of the values list.
-		///	The list values of integers is a list of handles to instances, this list
+		///	The list values of integers is a list of handles to instance, classe or property, this list
 		///	has a length as given in the value card.
+		///	Caller should not dispose the list
 		///	The return value always should be 0, if not something is wrong in the way this property is called.
 		/// </summary>
 		[DllImport(enginedll, EntryPoint = "GetObjectProperty")]
@@ -2726,7 +2697,7 @@ namespace RDF
 		/// <summary>
 		///		GetObjectPropertyEx                                     (https://rdf.bg/gkdoc/CS64/GetObjectPropertyEx.html)
 		///
-		///	This function gets the value(s) of a certain objectProperty
+		///	This function gets the value(s) of a certain property
 		///	in the context of an instance.
 		///	The value of card gives the actual card of the values list.
 		///	The list values of integers is a list of handles to instances, this list
