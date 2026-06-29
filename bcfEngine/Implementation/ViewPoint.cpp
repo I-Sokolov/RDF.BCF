@@ -110,7 +110,7 @@ bool ViewPoint::Validate(bool fix)
 /// <summary>
 /// 
 /// </summary>
-void ViewPoint::Write(_xml_writer& writer, const std::string& folder, const char* /*tag*/)
+void ViewPoint::Write(_xml_writer& writer, const std::string& folder, const char* tag)
 {
     m_Snapshot = CopyToRelative(m_Snapshot, folder, NULL);
     
@@ -125,7 +125,7 @@ void ViewPoint::Write(_xml_writer& writer, const std::string& folder, const char
     Attributes attr;
     ATTR_ADD(Guid);
 
-    WRITE_ELEM(ViewPoint);
+    WRITE_ELEM_EX(ViewPoint, tag);
 
     //
     m_Snapshot = AbsolutePath(m_Snapshot, folder);

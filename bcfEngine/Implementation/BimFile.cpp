@@ -84,7 +84,12 @@ void BimFile::Write(_xml_writer& writer, const std::string& folder, const char* 
     }
 
     XMLFile::Attributes attr;
-    ATTR_ADD(IsExternal);
+    if (Project_().GetVersion() > BCFVer_2_1) {
+        ATTR_ADD(IsExternal);
+    }
+    else {
+        attr.Add("isExternal", m_IsExternal.c_str());
+    }
     ATTR_ADD(IfcProject);
     ATTR_ADD(IfcSpatialStructureElement);
 

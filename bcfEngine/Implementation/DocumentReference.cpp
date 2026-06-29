@@ -87,7 +87,9 @@ void DocumentReference::Write(_xml_writer& writer, const std::string& folder, co
 
     XMLFile::Attributes attr;
     ATTR_ADD(Guid);
-
+    if (Project_().GetVersion() < BCFVer_3_0) {
+        attr.Add("isExternal", GetIsExternal() ? "true" : "false");
+    }
     WRITE_ELEM(DocumentReference);    
 }
 
@@ -96,8 +98,30 @@ void DocumentReference::Write(_xml_writer& writer, const std::string& folder, co
 /// </summary>
 void DocumentReference::Write_DocumentReference(_xml_writer& writer, const std::string& folder)
 {
-    WRITE_CONTENT(DocumentGuid);
-    WRITE_CONTENT(Url);
+    if (Project_().GetVersion() >= BCFVer_3_0) {
+        WRITE_CONTENT(DocumentGuid);
+        WRITE_CONTENT(Url);
+    }
+    else {
+        //2.1
+        if (GetIsExternal()) {
+            writer.writeTag("ReferencedDocument", m_Url);
+        }
+        else {
+            auto path = GetFilePath();
+            if (path && *path) {
+                if (0 == strncmp(path, folder.c_str(), folder.size())) {
+                    path += folder.size();
+                    if (path[0] == '\\' || path[0] == '/') {
+                        ++path;
+                    }
+                    writer.writeTag("ReferencedDocument", path);
+                }
+                else assert(false);
+            }
+        }
+    }
+
     WRITE_CONTENT(Description);
 }
 

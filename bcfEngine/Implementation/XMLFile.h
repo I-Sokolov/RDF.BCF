@@ -89,27 +89,36 @@ private:
 
 #define WRITE_MEMBER(name)    m_##name.Write(writer, folder, #name)
 
-#define WRITE_ELEM(name)                        \
-    writer.writeStartTag(#name, attr);          \
+#define WRITE_ELEM_EX(name, tag)                \
+    writer.writeStartTag(tag, attr);            \
     writer.indent()++;                          \
                                                 \
     Write_##name(writer, folder);               \
                                                 \
     writer.indent()--;                          \
-    writer.writeEndTag(#name)
+    writer.writeEndTag(tag)
 
-#define WRITE_LIST_EX(list, elem)               \
+#define WRITE_ELEM(name) WRITE_ELEM_EX(name, #name)
+
+#define WRITE_LIST_EX2(list, elem, nest)        \
     if (!m_##list.Items().empty()) {            \
-        writer.writeStartTag(#list);            \
-        writer.indent()++;                      \
+                                                \
+        if (nest){                              \
+            writer.writeStartTag(#list);        \
+            writer.indent()++;                  \
+        }                                       \
                                                 \
         for (auto item : m_##list.Items()) {    \
             item->Write(writer, folder, #elem); \
         }                                       \
                                                 \
-        writer.indent()--;                      \
-        writer.writeEndTag(#list);              \
+        if (nest){                              \
+            writer.indent()--;                  \
+            writer.writeEndTag(#list);          \
+        }                                       \
     }
+
+#define WRITE_LIST_EX(list, elem) WRITE_LIST_EX2(list, elem, true)        
 
 #define WRITE_LIST(elem) WRITE_LIST_EX(elem##s, elem)
 
