@@ -100,7 +100,7 @@ private:
 
 #define WRITE_ELEM(name) WRITE_ELEM_EX(name, #name)
 
-#define WRITE_LIST_EX2(list, elem, nest)        \
+#define WRITE_LIST_EX3(list, elem, nest, elemTag) \
     if (!m_##list.Items().empty()) {            \
                                                 \
         if (nest){                              \
@@ -109,7 +109,7 @@ private:
         }                                       \
                                                 \
         for (auto item : m_##list.Items()) {    \
-            item->Write(writer, folder, #elem); \
+            item->Write(writer, folder, elemTag); \
         }                                       \
                                                 \
         if (nest){                              \
@@ -117,6 +117,8 @@ private:
             writer.writeEndTag(#list);          \
         }                                       \
     }
+
+#define WRITE_LIST_EX2(list, elem, nest)        WRITE_LIST_EX3(list, elem, nest, #elem)
 
 #define WRITE_LIST_EX(list, elem) WRITE_LIST_EX2(list, elem, true)        
 

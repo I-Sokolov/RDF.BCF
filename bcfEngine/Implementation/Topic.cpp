@@ -213,7 +213,7 @@ void Topic::Write_Topic(_xml_writer& writer, const std::string& folder)
     
     if (Project_().GetVersion() > BCFVer_2_1) {
         WRITE_LIST(Comment);
-        WRITE_LIST(Viewpoint);
+        WRITE_LIST_EX3(Viewpoints, Viewpoint, true, "ViewPoint");
     }
 
 }

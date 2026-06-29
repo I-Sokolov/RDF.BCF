@@ -63,7 +63,7 @@ namespace CSExample
 
                 //
                 //
-                for (var version = RDF.BCF.Interop.Version._2_1; version <= RDF.BCF.Interop.Version._3_0; version++)
+                foreach (var version in new[] {RDF.BCF.Interop.Version._2_1, RDF.BCF.Interop.Version._3_0 } )
                 {
                     bcfData.FileWrite("MyTest.bcf", version);
 
