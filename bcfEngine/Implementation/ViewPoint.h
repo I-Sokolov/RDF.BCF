@@ -99,6 +99,8 @@ private:
     void Write_PerspectiveCamera(_xml_writer& writer, const std::string& folder);
     void Write_OrthogonalCamera(_xml_writer& writer, const std::string& folder);
 
+    void WriteViewSetupHints(_xml_writer& writer, const std::string& folder);
+
 private:
     Topic&                      m_topic;
 

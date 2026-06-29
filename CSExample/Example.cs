@@ -53,7 +53,7 @@ namespace CSExample
                 viewpoint.SetCameraViewPoint(new RDF.BCF.Interop.BCFPoint());
                 viewpoint.SetCameraDirection(new RDF.BCF.Interop.BCFPoint(1));
                 viewpoint.SetCameraUpVector(new RDF.BCF.Interop.BCFPoint(0, 0, 1));
-                viewpoint.FieldOfView = 90;
+                viewpoint.FieldOfView = 60;
                 viewpoint.AspectRatio = 1;
                 //hide all except one element
                 viewpoint.DefaultVisibility = false;   

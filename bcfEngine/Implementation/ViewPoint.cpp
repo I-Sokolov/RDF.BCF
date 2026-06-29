@@ -212,6 +212,10 @@ void  ViewPoint::Read_Components(_xml::_element& elem, const std::string& folder
 /// </summary>
 void  ViewPoint::Write_Components(_xml_writer& writer, const std::string& folder)
 {
+    if (Project_().GetVersion() < BCFVer_3_0) {
+        WriteViewSetupHints(writer, folder);
+    }
+
     WRITE_LIST_EX(Selection, Component);
 
     Attributes attr;
@@ -239,13 +243,24 @@ void  ViewPoint::Read_Visibility(_xml::_element& elem, const std::string& folder
 /// <summary>
 /// 
 /// </summary>
-void ViewPoint::Write_Visibility(_xml_writer& writer, const std::string& folder)
+void ViewPoint::WriteViewSetupHints(_xml_writer& writer, const std::string& folder)
 {
+
     Attributes attr;
     ATTR_ADD(SpacesVisible);
     ATTR_ADD(SpaceBoundariesVisible);
     ATTR_ADD(OpeningsVisible);
     writer.writeTag("ViewSetupHints", attr, "");
+}
+
+/// <summary>
+/// 
+/// </summary>
+void ViewPoint::Write_Visibility(_xml_writer& writer, const std::string& folder)
+{
+    if (Project_().GetVersion() >= BCFVer_3_0) {
+        WriteViewSetupHints(writer, folder);
+    }
 
     WRITE_LIST_EX(Exceptions, Component);
 }
@@ -287,7 +302,10 @@ void ViewPoint::Write_PerspectiveCamera(_xml_writer& writer, const std::string& 
     WRITE_MEMBER(CameraDirection);
     WRITE_MEMBER(CameraUpVector);
     WRITE_CONTENT(FieldOfView);
-    WRITE_CONTENT(AspectRatio);
+
+    if (Project_().GetVersion() >= BCFVer_3_0) {
+        WRITE_CONTENT(AspectRatio);
+    }
 }
 
 /// <summary>
