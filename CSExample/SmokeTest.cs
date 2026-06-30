@@ -14,12 +14,37 @@ namespace CSExample
 {
     internal class SmokeTest
     {
+        private static Interop.Version _version;
+
         /// <summary>
         /// 
         /// </summary>
         public static void Run()
         {
-            Console.WriteLine($"Running smoke tests. Current directory {System.IO.Directory.GetCurrentDirectory()}.");
+            foreach (var ver in new[] {Interop.Version._3_0, Interop.Version._2_1 })
+            {
+                _version = ver;
+
+                RunVersionTests();
+            }
+
+#if DEBUG
+            Console.WriteLine();
+            Console.WriteLine("Running Dataset test");
+            SmokeTest_DataSet("W:\\DevArea\\buildingSMART\\BCF-XML\\Test Cases");
+#endif
+
+            Console.WriteLine("TESTS PASSED");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static void RunVersionTests()
+        {
+            Console.WriteLine();
+            Console.WriteLine($"Running smoke tests for version {_version}");
+            Console.WriteLine($"Current directory {System.IO.Directory.GetCurrentDirectory()}.");
             Console.WriteLine("...");
 
             Console.WriteLine("TEST Errors");
@@ -39,13 +64,6 @@ namespace CSExample
 
             Console.WriteLine("TEST Validations");
             Validations();
-
-#if DEBUG
-            Console.WriteLine("Dataset test");
-            SmokeTest_DataSet("W:\\DevArea\\buildingSMART\\BCF-XML\\Test Cases");
-#endif
-
-            Console.WriteLine("TESTS PASSED");
         }
 
         [System.Runtime.InteropServices.DllImport("bcfEngine.dll", EntryPoint = "SmokeTest_DataSet")]
@@ -132,7 +150,7 @@ namespace CSExample
                 CheckExtensions(bcf);
 
                 ASSERT(bcf.IsModified);
-                var ok = bcf.FileWrite("Кирилица.bcf");
+                var ok = bcf.FileWrite("Кирилица.bcf", _version);
                 ASSERT(ok);
                 ASSERT(!bcf.IsModified);
             }
@@ -189,7 +207,7 @@ namespace CSExample
                 {
                     ASSERT(u == users[i++]);
                 }
-                var ok = bcf.FileWrite("TestExtensions.bcf");
+                var ok = bcf.FileWrite("TestExtensions.bcf", _version);
                 ASSERT(ok);
             }
         }
@@ -312,7 +330,7 @@ namespace CSExample
 
                 CheckTopicAttributes(bcf, true);
 
-                ok = bcf.FileWrite("TopicsTest.bcf");
+                ok = bcf.FileWrite("TopicsTest.bcf", _version);
                 ASSERT(ok);
             }
 
@@ -329,7 +347,7 @@ namespace CSExample
 
                 CheckTopicAttributes(bcf, false);
 
-                ok = bcf.FileWrite("TopicsTest2.bcf");
+                ok = bcf.FileWrite("TopicsTest2.bcf", _version);
                 ASSERT(ok);
             }
 
@@ -542,7 +560,7 @@ namespace CSExample
                 SetCommentAndViewPoints(bcf);
                 CheckCommentAndViewPoints(bcf, false, false);
 
-                ok = bcf.FileWrite("TestCommentsVP.bcf");
+                ok = bcf.FileWrite("TestCommentsVP.bcf", _version);
                 ASSERT(ok);
             }
 
@@ -560,7 +578,7 @@ namespace CSExample
 
                 CheckCommentAndViewPoints(bcf, true, true);
 
-                ok = bcf.FileWrite("TestCommentsVP2.bcf");
+                ok = bcf.FileWrite("TestCommentsVP2.bcf", _version);
                 ASSERT(ok);
             }
 
@@ -950,14 +968,14 @@ namespace CSExample
                 var topic = bcf.AddTopic("", "B", "C");
 
                 ASSERT(bcf.GetErrors().Length == 0);
-                var ok = bcf.FileWrite("Validation.bcf");
+                var ok = bcf.FileWrite("Validation.bcf", _version);
                 ASSERT(!ok);
                 var err = bcf.GetErrors();
                 ASSERT(err.Contains("Missed property"));
                 ASSERT(err.Contains("TopicType"));
 
                 topic.TopicType = "Type";
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 ASSERT(ok);
 
                 //
@@ -981,20 +999,20 @@ namespace CSExample
                 var comment = topic.AddComment();
                 ASSERT(bcf.GetErrors().Length == 0);
 
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 ASSERT(!ok);
                 err = bcf.GetErrors();
                 ASSERT(err.Contains("Missed property"));
                 ASSERT(err.Contains("Comment"));
 
                 comment.Text = "Text";
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 ASSERT(ok);
 
                 //component
                 var viewPoint = topic.AddViewPoint();
 
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 err = bcf.GetErrors();
                 ASSERT(!ok);
                 ASSERT(err.Contains("Missed property"));
@@ -1006,14 +1024,14 @@ namespace CSExample
                 viewPoint.FieldOfView = 90;
                 viewPoint.AspectRatio = 1;
 
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 ASSERT(ok);
 
                 //
                 var comp = viewPoint.AddSelection();
                 comp.IfcGuid = "wrong";
                 ASSERT(comp.IfcGuid.Length == 0);
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 err = bcf.GetErrors();
                 ASSERT(!ok);
                 ASSERT(err.Contains("Invalid value"));
@@ -1021,19 +1039,19 @@ namespace CSExample
                 ASSERT(err.Contains("IfcGuid"));
 
                 comp.IfcGuid = TestIfcGuid(0);
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 err = bcf.GetErrors();
                 ASSERT(ok);
 
                 var bmp = viewPoint.AddBitmap("", Interop.BCFBitmapFormat.BCFBitmapPNG, new Interop.BCFPoint(), new Interop.BCFPoint(), new Interop.BCFPoint(), 0);
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 ASSERT(!ok);
                 err = bcf.GetErrors();
                 ASSERT(err.Contains("Missed property"));
                 ASSERT(err.Contains("Reference"));
 
                 bmp.Remove();
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 ASSERT(ok);
 
                 //
@@ -1046,26 +1064,26 @@ namespace CSExample
                 clr.Color = "AABBCC";
                 ASSERT(clr.Color == "AABBCC");
 
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 ASSERT(!ok);
                 err = bcf.GetErrors();
                 ASSERT(err.Contains("Missed property"));
                 ASSERT(err.Contains("Components"));
 
                 clr.AddComponet(TestIfcGuid(0));
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 ASSERT(ok);
 
                 //
                 var docref = topic.AddDocumentRefernce("");
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 err = bcf.GetErrors();
                 ASSERT(!ok);
                 ASSERT(err.Contains("Missed property"));
                 ASSERT(err.Contains("Url"));
 
                 docref.SetFilePath ("http://ss");
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 ASSERT(ok);
             }
         }
@@ -1087,7 +1105,7 @@ namespace CSExample
                 CreateTopicLists(project, 3, 7);
                 CheckTopicLists(project, 3, 7);
 
-                var ok = project.FileWrite("TestListAttr.bcf");
+                var ok = project.FileWrite("TestListAttr.bcf", _version);
                 ASSERT(ok);
             }
 
