@@ -21,7 +21,7 @@ namespace CSExample
         /// </summary>
         public static void Run()
         {
-            foreach (var ver in new[] {Interop.Version._3_0, Interop.Version._2_1 })
+            foreach (var ver in new[] {Interop.Version._2_1, Interop.Version._3_0 })
             {
                 _version = ver;
 
