@@ -114,7 +114,9 @@ void Topic::WriteRootContent(_xml_writer& writer, const std::string& folder)
 {
     Attributes attr;
 
-    WRITE_ELEM(Header);
+    if (!m_Files.Items().empty()) {
+        WRITE_ELEM(Header);
+    }
 
     ATTR_ADD(Guid);
     ATTR_ADD(ServerAssignedId);
