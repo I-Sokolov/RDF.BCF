@@ -1024,7 +1024,7 @@ namespace CSExample
                 viewPoint.SetCameraViewPoint(new Interop.BCFPoint(0, 0, 0));
                 viewPoint.SetCameraDirection(new Interop.BCFPoint(1, 1, 1));
                 viewPoint.SetCameraUpVector(new Interop.BCFPoint(0, 0, 1));
-                viewPoint.FieldOfView = 90;
+                viewPoint.FieldOfView = 60;
                 viewPoint.AspectRatio = 1;
 
                 ok = bcf.FileWrite("Validation.bcf", _version);
