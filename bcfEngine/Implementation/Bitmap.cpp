@@ -5,6 +5,16 @@
 #include "XMLFile.h"
 #include "ViewPoint.h"
 
+static void ToLower(std::string& str)
+{
+    std::transform(str.begin(), str.end(), str.begin(), [](unsigned char c) { return std::tolower(c); });
+}
+
+static void ToUpper(std::string& str)
+{
+    std::transform(str.begin(), str.end(), str.begin(), [](unsigned char c) { return std::toupper(c); });
+}
+
 /// <summary>
 /// 
 /// </summary>
@@ -68,7 +78,14 @@ void Bitmap::Write(_xml_writer& writer, const std::string& folder, const char* t
 
     m_Reference = CopyToRelative(m_Reference, folder, NULL);
 
-    WRITE_CONTENT(Format);
+    if (Project_().GetVersion() >= BCFVer_3_0) {
+        WRITE_CONTENT(Format);
+    }
+    else {
+        ToUpper(m_Format);
+        WRITE_CONTENT_EX(Bitmap, Format);
+        ToLower(m_Format);
+    }
     WRITE_CONTENT(Reference);
     WRITE_MEMBER(Location);
     WRITE_MEMBER(Normal);
@@ -122,13 +139,14 @@ bool Bitmap::SetReference(const char* val)
     return SetPropertyString(val, m_Reference);
 }
 
+
 /// <summary>
 /// 
 /// </summary>
 void Bitmap::AfterRead(const std::string&)
 {
     if (Project_().GetVersion() < BCFVer_3_0) {
-        std::transform(m_Format.begin(), m_Format.end(), m_Format.begin(), [](unsigned char c) { return std::tolower(c); });
+        ToLower(m_Format);
     }
 }
 

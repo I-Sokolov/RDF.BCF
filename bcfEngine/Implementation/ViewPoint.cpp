@@ -189,7 +189,7 @@ void ViewPoint::WriteRootContent(_xml_writer& writer, const std::string& folder)
     }
     WRITE_LIST(Line);
     WRITE_LIST(ClippingPlane);
-    WRITE_LIST(Bitmap);
+    WRITE_LIST_EX2(Bitmaps, Bitmap, Project_().GetVersion() > BCFVer_2_1);
 }
 
 /// <summary>
@@ -333,7 +333,9 @@ void ViewPoint::Write_OrthogonalCamera(_xml_writer& writer, const std::string& f
     WRITE_MEMBER(CameraDirection);
     WRITE_MEMBER(CameraUpVector);
     WRITE_CONTENT(ViewToWorldScale);
-    WRITE_CONTENT(AspectRatio);
+    if (Project_().GetVersion() >= BCFVer_3_0) {
+        WRITE_CONTENT(AspectRatio);
+    }
 }
 
 

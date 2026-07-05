@@ -615,6 +615,7 @@ namespace CSExample
 
             //can't comment used viewpoint
             var cnt = topic.GetViewPoints().Count;
+            Console.WriteLine("Expected error: ViewPoint is used: Can not delete used viewpoint");
             var res = comment.ViewPoint.Remove();
             ASSERT(!res);
             var str = bcf.GetErrors();
@@ -751,7 +752,7 @@ namespace CSExample
                 vp.SetCameraDirection(new Interop.BCFPoint(i + .3, i + .4, i + .5 ));
                 vp.SetCameraUpVector(new Interop.BCFPoint(i + .6, i + .7, i + .8 ));
                 vp.ViewToWorldScale = i * 3;
-                vp.FieldOfView = i * 3.5 + 0.1;
+                vp.FieldOfView = i * 3.5 + 45;
                 vp.AspectRatio = i * 4 + 0.1;
                 vp.Snapshot = TestFile("png");
 
@@ -764,10 +765,10 @@ namespace CSExample
                     comp = vp.AddException();
                     comp.IfcGuid = TestIfcGuid(j);
 
-                    var color = vp.AddColoring((j % 2 == 0) ? $"00FFbb0{j}" : null);
+                    var color = vp.AddColoring((j % 2 == 0) ? $"00FFBB0{j}" : null);
                     if (j % 2 != 0)
                     {
-                        color.Color = $"00FFbb0{j}";
+                        color.Color = $"00FFBB0{j}";
                     }
                     for (int k = 0; k < 7; k++)
                     {
@@ -871,19 +872,20 @@ namespace CSExample
                 if (b)
                 {
                     ASSERT(vp.CameraType == Interop.BCFCamera.Perspective);
-                    ASSERT(vp.FieldOfView == i * 3.5 + 0.1);
+                    ASSERT(vp.FieldOfView == i * 3.5 + 45);
                     ASSERT(vp.ViewToWorldScale == (read ? 0 : i * 3));
                 }
                 else
                 {
                     ASSERT(vp.CameraType == Interop.BCFCamera.Orthogonal);
-                    ASSERT(vp.FieldOfView == (read ? 0 : i * 3.5 + 0.1));
+                    ASSERT(vp.FieldOfView == (read ? 0 : i * 3.5 + 45));
                     ASSERT(vp.ViewToWorldScale == i * 3);
                 }
                 ASSERT(EQ(vp.GetCameraViewPoint(), new Interop.BCFPoint(i, i + .1, i + .2 )));
                 ASSERT(EQ(vp.GetCameraDirection(), new Interop.BCFPoint(i + .3, i + .4, i + .5 )));
                 ASSERT(EQ(vp.GetCameraUpVector(), new Interop.BCFPoint( i + .6, i + .7, i + .8 )));
-                ASSERT(vp.AspectRatio == i * 4+0.1);
+                if (_version > Interop.Version._2_1)
+                    ASSERT(vp.AspectRatio == i * 4 + 0.1);
                 ASSERT(vp.Snapshot.EndsWith("Architectural.png"));
                 ASSERT(Path.Exists(vp.Snapshot));
 
@@ -914,7 +916,7 @@ namespace CSExample
                     ASSERT(comp.OriginatingSystem == "");
                     ASSERT(comp.AuthoringToolId == "");
 
-                    ASSERT(clr[j].Color== $"00FFbb0{j}");
+                    ASSERT(clr[j].Color== $"00FFBB0{j}");
                     ASSERT(clr[j].GetComponents().Count == 6);
                     for (int k = 0; k < 6; k++)
                     {

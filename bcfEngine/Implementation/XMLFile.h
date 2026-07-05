@@ -85,7 +85,8 @@ private:
 
 #define ATTR_ADD(name) attr.Add(#name,m_##name.c_str())
 
-#define WRITE_CONTENT(name)   if (!m_##name.empty()) writer.writeTag(#name, m_##name)
+#define WRITE_CONTENT_EX(tag, value)   if (!m_##value.empty()) writer.writeTag(#tag, m_##value)
+#define WRITE_CONTENT(name)   WRITE_CONTENT_EX(name, name)
 
 #define WRITE_MEMBER(name)    m_##name.Write(writer, folder, #name)
 
