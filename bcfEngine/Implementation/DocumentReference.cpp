@@ -116,9 +116,8 @@ void DocumentReference::Write_DocumentReference(_xml_writer& writer, const std::
             writer.writeTag("ReferencedDocument", m_Url);
         }
         else {
-            auto path = GetFilePath();
-            //path is %TEMP%\RDF.BCF.xx\Documents_\<doc GUID>\<Name>
-            auto relPath = path + strlen(path) - 1;
+            const char* path = GetFilePath();    //path is %TEMP%\RDF.BCF.xx\Documents_\<doc GUID>\<Name>
+            const char* relPath = path + strlen(path) - 1;
             int part = 0;
             for (; relPath > path; relPath--) {
                 if (*relPath == '\\' || *relPath == '/') {
@@ -130,7 +129,11 @@ void DocumentReference::Write_DocumentReference(_xml_writer& writer, const std::
                 }
             }
             assert(part == 3 && relPath > path);
-            writer.writeTag("ReferencedDocument", relPath);
+
+            std::string docRef("..");
+            FileSystem::AddPath(docRef, relPath);
+
+            writer.writeTag("ReferencedDocument", docRef.c_str());
         }
     }
 
