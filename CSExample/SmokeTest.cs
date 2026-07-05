@@ -483,7 +483,8 @@ namespace CSExample
             {
                 ASSERT(topic.TopicType == "TopicType");
                 ASSERT(topic.TopicStatus == "Status");
-                ASSERT(topic.ServerAssignedId == "ServerAssignedId");
+                if (_version > Interop.Version._2_1)
+                    ASSERT(topic.ServerAssignedId == "ServerAssignedId");
                 ASSERT(topic.TopicType == "TopicType");
                 ASSERT(topic.Priority == "Priority");
                 ASSERT(topic.DueDate == TestDate(0));

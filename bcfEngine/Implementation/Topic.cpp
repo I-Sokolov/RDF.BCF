@@ -119,7 +119,9 @@ void Topic::WriteRootContent(_xml_writer& writer, const std::string& folder)
     }
 
     ATTR_ADD(Guid);
-    ATTR_ADD(ServerAssignedId);
+    if (Project_().GetVersion() >= BCFVer_3_0) {
+        ATTR_ADD(ServerAssignedId);
+    }
     ATTR_ADD(TopicStatus);
     ATTR_ADD(TopicType);
 
