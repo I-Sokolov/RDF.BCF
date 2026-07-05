@@ -63,8 +63,6 @@ bool Documents::Validate(bool fix)
 /// </summary>
 void Documents::WriteRootContent(_xml_writer& writer, const std::string& folder)
 {
-    MarkUsedDocuments();
-
     Attributes attr;
     ElemTag listtag(writer, "Documents", attr);
 
@@ -73,6 +71,31 @@ void Documents::WriteRootContent(_xml_writer& writer, const std::string& folder)
             doc->Write(writer, folder, "Document");
         }
     }
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool Documents::PrepareToWrite(std::string& folder)
+{
+    bool ok = false;
+
+    try {
+        MarkUsedDocuments();
+
+        for (auto doc : m_Documents.Items()) {
+            if (doc->used) {
+                doc->PrepareToWrite(folder);
+            }
+        }
+
+        ok = true;
+    }
+    catch (std::exception& ex) {
+        m_project.Log_().add(Log::Level::error, "Write file error", "Failed to prepare document. %s", ex.what());
+    }
+
+    return ok;
 }
 
 /// <summary>

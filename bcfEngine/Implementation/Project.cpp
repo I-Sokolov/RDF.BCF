@@ -145,6 +145,8 @@ bool Project::WriteFile(const char* bcfFilePath, BCFVersion version)
     if (ok) {
         m_workingFolders.push_back(bcfFolder);
 
+        ok = ok && m_documents.PrepareToWrite (bcfFolder);
+
         ok = ok && WriteTopics(bcfFolder);
 
         ok = ok && m_version.WriteFile(bcfFolder);
