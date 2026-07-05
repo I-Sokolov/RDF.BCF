@@ -120,7 +120,7 @@ void ViewPoint::Write(_xml_writer& writer, const std::string& folder, const char
 
     //
     if (!WriteFile(folder)) {
-        throw std::exception();
+        throw std::runtime_error("Failed to write viewpoint file");
     }
     Attributes attr;
     ATTR_ADD(Guid);

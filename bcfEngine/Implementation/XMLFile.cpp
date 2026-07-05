@@ -25,16 +25,13 @@ bool XMLFile::ReadFile(const std::string& bcfFolder)
             auto root = doc.getRoot();
             if (root) {
                 ReadRoot(*root, bcfFolder);
+                AfterRead(bcfFolder);
                 ok = true;
             }
         }
     }
     catch (std::exception& ex) {
         m_project.Log_().add(Log::Level::error, "Read file error", "Failed to read %s file. %s", path.c_str(), ex.what());
-    }
-
-    if (ok) {
-        AfterRead(bcfFolder);
     }
 
     return ok;

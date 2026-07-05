@@ -39,13 +39,21 @@ void DocumentReference::AfterRead(const std::string& folder)
 {
     if (Project_().GetVersion() < BCFVer_3_0) {
 
+        bool ok = false;
+
         if (GetPropertyBool(m_isExternal)) {
-            SetFilePath(m_ReferencedDocument.c_str(), true);
+            ok = SetFilePath(m_ReferencedDocument.c_str(), true);
         }
         else {
             std::string path(folder);
             FileSystem::AddPath(path, m_ReferencedDocument.c_str());
-            SetFilePath(path.c_str(), false);
+            ok = SetFilePath(path.c_str(), false);
+        }
+
+        if (!ok) {
+            std::string err = "Failed to process legacy document reference: ";
+            err.append(m_ReferencedDocument);
+            throw std::runtime_error(err);
         }
     }
 }

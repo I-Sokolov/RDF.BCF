@@ -182,7 +182,7 @@ void Documents::Doc::GetReadWritePath(std::string& path, bool createFolder)
 
     if (createFolder) {
         if (!FileSystem::CreateDir(path.c_str(), Log_())) {
-            throw std::exception();
+            throw std::runtime_error("Failed to create directory");
         }
     }
 
@@ -241,7 +241,7 @@ void Documents::Doc::PrepareToWrite(const std::string& folder)
     GetReadWritePath(dst_name, true);
 
     if (!FileSystem::CopyFile(src_name.c_str(), dst_name.c_str(), Log_())) {
-        throw std::exception();
+        throw std::runtime_error("Failed to copy file");
     }
 }
 
