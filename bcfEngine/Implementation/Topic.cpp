@@ -175,7 +175,8 @@ void Topic::Read_Topic(_xml::_element& elem, const std::string& folder)
         CHILD_GET_LIST(ReferenceLinks, ReferenceLink)
         CHILD_GET_CONTENT(Priority)
         CHILD_GET_CONTENT(Index)
-        CHILD_GET_LIST(Labels, Label)
+        CHILD_GET_LIST_CONDITIONAL(Labels, Label, Project_().GetVersion() > BCFVer_2_1)
+        CHILD_ADD_TO_LIST_CONDITIONAL(Labels, Labels, Project_().GetVersion() <= BCFVer_2_1)
         CHILD_GET_CONTENT(CreationDate)
         CHILD_GET_CONTENT(CreationAuthor)
         CHILD_GET_CONTENT(ModifiedDate)
@@ -195,11 +196,18 @@ void Topic::Read_Topic(_xml::_element& elem, const std::string& folder)
 
 void Topic::Write_Topic(_xml_writer& writer, const std::string& folder)
 {
-    WRITE_LIST(ReferenceLink);
+    WRITE_LIST_EX2(ReferenceLinks, ReferenceLink, Project_().GetVersion() > BCFVer_2_1);
     WRITE_CONTENT(Title);
     WRITE_CONTENT(Priority);
     WRITE_CONTENT(Index);
-    WRITE_LIST(Label);
+    if (Project_().GetVersion() > BCFVer_2_1) {
+        WRITE_LIST(Label);
+    }
+    else{
+        for (auto& label : m_Labels.Items()) {
+            label->Write(writer, folder, "Labels");
+        }
+    }
     WRITE_CONTENT(CreationDate);
     WRITE_CONTENT(CreationAuthor);
     WRITE_CONTENT(ModifiedDate);
