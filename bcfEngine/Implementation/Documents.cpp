@@ -131,8 +131,6 @@ void Documents::MarkUsedDocuments()
 /// </summary>
 void Documents::Doc::Write(_xml_writer& writer, const std::string& folder, const char* tag)
 {
-    PrepareToWrite(folder);
-
     Attributes attr;
     ATTR_ADD(Guid);
     
