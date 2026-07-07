@@ -39,13 +39,21 @@ void DocumentReference::AfterRead(const std::string& folder)
 {
     if (Project_().GetVersion() < BCFVer_3_0) {
 
+        bool ok = false;
+
         if (GetPropertyBool(m_isExternal)) {
-            SetFilePath(m_ReferencedDocument.c_str(), true);
+            ok = SetFilePath(m_ReferencedDocument.c_str(), true);
         }
         else {
             std::string path(folder);
             FileSystem::AddPath(path, m_ReferencedDocument.c_str());
-            SetFilePath(path.c_str(), false);
+            ok = SetFilePath(path.c_str(), false);
+        }
+
+        if (!ok) {
+            std::string err = "Failed to process legacy document reference: ";
+            err.append(m_ReferencedDocument);
+            throw std::runtime_error(err);
         }
     }
 }
@@ -87,7 +95,9 @@ void DocumentReference::Write(_xml_writer& writer, const std::string& folder, co
 
     XMLFile::Attributes attr;
     ATTR_ADD(Guid);
-
+    if (Project_().GetVersion() < BCFVer_3_0) {
+        attr.Add("isExternal", GetIsExternal() ? "true" : "false");
+    }
     WRITE_ELEM(DocumentReference);    
 }
 
@@ -96,8 +106,37 @@ void DocumentReference::Write(_xml_writer& writer, const std::string& folder, co
 /// </summary>
 void DocumentReference::Write_DocumentReference(_xml_writer& writer, const std::string& folder)
 {
-    WRITE_CONTENT(DocumentGuid);
-    WRITE_CONTENT(Url);
+    if (Project_().GetVersion() >= BCFVer_3_0) {
+        WRITE_CONTENT(DocumentGuid);
+        WRITE_CONTENT(Url);
+    }
+    else {
+        //2.1
+        if (GetIsExternal()) {
+            writer.writeTag("ReferencedDocument", m_Url);
+        }
+        else {
+            const char* path = GetFilePath();    //path is %TEMP%\RDF.BCF.xx\Documents_\<doc GUID>\<Name>
+            const char* relPath = path + strlen(path) - 1;
+            int part = 0;
+            for (; relPath > path; relPath--) {
+                if (*relPath == '\\' || *relPath == '/') {
+                    part++;
+                    if (part > 2) {
+                        relPath++;
+                        break;
+                    }
+                }
+            }
+            assert(part == 3 && relPath > path);
+
+            std::string docRef("..");
+            FileSystem::AddPath(docRef, relPath);
+
+            writer.writeTag("ReferencedDocument", docRef.c_str());
+        }
+    }
+
     WRITE_CONTENT(Description);
 }
 

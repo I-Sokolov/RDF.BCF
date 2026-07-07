@@ -24,7 +24,7 @@ private:
     //XMLFile implementation
     virtual const char* XMLFileName() override { return "project.bcfp"; }
     virtual const char* XSDName() override { return "project.xsd"; }
-    virtual const char* RootElemName() override { return "ProjectInfo"; }
+    virtual const char* RootElemName() override;
     virtual void ReadRoot(_xml::_element& elem, const std::string& folder) override;
     virtual void AfterRead(const std::string& folder) override;
     virtual void WriteRootContent(_xml_writer& writer, const std::string& folder) override;

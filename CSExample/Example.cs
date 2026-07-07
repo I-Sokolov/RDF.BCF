@@ -33,8 +33,11 @@ namespace CSExample
                     return;
                 }
 
-                topic.Description = "This topic is made to demonstate how to create BCF";
+                topic.Description = "This topic is made to demonstrate how to create BCF";
                 topic.AddFile("..\\TestCases\\Architectural.ifc");
+
+                topic.AddDocumentRefernce("https://example.com/spec.pdf");
+
 
                 //
                 // create comment
@@ -50,7 +53,7 @@ namespace CSExample
                 viewpoint.SetCameraViewPoint(new RDF.BCF.Interop.BCFPoint());
                 viewpoint.SetCameraDirection(new RDF.BCF.Interop.BCFPoint(1));
                 viewpoint.SetCameraUpVector(new RDF.BCF.Interop.BCFPoint(0, 0, 1));
-                viewpoint.FieldOfView = 90;
+                viewpoint.FieldOfView = 60;
                 viewpoint.AspectRatio = 1;
                 //hide all except one element
                 viewpoint.DefaultVisibility = false;   
@@ -60,12 +63,15 @@ namespace CSExample
 
                 //
                 //
-                bcfData.FileWrite("MyTest.bcf");
-
-                var errors = bcfData.GetErrors();
-                if(errors.Length != 0)
+                foreach (var version in new[] {RDF.BCF.Interop.Version._2_1, RDF.BCF.Interop.Version._3_0 } )
                 {
-                    Console.WriteLine("There were errors: " + errors);
+                    bcfData.FileWrite("MyTest.bcf", version);
+
+                    var errors = bcfData.GetErrors();
+                    if (errors.Length != 0)
+                    {
+                        Console.WriteLine("There were errors: " + errors);
+                    }
                 }
             }
         }
@@ -76,22 +82,38 @@ namespace CSExample
         /// </summary>
         static void ReadExample()
         {
+            string bcfFilePath = "MyTest.bcf";
             using (var bcfData = new RDF.BCF.Project())
             {
-                if (!bcfData.FileRead("MyTest.bcf", false)) {
+                Console.WriteLine($"Reading BCF file: {bcfFilePath}");
+
+                if (!bcfData.FileRead(bcfFilePath, false))
+                {
                     Console.WriteLine($"Failed to read BCF file: {bcfData.GetErrors()}");
                     return;
                 }
 
+                Console.WriteLine($"Read - project name '{bcfData.Name}', id: {bcfData.ProjectId}");
+
+                Console.WriteLine($"Topics count: {bcfData.GetTopics().Count}");
                 foreach (var topic in bcfData.GetTopics())
                 {
                     Console.WriteLine($"Topic '{topic.Title}', type: {topic.TopicType}, status: {topic.TopicStatus}");
                     Console.WriteLine($"By {topic.CreationAuthor} {topic.CreationDate} {topic.ModifiedAuthor} {topic.ModifiedDate}");
                     Console.WriteLine($"{topic.Description}");
 
+                    Console.WriteLine($"Comments count: {topic.GetComments().Count}");
                     foreach (var comment in topic.GetComments())
                     {
                         Console.WriteLine($"  Comment by {comment.Author} {comment.Date}: {comment.Text}");
+                    }
+
+                    Console.WriteLine($"Document count: {topic.GetDocumentReferences().Count}");
+                    foreach (var docRef in topic.GetDocumentReferences())
+                    {
+                        Console.WriteLine($"  Document GUID: {docRef.Guid}");
+                        Console.WriteLine($"       external: {docRef.IsExternal}, description: {docRef.Description}");
+                        Console.WriteLine($"       path: {docRef.FilePath}");
                     }
                 }
             }

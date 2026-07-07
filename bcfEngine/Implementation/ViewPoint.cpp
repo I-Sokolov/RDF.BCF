@@ -110,7 +110,7 @@ bool ViewPoint::Validate(bool fix)
 /// <summary>
 /// 
 /// </summary>
-void ViewPoint::Write(_xml_writer& writer, const std::string& folder, const char* /*tag*/)
+void ViewPoint::Write(_xml_writer& writer, const std::string& folder, const char* tag)
 {
     m_Snapshot = CopyToRelative(m_Snapshot, folder, NULL);
     
@@ -120,12 +120,12 @@ void ViewPoint::Write(_xml_writer& writer, const std::string& folder, const char
 
     //
     if (!WriteFile(folder)) {
-        throw std::exception();
+        throw std::runtime_error("Failed to write viewpoint file");
     }
     Attributes attr;
     ATTR_ADD(Guid);
 
-    WRITE_ELEM(ViewPoint);
+    WRITE_ELEM_EX(ViewPoint, tag);
 
     //
     m_Snapshot = AbsolutePath(m_Snapshot, folder);
@@ -189,7 +189,7 @@ void ViewPoint::WriteRootContent(_xml_writer& writer, const std::string& folder)
     }
     WRITE_LIST(Line);
     WRITE_LIST(ClippingPlane);
-    WRITE_LIST(Bitmap);
+    WRITE_LIST_EX2(Bitmaps, Bitmap, Project_().GetVersion() > BCFVer_2_1);
 }
 
 /// <summary>
@@ -212,6 +212,10 @@ void  ViewPoint::Read_Components(_xml::_element& elem, const std::string& folder
 /// </summary>
 void  ViewPoint::Write_Components(_xml_writer& writer, const std::string& folder)
 {
+    if (Project_().GetVersion() < BCFVer_3_0) {
+        WriteViewSetupHints(writer, folder);
+    }
+
     WRITE_LIST_EX(Selection, Component);
 
     Attributes attr;
@@ -239,13 +243,24 @@ void  ViewPoint::Read_Visibility(_xml::_element& elem, const std::string& folder
 /// <summary>
 /// 
 /// </summary>
-void ViewPoint::Write_Visibility(_xml_writer& writer, const std::string& folder)
+void ViewPoint::WriteViewSetupHints(_xml_writer& writer, const std::string& folder)
 {
+
     Attributes attr;
     ATTR_ADD(SpacesVisible);
     ATTR_ADD(SpaceBoundariesVisible);
     ATTR_ADD(OpeningsVisible);
     writer.writeTag("ViewSetupHints", attr, "");
+}
+
+/// <summary>
+/// 
+/// </summary>
+void ViewPoint::Write_Visibility(_xml_writer& writer, const std::string& folder)
+{
+    if (Project_().GetVersion() >= BCFVer_3_0) {
+        WriteViewSetupHints(writer, folder);
+    }
 
     WRITE_LIST_EX(Exceptions, Component);
 }
@@ -287,7 +302,10 @@ void ViewPoint::Write_PerspectiveCamera(_xml_writer& writer, const std::string& 
     WRITE_MEMBER(CameraDirection);
     WRITE_MEMBER(CameraUpVector);
     WRITE_CONTENT(FieldOfView);
-    WRITE_CONTENT(AspectRatio);
+
+    if (Project_().GetVersion() >= BCFVer_3_0) {
+        WRITE_CONTENT(AspectRatio);
+    }
 }
 
 /// <summary>
@@ -315,7 +333,9 @@ void ViewPoint::Write_OrthogonalCamera(_xml_writer& writer, const std::string& f
     WRITE_MEMBER(CameraDirection);
     WRITE_MEMBER(CameraUpVector);
     WRITE_CONTENT(ViewToWorldScale);
-    WRITE_CONTENT(AspectRatio);
+    if (Project_().GetVersion() >= BCFVer_3_0) {
+        WRITE_CONTENT(AspectRatio);
+    }
 }
 
 

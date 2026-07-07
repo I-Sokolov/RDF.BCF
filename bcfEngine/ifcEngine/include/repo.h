@@ -258,6 +258,17 @@ bool            DECL STDC   repo_SetClassPropertyCardRestriction    (RdfFile fil
 //
 bool            DECL STDC   repo_GetClassPropertyCardRestriction   (RdfFile file, OwlClass cls, RdfProperty prop, int64_t* cmin, int64_t* cmax);
 
+// Specify range restriction and knowledge record in RdfFile
+// If the RdfFile already contains knowledge about this property range, it will be updated
+// Returns success flag
+//
+bool            DECL STDC   repo_SetPropertyRangeResctriction(RdfFile file, RdfProperty prop, OwlClass* rClasses, int_t nClasses);
+
+// Returns range restriction known only in this RdfFile, not taking into account other files and embedded knowledge
+// Returns success flag
+//
+bool            DECL STDC   repo_GetPropertyRangeResctriction(RdfFile file, RdfProperty prop, OwlClass** rClasses, int_t* nClasses);
+
 ///////////////////////////////////////////////////////////////////////////////////////////
 /// 
 /// Go through information presented in RdfFile
@@ -299,6 +310,11 @@ bool            DECL STDC   repo_IsKnowledgeExposedParent               (RepoKno
 //
 bool            DECL STDC   repo_IsKnowledgeSetClassPropertyCardinalityRestriction    (RepoKnowledge knowledge, OwlClass* pCls, RdfProperty* pProp, int64_t* cmin, int64_t* cmax);
 
+// Checks if the 'knowledge' information record is property range restriction
+// If yes, pProp will return property and rClasses[nClasses] array of relevant classes and *pParent will return related classes  
+//
+bool            DECL STDC   repo_IsKnowledgePropertyRangeRestriction                 (RepoKnowledge knowledge, RdfProperty* pProp, OwlClass** rClasses, int_t* nClasses);
+
 ///////////////////////////////////////////////////////////////////////////////////////////
 /// 
 // Utility functions
@@ -321,11 +337,6 @@ bool            DECL STDC   repo_IsCorrectName(const char* name, char nameType);
 //
 const char     DECL* STDC   repo_MakeCorrectName(RdfFile file, const char* name, char nameType);
 
-///////////////////////////////////////////////////////////////////////////////////////////
-/// 
-// Utility functions
-//
-
 // Repo supports errors messages buffer.
 // This function returns all messages in the buffer.
 // !!! Returned pointer us valid until next call to any function from repo.h
@@ -347,6 +358,11 @@ void           DECL  STDC   repo_AddError(OwlModel model, const char* error);
 // Returns NULL in case of error.
 //
 const char     DECL* STDC  repo_SplitIRI(const char* iriName, char* uriPathBuff = NULL, int_t uriPathBuffSize = 0);
+
+// 
+// Generates TTL knowledges from classes and properties of OwlModel which located in the file
+// 
+bool           DECL  STDC   repo_GenerateKnowleges(RdfFile file);
 
 #ifdef __cplusplus
 }

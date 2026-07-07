@@ -114,13 +114,23 @@ void Topic::WriteRootContent(_xml_writer& writer, const std::string& folder)
 {
     Attributes attr;
 
-    WRITE_ELEM(Header);
+    if (!m_Files.Items().empty()) {
+        WRITE_ELEM(Header);
+    }
 
     ATTR_ADD(Guid);
-    ATTR_ADD(ServerAssignedId);
+    if (Project_().GetVersion() >= BCFVer_3_0) {
+        ATTR_ADD(ServerAssignedId);
+    }
     ATTR_ADD(TopicStatus);
     ATTR_ADD(TopicType);
+
     WRITE_ELEM(Topic);
+
+    if (Project_().GetVersion() < BCFVer_3_0) {
+        WRITE_LIST_EX2(Comments, Comment, false);
+        WRITE_LIST_EX2(Viewpoints, Viewpoints, false);
+    }
 }
 
 /// <summary>
@@ -138,7 +148,7 @@ void Topic::Read_Header(_xml::_element& elem, const std::string& folder)
 /// </summary>
 void Topic::Write_Header(_xml_writer& writer, const std::string& folder)
 {
-    WRITE_LIST(File)
+    WRITE_LIST_EX2(Files, File, Project_().GetVersion() > BCFVer_2_1)
 }
 
 /// <summary>
@@ -165,7 +175,8 @@ void Topic::Read_Topic(_xml::_element& elem, const std::string& folder)
         CHILD_GET_LIST(ReferenceLinks, ReferenceLink)
         CHILD_GET_CONTENT(Priority)
         CHILD_GET_CONTENT(Index)
-        CHILD_GET_LIST(Labels, Label)
+        CHILD_GET_LIST_CONDITIONAL(Labels, Label, Project_().GetVersion() > BCFVer_2_1)
+        CHILD_ADD_TO_LIST_CONDITIONAL(Labels, Labels, Project_().GetVersion() <= BCFVer_2_1)
         CHILD_GET_CONTENT(CreationDate)
         CHILD_GET_CONTENT(CreationAuthor)
         CHILD_GET_CONTENT(ModifiedDate)
@@ -185,11 +196,18 @@ void Topic::Read_Topic(_xml::_element& elem, const std::string& folder)
 
 void Topic::Write_Topic(_xml_writer& writer, const std::string& folder)
 {
-    WRITE_LIST(ReferenceLink);
+    WRITE_LIST_EX2(ReferenceLinks, ReferenceLink, Project_().GetVersion() > BCFVer_2_1);
     WRITE_CONTENT(Title);
     WRITE_CONTENT(Priority);
     WRITE_CONTENT(Index);
-    WRITE_LIST(Label);
+    if (Project_().GetVersion() > BCFVer_2_1) {
+        WRITE_LIST(Label);
+    }
+    else{
+        for (auto& label : m_Labels.Items()) {
+            label->Write(writer, folder, "Labels");
+        }
+    }
     WRITE_CONTENT(CreationDate);
     WRITE_CONTENT(CreationAuthor);
     WRITE_CONTENT(ModifiedDate);
@@ -201,10 +219,14 @@ void Topic::Write_Topic(_xml_writer& writer, const std::string& folder)
     if (!m_BimSnippets.Items().empty()) {
         m_BimSnippets.Items().front()->Write(writer, folder, "BimSnippet");
     }
-    WRITE_LIST(DocumentReference);
-    WRITE_LIST(RelatedTopic);
-    WRITE_LIST(Comment);
-    WRITE_LIST(Viewpoint);
+
+    WRITE_LIST_EX2(DocumentReferences, DocumentReference,   Project_().GetVersion() > BCFVer_2_1);    
+    WRITE_LIST_EX2(RelatedTopics,      RelatedTopic,        Project_().GetVersion() > BCFVer_2_1);
+    
+    if (Project_().GetVersion() > BCFVer_2_1) {
+        WRITE_LIST(Comment);
+        WRITE_LIST_EX3(Viewpoints, Viewpoint, true, "ViewPoint");
+    }
 
 }
 

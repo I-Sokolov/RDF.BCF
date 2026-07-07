@@ -63,8 +63,6 @@ bool Documents::Validate(bool fix)
 /// </summary>
 void Documents::WriteRootContent(_xml_writer& writer, const std::string& folder)
 {
-    MarkUsedDocuments();
-
     Attributes attr;
     ElemTag listtag(writer, "Documents", attr);
 
@@ -73,6 +71,31 @@ void Documents::WriteRootContent(_xml_writer& writer, const std::string& folder)
             doc->Write(writer, folder, "Document");
         }
     }
+}
+
+/// <summary>
+/// 
+/// </summary>
+bool Documents::PrepareToWrite(std::string& folder)
+{
+    bool ok = false;
+
+    try {
+        MarkUsedDocuments();
+
+        for (auto doc : m_Documents.Items()) {
+            if (doc->used) {
+                doc->PrepareToWrite(folder);
+            }
+        }
+
+        ok = true;
+    }
+    catch (std::exception& ex) {
+        m_project.Log_().add(Log::Level::error, "Write file error", "Failed to prepare document. %s", ex.what());
+    }
+
+    return ok;
 }
 
 /// <summary>
@@ -108,8 +131,6 @@ void Documents::MarkUsedDocuments()
 /// </summary>
 void Documents::Doc::Write(_xml_writer& writer, const std::string& folder, const char* tag)
 {
-    PrepareToWrite(folder);
-
     Attributes attr;
     ATTR_ADD(Guid);
     
@@ -159,7 +180,7 @@ void Documents::Doc::GetReadWritePath(std::string& path, bool createFolder)
 
     if (createFolder) {
         if (!FileSystem::CreateDir(path.c_str(), Log_())) {
-            throw std::exception();
+            throw std::runtime_error("Failed to create directory");
         }
     }
 
@@ -218,7 +239,7 @@ void Documents::Doc::PrepareToWrite(const std::string& folder)
     GetReadWritePath(dst_name, true);
 
     if (!FileSystem::CopyFile(src_name.c_str(), dst_name.c_str(), Log_())) {
-        throw std::exception();
+        throw std::runtime_error("Failed to copy file");
     }
 }
 

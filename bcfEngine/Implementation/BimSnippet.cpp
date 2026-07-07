@@ -22,8 +22,8 @@ void BimSnippet::Read(_xml::_element& elem, const std::string& folder)
 {
     ATTRS_START
         ATTR_GET(SnippetType)
-        ATTR_GET(IsExternal)
 
+        ATTR_GET(IsExternal)
         ATTR_GET_STR(isExternal, m_IsExternal) //v2.1
     
     ATTRS_END(UnknownNames::NotAllowed)
@@ -78,7 +78,12 @@ void BimSnippet::Write(_xml_writer& writer, const std::string& folder, const cha
 
     XMLFile::Attributes attr;
     ATTR_ADD(SnippetType);
-    ATTR_ADD(IsExternal);
+    if (Project_().GetVersion() > BCFVer_2_1) {
+        ATTR_ADD(IsExternal);
+    }
+    else {
+        attr.Add("isExternal", m_IsExternal.c_str());
+    }
 
     XMLFile::ElemTag _(writer, tag, attr);
 

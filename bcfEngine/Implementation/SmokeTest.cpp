@@ -14,17 +14,29 @@
 /// <summary>
 /// 
 /// </summary>
-extern void SmokeTest_ValidateXSD(const char* xsdName, const char* xmlFilePath)
+extern void SmokeTest_ValidateXSD(const char* xsdName, const char* xmlFilePath, BCFVersion version)
 {
     std::string schemaFolder("..");
     FileSystem::AddPath(schemaFolder, "bcfEngine");
     FileSystem::AddPath(schemaFolder, "Schemas");
-
-    std::string xsdFilePath(schemaFolder);
-    FileSystem::AddPath(xsdFilePath, xsdName);
-
+    
     std::string exeFilePath(schemaFolder);
     FileSystem::AddPath(exeFilePath, "xml.exe");
+
+    std::string xsdFilePath(schemaFolder);
+    switch (version) {
+        case BCFVer_2_1:
+            FileSystem::AddPath(xsdFilePath, "2.1");
+            break;
+        case BCFVer_3_0:
+            FileSystem::AddPath(xsdFilePath, "3.0");
+            break;
+        default:
+            std::cerr << "Not supported version: " << version << std::endl;
+            exit(13);
+    }
+    FileSystem::AddPath(xsdFilePath, xsdName);
+
 
     char cmdLine[1024];
     sprintf_s(cmdLine, "%s val -e -s %s %s", exeFilePath.c_str(), xsdFilePath.c_str(), xmlFilePath);
@@ -69,6 +81,9 @@ static void TestFromDataSet(const char* filepath)
     ASSERT(ok);
 
     ok = bcf->WriteFile("Test.bcf", BCFVer_3_0);
+    ASSERT(ok);
+
+    ok = bcf->WriteFile("Test.bcf", BCFVer_2_1);
     ASSERT(ok);
 
     bcf->Delete();    

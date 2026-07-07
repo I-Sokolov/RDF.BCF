@@ -14,12 +14,37 @@ namespace CSExample
 {
     internal class SmokeTest
     {
+        private static Interop.Version _version;
+
         /// <summary>
         /// 
         /// </summary>
         public static void Run()
         {
-            Console.WriteLine($"Running smoke tests. Current directory {System.IO.Directory.GetCurrentDirectory()}.");
+            foreach (var ver in new[] {Interop.Version._2_1, Interop.Version._3_0 })
+            {
+                _version = ver;
+
+                RunVersionTests();
+            }
+
+#if DEBUG
+            Console.WriteLine();
+            Console.WriteLine("Running Dataset test");
+            SmokeTest_DataSet("W:\\DevArea\\buildingSMART\\BCF-XML\\Test Cases");
+#endif
+
+            Console.WriteLine("TESTS PASSED");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static void RunVersionTests()
+        {
+            Console.WriteLine();
+            Console.WriteLine($"Running smoke tests for version {_version}");
+            Console.WriteLine($"Current directory {System.IO.Directory.GetCurrentDirectory()}.");
             Console.WriteLine("...");
 
             Console.WriteLine("TEST Errors");
@@ -39,13 +64,6 @@ namespace CSExample
 
             Console.WriteLine("TEST Validations");
             Validations();
-
-#if DEBUG
-            Console.WriteLine("Dataset test");
-            SmokeTest_DataSet("W:\\DevArea\\buildingSMART\\BCF-XML\\Test Cases");
-#endif
-
-            Console.WriteLine("TESTS PASSED");
         }
 
         [System.Runtime.InteropServices.DllImport("bcfEngine.dll", EntryPoint = "SmokeTest_DataSet")]
@@ -132,7 +150,7 @@ namespace CSExample
                 CheckExtensions(bcf);
 
                 ASSERT(bcf.IsModified);
-                var ok = bcf.FileWrite("Кирилица.bcf");
+                var ok = bcf.FileWrite("Кирилица.bcf", _version);
                 ASSERT(ok);
                 ASSERT(!bcf.IsModified);
             }
@@ -189,7 +207,7 @@ namespace CSExample
                 {
                     ASSERT(u == users[i++]);
                 }
-                var ok = bcf.FileWrite("TestExtensions.bcf");
+                var ok = bcf.FileWrite("TestExtensions.bcf", _version);
                 ASSERT(ok);
             }
         }
@@ -312,7 +330,7 @@ namespace CSExample
 
                 CheckTopicAttributes(bcf, true);
 
-                ok = bcf.FileWrite("TopicsTest.bcf");
+                ok = bcf.FileWrite("TopicsTest.bcf", _version);
                 ASSERT(ok);
             }
 
@@ -329,7 +347,7 @@ namespace CSExample
 
                 CheckTopicAttributes(bcf, false);
 
-                ok = bcf.FileWrite("TopicsTest2.bcf");
+                ok = bcf.FileWrite("TopicsTest2.bcf", _version);
                 ASSERT(ok);
             }
 
@@ -465,7 +483,8 @@ namespace CSExample
             {
                 ASSERT(topic.TopicType == "TopicType");
                 ASSERT(topic.TopicStatus == "Status");
-                ASSERT(topic.ServerAssignedId == "ServerAssignedId");
+                if (_version > Interop.Version._2_1)
+                    ASSERT(topic.ServerAssignedId == "ServerAssignedId");
                 ASSERT(topic.TopicType == "TopicType");
                 ASSERT(topic.Priority == "Priority");
                 ASSERT(topic.DueDate == TestDate(0));
@@ -542,7 +561,7 @@ namespace CSExample
                 SetCommentAndViewPoints(bcf);
                 CheckCommentAndViewPoints(bcf, false, false);
 
-                ok = bcf.FileWrite("TestCommentsVP.bcf");
+                ok = bcf.FileWrite("TestCommentsVP.bcf", _version);
                 ASSERT(ok);
             }
 
@@ -560,7 +579,7 @@ namespace CSExample
 
                 CheckCommentAndViewPoints(bcf, true, true);
 
-                ok = bcf.FileWrite("TestCommentsVP2.bcf");
+                ok = bcf.FileWrite("TestCommentsVP2.bcf", _version);
                 ASSERT(ok);
             }
 
@@ -596,6 +615,7 @@ namespace CSExample
 
             //can't comment used viewpoint
             var cnt = topic.GetViewPoints().Count;
+            Console.WriteLine("Expected error: ViewPoint is used: Can not delete used viewpoint");
             var res = comment.ViewPoint.Remove();
             ASSERT(!res);
             var str = bcf.GetErrors();
@@ -732,7 +752,7 @@ namespace CSExample
                 vp.SetCameraDirection(new Interop.BCFPoint(i + .3, i + .4, i + .5 ));
                 vp.SetCameraUpVector(new Interop.BCFPoint(i + .6, i + .7, i + .8 ));
                 vp.ViewToWorldScale = i * 3;
-                vp.FieldOfView = i * 3.5 + 0.1;
+                vp.FieldOfView = i * 3.5 + 45;
                 vp.AspectRatio = i * 4 + 0.1;
                 vp.Snapshot = TestFile("png");
 
@@ -745,10 +765,10 @@ namespace CSExample
                     comp = vp.AddException();
                     comp.IfcGuid = TestIfcGuid(j);
 
-                    var color = vp.AddColoring((j % 2 == 0) ? $"00FFbb0{j}" : null);
+                    var color = vp.AddColoring((j % 2 == 0) ? $"00FFBB0{j}" : null);
                     if (j % 2 != 0)
                     {
-                        color.Color = $"00FFbb0{j}";
+                        color.Color = $"00FFBB0{j}";
                     }
                     for (int k = 0; k < 7; k++)
                     {
@@ -852,19 +872,20 @@ namespace CSExample
                 if (b)
                 {
                     ASSERT(vp.CameraType == Interop.BCFCamera.Perspective);
-                    ASSERT(vp.FieldOfView == i * 3.5 + 0.1);
+                    ASSERT(vp.FieldOfView == i * 3.5 + 45);
                     ASSERT(vp.ViewToWorldScale == (read ? 0 : i * 3));
                 }
                 else
                 {
                     ASSERT(vp.CameraType == Interop.BCFCamera.Orthogonal);
-                    ASSERT(vp.FieldOfView == (read ? 0 : i * 3.5 + 0.1));
+                    ASSERT(vp.FieldOfView == (read ? 0 : i * 3.5 + 45));
                     ASSERT(vp.ViewToWorldScale == i * 3);
                 }
                 ASSERT(EQ(vp.GetCameraViewPoint(), new Interop.BCFPoint(i, i + .1, i + .2 )));
                 ASSERT(EQ(vp.GetCameraDirection(), new Interop.BCFPoint(i + .3, i + .4, i + .5 )));
                 ASSERT(EQ(vp.GetCameraUpVector(), new Interop.BCFPoint( i + .6, i + .7, i + .8 )));
-                ASSERT(vp.AspectRatio == i * 4+0.1);
+                if (_version > Interop.Version._2_1)
+                    ASSERT(vp.AspectRatio == i * 4 + 0.1);
                 ASSERT(vp.Snapshot.EndsWith("Architectural.png"));
                 ASSERT(Path.Exists(vp.Snapshot));
 
@@ -895,7 +916,7 @@ namespace CSExample
                     ASSERT(comp.OriginatingSystem == "");
                     ASSERT(comp.AuthoringToolId == "");
 
-                    ASSERT(clr[j].Color== $"00FFbb0{j}");
+                    ASSERT(clr[j].Color== $"00FFBB0{j}");
                     ASSERT(clr[j].GetComponents().Count == 6);
                     for (int k = 0; k < 6; k++)
                     {
@@ -950,14 +971,14 @@ namespace CSExample
                 var topic = bcf.AddTopic("", "B", "C");
 
                 ASSERT(bcf.GetErrors().Length == 0);
-                var ok = bcf.FileWrite("Validation.bcf");
+                var ok = bcf.FileWrite("Validation.bcf", _version);
                 ASSERT(!ok);
                 var err = bcf.GetErrors();
                 ASSERT(err.Contains("Missed property"));
                 ASSERT(err.Contains("TopicType"));
 
                 topic.TopicType = "Type";
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 ASSERT(ok);
 
                 //
@@ -981,20 +1002,20 @@ namespace CSExample
                 var comment = topic.AddComment();
                 ASSERT(bcf.GetErrors().Length == 0);
 
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 ASSERT(!ok);
                 err = bcf.GetErrors();
                 ASSERT(err.Contains("Missed property"));
                 ASSERT(err.Contains("Comment"));
 
                 comment.Text = "Text";
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 ASSERT(ok);
 
                 //component
                 var viewPoint = topic.AddViewPoint();
 
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 err = bcf.GetErrors();
                 ASSERT(!ok);
                 ASSERT(err.Contains("Missed property"));
@@ -1003,17 +1024,17 @@ namespace CSExample
                 viewPoint.SetCameraViewPoint(new Interop.BCFPoint(0, 0, 0));
                 viewPoint.SetCameraDirection(new Interop.BCFPoint(1, 1, 1));
                 viewPoint.SetCameraUpVector(new Interop.BCFPoint(0, 0, 1));
-                viewPoint.FieldOfView = 90;
+                viewPoint.FieldOfView = 60;
                 viewPoint.AspectRatio = 1;
 
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 ASSERT(ok);
 
                 //
                 var comp = viewPoint.AddSelection();
                 comp.IfcGuid = "wrong";
                 ASSERT(comp.IfcGuid.Length == 0);
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 err = bcf.GetErrors();
                 ASSERT(!ok);
                 ASSERT(err.Contains("Invalid value"));
@@ -1021,19 +1042,19 @@ namespace CSExample
                 ASSERT(err.Contains("IfcGuid"));
 
                 comp.IfcGuid = TestIfcGuid(0);
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 err = bcf.GetErrors();
                 ASSERT(ok);
 
                 var bmp = viewPoint.AddBitmap("", Interop.BCFBitmapFormat.BCFBitmapPNG, new Interop.BCFPoint(), new Interop.BCFPoint(), new Interop.BCFPoint(), 0);
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 ASSERT(!ok);
                 err = bcf.GetErrors();
                 ASSERT(err.Contains("Missed property"));
                 ASSERT(err.Contains("Reference"));
 
                 bmp.Remove();
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 ASSERT(ok);
 
                 //
@@ -1046,26 +1067,26 @@ namespace CSExample
                 clr.Color = "AABBCC";
                 ASSERT(clr.Color == "AABBCC");
 
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 ASSERT(!ok);
                 err = bcf.GetErrors();
                 ASSERT(err.Contains("Missed property"));
                 ASSERT(err.Contains("Components"));
 
                 clr.AddComponet(TestIfcGuid(0));
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 ASSERT(ok);
 
                 //
                 var docref = topic.AddDocumentRefernce("");
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 err = bcf.GetErrors();
                 ASSERT(!ok);
                 ASSERT(err.Contains("Missed property"));
                 ASSERT(err.Contains("Url"));
 
                 docref.SetFilePath ("http://ss");
-                ok = bcf.FileWrite("Validation.bcf");
+                ok = bcf.FileWrite("Validation.bcf", _version);
                 ASSERT(ok);
             }
         }
@@ -1087,7 +1108,7 @@ namespace CSExample
                 CreateTopicLists(project, 3, 7);
                 CheckTopicLists(project, 3, 7);
 
-                var ok = project.FileWrite("TestListAttr.bcf");
+                var ok = project.FileWrite("TestListAttr.bcf", _version);
                 ASSERT(ok);
             }
 

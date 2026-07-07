@@ -12,6 +12,8 @@ public:
 
     bool Validate(bool fix);
 
+    bool PrepareToWrite (std::string& folder);
+
 private:
     //XMLFile implementation
     virtual const char* XMLFileName() override { return "documents.xml"; }
@@ -37,6 +39,7 @@ private:
 
         void Read(_xml::_element& elem, const std::string& folder);
         void Write(_xml_writer& writer, const std::string& folder, const char* tag);
+        void PrepareToWrite(const std::string& folder);
         bool Validate(bool fix);
 
         bool Remove() { return RemoveImpl(); }
@@ -49,7 +52,6 @@ private:
 
     private:
         void GetReadWritePath(std::string& path, bool createFolder);
-        void PrepareToWrite(const std::string& folder);
 
     private:
         GuidStr     m_Guid;

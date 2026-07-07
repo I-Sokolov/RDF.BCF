@@ -99,7 +99,12 @@ void Comment::Write_Comment(_xml_writer& writer, const std::string& folder)
 {
     WRITE_CONTENT(Date);
     WRITE_CONTENT(Author);
-    WRITE_CONTENT(Comment);
+    if (Project_().GetVersion() >= BCFVer_3_0) {
+        WRITE_CONTENT(Comment);
+    }
+    else {
+        writer.writeTag("Comment", m_Comment); //v2.1 requires even empty
+    }
     WRITE_MEMBER(Viewpoint);
     WRITE_CONTENT(ModifiedDate);
     WRITE_CONTENT(ModifiedAuthor);

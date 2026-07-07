@@ -145,12 +145,17 @@ bool Project::WriteFile(const char* bcfFilePath, BCFVersion version)
     if (ok) {
         m_workingFolders.push_back(bcfFolder);
 
+        ok = ok && m_documents.PrepareToWrite (bcfFolder);
+
         ok = ok && WriteTopics(bcfFolder);
 
         ok = ok && m_version.WriteFile(bcfFolder);
         ok = ok && m_projectInfo.WriteFile(bcfFolder);
-        ok = ok && m_extensions.WriteFile(bcfFolder);
-        ok = ok && m_documents.WriteFile(bcfFolder);
+        ok = ok && m_extensions.WriteExtension(bcfFolder);
+
+        if (GetVersion() > BCFVer_2_1) {
+            ok = ok && m_documents.WriteFile(bcfFolder);
+        }
 
         if (ok) {
             Archivator ar(m_log);
@@ -161,7 +166,7 @@ bool Project::WriteFile(const char* bcfFilePath, BCFVersion version)
     if (ok) {
         m_isModified = false;
 
-        ok = CleanWorkingFolders(true);//on successfull write we can free old working folders
+        ok = CleanWorkingFolders(true);//on successful write we can free old working folders
     }
 
     return ok;

@@ -76,7 +76,7 @@ void Coloring::Write(_xml_writer& writer, const std::string& folder, const char*
 
     XMLFile::ElemTag _(writer, tag, attr);
 
-    WRITE_LIST_EX(Components, Component);
+    WRITE_LIST_EX2(Components, Component, Project_().GetVersion() > BCFVer_2_1);
 }
 
 /// <summary>

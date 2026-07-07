@@ -59,6 +59,17 @@ bool ProjectInfo::Validate(bool)
 /// <summary>
 /// 
 /// </summary>
+const char* ProjectInfo::RootElemName()
+{
+    if (Project_().GetVersion() > BCFVer_2_1)
+        return "ProjectInfo";
+    else
+        return "ProjectExtension";
+}
+
+/// <summary>
+/// 
+/// </summary>
 void ProjectInfo::WriteRootContent(_xml_writer& writer, const std::string& folder)
 {
     if (m_ProjectId.empty()) {
@@ -70,6 +81,10 @@ void ProjectInfo::WriteRootContent(_xml_writer& writer, const std::string& folde
     ATTR_ADD(ProjectId);
 
     WRITE_ELEM(Project);
+
+    if (Project_().GetVersion() < BCFVer_3_0) {
+        writer.writeTag("ExtensionSchema", "extensions.xsd");
+    }
 }
 
 /// <summary>
@@ -79,4 +94,5 @@ void ProjectInfo::Write_Project(_xml_writer& writer, const std::string& folder)
 {
     WRITE_CONTENT(Name);
 }
+
 
