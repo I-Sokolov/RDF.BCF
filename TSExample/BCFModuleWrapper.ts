@@ -21,6 +21,8 @@ export class BCFModuleWrapper {
     }
 
     private stringToPtr(str: string): number {
+        if (str == undefined || str === null)
+            return 0;
         const len = (str.length + 1) * 4; // max for UTF-8
         const ptr = this.module._malloc(len);
         this.module.stringToUTF8(str, ptr, len);
@@ -51,25 +53,15 @@ export class BCFModuleWrapper {
      */
     private pointToPtr(point: BCFPoint): number {
         const ptr = this.module._malloc(24);
-
-        const heap = this.module.HEAPF64;
-        const index = ptr / 8;
-
-        heap[index] = point.x;
-        heap[index + 1] = point.y;
-        heap[index + 2] = point.z;
-
+        this.module._bcfPointSet(ptr, point.x, point.y, point.z);
         return ptr;
     }
 
     private ptrToPoint(ptr: number): BCFPoint {
-        const heap = this.module.HEAPF64;
-        const index = ptr / 8;
-
         return {
-            x: heap[index],
-            y: heap[index + 1],
-            z: heap[index + 2]
+            x: this.module._bcfPointGet(ptr, 0),
+            y: this.module._bcfPointGet(ptr, 1),
+            z: this.module._bcfPointGet(ptr, 2)
         };
     }
 
@@ -154,7 +146,7 @@ export class BCFModuleWrapper {
         projectPtr: number,
         user: string,
         autoExtent: boolean,
-        validateIfcGuids: boolean
+        validateIfcGuids? : boolean | true
     ): boolean {
         return this.withString(user, ptr =>
             this.module._bcfSetOptions(
@@ -249,7 +241,7 @@ export class BCFModuleWrapper {
         type: string,
         title: string,
         status: string,
-        guid: string
+        guid?: string | null
     ): number {
         return this.withString(type, typePtr =>
             this.withString(title, titlePtr =>
@@ -634,7 +626,7 @@ export class BCFModuleWrapper {
 
     bcfViewPointAdd(
         topicPtr: number,
-        guid: string
+        guid?: string | null
     ): number {
         return this.withString(guid, ptr =>
             this.module._bcfViewPointAdd(

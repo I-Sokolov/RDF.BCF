@@ -627,3 +627,27 @@ OBJ_GET_ATTR_PT(ClippingPlane, Direction);
 OBJ_SET_ATTR(Point, ClippingPlane, Location);
 OBJ_SET_ATTR(Point, ClippingPlane, Direction);
 
+/// <summary>
+/// 
+/// </summary>
+RDFBCF_EXPORT_IMPL(void, bcfPointSet)(BCFPoint* point, double x, double y, double z)
+{
+    if (point) {
+        point->xyz[0] = x;
+        point->xyz[1] = y;
+        point->xyz[2] = z;
+    }
+}
+
+/// <summary>
+/// 
+/// </summary>
+RDFBCF_EXPORT_IMPL(double, bcfPointGet)(BCFPoint* point, int coordinate)
+{
+    if (point) {
+        if (coordinate >= 0 && coordinate < 3) {
+            return point->xyz[coordinate];
+        }
+    }
+    return 0.0;
+}

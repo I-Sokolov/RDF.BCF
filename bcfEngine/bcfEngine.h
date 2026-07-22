@@ -351,6 +351,12 @@ extern "C" {
     RDFBCF_EXPORT BCFTopic*     bcfRelatedTopicGetAt   (BCFTopic* topic,uint16_t ind);
     RDFBCF_EXPORT bool          bcfRelatedTopicRemove  (BCFTopic* topic,BCFTopic* related);
 
+    /// <summary>
+    ///
+    /// </summary>
+    RDFBCF_EXPORT void          bcfPointSet(BCFPoint* point, double x, double y, double z);
+    RDFBCF_EXPORT double        bcfPointGet(BCFPoint* point, int coordinate);
+
 #ifdef __cplusplus
 } //extern "C"
 #endif
