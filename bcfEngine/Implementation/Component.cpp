@@ -173,7 +173,7 @@ bool Component::ValidateIfcGuid()
         }
     }
 
-    Log().add(Log::Level::error, "Invalud IfcGUID", "Invalid IFC GlobalId: %s", m_IfcGuid.c_str());
+    Log().add(Log::Level::error, "Invalid IfcGUID", "Component with GlobalId '%s' was not found in referenced IFC files", m_IfcGuid.c_str());
     return false;
 }
 
