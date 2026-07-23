@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CSExample
 {
@@ -64,6 +65,9 @@ namespace CSExample
 
             Console.WriteLine("TEST Validations");
             Validations();
+
+            Console.WriteLine("TEST Relative snapshot path");
+            RelativeSnapshotPath();
         }
 
         [System.Runtime.InteropServices.DllImport("bcfEngine.dll", EntryPoint = "SmokeTest_DataSet")]
@@ -1166,6 +1170,47 @@ namespace CSExample
             {
                 ASSERT(labels[i - 1] == $"Label {i}");
             }
+        }
+
+        static void RelativeSnapshotPath()
+        {
+            const string snapshotFile = "..\\TestCases\\Architectural.png";
+            const string filePath = "RelativeSnapshot.bcf";
+
+            using (var project = new Project("RelativeSnapshot"))
+            {
+                project.SetOptions("user@company.org", true);
+
+                //
+                var topic = project.AddTopic("MyTopic", "MyTopicTitle", "MyTopicDescription");
+                var viewpoint = topic.AddViewPoint();
+
+                //add snapshot
+                viewpoint.Snapshot = snapshotFile;
+
+                //add required viewpoint properties
+                viewpoint.SetCameraViewPoint(new Interop.BCFPoint(10, 10, 10));
+                viewpoint.SetCameraDirection(new Interop.BCFPoint(1, 0, 0));
+                viewpoint.SetCameraUpVector(new Interop.BCFPoint(0, 1, 0));
+                viewpoint.AspectRatio = 0.45;
+                viewpoint.FieldOfView = 33;
+
+                //
+                var ok = project.FileWrite(filePath, _version);
+                ASSERT(ok);
+            }
+
+            using (var bcf = new Project())
+            {
+                var res = bcf.FileRead(filePath, false);
+                ASSERT(res);
+                
+                var file = bcf.GetTopics().First().GetViewPoints().First().Snapshot;
+                ASSERT(System.IO.File.Exists(file));
+                var temp = Environment.GetEnvironmentVariable("TEMP");
+                ASSERT(file.StartsWith(temp));
+            }
+
         }
     }
 }
