@@ -14,6 +14,14 @@ import { BCFModuleWrapper } from "./BCFModuleWrapper.js";
 const BCF_FILE_PATH = "W:\\DevArea\\buildingSMART\\BCF-XML\\Test Cases\\v3.0\\Visualization\\Orthogonal camera\\orthogonal camera.bcf";
 const BCF_FILE_PATH_SAVE = "W:\\DevArea\\WriteTest.bcf";
 
+// Dynamically import the Emscripten JS module
+async function LoadBCFModule(): Promise<BCFModule> {
+    const initBcfEngine: any = (await import("./RDF.BCF.js")).default;
+    const Module: BCFModule = await initBcfEngine();
+    console.log("BCF module initialized:", Module);
+    return Module;
+}
+
 // Load BCF file into Emscripten FS
 async function LoadFileToEMS(module: BCFModule, filePath: string) {``
     const fileContent = await readFile(filePath);
@@ -33,10 +41,8 @@ async function DownloadFileFromEMS(module: BCFModule, filePath: string) {
 async function ExampleRawBCF() {
 
     console.log("ExampleRawBCF");
-    // Dynamically import the Emscripten JS module
-    const initBcfEngine: any = (await import("./RDF.BCF.js")).default; 
-    const Module: BCFModule = await initBcfEngine();
-    console.log("BCF module initialized:", Module);
+
+    const Module = await LoadBCFModule();
 
     // Create a new BCF project
     const bcfData = Module._bcfProjectCreate(0);
@@ -74,9 +80,7 @@ async function ExampleBCFWrapper() {
     console.log("ExampleBCFWrapper");
 
     // Dynamically import the Emscripten JS module
-    const initBcfEngine: any = (await import("./RDF.BCF.js")).default;
-    const Module: BCFModule = await initBcfEngine();
-    console.log("BCF module initialized:", Module);
+    const Module = await LoadBCFModule();
     const bcf = new BCFModuleWrapper(Module);
 
     // Use
@@ -110,9 +114,7 @@ async function TopicWithSnapshot()
     console.log("Topic With Snapshot Example");
 
     // Dynamically import the Emscripten JS module
-    const initBcfEngine: any = (await import("./RDF.BCF.js")).default;
-    const Module: BCFModule = await initBcfEngine();
-    console.log("BCF module initialized:", Module);
+    const Module = await LoadBCFModule();
     const bcf = new BCFModuleWrapper(Module);
 
     // 
@@ -163,9 +165,9 @@ async function TopicWithSnapshot()
 //
 async function main() {
 
-    //await ExampleRawBCF();
+    await ExampleRawBCF();
 
-    //await ExampleBCFWrapper();
+    await ExampleBCFWrapper();
 
     await TopicWithSnapshot();
 }

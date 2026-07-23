@@ -10,3 +10,4 @@ TSExample/BCFModule.js
 TSExample/BCFModule.js.map
 TSExample/BCFModuleWrapper.js
 TSExample/BCFModuleWrapper.js.map
+emscripten/Build.Wasm.Obj/
