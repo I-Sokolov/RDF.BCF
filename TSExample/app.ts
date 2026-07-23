@@ -16,7 +16,7 @@ const BCF_FILE_PATH_SAVE = "W:\\DevArea\\WriteTest.bcf";
 
 // Dynamically import the Emscripten JS module
 async function LoadBCFModule(): Promise<BCFModule> {
-    const initBcfEngine: any = (await import("./RDF.BCF.js")).default;
+    const initBcfEngine: any = (await import("../emscripten/RDF.BCF.js")).default;
     const Module: BCFModule = await initBcfEngine();
     console.log("BCF module initialized:", Module);
     return Module;
@@ -147,11 +147,12 @@ async function TopicWithSnapshot()
     bcf.bcfViewPointSetFieldOfView(viewpoint, 33);
 
     //
-    ok = bcf.bcfFileWrite(bcfData, "TopicWithSnapshotExample.bcf", 30);
+    const filePath = "..\\output\\TopicWithSnapshotExample.bcf";
+    ok = bcf.bcfFileWrite(bcfData, filePath, 30);
     console.log("Write file:", ok);
 
     if (ok) {
-        await DownloadFileFromEMS(Module, "TopicWithSnapshotExample.bcf");
+        await DownloadFileFromEMS(Module, filePath);
     }
     
     ok = bcf.bcfProjectDelete(bcfData);
