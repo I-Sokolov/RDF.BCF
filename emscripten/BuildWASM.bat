@@ -16,6 +16,7 @@ set BCF_SRC=../../bcfEngine/
 
 set EMCC_OPTS=-Wno-deprecated-declarations -I%BCF_SRC% -I%BCF_SRC%ifcEngine/include/ -DNDEBUG -DMAPPING_CIS2_DISABLED -DMAPPING_AP242_DISABLED -DEMBEDDED_SCHEMAS -O2
 
+if .%1.==.bcf. goto BCF
 if .%1.==.link. goto LINK
 
 REM ------------------ IFC -------------------------------------
@@ -43,6 +44,7 @@ call emcc _net.o _reader.o _serialization.o _xml.o -r -o XMLParser_0.o
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 REM ------------------ bcfengine - 1 chunk(s) ----------------------
+:BCF
 
 REM Compile chunk 1
 call emcc %EMCC_OPTS% -c %BCF_SRC%Implementation/Archivator.cpp %BCF_SRC%Implementation/bcfEngine.cpp %BCF_SRC%Implementation/BCFObject.cpp %BCF_SRC%Implementation/BimFile.cpp %BCF_SRC%Implementation/BimSnippet.cpp %BCF_SRC%Implementation/Bitmap.cpp %BCF_SRC%Implementation/ClippingPlane.cpp %BCF_SRC%Implementation/Coloring.cpp %BCF_SRC%Implementation/Comment.cpp %BCF_SRC%Implementation/Component.cpp %BCF_SRC%Implementation/DocumentReference.cpp %BCF_SRC%Implementation/Documents.cpp %BCF_SRC%Implementation/Extensions.cpp %BCF_SRC%Implementation/FileSystem.cpp %BCF_SRC%Implementation/GuidReference.cpp %BCF_SRC%Implementation/GuidStr.cpp %BCF_SRC%Implementation/Line.cpp %BCF_SRC%Implementation/ListOf.cpp %BCF_SRC%Implementation/Log.cpp %BCF_SRC%Implementation/pch.cpp %BCF_SRC%Implementation/Project.cpp %BCF_SRC%Implementation/ProjectInfo.cpp %BCF_SRC%Implementation/SmokeTest.cpp %BCF_SRC%Implementation/Topic.cpp %BCF_SRC%Implementation/Version.cpp %BCF_SRC%Implementation/ViewPoint.cpp %BCF_SRC%Implementation/XMLFile.cpp %BCF_SRC%Implementation/XMLPoint.cpp

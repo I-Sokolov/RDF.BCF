@@ -8,7 +8,7 @@
 //
 // 
 
-import { readFile, writeFile } from "fs/promises";
+import { readFile, writeFile, mkdir} from "fs/promises";
 import { BCFModuleWrapper } from "./BCFModuleWrapper.js";
 
 const BCF_FILE_PATH = "W:\\DevArea\\buildingSMART\\BCF-XML\\Test Cases\\v3.0\\Visualization\\Orthogonal camera\\orthogonal camera.bcf";
@@ -22,12 +22,31 @@ async function LoadBCFModule(): Promise<BCFModule> {
     return Module;
 }
 
+function mkdirRecursive(module: BCFModule, path: string) {
+    const parts = path.split('/').filter(p => p);
+    let currentPath = '';
+
+    for (let i = 0; i < parts.length - 1; i++) {
+        const part = parts[i];
+        currentPath += '/' + part;
+        try {
+            module.FS.mkdir(currentPath);
+        } catch (e: any) {
+            if (e.code !== 'EEXIST') throw e;
+        }
+    }
+}
+
 // Load BCF file into Emscripten FS
-async function LoadFileToEMS(module: BCFModule, filePath: string) {``
+async function LoadFileToEMS(module: BCFModule, filePath: string, targetPath: string = filePath) {
+
     const fileContent = await readFile(filePath);
     const fileData = new Uint8Array(await fileContent);
-    module.FS.writeFile(filePath, fileData);
-    console.log(`File ${filePath} loaded into Emscripten FS`);
+
+    mkdirRecursive(module, targetPath);
+
+    module.FS.writeFile(targetPath, fileData);
+    console.log(`File ${filePath} loaded into Emscripten FS as ${targetPath}`);
 }
 
 async function DownloadFileFromEMS(module: BCFModule, filePath: string) {
@@ -133,8 +152,8 @@ async function TopicWithSnapshot()
     console.log("Added viewpoint guid:", guid);
 
     //add snapshot
-    const snapshotFile = "..\\TestCases\\Architectural.png";
-    await LoadFileToEMS(Module, snapshotFile);
+    const snapshotFile = "/MyTest/test/Architectural.png";
+    await LoadFileToEMS(Module, "../TestCases/Architectural.png", snapshotFile);
 
     let ok = bcf.bcfViewPointSetSnapshot(viewpoint, snapshotFile);
     console.log("Set snapshot:", ok);
