@@ -13,6 +13,7 @@ import { BCFModuleWrapper } from "./BCFModuleWrapper.js";
 
 const BCF_FILE_PATH = "W:\\DevArea\\buildingSMART\\BCF-XML\\Test Cases\\v3.0\\Visualization\\Orthogonal camera\\orthogonal camera.bcf";
 const BCF_FILE_PATH_SAVE = "W:\\DevArea\\WriteTest.bcf";
+const JAPANISE_TEST = "こんにちは、田中さん。";
 
 // Dynamically import the Emscripten JS module
 async function LoadBCFModule(): Promise<BCFModule> {
@@ -128,6 +129,19 @@ async function ExampleBCFWrapper() {
 
 //
 //
+function ReadBCF(bcf: BCFModuleWrapper, filePath: string)
+{
+    const project = bcf.bcfProjectCreate();
+
+    let ok = bcf.bcfFileRead(project, filePath);
+    console.log("Read BCF file: ", filePath, " result ", ok);
+
+    ok = bcf.bcfProjectDelete(project);
+    console.log("Close BCF: ", ok);
+}
+
+//
+//
 async function TopicWithSnapshot()
 {
     console.log("Topic With Snapshot Example");
@@ -143,7 +157,7 @@ async function TopicWithSnapshot()
     bcf.bcfSetOptions(bcfData, "user@company.org", true);
 
     //
-    let topic = bcf.bcfTopicAdd(bcfData, "MyTopic", "MyTopicTitle", "MyTopicDescription");
+    let topic = bcf.bcfTopicAdd(bcfData, "MyTopic " + JAPANISE_TEST, "MyTopicTitle " + JAPANISE_TEST, "MyTopicDescription" + JAPANISE_TEST);
     let guid = bcf.bcfTopicGetGuid(topic);
     console.log("Added topic guid:", guid);
 
@@ -169,6 +183,10 @@ async function TopicWithSnapshot()
     const filePath = "..\\output\\TopicWithSnapshotExample.bcf";
     ok = bcf.bcfFileWrite(bcfData, filePath, 30);
     console.log("Write file:", ok);
+
+    //
+    //Test read
+    ReadBCF(bcf, filePath);
 
     if (ok) {
         await DownloadFileFromEMS(Module, filePath);
