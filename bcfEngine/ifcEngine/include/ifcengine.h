@@ -8016,24 +8016,6 @@ void						DECL STDC	engiGetAttributeAggr(
 											);
 
 //
-//		engiGetAggrUnknownElement                               (https://rdf.bg/ifcdoc/CP64/engiGetAggrUnknownElement.html)
-//				const SdaiAggr			aggregate							IN
-//				int_t					elementIndex						IN
-//				SdaiPrimitiveType		* valueType							IN / OUT
-//				void					* value								IN / OUT
-//
-//				void					returns
-//
-//	...
-//
-void						DECL STDC	engiGetAggrUnknownElement(
-												const SdaiAggr			aggregate,
-												int_t					elementIndex,
-												SdaiPrimitiveType		* valueType,
-												void					* value
-											);
-
-//
 //		sdaiErrorQuery                                          (https://rdf.bg/ifcdoc/CP64/sdaiErrorQuery.html)
 //				int_t					returns								OUT
 //
@@ -8653,6 +8635,24 @@ int_t						DECL STDC	sdaiValidateSchemaInstance(
 //
 //  Deprecated API Calls (GENERIC)
 //
+
+//
+//		engiGetAggrUnknownElement                               (https://rdf.bg/ifcdoc/CP64/engiGetAggrUnknownElement.html)
+//				const SdaiAggr			aggregate							IN
+//				int_t					elementIndex						IN
+//				SdaiPrimitiveType		* valueType							IN / OUT
+//				void					* value								IN / OUT
+//
+//				void					returns
+//
+//	This call is deprecated, please use engiGetAggrType, the index is irrelevant.
+//
+void						DECL STDC	engiGetAggrUnknownElement(
+												const SdaiAggr			aggregate,
+												int_t					elementIndex,
+												SdaiPrimitiveType		* valueType,
+												void					* value
+											);
 
 //
 //		engiGetEntityAttributeByIndex                           (https://rdf.bg/ifcdoc/CP64/engiGetEntityAttributeByIndex.html)
