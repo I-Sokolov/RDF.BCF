@@ -176,7 +176,7 @@ Documents::Doc::Doc(Documents& documents, ListOf<Doc>* list, const char* filePat
 void Documents::Doc::GetReadWritePath(std::string& path, bool createFolder)
 {
     path.assign(m_readFolder);
-    FileSystem::AddPath(path, "Documents");
+    FileSystem::AddPath(path, "documents");
 
     if (createFolder) {
         if (!FileSystem::CreateDir(path.c_str(), Log_())) {
@@ -200,7 +200,7 @@ const char* Documents::Doc::GetFilePath(bool create)
 
         std::string dst_path(m_readFolder);
 
-        FileSystem::AddPath(dst_path, "Documents_");
+        FileSystem::AddPath(dst_path, "documents_");
         if (!FileSystem::CreateDir(dst_path.c_str(), Log_())) {
             return "";
         }

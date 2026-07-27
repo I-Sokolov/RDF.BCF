@@ -3,7 +3,7 @@
 
 //This is raw BCF API.
 //See ExampleRawAPI in app.ts how to use it.
-//See BCFModuleWrapper.ts for convinuent API with string conversions.
+//See BCFModuleWrapper.ts for convenient API with string conversions.
 
 interface BCFModule extends EmscriptenModule {
     // Project functions
@@ -228,6 +228,10 @@ interface BCFModule extends EmscriptenModule {
     _bcfRelatedTopicAdd(topicPtr: number, relatedPtr: number): boolean;
     _bcfRelatedTopicGetAt(topicPtr: number, ind: number): number;
     _bcfRelatedTopicRemove(topicPtr: number, relatedPtr: number): boolean;
+
+    //Point helper functions
+    _bcfPointSet(pointPtr: number, x: number, y: number, z: number): void;
+    _bcfPointGet(pointPtr: number, coordinate : number): number;
 
     // Memory and string helpers
     _malloc(size: number): number;

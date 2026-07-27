@@ -14,8 +14,8 @@ class _xml_writer
 
 private: // Members
 
-	wofstream* m_pOutputStream;
-	int m_iIndent; // TAB-s count
+	ofstream*	m_pOutputStream;
+	int			m_iIndent; // TAB-s count
 
 public: // Methods
 
@@ -25,28 +25,36 @@ public: // Methods
 	{
 		VERIFY_POINTER(szOutputFile);
 
-		std::ofstream outputStream;
-		outputStream.open(szOutputFile, std::ios::out | std::ios::binary | std::ios::trunc);
+		m_pOutputStream = new ofstream(szOutputFile, std::ios::out | std::ios::binary | std::ios::trunc);
 
+		// Write UTF-8 BOM
 		unsigned char BOM[3] = { 0xEF, 0xBB, 0xBF };
-		outputStream.write((char*)BOM, sizeof(BOM));
-		outputStream.close();
-
-		m_pOutputStream = new wofstream(szOutputFile, std::ios::out | std::ios::app);
+		m_pOutputStream->write((char*)BOM, sizeof(BOM));
 
 		// UTF-8 locale
-		std::locale loc(std::locale::classic());
-		m_pOutputStream->imbue(loc);
+		try {
+			// Try to use UTF-8 locale if available
+			std::locale utf8_locale("en_US.UTF-8");
+			m_pOutputStream->imbue(utf8_locale);
+		}
+		catch (...) {
+			// Fallback to classic locale
+			// For Emscripten, classic locale should work with UTF-8 if we use ofstream
+			m_pOutputStream->imbue(std::locale::classic());
+		}
 	}
 
 	virtual ~_xml_writer()
 	{
-		delete m_pOutputStream;
+		if (m_pOutputStream) {
+			m_pOutputStream->close();
+			delete m_pOutputStream;
+		}
 	}
 
 	void write(const string& strText)
 	{
-		*getOutputStream() << strText.c_str();
+		*getOutputStream() << strText;
 	}
 
 	void writeComment(const string& strText)
@@ -55,7 +63,7 @@ public: // Methods
 
 		*getOutputStream() << "\n";
 		writeIndent();
-		*getOutputStream() << "<!--" << strText.c_str() << "-->";
+		*getOutputStream() << "<!--" << strText << "-->";
 	}
 
 	void writeStartTag(const string& strTag)
@@ -64,8 +72,7 @@ public: // Methods
 
 		*getOutputStream() << "\n";
 		writeIndent();
-		*getOutputStream() << "<" << strTag.c_str();
-		*getOutputStream() << ">";
+		*getOutputStream() << "<" << strTag << ">";
 	}
 
 	void writeStartTag(const string& strTag, const vector<pair<string, string>>& vecAttributes)
@@ -74,10 +81,10 @@ public: // Methods
 
 		*getOutputStream() << "\n";
 		writeIndent();
-		*getOutputStream() << "<" << strTag.c_str();
-		for (auto prAttribute : vecAttributes)
+		*getOutputStream() << "<" << strTag;
+		for (const auto& prAttribute : vecAttributes)
 		{
-			*getOutputStream() << " " << prAttribute.first.c_str() << "=\"" << prAttribute.second.c_str() << "\"";
+			*getOutputStream() << " " << prAttribute.first << "=\"" << prAttribute.second << "\"";
 		}
 		*getOutputStream() << ">";
 	}
@@ -92,7 +99,7 @@ public: // Methods
 			writeIndent();
 		}
 
-		*getOutputStream() << "</" << strTag.c_str() << ">";
+		*getOutputStream() << "</" << strTag << ">";
 	}
 
 	void writeTag(const string& strTag, const string& strValue)
@@ -115,10 +122,10 @@ public: // Methods
 
 		*getOutputStream() << "\n";
 		writeIndent();
-		*getOutputStream() << "<" << strTag.c_str();
-		for (auto prAttribute : vecAttributes)
+		*getOutputStream() << "<" << strTag;
+		for (const auto& prAttribute : vecAttributes)
 		{
-			*getOutputStream() << " " << prAttribute.first.c_str() << "=\"" << prAttribute.second.c_str() << "\"";
+			*getOutputStream() << " " << prAttribute.first << "=\"" << prAttribute.second << "\"";
 		}
 		*getOutputStream() << " />";
 	}
@@ -133,6 +140,6 @@ public: // Methods
 
 public: // Properties
 
-	wofstream* getOutputStream() const { return m_pOutputStream; }
+	ofstream* getOutputStream() const { return m_pOutputStream; }
 	int& indent() { return m_iIndent; }
 };

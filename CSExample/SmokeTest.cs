@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CSExample
 {
@@ -46,6 +47,9 @@ namespace CSExample
             Console.WriteLine($"Running smoke tests for version {_version}");
             Console.WriteLine($"Current directory {System.IO.Directory.GetCurrentDirectory()}.");
             Console.WriteLine("...");
+
+            Console.WriteLine("TEST Relative snapshot path and regional characters");
+            RelativeSnapshotPathAndRegionalChars();
 
             Console.WriteLine("TEST Errors");
             Errors();
@@ -1166,6 +1170,68 @@ namespace CSExample
             {
                 ASSERT(labels[i - 1] == $"Label {i}");
             }
+        }
+
+        static void RelativeSnapshotPathAndRegionalCharsCheck(Project project, bool saved)
+        {
+            var topic = project.GetTopics().First();
+
+            var snapshot = topic.GetViewPoints().First().Snapshot;
+            ASSERT(System.IO.File.Exists(snapshot));
+            if (saved)
+            {
+                var temp = Environment.GetEnvironmentVariable("TEMP");
+                ASSERT(temp!=null && snapshot.StartsWith(temp));
+            }
+
+            var txt = topic.TopicType;
+            ASSERT(txt == "MyTopic 日本語検定");
+
+            txt = topic.Title;
+            ASSERT(txt == "MyTopicTitle 日本語検定");
+
+            txt = topic.TopicStatus;
+            ASSERT(txt == "Status 日本語検定");
+        }
+
+        static void RelativeSnapshotPathAndRegionalChars()
+        {
+            const string snapshotFile = "..\\TestCases\\Architectural.png";
+            const string filePath = "RelativeSnapshot.bcf";
+
+            using (var project = new Project("RelativeSnapshot"))
+            {
+                project.SetOptions("user@company.org", true);
+
+                //
+                var topic = project.AddTopic("MyTopic 日本語検定", "MyTopicTitle 日本語検定", "Status 日本語検定");
+                var viewpoint = topic.AddViewPoint();
+
+                //add snapshot
+                viewpoint.Snapshot = snapshotFile;
+
+                //add required viewpoint properties
+                viewpoint.SetCameraViewPoint(new Interop.BCFPoint(10, 10, 10));
+                viewpoint.SetCameraDirection(new Interop.BCFPoint(1, 0, 0));
+                viewpoint.SetCameraUpVector(new Interop.BCFPoint(0, 1, 0));
+                viewpoint.AspectRatio = 0.45;
+                viewpoint.FieldOfView = 33;
+
+                RelativeSnapshotPathAndRegionalCharsCheck(project, false);
+
+                //
+                var ok = project.FileWrite(filePath, _version);
+                ASSERT(ok);
+            }
+
+            using (var bcf = new Project())
+            {
+                var res = bcf.FileRead(filePath, false);
+                ASSERT(res);
+
+                RelativeSnapshotPathAndRegionalCharsCheck(bcf, true);
+            }
+
         }
     }
 }
