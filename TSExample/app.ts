@@ -8,10 +8,11 @@
 //
 // 
 
-import { readFile, writeFile, mkdir} from "fs/promises";
+import { readFile, writeFile, readdir } from "fs/promises";
 import { BCFModuleWrapper } from "./BCFModuleWrapper.js";
 
-const BCF_FILE_PATH = "W:\\DevArea\\buildingSMART\\BCF-XML\\Test Cases\\v3.0\\Visualization\\Orthogonal camera\\orthogonal camera.bcf";
+//const BCF_FILE_PATH = "W:\\DevArea\\buildingSMART\\BCF-XML\\Test Cases\\v3.0\\Visualization\\Orthogonal camera\\orthogonal camera.bcf";
+const BCF_FILE_PATH = "W:\\DevArea\\buildingSMART\\BCF-XML\\Test Cases\\v3.0\\Markup\\Document reference internal\\Document reference internal.bcf";
 const BCF_FILE_PATH_SAVE = "W:\\DevArea\\WriteTest.bcf";
 const JAPANISE_TEST = "こんにちは、田中さん。";   // \u3053\u3093\u306B\u3061\u306F\u3001\u7530\u4E2D\u3055\u3093\u3002
 
@@ -112,42 +113,58 @@ async function ExampleRawBCF() {
 
 //
 //
-async function ExampleBCFWrapper() {
+async function TestReadBCF(filePath: string) {
 
-    console.log("ExampleBCFWrapper");
+    console.log("Test file: ", filePath);
 
     // Dynamically import the Emscripten JS module
     const Module = await LoadBCFModule();
     const bcf = new BCFModuleWrapper(Module);
 
     // Use
-    const bcfData = bcf.bcfProjectCreate("MyProject");
+    const bcfData = bcf.bcfProjectCreate();
     ASSERT(bcfData !== 0, "Failed to create BCF project");
-    console.log("BCF data pointer:", bcfData);
 
     // Load BCF file into Emscripten FS
-    await LoadFileToEMS(Module, BCF_FILE_PATH);
+    await LoadFileToEMS(Module, filePath);
 
-    let ok = bcf.bcfFileRead(bcfData, BCF_FILE_PATH, true);
+    console.log("Reading: ", filePath);
+    let ok = bcf.bcfFileRead(bcfData, filePath, true);
     ASSERT(ok, "Failed to read BCF file");
-    console.log("File read:", ok);
 
-    const projId = bcf.bcfProjectIdGet(bcfData);
-    ASSERT(projId !== "", "Failed to get project ID");
-    console.log("Project ID:", projId);
-
+    console.log("Writing: ", BCF_FILE_PATH_SAVE);
     ok = bcf.bcfFileWrite(bcfData, BCF_FILE_PATH_SAVE, 30);
     ASSERT(ok, "Failed to write BCF file");
-    console.log("Write file:", ok);
 
     await DownloadFileFromEMS(Module, BCF_FILE_PATH_SAVE);
 
     ok = bcf.bcfProjectDelete(bcfData);
     ASSERT(ok, "Failed to delete BCF project");
-    console.log("Cleanup:", ok);
 
-    console.log("Exit ExampleBCFWrapper");
+    console.log("Test finished for ", filePath);
 }
+
+//
+//
+async function ReadTestCases(folder: string) {
+
+        const entries = await readdir(folder, { withFileTypes: true });
+        
+        for (const entry of entries) {
+            const fullPath = `${folder}\\${entry.name}`;
+            
+            if (entry.isDirectory()) {
+                if (entry.name != "unzipped") {
+                    await ReadTestCases(fullPath);
+                }
+            } else if (entry.isFile()) {
+                if (entry.name.toLowerCase().endsWith('.bcf') || entry.name.toLowerCase().endsWith('.bcfzip')) {
+                    await TestReadBCF(fullPath);
+                }
+            }
+        }
+}
+
 
 //
 //
@@ -267,7 +284,7 @@ async function main() {
 
     await ExampleRawBCF();
 
-    await ExampleBCFWrapper();
+    await ReadTestCases("W:\\DevArea\\buildingSMART\\BCF-XML\\Test Cases");
 
     await TopicWithSnapshot();
 }
