@@ -1172,6 +1172,8 @@ namespace CSExample
             }
         }
 
+        const string REGIONAL_TEST = "日本語検定 <'&\">";
+
         static void RelativeSnapshotPathAndRegionalCharsCheck(Project project, bool saved)
         {
             var topic = project.GetTopics().First();
@@ -1185,13 +1187,17 @@ namespace CSExample
             }
 
             var txt = topic.TopicType;
-            ASSERT(txt == "MyTopic 日本語検定");
+            ASSERT(txt == $"MyTopic {REGIONAL_TEST}");
 
             txt = topic.Title;
-            ASSERT(txt == "MyTopicTitle 日本語検定");
+            ASSERT(txt == $"MyTopicTitle {REGIONAL_TEST}");
 
             txt = topic.TopicStatus;
-            ASSERT(txt == "Status 日本語検定");
+            ASSERT(txt == $"Status {REGIONAL_TEST}");
+
+            var labels = topic.GetLabels();
+            ASSERT(labels.Count == 1);
+            ASSERT(labels.First() == $"Label {REGIONAL_TEST}");
         }
 
         static void RelativeSnapshotPathAndRegionalChars()
@@ -1204,8 +1210,11 @@ namespace CSExample
                 project.SetOptions("user@company.org", true);
 
                 //
-                var topic = project.AddTopic("MyTopic 日本語検定", "MyTopicTitle 日本語検定", "Status 日本語検定");
+                var topic = project.AddTopic($"MyTopic {REGIONAL_TEST}", $"MyTopicTitle {REGIONAL_TEST}", $"Status {REGIONAL_TEST}");
                 var viewpoint = topic.AddViewPoint();
+
+                string[] labels = { $"Label {REGIONAL_TEST}" };
+                topic.SetLabels(labels);
 
                 //add snapshot
                 viewpoint.Snapshot = snapshotFile;

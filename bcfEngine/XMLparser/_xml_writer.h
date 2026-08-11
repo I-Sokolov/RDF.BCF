@@ -2,6 +2,7 @@
 
 #include "_errors.h"
 #include "_reader.h"
+#include "_string.h"
 
 #include <fstream>
 #include <locale>
@@ -57,6 +58,12 @@ public: // Methods
 		*getOutputStream() << strText;
 	}
 
+	// Writes text as escaped XML content (use write() for raw markup like the XML declaration).
+	void writeText(const string& strText)
+	{
+		*getOutputStream() << _string::escapeXml(strText);
+	}
+
 	void writeComment(const string& strText)
 	{
 		VERIFY_STLOBJ_IS_NOT_EMPTY(strText);
@@ -84,7 +91,7 @@ public: // Methods
 		*getOutputStream() << "<" << strTag;
 		for (const auto& prAttribute : vecAttributes)
 		{
-			*getOutputStream() << " " << prAttribute.first << "=\"" << prAttribute.second << "\"";
+			*getOutputStream() << " " << prAttribute.first << "=\"" << _string::escapeXml(prAttribute.second) << "\"";
 		}
 		*getOutputStream() << ">";
 	}
@@ -105,14 +112,14 @@ public: // Methods
 	void writeTag(const string& strTag, const string& strValue)
 	{
 		writeStartTag(strTag);
-		write(strValue);
+		writeText(strValue);
 		writeEndTag(strTag, false);
 	}
 
 	void writeTag(const string& strTag, const vector<pair<string, string>>& vecAttributes, const string& strValue)
 	{
 		writeStartTag(strTag, vecAttributes);
-		write(strValue);
+		writeText(strValue);
 		writeEndTag(strTag, false);
 	}
 
@@ -125,7 +132,7 @@ public: // Methods
 		*getOutputStream() << "<" << strTag;
 		for (const auto& prAttribute : vecAttributes)
 		{
-			*getOutputStream() << " " << prAttribute.first << "=\"" << prAttribute.second << "\"";
+			*getOutputStream() << " " << prAttribute.first << "=\"" << _string::escapeXml(prAttribute.second) << "\"";
 		}
 		*getOutputStream() << " />";
 	}

@@ -308,6 +308,7 @@ namespace _xml
 				if (strTag == END_TAG)
 				{
 					_string::trim(m_strContent);
+					m_strContent = _string::unescapeXml(m_strContent);
 
 					m_pSite->onElementLoaded(this);
 
@@ -419,7 +420,7 @@ namespace _xml
 					{
 						_string::trim(strBuffer);
 
-						m_vecAttributes.push_back(new _attribute(this, strName, strBuffer));
+						m_vecAttributes.push_back(new _attribute(this, strName, _string::unescapeXml(strBuffer)));
 						
 						strBuffer = "";
 						strName = "";

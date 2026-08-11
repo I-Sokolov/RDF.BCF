@@ -14,7 +14,7 @@ import { BCFModuleWrapper } from "./BCFModuleWrapper.js";
 //const BCF_FILE_PATH = "W:\\DevArea\\buildingSMART\\BCF-XML\\Test Cases\\v3.0\\Visualization\\Orthogonal camera\\orthogonal camera.bcf";
 const BCF_FILE_PATH = "W:\\DevArea\\buildingSMART\\BCF-XML\\Test Cases\\v3.0\\Markup\\Document reference internal\\Document reference internal.bcf";
 const BCF_FILE_PATH_SAVE = "W:\\DevArea\\WriteTest.bcf";
-const JAPANISE_TEST = "こんにちは、田中さん。";   // \u3053\u3093\u306B\u3061\u306F\u3001\u7530\u4E2D\u3055\u3093\u3002
+const JAPANISE_TEST = "こんにちは、田中さん。>\"'<&";   // \u3053\u3093\u306B\u3061\u306F\u3001\u7530\u4E2D\u3055\u3093\u3002
 
 function ASSERT(condition: boolean, message: string = "unexpected result") {
     if (!condition) {

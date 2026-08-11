@@ -16,7 +16,9 @@ set BCF_SRC=../../bcfEngine/
 
 set EMCC_OPTS=-Wno-deprecated-declarations -I%BCF_SRC% -I%BCF_SRC%ifcEngine/include/ -DNDEBUG -DMAPPING_CIS2_DISABLED -DMAPPING_AP242_DISABLED -DEMBEDDED_SCHEMAS -O2
 
+REM ==================================================================================================
 if .%1.==.bcf. goto BCF
+if .%1.==.xml. goto XML
 if .%1.==.link. goto LINK
 
 REM ------------------ IFC -------------------------------------
@@ -34,6 +36,7 @@ call emcc zip.o -r -o kubazip_0.o
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 REM ------------------ XMLParser - 1 chunk(s) ----------------------
+:XML
 
 REM Compile chunk 1
 call emcc %EMCC_OPTS% -c %BCF_SRC%XMLParser/_net.cpp %BCF_SRC%XMLParser/_reader.cpp %BCF_SRC%XMLParser/_serialization.cpp %BCF_SRC%XMLParser/_xml.cpp

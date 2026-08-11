@@ -342,6 +342,136 @@ public: //  Methods
 				strInput.end(),
 				[](unsigned char c) { return !isxdigit(c); }) == strInput.end();
 	}
+
+	// Escapes characters that are not allowed as-is in XML text/attribute values.
+	static inline string escapeXml(const string& strInput)
+	{
+		string strOutput;
+		strOutput.reserve(strInput.size());
+
+		for (char ch : strInput)
+		{
+			switch (ch)
+			{
+			case '&':  strOutput += "&amp;";  break;
+			case '<':  strOutput += "&lt;";   break;
+			case '>':  strOutput += "&gt;";   break;
+			case '"':  strOutput += "&quot;"; break;
+			case '\'': strOutput += "&apos;"; break;
+			default:   strOutput += ch;       break;
+			}
+		}
+
+		return strOutput;
+	}
+
+	// Decodes XML character/entity references (&amp; &lt; &gt; &quot; &apos; &#NN; &#xHH;) back to plain text.
+	static inline string unescapeXml(const string& strInput)
+	{
+		if (strInput.find('&') == string::npos)
+		{
+			return strInput;
+		}
+
+		string strOutput;
+		strOutput.reserve(strInput.size());
+
+		size_t iPos = 0;
+		while (iPos < strInput.size())
+		{
+			char ch = strInput[iPos];
+			if (ch == '&')
+			{
+				size_t iSemicolon = strInput.find(';', iPos + 1);
+				if (iSemicolon != string::npos)
+				{
+					string strEntity = strInput.substr(iPos + 1, iSemicolon - iPos - 1);
+
+					if (strEntity == "amp")
+					{
+						strOutput += '&';
+						iPos = iSemicolon + 1;
+						continue;
+					}
+					else if (strEntity == "lt")
+					{
+						strOutput += '<';
+						iPos = iSemicolon + 1;
+						continue;
+					}
+					else if (strEntity == "gt")
+					{
+						strOutput += '>';
+						iPos = iSemicolon + 1;
+						continue;
+					}
+					else if (strEntity == "quot")
+					{
+						strOutput += '"';
+						iPos = iSemicolon + 1;
+						continue;
+					}
+					else if (strEntity == "apos")
+					{
+						strOutput += '\'';
+						iPos = iSemicolon + 1;
+						continue;
+					}
+					else if (!strEntity.empty() && (strEntity[0] == '#'))
+					{
+						try
+						{
+							unsigned long iCode = 0;
+							if ((strEntity.size() > 1) && ((strEntity[1] == 'x') || (strEntity[1] == 'X')))
+							{
+								iCode = stoul(strEntity.substr(2), nullptr, 16);
+							}
+							else
+							{
+								iCode = stoul(strEntity.substr(1), nullptr, 10);
+							}
+
+							// Encode code point as UTF-8
+							if (iCode <= 0x7F)
+							{
+								strOutput += (char)iCode;
+							}
+							else if (iCode <= 0x7FF)
+							{
+								strOutput += (char)(0xC0 | (iCode >> 6));
+								strOutput += (char)(0x80 | (iCode & 0x3F));
+							}
+							else if (iCode <= 0xFFFF)
+							{
+								strOutput += (char)(0xE0 | (iCode >> 12));
+								strOutput += (char)(0x80 | ((iCode >> 6) & 0x3F));
+								strOutput += (char)(0x80 | (iCode & 0x3F));
+							}
+							else
+							{
+								strOutput += (char)(0xF0 | (iCode >> 18));
+								strOutput += (char)(0x80 | ((iCode >> 12) & 0x3F));
+								strOutput += (char)(0x80 | ((iCode >> 6) & 0x3F));
+								strOutput += (char)(0x80 | (iCode & 0x3F));
+							}
+
+							iPos = iSemicolon + 1;
+							continue;
+						}
+						catch (...)
+						{
+							// Not a valid numeric reference - fall through and copy '&' as-is
+						}
+					}
+				} // if (iSemicolon != string::npos)
+			} // if (ch == '&')
+
+			strOutput += ch;
+			iPos++;
+		} // while (iPos < strInput.size())
+
+		return strOutput;
+	}
 };
 
 // ************************************************************************************************
