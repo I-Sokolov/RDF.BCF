@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -22,6 +23,8 @@ namespace CSExample
         /// </summary>
         public static void Run()
         {
+            RelatedTopics20();
+
             foreach (var ver in new[] {Interop.Version._2_1, Interop.Version._3_0 })
             {
                 _version = ver;
@@ -1242,5 +1245,39 @@ namespace CSExample
             }
 
         }
+
+        static void RelatedTopics20()
+        {
+            using (var bcf = new Project())
+            {
+                var ok = bcf.FileRead("../TestCases/RelatedTopicsWithBothTopicsInSameFile.2.0.bcfzip", false);
+                ASSERT(ok);
+
+                ASSERT(bcf.GetTopics().Count == 2);
+
+                foreach (var topic in bcf.GetTopics())
+                {
+                    if (topic.Guid == "3ebd3a2c-5bc8-4ff5-9e98-d5fa240719b6")
+                    {
+                        var related = topic.GetRelatedTopics();
+                        ASSERT(related.Count == 1);
+
+                        var rel = related.First();
+                        ASSERT(rel.Guid == "d83f5842-19ea-4ca9-85bf-03d4b8f504b8");
+
+                    }
+                    else if (topic.Guid == "d83f5842-19ea-4ca9-85bf-03d4b8f504b8")
+                    {
+                        ASSERT(topic.Title == "Related topic 2");
+                    }
+                    else 
+                    {
+                        ASSERT(false);
+                    }
+                }
+
+            }
+        }
+
     }
 }

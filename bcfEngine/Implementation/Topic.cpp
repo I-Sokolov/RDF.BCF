@@ -166,9 +166,9 @@ void Topic::Read_Topic(_xml::_element& elem, const std::string& folder)
         ATTR_GET(TopicType)
     ATTRS_END(UnknownNames::NotAllowed)
 
-    //if (!topicGuid.empty() && strcmp(topicGuid.c_str(), m_Guid.c_str())) {
-    //    printf("Data inconsistent: %s\n", folder.c_str());
-    //}
+        //if (!topicGuid.empty() && strcmp(topicGuid.c_str(), m_Guid.c_str())) {
+        //    printf("Data inconsistent: %s\n", folder.c_str());
+        //}
 
     CHILDREN_START
         CHILD_GET_CONTENT(Title)
@@ -185,9 +185,13 @@ void Topic::Read_Topic(_xml::_element& elem, const std::string& folder)
         CHILD_GET_CONTENT(AssignedTo)
         CHILD_GET_CONTENT(Description)
         CHILD_GET_CONTENT(Stage)
+
         CHILD_GET_LIST_CONDITIONAL(DocumentReferences, DocumentReference, Project_().GetVersion() > BCFVer_2_0)
         CHILD_ADD_TO_LIST_CONDITIONAL(DocumentReferences, DocumentReferences, Project_().GetVersion() == BCFVer_2_0)
-        CHILD_GET_LIST(RelatedTopics, RelatedTopic)
+
+        CHILD_GET_LIST_CONDITIONAL(RelatedTopics, RelatedTopic, Project_().GetVersion() > BCFVer_2_0)
+        CHILD_ADD_TO_LIST_CONDITIONAL(RelatedTopics, RelatedTopics, Project_().GetVersion() == BCFVer_2_0)
+
         CHILD_GET_LIST(Comments, Comment)
         CHILD_GET_LIST(Viewpoints, ViewPoint)
         CHILD_GET_LIST(BimSnippets, BimSnippet)
