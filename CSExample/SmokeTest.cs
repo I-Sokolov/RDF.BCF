@@ -1248,6 +1248,8 @@ namespace CSExample
 
         static void RelatedTopics20()
         {
+            System.Console.WriteLine("test RelatedTopics20");
+
             using (var bcf = new Project())
             {
                 var ok = bcf.FileRead("../TestCases/RelatedTopicsWithBothTopicsInSameFile.2.0.bcfzip", false);
@@ -1276,6 +1278,8 @@ namespace CSExample
                     }
                 }
 
+                string err = bcf.GetErrors();
+                System.Console.WriteLine(err);
             }
         }
 

@@ -9,6 +9,15 @@ GuidStr::GuidStr(Project& project, const char* guid)
     : m_project(project)
 {
     if (guid) {
+
+        //older versions allow capital letters in GUID
+        std::string lower;
+        if (m_project.GetVersion() < BCFVer_3_0) {
+            lower.assign(guid);
+            std::transform(lower.begin(), lower.end(), lower.begin(), [](unsigned char c) { return std::tolower(c); });
+            guid = lower.c_str();
+        }
+
         if (*guid && IsGUIDValid(guid, &project.Log_())) {
             value.assign(guid);
         }
@@ -79,16 +88,26 @@ std::string GuidStr::New()
 /// </summary>
 void GuidStr::assign(const std::string& s)
 { 
+    const char* str = s.c_str();
+
+    //older versions allow capital letters in GUID
+    std::string lower;
+    if (m_project.GetVersion() < BCFVer_3_0) {
+        lower.assign(str);
+        std::transform(lower.begin(), lower.end(), lower.begin(), [](unsigned char c) { return std::tolower(c); });
+        str = lower.c_str();
+    }
+
     if (value.empty()) {
-        if (IsGUIDValid(s.c_str(), &m_project.Log_())) {
-            value.assign(s);
+        if (IsGUIDValid(str, &m_project.Log_())) {
+            value.assign(str);
         }
         else {
             AssignNew();
         }
     }
-    else if (value!=s) {
-        m_project.Log_().add(Log::Level::warning, "Inconsistent GUIDs",  "%s is also referenced as %s", value.c_str(), s.c_str());
+    else if (0!=strcmp(value.c_str(), str)) {
+        m_project.Log_().add(Log::Level::warning, "Inconsistent GUIDs",  "%s is also referenced as %s", value.c_str(), str);
     }
 }
 

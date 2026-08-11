@@ -33,6 +33,11 @@ void GuidReference::Read(_xml::_element& elem, const std::string& /*folder*/)
     ATTRS_START
         ATTR_GET(Guid)
     ATTRS_END(UnknownNames::NotAllowed)
+
+    //older versions allow capital letters in GUID
+    if (Project_().GetVersion() < BCFVer_3_0) {
+        std::transform(m_Guid.begin(), m_Guid.end(), m_Guid.begin(), [](unsigned char c) { return std::tolower(c); });
+    }
 }
 
 /// <summary>
