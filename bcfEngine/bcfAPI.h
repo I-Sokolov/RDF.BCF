@@ -36,9 +36,9 @@ struct BCFExtensions;
     virtual bool Set##PropName(BCFPoint* pt) = 0;
 
 /// <summary>
-/// Use static Create method to create prject, and Delete to dispose
-/// All BCF obects lifetime until BCFProject::Delete
-/// All strings are valid untile next call or BCFProject::Delete
+/// Use static Create method to create project, and Delete to dispose
+/// All BCF objects lifetime until BCFProject::Delete
+/// All strings are valid until next call or BCFProject::Delete
 /// </summary>
 struct BCFProject
 {

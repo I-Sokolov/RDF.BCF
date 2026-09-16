@@ -21,7 +21,17 @@ void FileSystem::AddPath(std::string& path, const char* name, bool zippath)
     if (!path.empty() && path.back() != sep) {
         path.push_back(sep);
     }
+
+    auto len = path.length();
+
     path.append(name);
+
+    //normalize path separators
+    for (size_t ind = len; ind < path.length(); ind++) {
+        if (path[ind] == '/' || path[ind] == '\\') {
+            path[ind] = sep;
+        }
+    }
 }
 
 /// <summary>

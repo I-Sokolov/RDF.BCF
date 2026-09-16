@@ -1076,11 +1076,15 @@ static	inline	SdaiModel	engiOpenModelByArray(
 //				SdaiModel				model								IN
 //				SdaiString				fileName							IN
 //
-//				void					returns
+//				int_t					returns								OUT
 //
 //	This function saves the model (char file name).
 //
-void						DECL STDC	sdaiSaveModelBN(
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - model is NULL or not recognized as a model handle
+//		2 - file at path location cannot be created/overwritten
+//
+int_t						DECL STDC	sdaiSaveModelBN(
 												SdaiModel				model,
 												SdaiString				fileName
 											);
@@ -1091,7 +1095,7 @@ void						DECL STDC	sdaiSaveModelBN(
 
 //
 //
-static	inline	void	sdaiSaveModelBN(
+static	inline	int_t	sdaiSaveModelBN(
 								SdaiModel				model,
 								char					* fileName
 							)
@@ -1111,11 +1115,15 @@ static	inline	void	sdaiSaveModelBN(
 //				SdaiModel				model								IN
 //				const wchar_t			* fileName							IN
 //
-//				void					returns
+//				int_t					returns								OUT
 //
 //	This function saves the model (wchar, i.e. Unicode file name).
 //
-void						DECL STDC	sdaiSaveModelBNUnicode(
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - model is NULL or not recognized as a model handle
+//		2 - file at path location cannot be created/overwritten
+//
+int_t						DECL STDC	sdaiSaveModelBNUnicode(
 												SdaiModel				model,
 												const wchar_t			* fileName
 											);
@@ -1126,7 +1134,7 @@ void						DECL STDC	sdaiSaveModelBNUnicode(
 
 //
 //
-static	inline	void	sdaiSaveModelBNUnicode(
+static	inline	int_t	sdaiSaveModelBNUnicode(
 								SdaiModel				model,
 								wchar_t					* fileName
 							)
@@ -1147,11 +1155,15 @@ static	inline	void	sdaiSaveModelBNUnicode(
 //				const void				* callback							IN
 //				int_t					size								IN
 //
-//				void					returns
+//				int_t					returns								OUT
 //
 //	This function saves the model as a stream.
 //
-void						DECL STDC	engiSaveModelByStream(
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - model is NULL or not recognized as a model handle
+//		2 - callback function not recognized
+//
+int_t						DECL STDC	engiSaveModelByStream(
 												SdaiModel				model,
 												const void				* callback,
 												int_t					size
@@ -1163,11 +1175,15 @@ void						DECL STDC	engiSaveModelByStream(
 //				unsigned char			* content							IN / OUT
 //				int_t					* size								IN / OUT
 //
-//				void					returns
+//				int_t					returns								OUT
 //
 //	This function saves the model as an array.
 //
-void						DECL STDC	engiSaveModelByArray(
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - model is NULL or not recognized as a model handle
+//		2 - content or size could not be set
+//
+int_t						DECL STDC	engiSaveModelByArray(
 												SdaiModel				model,
 												unsigned char			* content,
 												int_t					* size
@@ -1178,11 +1194,15 @@ void						DECL STDC	engiSaveModelByArray(
 //				SdaiModel				model								IN
 //				SdaiString				fileName							IN
 //
-//				void					returns
+//				int_t					returns								OUT
 //
 //	This function saves the model as XML according to IFC2x3's way of XML serialization (char file name).
 //
-void						DECL STDC	sdaiSaveModelAsXmlBN(
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - model is NULL or not recognized as a model handle
+//		2 - file at path location cannot be created/overwritten
+//
+int_t						DECL STDC	sdaiSaveModelAsXmlBN(
 												SdaiModel				model,
 												SdaiString				fileName
 											);
@@ -1193,7 +1213,7 @@ void						DECL STDC	sdaiSaveModelAsXmlBN(
 
 //
 //
-static	inline	void	sdaiSaveModelAsXmlBN(
+static	inline	int_t	sdaiSaveModelAsXmlBN(
 								SdaiModel				model,
 								char					* fileName
 							)
@@ -1213,11 +1233,15 @@ static	inline	void	sdaiSaveModelAsXmlBN(
 //				SdaiModel				model								IN
 //				const wchar_t			* fileName							IN
 //
-//				void					returns
+//				int_t					returns								OUT
 //
 //	This function saves the model as XML according to IFC2x3's way of XML serialization (wchar, i.e. Unicode file name).
 //
-void						DECL STDC	sdaiSaveModelAsXmlBNUnicode(
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - model is NULL or not recognized as a model handle
+//		2 - file at path location cannot be created/overwritten
+//
+int_t						DECL STDC	sdaiSaveModelAsXmlBNUnicode(
 												SdaiModel				model,
 												const wchar_t			* fileName
 											);
@@ -1228,7 +1252,7 @@ void						DECL STDC	sdaiSaveModelAsXmlBNUnicode(
 
 //
 //
-static	inline	void	sdaiSaveModelAsXmlBNUnicode(
+static	inline	int_t	sdaiSaveModelAsXmlBNUnicode(
 								SdaiModel				model,
 								wchar_t					* fileName
 							)
@@ -1248,11 +1272,15 @@ static	inline	void	sdaiSaveModelAsXmlBNUnicode(
 //				SdaiModel				model								IN
 //				SdaiString				fileName							IN
 //
-//				void					returns
+//				int_t					returns								OUT
 //
 //	This function saves the model as XML according to IFC4's way of XML serialization (char file name).
 //
-void						DECL STDC	sdaiSaveModelAsSimpleXmlBN(
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - model is NULL or not recognized as a model handle
+//		2 - file at path location cannot be created/overwritten
+//
+int_t						DECL STDC	sdaiSaveModelAsSimpleXmlBN(
 												SdaiModel				model,
 												SdaiString				fileName
 											);
@@ -1263,7 +1291,7 @@ void						DECL STDC	sdaiSaveModelAsSimpleXmlBN(
 
 //
 //
-static	inline	void	sdaiSaveModelAsSimpleXmlBN(
+static	inline	int_t	sdaiSaveModelAsSimpleXmlBN(
 								SdaiModel				model,
 								char					* fileName
 							)
@@ -1283,11 +1311,15 @@ static	inline	void	sdaiSaveModelAsSimpleXmlBN(
 //				SdaiModel				model								IN
 //				const wchar_t			* fileName							IN
 //
-//				void					returns
+//				int_t					returns								OUT
 //
 //	This function saves the model as XML according to IFC4's way of XML serialization (wchar, i.e. Unicode file name).
 //
-void						DECL STDC	sdaiSaveModelAsSimpleXmlBNUnicode(
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - model is NULL or not recognized as a model handle
+//		2 - file at path location cannot be created/overwritten
+//
+int_t						DECL STDC	sdaiSaveModelAsSimpleXmlBNUnicode(
 												SdaiModel				model,
 												const wchar_t			* fileName
 											);
@@ -1298,7 +1330,7 @@ void						DECL STDC	sdaiSaveModelAsSimpleXmlBNUnicode(
 
 //
 //
-static	inline	void	sdaiSaveModelAsSimpleXmlBNUnicode(
+static	inline	int_t	sdaiSaveModelAsSimpleXmlBNUnicode(
 								SdaiModel				model,
 								wchar_t					* fileName
 							)
@@ -1318,11 +1350,15 @@ static	inline	void	sdaiSaveModelAsSimpleXmlBNUnicode(
 //				SdaiModel				model								IN
 //				SdaiString				fileName							IN
 //
-//				void					returns
+//				int_t					returns								OUT
 //
 //	This function saves the model as JSON according to IFC4's way of JSON serialization (char file name).
 //
-void						DECL STDC	sdaiSaveModelAsJsonBN(
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - model is NULL or not recognized as a model handle
+//		2 - file at path location cannot be created/overwritten
+//
+int_t						DECL STDC	sdaiSaveModelAsJsonBN(
 												SdaiModel				model,
 												SdaiString				fileName
 											);
@@ -1333,7 +1369,7 @@ void						DECL STDC	sdaiSaveModelAsJsonBN(
 
 //
 //
-static	inline	void	sdaiSaveModelAsJsonBN(
+static	inline	int_t	sdaiSaveModelAsJsonBN(
 								SdaiModel				model,
 								char					* fileName
 							)
@@ -1353,11 +1389,15 @@ static	inline	void	sdaiSaveModelAsJsonBN(
 //				SdaiModel				model								IN
 //				const wchar_t			* fileName							IN
 //
-//				void					returns
+//				int_t					returns								OUT
 //
 //	This function saves the model as JSON according to IFC4's way of JSON serialization (wchar, i.e. Unicode file name).
 //
-void						DECL STDC	sdaiSaveModelAsJsonBNUnicode(
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - model is NULL or not recognized as a model handle
+//		2 - file at path location cannot be created/overwritten
+//
+int_t						DECL STDC	sdaiSaveModelAsJsonBNUnicode(
 												SdaiModel				model,
 												const wchar_t			* fileName
 											);
@@ -1368,7 +1408,7 @@ void						DECL STDC	sdaiSaveModelAsJsonBNUnicode(
 
 //
 //
-static	inline	void	sdaiSaveModelAsJsonBNUnicode(
+static	inline	int_t	sdaiSaveModelAsJsonBNUnicode(
 								SdaiModel				model,
 								wchar_t					* fileName
 							)
@@ -1388,11 +1428,15 @@ static	inline	void	sdaiSaveModelAsJsonBNUnicode(
 //				SdaiModel				model								IN
 //				SdaiString				filePath							IN
 //
-//				bool					returns								OUT
+//				int_t					returns								OUT
 //
 //	This function saves the schema.
 //
-bool						DECL STDC	engiSaveSchemaBN(
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - model is NULL or not recognized as a model handle
+//		2 - file at path location cannot be created/overwritten
+//
+int_t						DECL STDC	engiSaveSchemaBN(
 												SdaiModel				model,
 												SdaiString				filePath
 											);
@@ -1403,7 +1447,7 @@ bool						DECL STDC	engiSaveSchemaBN(
 
 //
 //
-static	inline	bool	engiSaveSchemaBN(
+static	inline	int_t	engiSaveSchemaBN(
 								SdaiModel				model,
 								char					* filePath
 							)
@@ -1423,11 +1467,15 @@ static	inline	bool	engiSaveSchemaBN(
 //				SdaiModel				model								IN
 //				const wchar_t			* filePath							IN
 //
-//				bool					returns								OUT
+//				int_t					returns								OUT
 //
 //	This function saves the schema (wchar, i.e. Unicode file name).
 //
-bool						DECL STDC	engiSaveSchemaBNUnicode(
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - model is NULL or not recognized as a model handle
+//		2 - file at path location cannot be created/overwritten
+//
+int_t						DECL STDC	engiSaveSchemaBNUnicode(
 												SdaiModel				model,
 												const wchar_t			* filePath
 											);
@@ -1438,7 +1486,7 @@ bool						DECL STDC	engiSaveSchemaBNUnicode(
 
 //
 //
-static	inline	bool	engiSaveSchemaBNUnicode(
+static	inline	int_t	engiSaveSchemaBNUnicode(
 								SdaiModel				model,
 								wchar_t					* filePath
 							)
@@ -1457,14 +1505,17 @@ static	inline	bool	engiSaveSchemaBNUnicode(
 //		sdaiCloseModel                                          (https://rdf.bg/ifcdoc/CP64/sdaiCloseModel.html)
 //				SdaiModel				model								IN
 //
-//				void					returns
+//				int_t					returns								OUT
 //
 //	This function closes the model. After this call no instance handles will be available including all
 //	handles referencing the geometry of this specific file, in default compilation the model itself will
 //	be known in the kernel, however known to be disabled. Calls containing the model reference will be
 //	protected from crashing when called.
 //
-void						DECL STDC	sdaiCloseModel(
+//	If the model is closed successfully the return value will be 0, in case of non-zero value:
+//		1 - model is NULL or not recognized as a model handle
+//
+int_t						DECL STDC	sdaiCloseModel(
 												SdaiModel				model
 											);
 
@@ -7082,7 +7133,13 @@ void						DECL STDC	setMaximumSegmentationLength(
 //
 //				double					returns								OUT
 //
-//	...
+//	This function will return the conversion factor compared to the base SI unit.
+//
+//	The possible unitType values are all enumeration values from enumeration type IfcUnitEnum.
+//
+//	For example getProjectUnitConversionFactor(model, "LENGTHUNIT") returns 0.001 in case of MilliMeters.
+//	
+//	Optional arguments unitPrefix (for example "MILLI"), unitName (if defined) and SIUnitName (for example "METRE") can be requested.
 //
 double						DECL STDC	getProjectUnitConversionFactor(
 												SdaiModel				model,
@@ -7095,6 +7152,22 @@ double						DECL STDC	getProjectUnitConversionFactor(
 #ifdef __cplusplus
 	}
 //{{ Begin C++ polymorphic versions
+
+//
+//
+static	inline	double	getProjectUnitConversionFactor(
+								SdaiModel				model,
+								SdaiString				unitType
+							)
+{
+	return	getProjectUnitConversionFactor(
+					model,
+					(SdaiString) unitType,
+					(SdaiString*) nullptr,				//	unitPrefix
+					(SdaiString*) nullptr,				//	unitName
+					(SdaiString*) nullptr				//	SIUnitName
+				);
+}
 
 //
 //
@@ -7115,6 +7188,19 @@ static	inline	double	getProjectUnitConversionFactor(
 				);
 }
 
+//
+//
+static	inline	double	getProjectUnitConversionFactor(
+								SdaiModel				model,
+								char					* unitType
+							)
+{
+	return	getProjectUnitConversionFactor(
+					model,
+					(SdaiString) unitType
+				);
+}
+
 //}} End C++ polymorphic versions
 	extern "C" {
 #endif
@@ -7129,7 +7215,13 @@ static	inline	double	getProjectUnitConversionFactor(
 //
 //				double					returns								OUT
 //
-//	...
+//	This function will return the conversion factor compared to the base SI unit.
+//
+//	The possible unitType values are all enumeration values from enumeration type IfcUnitEnum.
+//
+//	For example getProjectUnitConversionFactorW(model, L"LENGTHUNIT") returns 0.001 in case of MilliMeters.
+//	
+//	Optional arguments unitPrefix (for example L"MILLI"), unitName (if defined) and SIUnitName (for example L"METRE") can be requested.
 //
 double						DECL STDC	getProjectUnitConversionFactorW(
 												SdaiModel				model,
@@ -7176,7 +7268,13 @@ static	inline	double	getProjectUnitConversionFactorW(
 //
 //				double					returns								OUT
 //
-//	...
+//	This function will return the conversion factor compared to the base SI unit.
+//
+//	The unitType is derived from the instance.
+//
+//	For example getUnitInstanceConversionFactor(myInstance) returns 0.001 in case of MilliMeters if the instance defines a length unit.
+//	
+//	Optional arguments unitType (for example "LENGTHUNIT"), unitPrefix (for example "MILLI"), unitName (if defined) and SIUnitName (for example "METRE") can be requested.
 //
 double						DECL STDC	getUnitInstanceConversionFactor(
 												SdaiInstance			unitInstance,
@@ -7223,7 +7321,13 @@ static	inline	double	getUnitInstanceConversionFactor(
 //
 //				double					returns								OUT
 //
-//	...
+//	This function will return the conversion factor compared to the base SI unit.
+//
+//	The unitType is derived from the instance.
+//
+//	For example getUnitInstanceConversionFactorW(myInstance) returns 0.001 in case of MilliMeters if the instance defines a length unit.
+//	
+//	Optional arguments unitType (for example L"LENGTHUNIT"), unitPrefix (for example L"MILLI"), unitName (if defined) and SIUnitName (for example L"METRE") can be requested.
 //
 double						DECL STDC	getUnitInstanceConversionFactorW(
 												SdaiInstance			unitInstance,
@@ -8041,6 +8145,25 @@ int_t						DECL STDC	InitializeMultiThreading(
 												SdaiModel				model,
 												int_t					threadCount
 											);
+
+#ifdef __cplusplus
+	}
+//{{ Begin C++ polymorphic versions
+
+//
+//
+static	inline	int_t	InitializeMultiThreading(
+							)
+{
+	return	InitializeMultiThreading(
+					0,									//	model
+					0									//	threadCount
+				);
+}
+
+//}} End C++ polymorphic versions
+	extern "C" {
+#endif
 
 //
 //		CreateOwlModelMultiThreadingWrapper                     (https://rdf.bg/ifcdoc/CP64/CreateOwlModelMultiThreadingWrapper.html)
