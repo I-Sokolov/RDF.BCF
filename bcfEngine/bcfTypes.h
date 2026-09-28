@@ -65,6 +65,7 @@ extern "C" {
     /// </summary>
     enum BCFCamera
     {
+        BCFCameraNotSet = -1,
         BCFCameraPerspective = 0,
         BCFCameraOrthogonal = 1
     };

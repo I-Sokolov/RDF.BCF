@@ -597,7 +597,34 @@ namespace CSExample
 
                 CheckCommentAndViewPoints(bcf, true, true);
             }
-        }
+
+            //
+            // BCF 2.1 allows viewpoint without camera, but BCF 3.0 does not allow it.
+            //
+            using ( var bcf = new RDF.BCF.Project("MyProject") )
+                {
+                bool ok = bcf.SetOptions("Smoke-tester", true);
+                ASSERT(ok);
+
+                var topic = bcf.AddTopic("Type", "Title", "New");
+                var vp = topic.AddViewPoint();
+
+                ok = bcf.FileWrite("TestCommentsVP3.bcf", _version);
+
+                var str = bcf.GetErrors();
+                if ( _version > Interop.Version._2_1 )
+                    {
+                    ASSERT(!ok);
+                    ASSERT(str.Length != 0);
+                    Console.WriteLine(str);
+                    }
+                else
+                    {
+                    ASSERT(ok);
+                    ASSERT(str.Length == 0);
+                    }
+                }
+            }
          
         static void SetCommentAndViewPoints(Project bcf)
         {
@@ -1024,11 +1051,18 @@ namespace CSExample
 
                 ok = bcf.FileWrite("Validation.bcf", _version);
                 err = bcf.GetErrors();
-                ASSERT(!ok);
-                ASSERT(err.Contains("Missed property"));
-                ASSERT(err.Contains("CameraViewPoint"));
+                if (_version > Interop.Version._2_1)
+                {
+                    ASSERT(!ok);
+                    ASSERT(err.Contains("Missed property"));
+                    ASSERT(err.Contains("CameraType"));
+                }
+                else
+                {
+                    ASSERT(ok);
+                }
 
-                viewPoint.SetCameraViewPoint(new Interop.BCFPoint(0, 0, 0));
+                    viewPoint.SetCameraViewPoint(new Interop.BCFPoint(0, 0, 0));
                 viewPoint.SetCameraDirection(new Interop.BCFPoint(1, 1, 1));
                 viewPoint.SetCameraUpVector(new Interop.BCFPoint(0, 0, 1));
                 viewPoint.FieldOfView = 60;

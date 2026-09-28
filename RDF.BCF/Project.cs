@@ -23,6 +23,8 @@
             return BCF.Interop.GetErrors(m_handle, cleanLog);
         }
 
+        public string Errors { get { return GetErrors(false); } }
+
         /// <summary>
         /// Reads BCF data from given BCF XML file.
         /// Data can be modified after reading.

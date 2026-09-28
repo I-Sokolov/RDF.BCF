@@ -133,11 +133,11 @@ bool Project::Validate(bool fix)
 /// </summary>
 bool Project::WriteFile(const char* bcfFilePath, BCFVersion version)
 {
+    m_version.Set(version);
+
     if (!Validate(false)) {
         return false;
     }
-
-    m_version.Set(version);
 
     std::string bcfFolder;
     bool ok = FileSystem::CreateTempDir(bcfFolder, m_log);

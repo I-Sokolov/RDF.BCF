@@ -17,7 +17,7 @@ ViewPoint::ViewPoint(Topic& topic, ListOfBCFObjects* parentList, const char* gui
     : XMLFile(topic.Project_(), parentList)
     , m_topic(topic)
     , m_Guid(topic.Project_(), guid)
-    , m_cameraType(BCFCameraPerspective)
+    , m_cameraType(BCFCameraNotSet)
     , m_CameraViewPoint(*this)
     , m_CameraDirection(*this)
     , m_CameraUpVector(*this)
@@ -60,6 +60,8 @@ bool ViewPoint::Validate(bool fix)
 {
     if (fix) {
        
+        if (m_cameraType == BCFCameraNotSet)
+            m_cameraType = BCFCameraPerspective;
         if (!m_CameraViewPoint.IsSet())
             m_CameraViewPoint.SetPoint(0, 0, 0);
         if (!m_CameraDirection.IsSet())
@@ -87,21 +89,29 @@ bool ViewPoint::Validate(bool fix)
     valid = m_ClippingPlanes.Validate(fix) && valid;
     valid = m_Bitmaps.Validate(fix) && valid;
 
-    REQUIRED(CameraViewPoint, m_CameraViewPoint.IsSet());
-    REQUIRED(CameraDirection, m_CameraDirection.IsSet());
-    REQUIRED(CameraUpVector, m_CameraUpVector.IsSet());
-    REQUIRED(AspectRatio, GetAspectRatio() > 0);
+    auto cameraType = GetCameraType ();
+    if (Project_().GetVersion() > BCFVer_2_1) {
+        REQUIRED(CameraType, cameraType == BCFCameraPerspective || cameraType == BCFCameraOrthogonal);
+    }
 
-    REQUIRED(CameraViewPoint, m_CameraViewPoint.IsSet());
-    REQUIRED(CameraDirection, m_CameraDirection.IsSet());
-    REQUIRED(CameraUpVector, m_CameraUpVector.IsSet());
-    REQUIRED(AspectRatio, GetAspectRatio() > 0);
+    if (cameraType == BCFCameraPerspective || cameraType == BCFCameraOrthogonal) {
+        REQUIRED(CameraViewPoint, m_CameraViewPoint.IsSet());
+        REQUIRED(CameraDirection, m_CameraDirection.IsSet());
+        REQUIRED(CameraUpVector, m_CameraUpVector.IsSet());
+        REQUIRED(AspectRatio, GetAspectRatio() > 0);
 
-    if (GetCameraType() == BCFCameraPerspective) {
-        REQUIRED(FieldOfView, GetFieldOfView() > 0 && GetFieldOfView() < 180);
+        if (cameraType == BCFCameraPerspective) {
+            REQUIRED(FieldOfView, GetFieldOfView() > 0 && GetFieldOfView() < 180);
+        }
+        else if (cameraType == BCFCameraOrthogonal) {
+            REQUIRED(ViewToWorldScale, GetViewToWorldScale() != 0);
+        }
     }
     else {
-        REQUIRED(ViewToWorldScale, GetViewToWorldScale() != 0);
+        if (m_CameraViewPoint.IsSet() || m_CameraDirection.IsSet() || m_CameraUpVector.IsSet()) {
+            valid = false;
+            Log_().add(Log::Level::error,"CameraType is not set, but camera parameters are set");
+        }
     }
 
     return valid;
@@ -184,7 +194,7 @@ void ViewPoint::WriteRootContent(_xml_writer& writer, const std::string& folder)
     if (m_cameraType == BCFCameraPerspective) {
         WRITE_ELEM(PerspectiveCamera);
     }
-    else {
+    else if (m_cameraType == BCFCameraOrthogonal) {
         WRITE_ELEM(OrthogonalCamera);
     }
     WRITE_LIST(Line);

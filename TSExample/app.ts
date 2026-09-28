@@ -280,6 +280,41 @@ async function TopicWithSnapshot()
 
 //
 //
+async function ViewPointWithoutCamera()
+{
+    console.log("BCF 2.1 allows viewpoint without camera, but BCF 3.0 does not allow it.");
+
+    // Dynamically import the Emscripten JS module
+    const Module = await LoadBCFModule();
+    const bcf = new BCFModuleWrapper(Module);
+
+    // 
+    const bcfData = bcf.bcfProjectCreate("MyProject");
+    ASSERT(bcfData !== 0, "Failed to create BCF project");
+
+    bcf.bcfSetOptions(bcfData, "user@company.org", true);
+
+    const topic = bcf.bcfTopicAdd(bcfData, "Type", "Title", "New");
+
+    //
+    // 
+    const vp = bcf.bcfViewPointAdd(topic);
+
+    let ok = bcf.bcfFileWrite(bcfData, "TestCommentsVP3.bcf", 21);
+    ASSERT(ok);
+
+    ok = bcf.bcfFileWrite(bcfData, "TestCommentsVP3.bcf", 30);
+    ASSERT(!ok);
+
+    const err = bcf.bcfGetErrors(bcfData, true);
+    ASSERT(err.includes("Missed property"));
+    ASSERT(err.includes("CameraType"));
+
+    bcf.bcfProjectDelete(bcfData);
+}
+
+//
+//
 async function main() {
 
     await ExampleRawBCF();
@@ -287,6 +322,8 @@ async function main() {
     await ReadTestCases("W:\\DevArea\\buildingSMART\\BCF-XML\\Test Cases");
 
     await TopicWithSnapshot();
+
+    await ViewPointWithoutCamera();
 }
 
 main().catch(console.error);

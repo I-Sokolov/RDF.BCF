@@ -25,6 +25,7 @@ public:
     virtual bool        GetSpaceVisible() override { return GetPropertyBool(m_SpacesVisible); }
     virtual bool        GetSpaceBoundariesVisible() override { return GetPropertyBool(m_SpaceBoundariesVisible); }
     virtual bool        GetOpeningsVisible() override { return GetPropertyBool(m_OpeningsVisible); }
+
     virtual BCFCamera   GetCameraType() override { return m_cameraType; }
     virtual bool        GetCameraViewPoint(BCFPoint& pt) override { return m_CameraViewPoint.GetPoint(pt); }
     virtual bool        GetCameraDirection(BCFPoint& pt) override { return m_CameraDirection.GetPoint(pt); }
@@ -38,13 +39,14 @@ public:
     virtual bool        SetSpaceVisible(bool val) override { return SetPropertyBool(val, m_SpacesVisible); }
     virtual bool        SetSpaceBoundariesVisible(bool val) override { return SetPropertyBool(val, m_SpaceBoundariesVisible); }
     virtual bool        SetOpeningsVisible(bool val) override { return SetPropertyBool(val, m_OpeningsVisible); }
+
     virtual bool        SetCameraType(BCFCamera val);
-    virtual bool        SetCameraViewPoint(BCFPoint* pt) override { return m_CameraViewPoint.SetPoint(pt); }
-    virtual bool        SetCameraDirection(BCFPoint* pt) override { return m_CameraDirection.SetPoint(pt); }
-    virtual bool        SetCameraUpVector(BCFPoint* pt) override { return m_CameraUpVector.SetPoint(pt); }
-    virtual bool        SetViewToWorldScale(double val) override { return SetPropertyReal(val,m_ViewToWorldScale); }
-    virtual bool        SetFieldOfView(double val) override { return SetPropertyReal (val, m_FieldOfView); }
-    virtual bool        SetAspectRatio(double val) override { return SetPropertyReal (val, m_AspectRatio); }
+    virtual bool        SetCameraViewPoint(BCFPoint* pt) override { EnsureCameraTypeSet(BCFCameraPerspective); return m_CameraViewPoint.SetPoint(pt); }
+    virtual bool        SetCameraDirection(BCFPoint* pt) override { EnsureCameraTypeSet(BCFCameraPerspective); return m_CameraDirection.SetPoint(pt); }
+    virtual bool        SetCameraUpVector(BCFPoint* pt) override { EnsureCameraTypeSet(BCFCameraPerspective); return m_CameraUpVector.SetPoint(pt); }
+    virtual bool        SetViewToWorldScale(double val) override { EnsureCameraTypeSet(BCFCameraPerspective); return SetPropertyReal(val,m_ViewToWorldScale); }
+    virtual bool        SetFieldOfView(double val) override { EnsureCameraTypeSet(BCFCameraPerspective); return SetPropertyReal (val, m_FieldOfView); }
+    virtual bool        SetAspectRatio(double val) override { EnsureCameraTypeSet(BCFCameraOrthogonal); return SetPropertyReal (val, m_AspectRatio); }
 
     virtual BCFComponent* AddSelection(const char* ifcGuid = NULL, const char* authoringToolId = NULL, const char* originatingSystem = NULL) override;
     virtual BCFComponent* GetSelection(uint16_t ind) override;
@@ -100,6 +102,8 @@ private:
     void Write_OrthogonalCamera(_xml_writer& writer, const std::string& folder);
 
     void WriteViewSetupHints(_xml_writer& writer, const std::string& folder);
+
+    void EnsureCameraTypeSet(BCFCamera useIfUnset) { if (m_cameraType == BCFCameraNotSet) m_cameraType = useIfUnset; }
 
 private:
     Topic&                      m_topic;
