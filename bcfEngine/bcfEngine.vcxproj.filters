@@ -153,6 +153,9 @@
     <ClInclude Include="kubazip\zip.h">
       <Filter>kubazip</Filter>
     </ClInclude>
+    <ClInclude Include="XMLparser\_xml_writer.h">
+      <Filter>XMLparser</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="XMLparser\_net.cpp">

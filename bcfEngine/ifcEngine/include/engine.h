@@ -1368,6 +1368,10 @@ static	inline	OwlInstance	ImportModelA(
 //
 //	This function saves the selected instance and its dependencies on location file name.
 //
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - owlInstance is NULL or not recognized as an instance handle
+//		2 - file at path location cannot be created/overwritten
+//
 int64_t						DECL STDC	SaveInstanceTree(
 												OwlInstance				owlInstance,
 												const char				* fileName
@@ -1402,6 +1406,10 @@ static	inline	int64_t	SaveInstanceTree(
 //				int64_t					returns								OUT
 //
 //	This function saves the selected instance and its dependencies on location file name.
+//
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - owlInstance is NULL or not recognized as an instance handle
+//		2 - file at path location cannot be created/overwritten
 //
 int64_t						DECL STDC	SaveInstanceTreeW(
 												OwlInstance				owlInstance,
@@ -1439,6 +1447,10 @@ static	inline	int64_t	SaveInstanceTreeW(
 //
 //	This function saves the selected instance and its dependencies in a stream.
 //
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - owlInstance is NULL or not recognized as an instance handle
+//		2 - callback unknown or size is zero
+//
 int64_t						DECL STDC	SaveInstanceTreeS(
 												OwlInstance				owlInstance,
 												const void				* callback,
@@ -1455,6 +1467,10 @@ int64_t						DECL STDC	SaveInstanceTreeS(
 //
 //	This function saves the selected instance and its dependencies in an array.
 //
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - owlInstance is NULL or not recognized as an instance handle
+//		2 - content or size is zero
+//
 int64_t						DECL STDC	SaveInstanceTreeA(
 												OwlInstance				owlInstance,
 												unsigned char			* content,
@@ -1470,6 +1486,10 @@ int64_t						DECL STDC	SaveInstanceTreeA(
 //				int64_t					returns								OUT
 //
 //	This function saves the selected instance and its dependencies on location file name.
+//
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - owlInstance is NULL or not recognized as an instance handle
+//		2 - file at path location cannot be created/overwritten
 //
 int64_t						DECL STDC	SaveInstanceNetwork(
 												OwlInstance				owlInstance,
@@ -1509,6 +1529,10 @@ static	inline	int64_t	SaveInstanceNetwork(
 //				int64_t					returns								OUT
 //
 //	This function saves the selected instance and its dependencies on location file name.
+//
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - owlInstance is NULL or not recognized as an instance handle
+//		2 - file at path location cannot be created/overwritten
 //
 int64_t						DECL STDC	SaveInstanceNetworkW(
 												OwlInstance				owlInstance,
@@ -1550,6 +1574,10 @@ static	inline	int64_t	SaveInstanceNetworkW(
 //
 //	This function saves the selected instance and its dependencies in a stream.
 //
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - owlInstance is NULL or not recognized as an instance handle
+//		2 - callback unknown or size is zero
+//
 int64_t						DECL STDC	SaveInstanceNetworkS(
 												OwlInstance				owlInstance,
 												bool					includeInverseRelations,
@@ -1568,6 +1596,10 @@ int64_t						DECL STDC	SaveInstanceNetworkS(
 //
 //	This function saves the selected instance and its dependencies in an array.
 //
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - owlInstance is NULL or not recognized as an instance handle
+//		2 - content or size is zero
+//
 int64_t						DECL STDC	SaveInstanceNetworkA(
 												OwlInstance				owlInstance,
 												bool					includeInverseRelations,
@@ -1583,6 +1615,12 @@ int64_t						DECL STDC	SaveInstanceNetworkA(
 //				int64_t					returns								OUT
 //
 //	This function saves the current model on location file name.
+//
+//	It is allowed to use a class, property or instance handle instead of the model handle.
+//
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - model is NULL or not recognized as an model (or class/property/instance) handle
+//		2 - content or size is zero
 //
 int64_t						DECL STDC	SaveModel(
 												OwlModel				model,
@@ -1618,6 +1656,12 @@ static	inline	int64_t	SaveModel(
 //				int64_t					returns								OUT
 //
 //	This function saves the current model on location file name.
+//
+//	It is allowed to use a class, property or instance handle instead of the model handle.
+//
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - model is NULL or not recognized as an model (or class/property/instance) handle
+//		2 - content or size is zero
 //
 int64_t						DECL STDC	SaveModelW(
 												OwlModel				model,
@@ -1655,6 +1699,12 @@ static	inline	int64_t	SaveModelW(
 //
 //	This function saves the current model in a stream.
 //
+//	It is allowed to use a class, property or instance handle instead of the model handle.
+//
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - owlInstance is NULL or not recognized as an instance handle
+//		2 - callback unknown or size is zero
+//
 int64_t						DECL STDC	SaveModelS(
 												OwlModel				model,
 												const void				* callback,
@@ -1670,6 +1720,12 @@ int64_t						DECL STDC	SaveModelS(
 //				int64_t					returns								OUT
 //
 //	This function saves the current model in an array.
+//
+//	It is allowed to use a class, property or instance handle instead of the model handle.
+//
+//	If save operation finished succesfully the return value will be 0, in case of non-zero value:
+//		1 - owlInstance is NULL or not recognized as an instance handle
+//		2 - content or size is zero
 //
 int64_t						DECL STDC	SaveModelA(
 												OwlModel				model,
@@ -7565,38 +7621,6 @@ static	inline	double	GetDistance(
 
 //
 //
-static	inline	uint32_t	GetColorOfComponent(
-									OwlInstance				owlInstanceColorComponent
-								)
-{
-	assert(IsInstanceOfClass(owlInstanceColorComponent, "ColorComponent"));
-
-	int64_t	model = GetModel(owlInstanceColorComponent);
-
-	const char	* rgbwNames[4] = { "R", "G", "B", "W" };
-	double		rgbwValues[4] = { 0., 0., 0., 0. };
-
-	for (size_t i = 0; i < 4; i++) {
-		double	* values = nullptr;
-		int64_t	card = 0;
-		GetDatatypeProperty(
-				owlInstanceColorComponent,
-				GetPropertyByName(
-						model,
-						rgbwNames[i]
-					),
-				(const void**) &values,
-				&card
-			);
-		assert(card == 0 || card == 1);
-		rgbwValues[i] = (card == 1) ? values[0] : ((i == 3) ? 1. : 0.);
-	}
-
-	return	COLOR_ARR_RGBW(rgbwValues);
-}
-
-//
-//
 static	inline	void	SetColorOfComponent(
 								OwlInstance				owlInstanceColorComponent,
 								uint32_t				color
@@ -7626,49 +7650,34 @@ static	inline	void	SetColorOfComponent(
 
 //
 //
-static	inline	void	GetColor(
-								OwlInstance				owlInstanceColor,
-								uint32_t				* ambient,
-								uint32_t				* diffuse,
-								uint32_t				* emissive,
-								uint32_t				* specular
-							)
+static	inline	uint32_t	GetColorOfComponent(
+									OwlInstance				owlInstanceColorComponent
+								)
 {
-	assert(IsInstanceOfClass(owlInstanceColor, "Color"));
+	assert(IsInstanceOfClass(owlInstanceColorComponent, "ColorComponent"));
 
-	int64_t	model = GetModel(owlInstanceColor);
+	int64_t	model = GetModel(owlInstanceColorComponent);
 
-	GetDefaultColor(
-			model,
-			ambient,
-			diffuse,
-			emissive,
-			specular
-		);
-
-	const char	* componentNames[4] = { "ambient", "diffuse", "emissive", "specular" };
-	uint32_t	* componentColors[4] = { ambient, diffuse, emissive, specular };
+	const char	* rgbwNames[4] = { "R", "G", "B", "W" };
+	double		rgbwValues[4] = { 0., 0., 0., 0. };
 
 	for (size_t i = 0; i < 4; i++) {
-		if (componentColors[i]) {
-			OwlInstance	* values = nullptr;
-			int64_t		card = 0;
-			GetObjectProperty(
-					owlInstanceColor,
-					GetPropertyByName(
-							model,
-							componentNames[i]
-						),
-					(const OwlInstance**) &values,
-					&card
-				);
-
-			int64_t owlInstanceColorComponent = (card == 1) ? values[0] : 0;
-			if (owlInstanceColorComponent) {
-				(*componentColors[i]) = GetColorOfComponent(owlInstanceColorComponent);
-			}
-		}
+		double	* values = nullptr;
+		int64_t	card = 0;
+		GetDatatypeProperty(
+				owlInstanceColorComponent,
+				GetPropertyByName(
+						model,
+						rgbwNames[i]
+					),
+				(const void**) &values,
+				&card
+			);
+		assert(card == 0 || card == 1);
+		rgbwValues[i] = (card == 1) ? values[0] : ((i == 3) ? 1. : 0.);
 	}
+
+	return	COLOR_ARR_RGBW(rgbwValues);
 }
 
 //
@@ -7790,6 +7799,92 @@ static	inline	void	SetColor(
 
 //
 //
+static	inline	void	GetColor(
+								OwlInstance				owlInstanceColor,
+								uint32_t				* ambient,
+								uint32_t				* diffuse,
+								uint32_t				* emissive,
+								uint32_t				* specular
+							)
+{
+	assert(IsInstanceOfClass(owlInstanceColor, "Color"));
+
+	int64_t	model = GetModel(owlInstanceColor);
+
+	GetDefaultColor(
+			model,
+			ambient,
+			diffuse,
+			emissive,
+			specular
+		);
+
+	const char	* componentNames[4] = { "ambient", "diffuse", "emissive", "specular" };
+	uint32_t	* componentColors[4] = { ambient, diffuse, emissive, specular };
+
+	for (size_t i = 0; i < 4; i++) {
+		if (componentColors[i]) {
+			OwlInstance	* values = nullptr;
+			int64_t		card = 0;
+			GetObjectProperty(
+					owlInstanceColor,
+					GetPropertyByName(
+							model,
+							componentNames[i]
+						),
+					(const OwlInstance**) &values,
+					&card
+				);
+
+			int64_t owlInstanceColorComponent = (card == 1) ? values[0] : 0;
+			if (owlInstanceColorComponent) {
+				(*componentColors[i]) = GetColorOfComponent(owlInstanceColorComponent);
+			}
+		}
+	}
+}
+
+//
+//
+static	inline	void	SetMaterialColor(
+								OwlInstance				owlInstanceMaterial,
+								uint32_t				ambient,
+								uint32_t				diffuse,
+								uint32_t				emissive,
+								uint32_t				specular
+							)
+{
+	assert(IsInstanceOfClass(owlInstanceMaterial, "Material"));
+
+	int64_t	* values = nullptr, card = 0;
+	GetObjectProperty(
+			owlInstanceMaterial,
+			GetPropertyByName(
+					GetModel(owlInstanceMaterial),
+					"color"
+				),
+			&values,
+			&card
+		);
+
+	SetColor(
+			(card == 1) ?
+				values[0] :
+				CreateInstance(
+						GetClassByName(
+								GetModel(owlInstanceMaterial),
+								"color"
+							)
+					),
+			ambient,
+			diffuse,
+			emissive,
+			specular
+		);
+}
+
+//
+//
 static	inline	void	GetMaterialColor(
 								OwlInstance				owlInstanceMaterial,
 								uint32_t				* ambient,
@@ -7832,46 +7927,6 @@ static	inline	void	GetMaterialColor(
 				specular
 			);
 	}
-}
-
-
-//
-//
-static	inline	void	SetMaterialColor(
-								OwlInstance				owlInstanceMaterial,
-								uint32_t				ambient,
-								uint32_t				diffuse,
-								uint32_t				emissive,
-								uint32_t				specular
-							)
-{
-	assert(IsInstanceOfClass(owlInstanceMaterial, "Material"));
-
-	int64_t	* values = nullptr, card = 0;
-	GetObjectProperty(
-			owlInstanceMaterial,
-			GetPropertyByName(
-					GetModel(owlInstanceMaterial),
-					"color"
-				),
-			&values,
-			&card
-		);
-
-	SetColor(
-			(card == 1) ?
-				values[0] :
-				CreateInstance(
-						GetClassByName(
-								GetModel(owlInstanceMaterial),
-								"color"
-							)
-					),
-			ambient,
-			diffuse,
-			emissive,
-			specular
-		);
 }
 
 //

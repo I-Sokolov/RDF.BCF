@@ -562,6 +562,41 @@ static	inline	const char	* GetDateTime(
 #endif
 
 //
+//		GetDateTimeW                                            (https://rdf.bg/cis2doc/CP64/GetDateTimeW.html)
+//				SdaiModel				model								IN
+//				const wchar_t			** dateTimeStamp					IN / OUT
+//
+//				const wchar_t			* returns							OUT
+//
+//	Returns an current date and time according to ISO 8601 without time zone, i.e. formatted as '2099-12-31T23:59:59'.
+//
+const wchar_t				DECL * STDC	GetDateTimeW(
+												SdaiModel				model,
+												const wchar_t			** dateTimeStamp
+											);
+
+#ifdef __cplusplus
+	}
+//{{ Begin C++ polymorphic versions
+
+//
+//
+static	inline	const wchar_t	* GetDateTimeW(
+										SdaiModel				model,
+										wchar_t					** dateTimeStamp
+									)
+{
+	return	GetDateTimeW(
+					model,
+					(const wchar_t**) dateTimeStamp
+				);
+}
+
+//}} End C++ polymorphic versions
+	extern "C" {
+#endif
+
+//
 //		GetLibraryIdentifier                                    (https://rdf.bg/cis2doc/CP64/GetLibraryIdentifier.html)
 //				const char				** libraryIdentifier				IN / OUT
 //
@@ -595,6 +630,37 @@ static	inline	const char	* GetLibraryIdentifier(
 {
 	return	GetLibraryIdentifier(
 					(const char**) nullptr				//	libraryIdentifier
+				);
+}
+
+//}} End C++ polymorphic versions
+	extern "C" {
+#endif
+
+//
+//		GetLibraryIdentifierW                                   (https://rdf.bg/cis2doc/CP64/GetLibraryIdentifierW.html)
+//				const wchar_t			** libraryIdentifier				IN / OUT
+//
+//				const wchar_t			* returns							OUT
+//
+//	Returns an identifier for the current instance of this library including date stamp and revision number.
+//
+const wchar_t				DECL * STDC	GetLibraryIdentifierW(
+												const wchar_t			** libraryIdentifier
+											);
+
+#ifdef __cplusplus
+	}
+//{{ Begin C++ polymorphic versions
+
+//
+//
+static	inline	const wchar_t	* GetLibraryIdentifierW(
+										wchar_t					** libraryIdentifier
+									)
+{
+	return	GetLibraryIdentifierW(
+					(const wchar_t**) libraryIdentifier
 				);
 }
 
@@ -642,6 +708,41 @@ static	inline	SdaiString	GetSchemaName(
 	return	GetSchemaName(
 					model,
 					(SdaiString*) nullptr				//	schemaName
+				);
+}
+
+//}} End C++ polymorphic versions
+	extern "C" {
+#endif
+
+//
+//		GetSchemaNameW                                          (https://rdf.bg/cis2doc/CP64/GetSchemaNameW.html)
+//				SdaiModel				model								IN
+//				const wchar_t			** schemaName						IN / OUT
+//
+//				const wchar_t			* returns							OUT
+//
+//	Returns the value as defined by SCHEMA in the loaded EXPRESS schema.
+//
+const wchar_t				DECL * STDC	GetSchemaNameW(
+												SdaiModel				model,
+												const wchar_t			** schemaName
+											);
+
+#ifdef __cplusplus
+	}
+//{{ Begin C++ polymorphic versions
+
+//
+//
+static	inline	const wchar_t	* GetSchemaNameW(
+										SdaiModel				model,
+										wchar_t					** schemaName
+									)
+{
+	return	GetSchemaNameW(
+					model,
+					(const wchar_t**) schemaName
 				);
 }
 
@@ -2766,10 +2867,15 @@ SdaiString					DECL STDC	sdaiGetADBTypePath(
 //		  requested valueType is matching with the value argument, a mismatch will lead to unpredictable results.
 //
 //	The Table 2 shows what valueType can be fulfilled depending on actual model data.
-//	If a get-function cannot get a value it will return 0, it may happen when model item is unset ($) or incompatible with requested valueType.
-//	To separate these cases you can use engiGetInstanceAttrType(BN), sdaiGetADBType and engiGetAggrType.
 //	On success get-function will return non-zero. More precisely, according to ISO 10303-24-2001 on success they return content of
 //	value argument (*value) for sdaiADB, sdaiAGGR, or sdaiINSTANCE or value argument itself for other types (it has no useful meaning for C#).
+//	All get-functions return NULL and set value to 0 if model data are incompatible with requested valueType.
+//	Furthermore:
+//	- for unset ($) data all get-functions return NULL and set value to 0, except when valueType = sdaiEXPRESSSTRING
+//	- for derived (*), depending on engiEnableDerivedAttributes, and except valueType = sdaiEXPRESSSTRING:
+//	   -- either calculate and follow these rues for calculated value
+//	   -- or handles it as unset ($)
+//	- if valueType = sdaiEXPRESSSTRING and data is unset ($) or derived (*), get-function will return NULL but set value to "$" or "*" respectively for any engiEnableDerivedAttributes state
 //
 //
 //	Table 1 – Required value buffer depending on valueType (on the example of sdaiGetADBValue but valid for all get-functions)
@@ -2777,69 +2883,72 @@ SdaiString					DECL STDC	sdaiGetADBTypePath(
 //	valueType				C/C++												C#
 //
 //	sdaiINTEGER				int_t val;											int_t val;
-//							sdaiGetADBValue (ADB, sdaiINTEGER, &val);			cis2engine.sdaiGetADBValue (ADB, cis2engine.sdaiINTEGER, out val);
+//							sdaiGetADBValue (ADB, sdaiINTEGER, &val);			CIS2Engine.sdaiGetADBValue (ADB, CIS2Engine.sdaiINTEGER, out val);
 //
 //	sdaiREAL or sdaiNUMBER	double val;											double val;
-//							sdaiGetADBValue (ADB, sdaiREAL, &val);				cis2engine.sdaiGetADBValue (ADB, cis2engine.sdaiREAL, out val);
+//							sdaiGetADBValue (ADB, sdaiREAL, &val);				CIS2Engine.sdaiGetADBValue (ADB, CIS2Engine.sdaiREAL, out val);
 //
 //	sdaiBOOLEAN				SdaiBoolean val;									bool val;
-//							sdaiGetADBValue (ADB, sdaiBOOLEAN, &val);			cis2engine.sdaiGetADBValue (ADB, cis2engine.sdaiBOOLEAN, out val);
+//							sdaiGetADBValue (ADB, sdaiBOOLEAN, &val);			CIS2Engine.sdaiGetADBValue (ADB, CIS2Engine.sdaiBOOLEAN, out val);
 //
 //	sdaiLOGICAL				const TCHAR* val;									string val;
-//							sdaiGetADBValue (ADB, sdaiLOGICAL, &val);			cis2engine.sdaiGetADBValue (ADB, cis2engine.sdaiLOGICAL, out val);
+//							sdaiGetADBValue (ADB, sdaiLOGICAL, &val);			CIS2Engine.sdaiGetADBValue (ADB, CIS2Engine.sdaiLOGICAL, out val);
 //
 //	sdaiENUM				const TCHAR* val;									string val;
-//							sdaiGetADBValue (ADB, sdaiENUM, &val);				cis2engine.sdaiGetADBValue (ADB, cis2engine.sdaiENUM, out val);
+//							sdaiGetADBValue (ADB, sdaiENUM, &val);				CIS2Engine.sdaiGetADBValue (ADB, CIS2Engine.sdaiENUM, out val);
 //
 //	sdaiBINARY				const TCHAR* val;									string val;
-//							sdaiGetADBValue (ADB, sdaiBINARY, &val);			cis2engine.sdaiGetADBValue (ADB, cis2engine.sdaiBINARY, out val);
+//							sdaiGetADBValue (ADB, sdaiBINARY, &val);			CIS2Engine.sdaiGetADBValue (ADB, CIS2Engine.sdaiBINARY, out val);
 //
 //	sdaiSTRING				const char* val;									string val;
-//							sdaiGetADBValue (ADB, sdaiSTRING, &val);			cis2engine.sdaiGetADBValue (ADB, cis2engine.sdaiSTRING, out val);
+//							sdaiGetADBValue (ADB, sdaiSTRING, &val);			CIS2Engine.sdaiGetADBValue (ADB, CIS2Engine.sdaiSTRING, out val);
 //
 //	sdaiUNICODE				const wchar_t* val;									string val;
-//							sdaiGetADBValue (ADB, sdaiUNICODE, &val);			cis2engine.sdaiGetADBValue (ADB, cis2engine.sdaiUNICODE, out val);
+//							sdaiGetADBValue (ADB, sdaiUNICODE, &val);			CIS2Engine.sdaiGetADBValue (ADB, CIS2Engine.sdaiUNICODE, out val);
 //
 //	sdaiEXPRESSSTRING		const char* val;									string val;
-//							sdaiGetADBValue (ADB, sdaiEXPRESSSTRING, &val);		cis2engine.sdaiGetADBValue (ADB, cis2engine.sdaiEXPRESSSTRING, out val);
+//							sdaiGetADBValue (ADB, sdaiEXPRESSSTRING, &val);		CIS2Engine.sdaiGetADBValue (ADB, CIS2Engine.sdaiEXPRESSSTRING, out val);
 //
 //	sdaiINSTANCE			SdaiInstance val;									int_t val;
-//							sdaiGetADBValue (ADB, sdaiINSTANCE, &val);			cis2engine.sdaiGetADBValue (ADB, cis2engine.sdaiINSTANCE, out val);
+//							sdaiGetADBValue (ADB, sdaiINSTANCE, &val);			CIS2Engine.sdaiGetADBValue (ADB, CIS2Engine.sdaiINSTANCE, out val);
 //
 //	sdaiAGGR				SdaiAggr aggr;										int_t aggr;
-//							sdaiGetADBValue (ADB, sdaiAGGR, &aggr);				cis2engine.sdaiGetADBValue (ADB, cis2engine.sdaiAGGR, out aggr);
+//							sdaiGetADBValue (ADB, sdaiAGGR, &aggr);				CIS2Engine.sdaiGetADBValue (ADB, CIS2Engine.sdaiAGGR, out aggr);
 //
-//	sdaiADB					SdaiADB adb = sdaiCreateEmptyADB();					int_t adb = 0;	//	it is important to initialize
-//							sdaiGetADBValue (ADB, sdaiADB, adb);				cis2engine.sdaiGetADBValue (ADB, cis2engine.sdaiADB, out adb);		
-//							sdaiDeleteADB (adb);
+//	sdaiADB					SdaiADB adb = sdaiCreateEmptyADB();					int_t adb = CIS2Engine.sdaiCreateEmptyADB();
+//							sdaiGetADBValue (ADB, sdaiADB, adb);				CIS2Engine.sdaiGetADBValue (ADB, CIS2Engine.sdaiADB, adb);
+//							...													...
+//							sdaiDeleteADB (adb);	//	optional				CIS2Engine.sdaiDeleteADB (adb);	//	optional
 //
-//							SdaiADB adb = nullptr;	//	it is important to initialize
-//							sdaiGetADBValue (ADB, sdaiADB, &adb);
+//							SdaiADB adb = nullptr;								int_t adb = 0;	//	it is important to initialize
+//							sdaiGetADBValue (ADB, sdaiADB, &adb);				CIS2Engine.sdaiGetADBValue (ADB, CIS2Engine.sdaiADB, out adb);
+//							...													...
+//							sdaiDeleteADB (adb);	//	optional				CIS2Engine.sdaiDeleteADB (adb);	//	optional
 //
 //	TCHAR is “char” or “wchar_t” depending on setStringUnicode.
 //	(Non-standard behavior) sdaiLOGICAL behaves differently from ISO 10303-24-2001: it expects char* while standard declares int_t.
-//	(Non-standard extension) sdiADB in C++ has an option to work without sdaiCreateEmptyADB and sdaiDeleteADB as shown in the table.
+//	(Non-standard extension) sdiADB has an option to work without sdaiCreateEmptyADB and sdaiDeleteADB as shown in the table (all open ADB's will be deleted on model close).
 //
 //
 //	Table 2 - valueType can be requested depending on actual model data.
 //
 //	valueType		Works for following values in the model
-//				 	  integer	   real		.T. or .F.	   .U.		other enum	  binary	  string	 instance	   list		 $ (empty)
-//	sdaiINTEGER			Yes			Yes *		 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiREAL			Yes			Yes			 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiNUMBER			Yes			Yes			 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiBOOLEAN			 .			 .			Yes			 .			 .			 .			 .			 .			 .			 .
-//	sdaiLOGICAL			 .			 .			Yes			Yes			 .			 .			 .			 .			 .			 .
-//	sdaiENUM			 .			 .			Yes			Yes			Yes			 .			 .			 .			 .			 .
-//	sdaiBINARY			 .			 .			 .			 .			 .			Yes			 .			 .			 .			 .
-//	sdaiSTRING			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiUNICODE			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiEXPRESSSTRING	Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiINSTANCE		 .			 .			 .			 .			 .			 .			 .			Yes			 .			 .
-//	sdaiAGGR			 .			 .			 .			 .			 .			 .			 .			 .			Yes			 .
-//	sdaiADB				Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .
-//	Note: sdaiGetAttr, stdaiGetAttrBN, engiGetElement will success with any model data, except non-set($)
-//		  (Non-standard extensions) sdaiGetADBValue: sdaiADB is allowed and will success when sdaiGetADBTypePath is not NULL, returning ABD value has type path element removed.
+//				 	  integer	   real		.T. or .F.	   .U.		other enum	  binary	  string	 instance	   list
+//	sdaiINTEGER			Yes			Yes *		 .			 .			 .			 .			 .			 .			 .
+//	sdaiREAL			Yes			Yes			 .			 .			 .			 .			 .			 .			 .
+//	sdaiNUMBER			Yes			Yes			 .			 .			 .			 .			 .			 .			 .
+//	sdaiBOOLEAN			 .			 .			Yes			 .			 .			 .			 .			 .			 .
+//	sdaiLOGICAL			 .			 .			Yes			Yes			 .			 .			 .			 .			 .
+//	sdaiENUM			 .			 .			Yes			Yes			Yes			 .			 .			 .			 .
+//	sdaiBINARY			 .			 .			 .			 .			 .			Yes			 .			 .			 .
+//	sdaiSTRING			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiUNICODE			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiEXPRESSSTRING	Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiINSTANCE		 .			 .			 .			 .			 .			 .			 .			Yes			 .
+//	sdaiAGGR			 .			 .			 .			 .			 .			 .			 .			 .			Yes
+//	sdaiADB				Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes
+//
+//	(Non-standard extensions) sdaiGetADBValue: sdaiADB is allowed and will success when sdaiGetADBTypePath is not NULL, returning ABD value has type path element removed.
 //
 void						DECL * STDC	sdaiGetADBValue(
 												const SdaiADB			ADB,
@@ -2901,48 +3010,49 @@ static	inline	SdaiInstance	sdaiGetADBValue(
 //	valueType				C/C++														C#
 //
 //	sdaiINTEGER				int_t val = 123;											int_t val = 123;
-//							sdaiPutADBValue (ADB, sdaiINTEGER, &val);					cis2engine.sdaiPutADBValue (ADB, cis2engine.sdaiINTEGER, ref val);
+//							sdaiPutADBValue (ADB, sdaiINTEGER, &val);					CIS2Engine.sdaiPutADBValue (ADB, CIS2Engine.sdaiINTEGER, ref val);
 //
 //	sdaiREAL or sdaiNUMBER	double val = 123.456;										double val = 123.456;
-//							sdaiPutADBValue (ADB, sdaiREAL, &val);						cis2engine.sdaiPutADBValue (ADB, cis2engine.sdaiREAL, ref val);
+//							sdaiPutADBValue (ADB, sdaiREAL, &val);						CIS2Engine.sdaiPutADBValue (ADB, CIS2Engine.sdaiREAL, ref val);
 //
 //	sdaiBOOLEAN				SdaiBoolean val = sdaiTRUE;									bool val = true;
-//							sdaiPutADBValue (ADB, sdaiBOOLEAN, &val);					cis2engine.sdaiPutADBValue (ADB, cis2engine.sdaiBOOLEAN, ref val);
+//							sdaiPutADBValue (ADB, sdaiBOOLEAN, &val);					CIS2Engine.sdaiPutADBValue (ADB, CIS2Engine.sdaiBOOLEAN, ref val);
 //
 //	sdaiLOGICAL				const TCHAR* val = "U";										string val = "U";
-//							sdaiPutADBValue (ADB, sdaiLOGICAL, val);					cis2engine.sdaiPutADBValue (ADB, cis2engine.sdaiLOGICAL, val);
+//							sdaiPutADBValue (ADB, sdaiLOGICAL, val);					CIS2Engine.sdaiPutADBValue (ADB, CIS2Engine.sdaiLOGICAL, val);
 //
 //	sdaiENUM				const TCHAR* val = "NOTDEFINED";							string val = "NOTDEFINED";
-//							sdaiPutADBValue (ADB, sdaiENUM, val);						cis2engine.sdaiPutADBValue (ADB, cis2engine.sdaiENUM, val);
+//							sdaiPutADBValue (ADB, sdaiENUM, val);						CIS2Engine.sdaiPutADBValue (ADB, CIS2Engine.sdaiENUM, val);
 //
 //	sdaiBINARY				const TCHAR* val = "0123456ABC";							string val = "0123456ABC";
-//							sdaiPutADBValue (ADB, sdaiBINARY, val);						cis2engine.sdaiPutADBValue (ADB, cis2engine.sdaiBINARY, val);
+//							sdaiPutADBValue (ADB, sdaiBINARY, val);						CIS2Engine.sdaiPutADBValue (ADB, CIS2Engine.sdaiBINARY, val);
 //
 //	sdaiSTRING				const char* val = "My Simple String";						string val = "My Simple String";
-//							sdaiPutADBValue (ADB, sdaiSTRING, val);						cis2engine.sdaiPutADBValue (ADB, cis2engine.sdaiSTRING, val);
+//							sdaiPutADBValue (ADB, sdaiSTRING, val);						CIS2Engine.sdaiPutADBValue (ADB, CIS2Engine.sdaiSTRING, val);
 //
 //	sdaiUNICODE				const wchar_t* val = L"Any Unicode String";					string val = "Any Unicode String";
-//							sdaiPutADBValue (ADB, sdaiUNICODE, val);					cis2engine.sdaiPutADBValue (ADB, cis2engine.sdaiUNICODE, val);
+//							sdaiPutADBValue (ADB, sdaiUNICODE, val);					CIS2Engine.sdaiPutADBValue (ADB, CIS2Engine.sdaiUNICODE, val);
 //
 //	sdaiEXPRESSSTRING		const char* val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";	string val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";
-//							sdaiPutADBValue (ADB, sdaiEXPRESSSTRING, val);				cis2engine.sdaiPutADBValue (ADB, cis2engine.sdaiEXPRESSSTRING, val);
+//							sdaiPutADBValue (ADB, sdaiEXPRESSSTRING, val);				CIS2Engine.sdaiPutADBValue (ADB, CIS2Engine.sdaiEXPRESSSTRING, val);
 //
-//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "PRODUCT");	int_t val = cis2engine.sdaiCreateInstanceBN (model, "PRODUCT");
-//							sdaiPutADBValue (ADB, sdaiINSTANCE, val);					cis2engine.sdaiPutADBValue (ADB, cis2engine.sdaiINSTANCE, val);
+//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "IFCSITE");	int_t val = CIS2Engine.sdaiCreateInstanceBN (model, "IFCSITE");
+//							sdaiPutADBValue (ADB, sdaiINSTANCE, val);					CIS2Engine.sdaiPutADBValue (ADB, CIS2Engine.sdaiINSTANCE, val);
 //
 //	sdaiAGGR				SdaiAggr val = sdaiCreateAggr (inst, 0);					int_t val = sdaiCreateAggr (inst, 0);
-//							sdaiPutAttr (val, sdaiINSTANCE, inst);						cis2engine.sdaiPutAttr (val, cis2engine.sdaiINSTANCE, inst);
-//							sdaiPutADBValue (ADB, sdaiAGGR, val);						cis2engine.sdaiPutADBValue (ADB, cis2engine.sdaiAGGR, val);
+//							sdaiPutAttr (val, sdaiINSTANCE, inst);						CIS2Engine.sdaiPutAttr (val, CIS2Engine.sdaiINSTANCE, inst);
+//							sdaiPutADBValue (ADB, sdaiAGGR, val);						CIS2Engine.sdaiPutADBValue (ADB, CIS2Engine.sdaiAGGR, val);
 //
 //	sdaiADB					int_t integerValue = 123;									int_t integerValue = 123;	
-//							SdaiADB val = sdaiCreateADB (sdaiINTEGER, &integerValue);	int_t val = cis2engine.sdaiCreateADB (cis2engine.sdaiINTEGER, ref integerValue);
-//							sdaiPutADBTypePath (val, 1, "INTEGER");						cis2engine.sdaiPutADBTypePath (val, 1, "INTEGER");
-//							sdaiPutADBValue (ADB, sdaiADB, val);						cis2engine.sdaiPutADBValue (ADB, cis2engine.sdaiADB, val);	
-//							sdaiDeleteADB (val);										cis2engine.sdaiDeleteADB (val);
+//							SdaiADB val = sdaiCreateADB (sdaiINTEGER, &integerValue);	int_t val = CIS2Engine.sdaiCreateADB (CIS2Engine.sdaiINTEGER, ref integerValue);
+//							sdaiPutADBTypePath (val, 1, "IFCINTEGER");					CIS2Engine.sdaiPutADBTypePath (val, 1, "IFCINTEGER");
+//							sdaiPutADBValue (ADB, sdaiADB, val);						CIS2Engine.sdaiPutADBValue (ADB, CIS2Engine.sdaiADB, val);	
+//							...															...
+//							sdaiDeleteADB (val);	//	optional						CIS2Engine.sdaiDeleteADB (val);	//	optional
 //
 //	TCHAR is “char” or “wchar_t” depending on setStringUnicode.
 //	(Non-standard behavior) sdaiLOGICAL behaves differently from ISO 10303-24-2001: it expects char* while standard declares int_t.
-//	(Non-standard extension) sdiADB in C++ has an option to work without sdaiCreateEmptyADB and sdaiDeleteADB as shown in the table.
+//	(Non-standard extension) sdiADB has an option to work without sdaiDeleteADB as shown in the table (all open ADB's will be deleted on model close).
 //
 //
 //	Table 2 - valueType can be requested depending on actual model data.
@@ -3045,10 +3155,15 @@ void						DECL STDC	sdaiDeleteADB(
 //		  requested valueType is matching with the value argument, a mismatch will lead to unpredictable results.
 //
 //	The Table 2 shows what valueType can be fulfilled depending on actual model data.
-//	If a get-function cannot get a value it will return 0, it may happen when model item is unset ($) or incompatible with requested valueType.
-//	To separate these cases you can use engiGetInstanceAttrType(BN), sdaiGetADBType and engiGetAggrType.
 //	On success get-function will return non-zero. More precisely, according to ISO 10303-24-2001 on success they return content of
 //	value argument (*value) for sdaiADB, sdaiAGGR, or sdaiINSTANCE or value argument itself for other types (it has no useful meaning for C#).
+//	All get-functions return NULL and set value to 0 if model data are incompatible with requested valueType.
+//	Furthermore:
+//	- for unset ($) data all get-functions return NULL and set value to 0, except when valueType = sdaiEXPRESSSTRING
+//	- for derived (*), depending on engiEnableDerivedAttributes, and except valueType = sdaiEXPRESSSTRING:
+//	   -- either calculate and follow these rues for calculated value
+//	   -- or handles it as unset ($)
+//	- if valueType = sdaiEXPRESSSTRING and data is unset ($) or derived (*), get-function will return NULL but set value to "$" or "*" respectively for any engiEnableDerivedAttributes state
 //
 //
 //	Table 1 – Required value buffer depending on valueType (on the example of sdaiGetAggrByIndex but valid for all get-functions)
@@ -3056,69 +3171,72 @@ void						DECL STDC	sdaiDeleteADB(
 //	valueType				C/C++																C#
 //
 //	sdaiINTEGER				int_t val;															int_t val;
-//							sdaiGetAggrByIndex (aggregate, index, sdaiINTEGER, &val);			cis2engine.sdaiGetAggrByIndex (aggregate, index, cis2engine.sdaiINTEGER, out val);
+//							sdaiGetAggrByIndex (aggregate, index, sdaiINTEGER, &val);			CIS2Engine.sdaiGetAggrByIndex (aggregate, index, CIS2Engine.sdaiINTEGER, out val);
 //
 //	sdaiREAL or sdaiNUMBER	double val;															double val;
-//							sdaiGetAggrByIndex (aggregate, index, sdaiREAL, &val);				cis2engine.sdaiGetAggrByIndex (aggregate, index, cis2engine.sdaiREAL, out val);
+//							sdaiGetAggrByIndex (aggregate, index, sdaiREAL, &val);				CIS2Engine.sdaiGetAggrByIndex (aggregate, index, CIS2Engine.sdaiREAL, out val);
 //
 //	sdaiBOOLEAN				SdaiBoolean val;													bool val;
-//							sdaiGetAggrByIndex (aggregate, index, sdaiBOOLEAN, &val);			cis2engine.sdaiGetAggrByIndex (aggregate, index, cis2engine.sdaiBOOLEAN, out val);
+//							sdaiGetAggrByIndex (aggregate, index, sdaiBOOLEAN, &val);			CIS2Engine.sdaiGetAggrByIndex (aggregate, index, CIS2Engine.sdaiBOOLEAN, out val);
 //
 //	sdaiLOGICAL				const TCHAR* val;													string val;
-//							sdaiGetAggrByIndex (aggregate, index, sdaiLOGICAL, &val);			cis2engine.sdaiGetAggrByIndex (aggregate, index, cis2engine.sdaiLOGICAL, out val);
+//							sdaiGetAggrByIndex (aggregate, index, sdaiLOGICAL, &val);			CIS2Engine.sdaiGetAggrByIndex (aggregate, index, CIS2Engine.sdaiLOGICAL, out val);
 //
 //	sdaiENUM				const TCHAR* val;													string val;
-//							sdaiGetAggrByIndex (aggregate, index, sdaiENUM, &val);				cis2engine.sdaiGetAggrByIndex (aggregate, index, cis2engine.sdaiENUM, out val);
+//							sdaiGetAggrByIndex (aggregate, index, sdaiENUM, &val);				CIS2Engine.sdaiGetAggrByIndex (aggregate, index, CIS2Engine.sdaiENUM, out val);
 //
 //	sdaiBINARY				const TCHAR* val;													string val;
-//							sdaiGetAggrByIndex (aggregate, index, sdaiBINARY, &val);			cis2engine.sdaiGetAggrByIndex (aggregate, index, cis2engine.sdaiBINARY, out val);
+//							sdaiGetAggrByIndex (aggregate, index, sdaiBINARY, &val);			CIS2Engine.sdaiGetAggrByIndex (aggregate, index, CIS2Engine.sdaiBINARY, out val);
 //
 //	sdaiSTRING				const char* val;													string val;
-//							sdaiGetAggrByIndex (aggregate, index, sdaiSTRING, &val);			cis2engine.sdaiGetAggrByIndex (aggregate, index, cis2engine.sdaiSTRING, out val);
+//							sdaiGetAggrByIndex (aggregate, index, sdaiSTRING, &val);			CIS2Engine.sdaiGetAggrByIndex (aggregate, index, CIS2Engine.sdaiSTRING, out val);
 //
 //	sdaiUNICODE				const wchar_t* val;													string val;
-//							sdaiGetAggrByIndex (aggregate, index, sdaiUNICODE, &val);			cis2engine.sdaiGetAggrByIndex (aggregate, index, cis2engine.sdaiUNICODE, out val);
+//							sdaiGetAggrByIndex (aggregate, index, sdaiUNICODE, &val);			CIS2Engine.sdaiGetAggrByIndex (aggregate, index, CIS2Engine.sdaiUNICODE, out val);
 //
 //	sdaiEXPRESSSTRING		const char* val;													string val;
-//							sdaiGetAggrByIndex (aggregate, index, sdaiEXPRESSSTRING, &val);		cis2engine.sdaiGetAggrByIndex (aggregate, index, cis2engine.sdaiEXPRESSSTRING, out val);
+//							sdaiGetAggrByIndex (aggregate, index, sdaiEXPRESSSTRING, &val);		CIS2Engine.sdaiGetAggrByIndex (aggregate, index, CIS2Engine.sdaiEXPRESSSTRING, out val);
 //
 //	sdaiINSTANCE			SdaiInstance val;													int_t val;
-//							sdaiGetAggrByIndex (aggregate, index, sdaiINSTANCE, &val);			cis2engine.sdaiGetAggrByIndex (aggregate, index, cis2engine.sdaiINSTANCE, out val);
+//							sdaiGetAggrByIndex (aggregate, index, sdaiINSTANCE, &val);			CIS2Engine.sdaiGetAggrByIndex (aggregate, index, CIS2Engine.sdaiINSTANCE, out val);
 //
 //	sdaiAGGR				SdaiAggr aggr;														int_t aggr;
-//							sdaiGetAggrByIndex (aggregate, index, sdaiAGGR, &aggr);				cis2engine.sdaiGetAggrByIndex (aggregate, index, cis2engine.sdaiAGGR, out aggr);
+//							sdaiGetAggrByIndex (aggregate, index, sdaiAGGR, &aggr);				CIS2Engine.sdaiGetAggrByIndex (aggregate, index, CIS2Engine.sdaiAGGR, out aggr);
 //
-//	sdaiADB					SdaiADB adb = sdaiCreateEmptyADB();									int_t adb = 0;	//	it is important to initialize
-//							sdaiGetAggrByIndex (aggregate, index, sdaiADB, adb);				cis2engine.sdaiGetAggrByIndex (aggregate, index, cis2engine.sdaiADB, out adb);		
-//							sdaiDeleteADB (adb);
+//	sdaiADB					SdaiADB adb = sdaiCreateEmptyADB();									int_t adb = CIS2Engine.sdaiCreateEmptyADB();
+//							sdaiGetAggrByIndex (aggregate, index, sdaiADB, adb);				CIS2Engine.sdaiGetAggrByIndex (aggregate, index, CIS2Engine.sdaiADB, adb);
+//							...																	...
+//							sdaiDeleteADB (adb);	//	optional								CIS2Engine.sdaiDeleteADB (adb);	//	optional
 //
-//							SdaiADB adb = nullptr;	//	it is important to initialize
-//							sdaiGetAggrByIndex (aggregate, index, sdaiADB, &adb);
+//							SdaiADB adb = nullptr;												int_t adb = 0;	//	it is important to initialize
+//							sdaiGetAggrByIndex (aggregate, index, sdaiADB, &adb);				CIS2Engine.sdaiGetAggrByIndex (aggregate, index, CIS2Engine.sdaiADB, out adb);
+//							...																	...
+//							sdaiDeleteADB (adb);	//	optional								CIS2Engine.sdaiDeleteADB (adb);	//	optional
 //
 //	TCHAR is “char” or “wchar_t” depending on setStringUnicode.
 //	(Non-standard behavior) sdaiLOGICAL behaves differently from ISO 10303-24-2001: it expects char* while standard declares int_t.
-//	(Non-standard extension) sdiADB in C++ has an option to work without sdaiCreateEmptyADB and sdaiDeleteADB as shown in the table.
+//	(Non-standard extension) sdiADB has an option to work without sdaiCreateEmptyADB and sdaiDeleteADB as shown in the table (all open ADB's will be deleted on model close).
 //
 //
 //	Table 2 - valueType can be requested depending on actual model data.
 //
 //	valueType		Works for following values in the model
-//				 	  integer	   real		.T. or .F.	   .U.		other enum	  binary	  string	 instance	   list		 $ (empty)
-//	sdaiINTEGER			Yes			Yes *		 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiREAL			Yes			Yes			 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiNUMBER			Yes			Yes			 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiBOOLEAN			 .			 .			Yes			 .			 .			 .			 .			 .			 .			 .
-//	sdaiLOGICAL			 .			 .			Yes			Yes			 .			 .			 .			 .			 .			 .
-//	sdaiENUM			 .			 .			Yes			Yes			Yes			 .			 .			 .			 .			 .
-//	sdaiBINARY			 .			 .			 .			 .			 .			Yes			 .			 .			 .			 .
-//	sdaiSTRING			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiUNICODE			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiEXPRESSSTRING	Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiINSTANCE		 .			 .			 .			 .			 .			 .			 .			Yes			 .			 .
-//	sdaiAGGR			 .			 .			 .			 .			 .			 .			 .			 .			Yes			 .
-//	sdaiADB				Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .
-//	Note: sdaiGetAttr, stdaiGetAttrBN, engiGetElement will success with any model data, except non-set($)
-//		  (Non-standard extensions) sdaiGetADBValue: sdaiADB is allowed and will success when sdaiGetADBTypePath is not NULL, returning ABD value has type path element removed.
+//				 	  integer	   real		.T. or .F.	   .U.		other enum	  binary	  string	 instance	   list
+//	sdaiINTEGER			Yes			Yes *		 .			 .			 .			 .			 .			 .			 .
+//	sdaiREAL			Yes			Yes			 .			 .			 .			 .			 .			 .			 .
+//	sdaiNUMBER			Yes			Yes			 .			 .			 .			 .			 .			 .			 .
+//	sdaiBOOLEAN			 .			 .			Yes			 .			 .			 .			 .			 .			 .
+//	sdaiLOGICAL			 .			 .			Yes			Yes			 .			 .			 .			 .			 .
+//	sdaiENUM			 .			 .			Yes			Yes			Yes			 .			 .			 .			 .
+//	sdaiBINARY			 .			 .			 .			 .			 .			Yes			 .			 .			 .
+//	sdaiSTRING			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiUNICODE			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiEXPRESSSTRING	Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiINSTANCE		 .			 .			 .			 .			 .			 .			 .			Yes			 .
+//	sdaiAGGR			 .			 .			 .			 .			 .			 .			 .			 .			Yes
+//	sdaiADB				Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes
+//
+//	(Non-standard extensions) sdaiGetADBValue: sdaiADB is allowed and will success when sdaiGetADBTypePath is not NULL, returning ABD value has type path element removed.
 //
 void						DECL * STDC	sdaiGetAggrByIndex(
 												const SdaiAggr			aggregate,
@@ -3186,48 +3304,49 @@ static	inline	SdaiInstance	sdaiGetAggrByIndex(
 //	valueType				C/C++															C#
 //
 //	sdaiINTEGER				int_t val = 123;												int_t val = 123;
-//							sdaiPutAggrByIndex (aggregate, index, sdaiINTEGER, &val);		cis2engine.sdaiPutAggrByIndex (aggregate, index, cis2engine.sdaiINTEGER, ref val);
+//							sdaiPutAggrByIndex (aggregate, index, sdaiINTEGER, &val);		CIS2Engine.sdaiPutAggrByIndex (aggregate, index, CIS2Engine.sdaiINTEGER, ref val);
 //
 //	sdaiREAL or sdaiNUMBER	double val = 123.456;											double val = 123.456;
-//							sdaiPutAggrByIndex (aggregate, index, sdaiREAL, &val);			cis2engine.sdaiPutAggrByIndex (aggregate, index, cis2engine.sdaiREAL, ref val);
+//							sdaiPutAggrByIndex (aggregate, index, sdaiREAL, &val);			CIS2Engine.sdaiPutAggrByIndex (aggregate, index, CIS2Engine.sdaiREAL, ref val);
 //
 //	sdaiBOOLEAN				SdaiBoolean val = sdaiTRUE;										bool val = true;
-//							sdaiPutAggrByIndex (aggregate, index, sdaiBOOLEAN, &val);		cis2engine.sdaiPutAggrByIndex (aggregate, index, cis2engine.sdaiBOOLEAN, ref val);
+//							sdaiPutAggrByIndex (aggregate, index, sdaiBOOLEAN, &val);		CIS2Engine.sdaiPutAggrByIndex (aggregate, index, CIS2Engine.sdaiBOOLEAN, ref val);
 //
 //	sdaiLOGICAL				const TCHAR* val = "U";											string val = "U";
-//							sdaiPutAggrByIndex (aggregate, index, sdaiLOGICAL, val);		cis2engine.sdaiPutAggrByIndex (aggregate, index, cis2engine.sdaiLOGICAL, val);
+//							sdaiPutAggrByIndex (aggregate, index, sdaiLOGICAL, val);		CIS2Engine.sdaiPutAggrByIndex (aggregate, index, CIS2Engine.sdaiLOGICAL, val);
 //
 //	sdaiENUM				const TCHAR* val = "NOTDEFINED";								string val = "NOTDEFINED";
-//							sdaiPutAggrByIndex (aggregate, index, sdaiENUM, val);			cis2engine.sdaiPutAggrByIndex (aggregate, index, cis2engine.sdaiENUM, val);
+//							sdaiPutAggrByIndex (aggregate, index, sdaiENUM, val);			CIS2Engine.sdaiPutAggrByIndex (aggregate, index, CIS2Engine.sdaiENUM, val);
 //
 //	sdaiBINARY				const TCHAR* val = "0123456ABC";								string val = "0123456ABC";
-//							sdaiPutAggrByIndex (aggregate, index, sdaiBINARY, val);			cis2engine.sdaiPutAggrByIndex (aggregate, index, cis2engine.sdaiBINARY, val);
+//							sdaiPutAggrByIndex (aggregate, index, sdaiBINARY, val);			CIS2Engine.sdaiPutAggrByIndex (aggregate, index, CIS2Engine.sdaiBINARY, val);
 //
 //	sdaiSTRING				const char* val = "My Simple String";							string val = "My Simple String";
-//							sdaiPutAggrByIndex (aggregate, index, sdaiSTRING, val);			cis2engine.sdaiPutAggrByIndex (aggregate, index, cis2engine.sdaiSTRING, val);
+//							sdaiPutAggrByIndex (aggregate, index, sdaiSTRING, val);			CIS2Engine.sdaiPutAggrByIndex (aggregate, index, CIS2Engine.sdaiSTRING, val);
 //
 //	sdaiUNICODE				const wchar_t* val = L"Any Unicode String";						string val = "Any Unicode String";
-//							sdaiPutAggrByIndex (aggregate, index, sdaiUNICODE, val);		cis2engine.sdaiPutAggrByIndex (aggregate, index, cis2engine.sdaiUNICODE, val);
+//							sdaiPutAggrByIndex (aggregate, index, sdaiUNICODE, val);		CIS2Engine.sdaiPutAggrByIndex (aggregate, index, CIS2Engine.sdaiUNICODE, val);
 //
 //	sdaiEXPRESSSTRING		const char* val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";		string val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";
-//							sdaiPutAggrByIndex (aggregate, index, sdaiEXPRESSSTRING, val);	cis2engine.sdaiPutAggrByIndex (aggregate, index, cis2engine.sdaiEXPRESSSTRING, val);
+//							sdaiPutAggrByIndex (aggregate, index, sdaiEXPRESSSTRING, val);	CIS2Engine.sdaiPutAggrByIndex (aggregate, index, CIS2Engine.sdaiEXPRESSSTRING, val);
 //
-//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "PRODUCT");		int_t val = cis2engine.sdaiCreateInstanceBN (model, "PRODUCT");
-//							sdaiPutAggrByIndex (aggregate, index, sdaiINSTANCE, val);		cis2engine.sdaiPutAggrByIndex (aggregate, index, cis2engine.sdaiINSTANCE, val);
+//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "IFCSITE");		int_t val = CIS2Engine.sdaiCreateInstanceBN (model, "IFCSITE");
+//							sdaiPutAggrByIndex (aggregate, index, sdaiINSTANCE, val);		CIS2Engine.sdaiPutAggrByIndex (aggregate, index, CIS2Engine.sdaiINSTANCE, val);
 //
 //	sdaiAGGR				SdaiAggr val = sdaiCreateAggr (inst, 0);						int_t val = sdaiCreateAggr (inst, 0);
-//							sdaiPutAttr (val, sdaiINSTANCE, inst);							cis2engine.sdaiPutAttr (val, cis2engine.sdaiINSTANCE, inst);
-//							sdaiPutAggrByIndex (aggregate, index, sdaiAGGR, val);			cis2engine.sdaiPutAggrByIndex (aggregate, index, cis2engine.sdaiAGGR, val);
+//							sdaiPutAttr (val, sdaiINSTANCE, inst);							CIS2Engine.sdaiPutAttr (val, CIS2Engine.sdaiINSTANCE, inst);
+//							sdaiPutAggrByIndex (aggregate, index, sdaiAGGR, val);			CIS2Engine.sdaiPutAggrByIndex (aggregate, index, CIS2Engine.sdaiAGGR, val);
 //
 //	sdaiADB					int_t integerValue = 123;										int_t integerValue = 123;	
-//							SdaiADB val = sdaiCreateADB (sdaiINTEGER, &integerValue);		int_t val = cis2engine.sdaiCreateADB (cis2engine.sdaiINTEGER, ref integerValue);
-//							sdaiPutADBTypePath (val, 1, "INTEGER");							cis2engine.sdaiPutADBTypePath (val, 1, "INTEGER");
-//							sdaiPutAggrByIndex (aggregate, index, sdaiADB, val);			cis2engine.sdaiPutAggrByIndex (aggregate, index, cis2engine.sdaiADB, val);	
-//							sdaiDeleteADB (val);											cis2engine.sdaiDeleteADB (val);
+//							SdaiADB val = sdaiCreateADB (sdaiINTEGER, &integerValue);		int_t val = CIS2Engine.sdaiCreateADB (CIS2Engine.sdaiINTEGER, ref integerValue);
+//							sdaiPutADBTypePath (val, 1, "IFCINTEGER");						CIS2Engine.sdaiPutADBTypePath (val, 1, "IFCINTEGER");
+//							sdaiPutAggrByIndex (aggregate, index, sdaiADB, val);			CIS2Engine.sdaiPutAggrByIndex (aggregate, index, CIS2Engine.sdaiADB, val);	
+//							...																...
+//							sdaiDeleteADB (val);	//	optional							CIS2Engine.sdaiDeleteADB (val);	//	optional
 //
 //	TCHAR is “char” or “wchar_t” depending on setStringUnicode.
 //	(Non-standard behavior) sdaiLOGICAL behaves differently from ISO 10303-24-2001: it expects char* while standard declares int_t.
-//	(Non-standard extension) sdiADB in C++ has an option to work without sdaiCreateEmptyADB and sdaiDeleteADB as shown in the table.
+//	(Non-standard extension) sdiADB has an option to work without sdaiDeleteADB as shown in the table (all open ADB's will be deleted on model close).
 //
 //
 //	Table 2 - valueType can be requested depending on actual model data.
@@ -3304,7 +3423,7 @@ static	inline	void	sdaiPutAggrByIndex(
 //
 //				void					returns
 //
-//	...
+//	This call returns the type used within an aggregation according to the instance (independent of the schema definition)
 //
 void						DECL STDC	engiGetAggrType(
 												const SdaiAggr			aggregate,
@@ -3318,7 +3437,7 @@ void						DECL STDC	engiGetAggrType(
 //
 //				void					returns
 //
-//	...
+//	This call returns the type used within an aggregation according to the instance (independent of the schema definition)
 //
 void						DECL STDC	engiGetAggrTypex(
 												const SdaiAggr			aggregate,
@@ -3342,10 +3461,15 @@ void						DECL STDC	engiGetAggrTypex(
 //		  requested valueType is matching with the value argument, a mismatch will lead to unpredictable results.
 //
 //	The Table 2 shows what valueType can be fulfilled depending on actual model data.
-//	If a get-function cannot get a value it will return 0, it may happen when model item is unset ($) or incompatible with requested valueType.
-//	To separate these cases you can use engiGetInstanceAttrType(BN), sdaiGetADBType and engiGetAggrType.
 //	On success get-function will return non-zero. More precisely, according to ISO 10303-24-2001 on success they return content of
 //	value argument (*value) for sdaiADB, sdaiAGGR, or sdaiINSTANCE or value argument itself for other types (it has no useful meaning for C#).
+//	All get-functions return NULL and set value to 0 if model data are incompatible with requested valueType.
+//	Furthermore:
+//	- for unset ($) data all get-functions return NULL and set value to 0, except when valueType = sdaiEXPRESSSTRING
+//	- for derived (*), depending on engiEnableDerivedAttributes, and except valueType = sdaiEXPRESSSTRING:
+//	   -- either calculate and follow these rues for calculated value
+//	   -- or handles it as unset ($)
+//	- if valueType = sdaiEXPRESSSTRING and data is unset ($) or derived (*), get-function will return NULL but set value to "$" or "*" respectively for any engiEnableDerivedAttributes state
 //
 //
 //	Table 1 – Required value buffer depending on valueType (on the example of sdaiGetAttr but valid for all get-functions)
@@ -3353,69 +3477,72 @@ void						DECL STDC	engiGetAggrTypex(
 //	valueType				C/C++															C#
 //
 //	sdaiINTEGER				int_t val;														int_t val;
-//							sdaiGetAttr (instance, attribute, sdaiINTEGER, &val);			cis2engine.sdaiGetAttr (instance, attribute, cis2engine.sdaiINTEGER, out val);
+//							sdaiGetAttr (instance, attribute, sdaiINTEGER, &val);			CIS2Engine.sdaiGetAttr (instance, attribute, CIS2Engine.sdaiINTEGER, out val);
 //
 //	sdaiREAL or sdaiNUMBER	double val;														double val;
-//							sdaiGetAttr (instance, attribute, sdaiREAL, &val);				cis2engine.sdaiGetAttr (instance, attribute, cis2engine.sdaiREAL, out val);
+//							sdaiGetAttr (instance, attribute, sdaiREAL, &val);				CIS2Engine.sdaiGetAttr (instance, attribute, CIS2Engine.sdaiREAL, out val);
 //
 //	sdaiBOOLEAN				SdaiBoolean val;												bool val;
-//							sdaiGetAttr (instance, attribute, sdaiBOOLEAN, &val);			cis2engine.sdaiGetAttr (instance, attribute, cis2engine.sdaiBOOLEAN, out val);
+//							sdaiGetAttr (instance, attribute, sdaiBOOLEAN, &val);			CIS2Engine.sdaiGetAttr (instance, attribute, CIS2Engine.sdaiBOOLEAN, out val);
 //
 //	sdaiLOGICAL				const TCHAR* val;												string val;
-//							sdaiGetAttr (instance, attribute, sdaiLOGICAL, &val);			cis2engine.sdaiGetAttr (instance, attribute, cis2engine.sdaiLOGICAL, out val);
+//							sdaiGetAttr (instance, attribute, sdaiLOGICAL, &val);			CIS2Engine.sdaiGetAttr (instance, attribute, CIS2Engine.sdaiLOGICAL, out val);
 //
 //	sdaiENUM				const TCHAR* val;												string val;
-//							sdaiGetAttr (instance, attribute, sdaiENUM, &val);				cis2engine.sdaiGetAttr (instance, attribute, cis2engine.sdaiENUM, out val);
+//							sdaiGetAttr (instance, attribute, sdaiENUM, &val);				CIS2Engine.sdaiGetAttr (instance, attribute, CIS2Engine.sdaiENUM, out val);
 //
 //	sdaiBINARY				const TCHAR* val;												string val;
-//							sdaiGetAttr (instance, attribute, sdaiBINARY, &val);			cis2engine.sdaiGetAttr (instance, attribute, cis2engine.sdaiBINARY, out val);
+//							sdaiGetAttr (instance, attribute, sdaiBINARY, &val);			CIS2Engine.sdaiGetAttr (instance, attribute, CIS2Engine.sdaiBINARY, out val);
 //
 //	sdaiSTRING				const char* val;												string val;
-//							sdaiGetAttr (instance, attribute, sdaiSTRING, &val);			cis2engine.sdaiGetAttr (instance, attribute, cis2engine.sdaiSTRING, out val);
+//							sdaiGetAttr (instance, attribute, sdaiSTRING, &val);			CIS2Engine.sdaiGetAttr (instance, attribute, CIS2Engine.sdaiSTRING, out val);
 //
 //	sdaiUNICODE				const wchar_t* val;												string val;
-//							sdaiGetAttr (instance, attribute, sdaiUNICODE, &val);			cis2engine.sdaiGetAttr (instance, attribute, cis2engine.sdaiUNICODE, out val);
+//							sdaiGetAttr (instance, attribute, sdaiUNICODE, &val);			CIS2Engine.sdaiGetAttr (instance, attribute, CIS2Engine.sdaiUNICODE, out val);
 //
 //	sdaiEXPRESSSTRING		const char* val;												string val;
-//							sdaiGetAttr (instance, attribute, sdaiEXPRESSSTRING, &val);		cis2engine.sdaiGetAttr (instance, attribute, cis2engine.sdaiEXPRESSSTRING, out val);
+//							sdaiGetAttr (instance, attribute, sdaiEXPRESSSTRING, &val);		CIS2Engine.sdaiGetAttr (instance, attribute, CIS2Engine.sdaiEXPRESSSTRING, out val);
 //
 //	sdaiINSTANCE			SdaiInstance val;												int_t val;
-//							sdaiGetAttr (instance, attribute, sdaiINSTANCE, &val);			cis2engine.sdaiGetAttr (instance, attribute, cis2engine.sdaiINSTANCE, out val);
+//							sdaiGetAttr (instance, attribute, sdaiINSTANCE, &val);			CIS2Engine.sdaiGetAttr (instance, attribute, CIS2Engine.sdaiINSTANCE, out val);
 //
 //	sdaiAGGR				SdaiAggr aggr;													int_t aggr;
-//							sdaiGetAttr (instance, attribute, sdaiAGGR, &aggr);				cis2engine.sdaiGetAttr (instance, attribute, cis2engine.sdaiAGGR, out aggr);
+//							sdaiGetAttr (instance, attribute, sdaiAGGR, &aggr);				CIS2Engine.sdaiGetAttr (instance, attribute, CIS2Engine.sdaiAGGR, out aggr);
 //
-//	sdaiADB					SdaiADB adb = sdaiCreateEmptyADB();								int_t adb = 0;	//	it is important to initialize
-//							sdaiGetAttr (instance, attribute, sdaiADB, adb);				cis2engine.sdaiGetAttr (instance, attribute, cis2engine.sdaiADB, out adb);		
-//							sdaiDeleteADB (adb);
+//	sdaiADB					SdaiADB adb = sdaiCreateEmptyADB();								int_t adb = CIS2Engine.sdaiCreateEmptyADB();
+//							sdaiGetAttr (instance, attribute, sdaiADB, adb);				CIS2Engine.sdaiGetAttr (instance, attribute, CIS2Engine.sdaiADB, adb);
+//							...																...
+//							sdaiDeleteADB (adb);	//	optional							CIS2Engine.sdaiDeleteADB (adb);	//	optional
 //
-//							SdaiADB adb = nullptr;	//	it is important to initialize
-//							sdaiGetAttr (instance, attribute, sdaiADB, &adb);
+//							SdaiADB adb = nullptr;											int_t adb = 0;	//	it is important to initialize
+//							sdaiGetAttr (instance, attribute, sdaiADB, &adb);				CIS2Engine.sdaiGetAttr (instance, attribute, CIS2Engine.sdaiADB, out adb);
+//							...																...
+//							sdaiDeleteADB (adb);	//	optional							CIS2Engine.sdaiDeleteADB (adb);	//	optional
 //
 //	TCHAR is “char” or “wchar_t” depending on setStringUnicode.
 //	(Non-standard behavior) sdaiLOGICAL behaves differently from ISO 10303-24-2001: it expects char* while standard declares int_t.
-//	(Non-standard extension) sdiADB in C++ has an option to work without sdaiCreateEmptyADB and sdaiDeleteADB as shown in the table.
+//	(Non-standard extension) sdiADB has an option to work without sdaiCreateEmptyADB and sdaiDeleteADB as shown in the table (all open ADB's will be deleted on model close).
 //
 //
 //	Table 2 - valueType can be requested depending on actual model data.
 //
 //	valueType		Works for following values in the model
-//				 	  integer	   real		.T. or .F.	   .U.		other enum	  binary	  string	 instance	   list		 $ (empty)
-//	sdaiINTEGER			Yes			Yes *		 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiREAL			Yes			Yes			 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiNUMBER			Yes			Yes			 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiBOOLEAN			 .			 .			Yes			 .			 .			 .			 .			 .			 .			 .
-//	sdaiLOGICAL			 .			 .			Yes			Yes			 .			 .			 .			 .			 .			 .
-//	sdaiENUM			 .			 .			Yes			Yes			Yes			 .			 .			 .			 .			 .
-//	sdaiBINARY			 .			 .			 .			 .			 .			Yes			 .			 .			 .			 .
-//	sdaiSTRING			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiUNICODE			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiEXPRESSSTRING	Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiINSTANCE		 .			 .			 .			 .			 .			 .			 .			Yes			 .			 .
-//	sdaiAGGR			 .			 .			 .			 .			 .			 .			 .			 .			Yes			 .
-//	sdaiADB				Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .
-//	Note: sdaiGetAttr, stdaiGetAttrBN, engiGetElement will success with any model data, except non-set($)
-//		  (Non-standard extensions) sdaiGetADBValue: sdaiADB is allowed and will success when sdaiGetADBTypePath is not NULL, returning ABD value has type path element removed.
+//				 	  integer	   real		.T. or .F.	   .U.		other enum	  binary	  string	 instance	   list
+//	sdaiINTEGER			Yes			Yes *		 .			 .			 .			 .			 .			 .			 .
+//	sdaiREAL			Yes			Yes			 .			 .			 .			 .			 .			 .			 .
+//	sdaiNUMBER			Yes			Yes			 .			 .			 .			 .			 .			 .			 .
+//	sdaiBOOLEAN			 .			 .			Yes			 .			 .			 .			 .			 .			 .
+//	sdaiLOGICAL			 .			 .			Yes			Yes			 .			 .			 .			 .			 .
+//	sdaiENUM			 .			 .			Yes			Yes			Yes			 .			 .			 .			 .
+//	sdaiBINARY			 .			 .			 .			 .			 .			Yes			 .			 .			 .
+//	sdaiSTRING			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiUNICODE			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiEXPRESSSTRING	Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiINSTANCE		 .			 .			 .			 .			 .			 .			 .			Yes			 .
+//	sdaiAGGR			 .			 .			 .			 .			 .			 .			 .			 .			Yes
+//	sdaiADB				Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes
+//
+//	(Non-standard extensions) sdaiGetADBValue: sdaiADB is allowed and will success when sdaiGetADBTypePath is not NULL, returning ABD value has type path element removed.
 //
 void						DECL * STDC	sdaiGetAttr(
 												SdaiInstance			instance,
@@ -3480,10 +3607,15 @@ static	inline	SdaiInstance	sdaiGetAttr(
 //		  requested valueType is matching with the value argument, a mismatch will lead to unpredictable results.
 //
 //	The Table 2 shows what valueType can be fulfilled depending on actual model data.
-//	If a get-function cannot get a value it will return 0, it may happen when model item is unset ($) or incompatible with requested valueType.
-//	To separate these cases you can use engiGetInstanceAttrType(BN), sdaiGetADBType and engiGetAggrType.
 //	On success get-function will return non-zero. More precisely, according to ISO 10303-24-2001 on success they return content of
 //	value argument (*value) for sdaiADB, sdaiAGGR, or sdaiINSTANCE or value argument itself for other types (it has no useful meaning for C#).
+//	All get-functions return NULL and set value to 0 if model data are incompatible with requested valueType.
+//	Furthermore:
+//	- for unset ($) data all get-functions return NULL and set value to 0, except when valueType = sdaiEXPRESSSTRING
+//	- for derived (*), depending on engiEnableDerivedAttributes, and except valueType = sdaiEXPRESSSTRING:
+//	   -- either calculate and follow these rues for calculated value
+//	   -- or handles it as unset ($)
+//	- if valueType = sdaiEXPRESSSTRING and data is unset ($) or derived (*), get-function will return NULL but set value to "$" or "*" respectively for any engiEnableDerivedAttributes state
 //
 //
 //	Table 1 – Required value buffer depending on valueType (on the example of sdaiGetAttrBN but valid for all get-functions)
@@ -3491,69 +3623,72 @@ static	inline	SdaiInstance	sdaiGetAttr(
 //	valueType				C/C++																C#
 //
 //	sdaiINTEGER				int_t val;															int_t val;
-//							sdaiGetAttrBN (instance, "attrName", sdaiINTEGER, &val);			cis2engine.sdaiGetAttrBN (instance, "attrName", cis2engine.sdaiINTEGER, out val);
+//							sdaiGetAttrBN (instance, "attrName", sdaiINTEGER, &val);			CIS2Engine.sdaiGetAttrBN (instance, "attrName", CIS2Engine.sdaiINTEGER, out val);
 //
 //	sdaiREAL or sdaiNUMBER	double val;															double val;
-//							sdaiGetAttrBN (instance, "attrName", sdaiREAL, &val);				cis2engine.sdaiGetAttrBN (instance, "attrName", cis2engine.sdaiREAL, out val);
+//							sdaiGetAttrBN (instance, "attrName", sdaiREAL, &val);				CIS2Engine.sdaiGetAttrBN (instance, "attrName", CIS2Engine.sdaiREAL, out val);
 //
 //	sdaiBOOLEAN				SdaiBoolean val;													bool val;
-//							sdaiGetAttrBN (instance, "attrName", sdaiBOOLEAN, &val);			cis2engine.sdaiGetAttrBN (instance, "attrName", cis2engine.sdaiBOOLEAN, out val);
+//							sdaiGetAttrBN (instance, "attrName", sdaiBOOLEAN, &val);			CIS2Engine.sdaiGetAttrBN (instance, "attrName", CIS2Engine.sdaiBOOLEAN, out val);
 //
 //	sdaiLOGICAL				const TCHAR* val;													string val;
-//							sdaiGetAttrBN (instance, "attrName", sdaiLOGICAL, &val);			cis2engine.sdaiGetAttrBN (instance, "attrName", cis2engine.sdaiLOGICAL, out val);
+//							sdaiGetAttrBN (instance, "attrName", sdaiLOGICAL, &val);			CIS2Engine.sdaiGetAttrBN (instance, "attrName", CIS2Engine.sdaiLOGICAL, out val);
 //
 //	sdaiENUM				const TCHAR* val;													string val;
-//							sdaiGetAttrBN (instance, "attrName", sdaiENUM, &val);				cis2engine.sdaiGetAttrBN (instance, "attrName", cis2engine.sdaiENUM, out val);
+//							sdaiGetAttrBN (instance, "attrName", sdaiENUM, &val);				CIS2Engine.sdaiGetAttrBN (instance, "attrName", CIS2Engine.sdaiENUM, out val);
 //
 //	sdaiBINARY				const TCHAR* val;													string val;
-//							sdaiGetAttrBN (instance, "attrName", sdaiBINARY, &val);				cis2engine.sdaiGetAttrBN (instance, "attrName", cis2engine.sdaiBINARY, out val);
+//							sdaiGetAttrBN (instance, "attrName", sdaiBINARY, &val);				CIS2Engine.sdaiGetAttrBN (instance, "attrName", CIS2Engine.sdaiBINARY, out val);
 //
 //	sdaiSTRING				const char* val;													string val;
-//							sdaiGetAttrBN (instance, "attrName", sdaiSTRING, &val);				cis2engine.sdaiGetAttrBN (instance, "attrName", cis2engine.sdaiSTRING, out val);
+//							sdaiGetAttrBN (instance, "attrName", sdaiSTRING, &val);				CIS2Engine.sdaiGetAttrBN (instance, "attrName", CIS2Engine.sdaiSTRING, out val);
 //
 //	sdaiUNICODE				const wchar_t* val;													string val;
-//							sdaiGetAttrBN (instance, "attrName", sdaiUNICODE, &val);			cis2engine.sdaiGetAttrBN (instance, "attrName", cis2engine.sdaiUNICODE, out val);
+//							sdaiGetAttrBN (instance, "attrName", sdaiUNICODE, &val);			CIS2Engine.sdaiGetAttrBN (instance, "attrName", CIS2Engine.sdaiUNICODE, out val);
 //
 //	sdaiEXPRESSSTRING		const char* val;													string val;
-//							sdaiGetAttrBN (instance, "attrName", sdaiEXPRESSSTRING, &val);		cis2engine.sdaiGetAttrBN (instance, "attrName", cis2engine.sdaiEXPRESSSTRING, out val);
+//							sdaiGetAttrBN (instance, "attrName", sdaiEXPRESSSTRING, &val);		CIS2Engine.sdaiGetAttrBN (instance, "attrName", CIS2Engine.sdaiEXPRESSSTRING, out val);
 //
 //	sdaiINSTANCE			SdaiInstance val;													int_t val;
-//							sdaiGetAttrBN (instance, "attrName", sdaiINSTANCE, &val);			cis2engine.sdaiGetAttrBN (instance, "attrName", cis2engine.sdaiINSTANCE, out val);
+//							sdaiGetAttrBN (instance, "attrName", sdaiINSTANCE, &val);			CIS2Engine.sdaiGetAttrBN (instance, "attrName", CIS2Engine.sdaiINSTANCE, out val);
 //
 //	sdaiAGGR				SdaiAggr aggr;														int_t aggr;
-//							sdaiGetAttrBN (instance, "attrName", sdaiAGGR, &aggr);				cis2engine.sdaiGetAttrBN (instance, "attrName", cis2engine.sdaiAGGR, out aggr);
+//							sdaiGetAttrBN (instance, "attrName", sdaiAGGR, &aggr);				CIS2Engine.sdaiGetAttrBN (instance, "attrName", CIS2Engine.sdaiAGGR, out aggr);
 //
-//	sdaiADB					SdaiADB adb = sdaiCreateEmptyADB();									int_t adb = 0;	//	it is important to initialize
-//							sdaiGetAttrBN (instance, "attrName", sdaiADB, adb);					cis2engine.sdaiGetAttrBN (instance, "attrName", cis2engine.sdaiADB, out adb);		
-//							sdaiDeleteADB (adb);
+//	sdaiADB					SdaiADB adb = sdaiCreateEmptyADB();									int_t adb = CIS2Engine.sdaiCreateEmptyADB();
+//							sdaiGetAttrBN (instance, "attrName", sdaiADB, adb);					CIS2Engine.sdaiGetAttrBN (instance, "attrName", CIS2Engine.sdaiADB, adb);
+//							...																	...
+//							sdaiDeleteADB (adb);	//	optional								CIS2Engine.sdaiDeleteADB (adb);	//	optional
 //
-//							SdaiADB adb = nullptr;	//	it is important to initialize
-//							sdaiGetAttrBN (instance, "attrName", sdaiADB, &adb);
+//							SdaiADB adb = nullptr;												int_t adb = 0;	//	it is important to initialize
+//							sdaiGetAttrBN (instance, "attrName", sdaiADB, &adb);				CIS2Engine.sdaiGetAttrBN (instance, "attrName", CIS2Engine.sdaiADB, out adb);
+//							...																	...
+//							sdaiDeleteADB (adb);	//	optional								CIS2Engine.sdaiDeleteADB (adb);	//	optional
 //
 //	TCHAR is “char” or “wchar_t” depending on setStringUnicode.
 //	(Non-standard behavior) sdaiLOGICAL behaves differently from ISO 10303-24-2001: it expects char* while standard declares int_t.
-//	(Non-standard extension) sdiADB in C++ has an option to work without sdaiCreateEmptyADB and sdaiDeleteADB as shown in the table.
+//	(Non-standard extension) sdiADB has an option to work without sdaiCreateEmptyADB and sdaiDeleteADB as shown in the table (all open ADB's will be deleted on model close).
 //
 //
 //	Table 2 - valueType can be requested depending on actual model data.
 //
 //	valueType		Works for following values in the model
-//				 	  integer	   real		.T. or .F.	   .U.		other enum	  binary	  string	 instance	   list		 $ (empty)
-//	sdaiINTEGER			Yes			Yes *		 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiREAL			Yes			Yes			 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiNUMBER			Yes			Yes			 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiBOOLEAN			 .			 .			Yes			 .			 .			 .			 .			 .			 .			 .
-//	sdaiLOGICAL			 .			 .			Yes			Yes			 .			 .			 .			 .			 .			 .
-//	sdaiENUM			 .			 .			Yes			Yes			Yes			 .			 .			 .			 .			 .
-//	sdaiBINARY			 .			 .			 .			 .			 .			Yes			 .			 .			 .			 .
-//	sdaiSTRING			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiUNICODE			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiEXPRESSSTRING	Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiINSTANCE		 .			 .			 .			 .			 .			 .			 .			Yes			 .			 .
-//	sdaiAGGR			 .			 .			 .			 .			 .			 .			 .			 .			Yes			 .
-//	sdaiADB				Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .
-//	Note: sdaiGetAttr, stdaiGetAttrBN, engiGetElement will success with any model data, except non-set($)
-//		  (Non-standard extensions) sdaiGetADBValue: sdaiADB is allowed and will success when sdaiGetADBTypePath is not NULL, returning ABD value has type path element removed.
+//				 	  integer	   real		.T. or .F.	   .U.		other enum	  binary	  string	 instance	   list
+//	sdaiINTEGER			Yes			Yes *		 .			 .			 .			 .			 .			 .			 .
+//	sdaiREAL			Yes			Yes			 .			 .			 .			 .			 .			 .			 .
+//	sdaiNUMBER			Yes			Yes			 .			 .			 .			 .			 .			 .			 .
+//	sdaiBOOLEAN			 .			 .			Yes			 .			 .			 .			 .			 .			 .
+//	sdaiLOGICAL			 .			 .			Yes			Yes			 .			 .			 .			 .			 .
+//	sdaiENUM			 .			 .			Yes			Yes			Yes			 .			 .			 .			 .
+//	sdaiBINARY			 .			 .			 .			 .			 .			Yes			 .			 .			 .
+//	sdaiSTRING			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiUNICODE			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiEXPRESSSTRING	Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiINSTANCE		 .			 .			 .			 .			 .			 .			 .			Yes			 .
+//	sdaiAGGR			 .			 .			 .			 .			 .			 .			 .			 .			Yes
+//	sdaiADB				Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes
+//
+//	(Non-standard extensions) sdaiGetADBValue: sdaiADB is allowed and will success when sdaiGetADBTypePath is not NULL, returning ABD value has type path element removed.
 //
 //	Technically sdaiGetAttrBN will transform into the following call
 //		sdaiGetAttr(
@@ -4595,48 +4730,49 @@ static	inline	SdaiNPL	sdaiFindInstanceUsedInBN(
 //	valueType				C/C++														C#
 //
 //	sdaiINTEGER				int_t val = 123;											int_t val = 123;
-//							sdaiPrepend (aggregate, sdaiINTEGER, &val);					cis2engine.sdaiPrepend (aggregate, cis2engine.sdaiINTEGER, ref val);
+//							sdaiPrepend (aggregate, sdaiINTEGER, &val);					CIS2Engine.sdaiPrepend (aggregate, CIS2Engine.sdaiINTEGER, ref val);
 //
 //	sdaiREAL or sdaiNUMBER	double val = 123.456;										double val = 123.456;
-//							sdaiPrepend (aggregate, sdaiREAL, &val);					cis2engine.sdaiPrepend (aggregate, cis2engine.sdaiREAL, ref val);
+//							sdaiPrepend (aggregate, sdaiREAL, &val);					CIS2Engine.sdaiPrepend (aggregate, CIS2Engine.sdaiREAL, ref val);
 //
 //	sdaiBOOLEAN				SdaiBoolean val = sdaiTRUE;									bool val = true;
-//							sdaiPrepend (aggregate, sdaiBOOLEAN, &val);					cis2engine.sdaiPrepend (aggregate, cis2engine.sdaiBOOLEAN, ref val);
+//							sdaiPrepend (aggregate, sdaiBOOLEAN, &val);					CIS2Engine.sdaiPrepend (aggregate, CIS2Engine.sdaiBOOLEAN, ref val);
 //
 //	sdaiLOGICAL				const TCHAR* val = "U";										string val = "U";
-//							sdaiPrepend (aggregate, sdaiLOGICAL, val);					cis2engine.sdaiPrepend (aggregate, cis2engine.sdaiLOGICAL, val);
+//							sdaiPrepend (aggregate, sdaiLOGICAL, val);					CIS2Engine.sdaiPrepend (aggregate, CIS2Engine.sdaiLOGICAL, val);
 //
 //	sdaiENUM				const TCHAR* val = "NOTDEFINED";							string val = "NOTDEFINED";
-//							sdaiPrepend (aggregate, sdaiENUM, val);						cis2engine.sdaiPrepend (aggregate, cis2engine.sdaiENUM, val);
+//							sdaiPrepend (aggregate, sdaiENUM, val);						CIS2Engine.sdaiPrepend (aggregate, CIS2Engine.sdaiENUM, val);
 //
 //	sdaiBINARY				const TCHAR* val = "0123456ABC";							string val = "0123456ABC";
-//							sdaiPrepend (aggregate, sdaiBINARY, val);					cis2engine.sdaiPrepend (aggregate, cis2engine.sdaiBINARY, val);
+//							sdaiPrepend (aggregate, sdaiBINARY, val);					CIS2Engine.sdaiPrepend (aggregate, CIS2Engine.sdaiBINARY, val);
 //
 //	sdaiSTRING				const char* val = "My Simple String";						string val = "My Simple String";
-//							sdaiPrepend (aggregate, sdaiSTRING, val);					cis2engine.sdaiPrepend (aggregate, cis2engine.sdaiSTRING, val);
+//							sdaiPrepend (aggregate, sdaiSTRING, val);					CIS2Engine.sdaiPrepend (aggregate, CIS2Engine.sdaiSTRING, val);
 //
 //	sdaiUNICODE				const wchar_t* val = L"Any Unicode String";					string val = "Any Unicode String";
-//							sdaiPrepend (aggregate, sdaiUNICODE, val);					cis2engine.sdaiPrepend (aggregate, cis2engine.sdaiUNICODE, val);
+//							sdaiPrepend (aggregate, sdaiUNICODE, val);					CIS2Engine.sdaiPrepend (aggregate, CIS2Engine.sdaiUNICODE, val);
 //
 //	sdaiEXPRESSSTRING		const char* val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";	string val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";
-//							sdaiPrepend (aggregate, sdaiEXPRESSSTRING, val);			cis2engine.sdaiPrepend (aggregate, cis2engine.sdaiEXPRESSSTRING, val);
+//							sdaiPrepend (aggregate, sdaiEXPRESSSTRING, val);			CIS2Engine.sdaiPrepend (aggregate, CIS2Engine.sdaiEXPRESSSTRING, val);
 //
-//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "PRODUCT");	int_t val = cis2engine.sdaiCreateInstanceBN (model, "PRODUCT");
-//							sdaiPrepend (aggregate, sdaiINSTANCE, val);					cis2engine.sdaiPrepend (aggregate, cis2engine.sdaiINSTANCE, val);
+//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "IFCSITE");	int_t val = CIS2Engine.sdaiCreateInstanceBN (model, "IFCSITE");
+//							sdaiPrepend (aggregate, sdaiINSTANCE, val);					CIS2Engine.sdaiPrepend (aggregate, CIS2Engine.sdaiINSTANCE, val);
 //
 //	sdaiAGGR				SdaiAggr val = sdaiCreateAggr (inst, 0);					int_t val = sdaiCreateAggr (inst, 0);
-//							sdaiPutAttr (val, sdaiINSTANCE, inst);						cis2engine.sdaiPutAttr (val, cis2engine.sdaiINSTANCE, inst);
-//							sdaiPrepend (aggregate, sdaiAGGR, val);						cis2engine.sdaiPrepend (aggregate, cis2engine.sdaiAGGR, val);
+//							sdaiPutAttr (val, sdaiINSTANCE, inst);						CIS2Engine.sdaiPutAttr (val, CIS2Engine.sdaiINSTANCE, inst);
+//							sdaiPrepend (aggregate, sdaiAGGR, val);						CIS2Engine.sdaiPrepend (aggregate, CIS2Engine.sdaiAGGR, val);
 //
 //	sdaiADB					int_t integerValue = 123;									int_t integerValue = 123;	
-//							SdaiADB val = sdaiCreateADB (sdaiINTEGER, &integerValue);	int_t val = cis2engine.sdaiCreateADB (cis2engine.sdaiINTEGER, ref integerValue);
-//							sdaiPutADBTypePath (val, 1, "INTEGER");						cis2engine.sdaiPutADBTypePath (val, 1, "INTEGER");
-//							sdaiPrepend (aggregate, sdaiADB, val);						cis2engine.sdaiPrepend (aggregate, cis2engine.sdaiADB, val);	
-//							sdaiDeleteADB (val);										cis2engine.sdaiDeleteADB (val);
+//							SdaiADB val = sdaiCreateADB (sdaiINTEGER, &integerValue);	int_t val = CIS2Engine.sdaiCreateADB (CIS2Engine.sdaiINTEGER, ref integerValue);
+//							sdaiPutADBTypePath (val, 1, "IFCINTEGER");					CIS2Engine.sdaiPutADBTypePath (val, 1, "IFCINTEGER");
+//							sdaiPrepend (aggregate, sdaiADB, val);						CIS2Engine.sdaiPrepend (aggregate, CIS2Engine.sdaiADB, val);	
+//							...															...
+//							sdaiDeleteADB (val);	//	optional						CIS2Engine.sdaiDeleteADB (val);	//	optional
 //
 //	TCHAR is “char” or “wchar_t” depending on setStringUnicode.
 //	(Non-standard behavior) sdaiLOGICAL behaves differently from ISO 10303-24-2001: it expects char* while standard declares int_t.
-//	(Non-standard extension) sdiADB in C++ has an option to work without sdaiCreateEmptyADB and sdaiDeleteADB as shown in the table.
+//	(Non-standard extension) sdiADB has an option to work without sdaiDeleteADB as shown in the table (all open ADB's will be deleted on model close).
 //
 //
 //	Table 2 - valueType can be requested depending on actual model data.
@@ -4720,48 +4856,49 @@ static	inline	void	sdaiPrepend(
 //	valueType				C/C++														C#
 //
 //	sdaiINTEGER				int_t val = 123;											int_t val = 123;
-//							sdaiAppend (aggregate, sdaiINTEGER, &val);					cis2engine.sdaiAppend (aggregate, cis2engine.sdaiINTEGER, ref val);
+//							sdaiAppend (aggregate, sdaiINTEGER, &val);					CIS2Engine.sdaiAppend (aggregate, CIS2Engine.sdaiINTEGER, ref val);
 //
 //	sdaiREAL or sdaiNUMBER	double val = 123.456;										double val = 123.456;
-//							sdaiAppend (aggregate, sdaiREAL, &val);						cis2engine.sdaiAppend (aggregate, cis2engine.sdaiREAL, ref val);
+//							sdaiAppend (aggregate, sdaiREAL, &val);						CIS2Engine.sdaiAppend (aggregate, CIS2Engine.sdaiREAL, ref val);
 //
 //	sdaiBOOLEAN				SdaiBoolean val = sdaiTRUE;									bool val = true;
-//							sdaiAppend (aggregate, sdaiBOOLEAN, &val);					cis2engine.sdaiAppend (aggregate, cis2engine.sdaiBOOLEAN, ref val);
+//							sdaiAppend (aggregate, sdaiBOOLEAN, &val);					CIS2Engine.sdaiAppend (aggregate, CIS2Engine.sdaiBOOLEAN, ref val);
 //
 //	sdaiLOGICAL				const TCHAR* val = "U";										string val = "U";
-//							sdaiAppend (aggregate, sdaiLOGICAL, val);					cis2engine.sdaiAppend (aggregate, cis2engine.sdaiLOGICAL, val);
+//							sdaiAppend (aggregate, sdaiLOGICAL, val);					CIS2Engine.sdaiAppend (aggregate, CIS2Engine.sdaiLOGICAL, val);
 //
 //	sdaiENUM				const TCHAR* val = "NOTDEFINED";							string val = "NOTDEFINED";
-//							sdaiAppend (aggregate, sdaiENUM, val);						cis2engine.sdaiAppend (aggregate, cis2engine.sdaiENUM, val);
+//							sdaiAppend (aggregate, sdaiENUM, val);						CIS2Engine.sdaiAppend (aggregate, CIS2Engine.sdaiENUM, val);
 //
 //	sdaiBINARY				const TCHAR* val = "0123456ABC";							string val = "0123456ABC";
-//							sdaiAppend (aggregate, sdaiBINARY, val);					cis2engine.sdaiAppend (aggregate, cis2engine.sdaiBINARY, val);
+//							sdaiAppend (aggregate, sdaiBINARY, val);					CIS2Engine.sdaiAppend (aggregate, CIS2Engine.sdaiBINARY, val);
 //
 //	sdaiSTRING				const char* val = "My Simple String";						string val = "My Simple String";
-//							sdaiAppend (aggregate, sdaiSTRING, val);					cis2engine.sdaiAppend (aggregate, cis2engine.sdaiSTRING, val);
+//							sdaiAppend (aggregate, sdaiSTRING, val);					CIS2Engine.sdaiAppend (aggregate, CIS2Engine.sdaiSTRING, val);
 //
 //	sdaiUNICODE				const wchar_t* val = L"Any Unicode String";					string val = "Any Unicode String";
-//							sdaiAppend (aggregate, sdaiUNICODE, val);					cis2engine.sdaiAppend (aggregate, cis2engine.sdaiUNICODE, val);
+//							sdaiAppend (aggregate, sdaiUNICODE, val);					CIS2Engine.sdaiAppend (aggregate, CIS2Engine.sdaiUNICODE, val);
 //
 //	sdaiEXPRESSSTRING		const char* val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";	string val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";
-//							sdaiAppend (aggregate, sdaiEXPRESSSTRING, val);				cis2engine.sdaiAppend (aggregate, cis2engine.sdaiEXPRESSSTRING, val);
+//							sdaiAppend (aggregate, sdaiEXPRESSSTRING, val);				CIS2Engine.sdaiAppend (aggregate, CIS2Engine.sdaiEXPRESSSTRING, val);
 //
-//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "PRODUCT");	int_t val = cis2engine.sdaiCreateInstanceBN (model, "PRODUCT");
-//							sdaiAppend (aggregate, sdaiINSTANCE, val);					cis2engine.sdaiAppend (aggregate, cis2engine.sdaiINSTANCE, val);
+//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "IFCSITE");	int_t val = CIS2Engine.sdaiCreateInstanceBN (model, "IFCSITE");
+//							sdaiAppend (aggregate, sdaiINSTANCE, val);					CIS2Engine.sdaiAppend (aggregate, CIS2Engine.sdaiINSTANCE, val);
 //
 //	sdaiAGGR				SdaiAggr val = sdaiCreateAggr (inst, 0);					int_t val = sdaiCreateAggr (inst, 0);
-//							sdaiPutAttr (val, sdaiINSTANCE, inst);						cis2engine.sdaiPutAttr (val, cis2engine.sdaiINSTANCE, inst);
-//							sdaiAppend (aggregate, sdaiAGGR, val);						cis2engine.sdaiAppend (aggregate, cis2engine.sdaiAGGR, val);
+//							sdaiPutAttr (val, sdaiINSTANCE, inst);						CIS2Engine.sdaiPutAttr (val, CIS2Engine.sdaiINSTANCE, inst);
+//							sdaiAppend (aggregate, sdaiAGGR, val);						CIS2Engine.sdaiAppend (aggregate, CIS2Engine.sdaiAGGR, val);
 //
 //	sdaiADB					int_t integerValue = 123;									int_t integerValue = 123;	
-//							SdaiADB val = sdaiCreateADB (sdaiINTEGER, &integerValue);	int_t val = cis2engine.sdaiCreateADB (cis2engine.sdaiINTEGER, ref integerValue);
-//							sdaiPutADBTypePath (val, 1, "INTEGER");						cis2engine.sdaiPutADBTypePath (val, 1, "INTEGER");
-//							sdaiAppend (aggregate, sdaiADB, val);						cis2engine.sdaiAppend (aggregate, cis2engine.sdaiADB, val);	
-//							sdaiDeleteADB (val);										cis2engine.sdaiDeleteADB (val);
+//							SdaiADB val = sdaiCreateADB (sdaiINTEGER, &integerValue);	int_t val = CIS2Engine.sdaiCreateADB (CIS2Engine.sdaiINTEGER, ref integerValue);
+//							sdaiPutADBTypePath (val, 1, "IFCINTEGER");					CIS2Engine.sdaiPutADBTypePath (val, 1, "IFCINTEGER");
+//							sdaiAppend (aggregate, sdaiADB, val);						CIS2Engine.sdaiAppend (aggregate, CIS2Engine.sdaiADB, val);	
+//							...															...
+//							sdaiDeleteADB (val);	//	optional						CIS2Engine.sdaiDeleteADB (val);	//	optional
 //
 //	TCHAR is “char” or “wchar_t” depending on setStringUnicode.
 //	(Non-standard behavior) sdaiLOGICAL behaves differently from ISO 10303-24-2001: it expects char* while standard declares int_t.
-//	(Non-standard extension) sdiADB in C++ has an option to work without sdaiCreateEmptyADB and sdaiDeleteADB as shown in the table.
+//	(Non-standard extension) sdiADB has an option to work without sdaiDeleteADB as shown in the table (all open ADB's will be deleted on model close).
 //
 //
 //	Table 2 - valueType can be requested depending on actual model data.
@@ -4845,48 +4982,49 @@ static	inline	void	sdaiAppend(
 //	valueType				C/C++														C#
 //
 //	sdaiINTEGER				int_t val = 123;											int_t val = 123;
-//							sdaiAdd (aggregate, sdaiINTEGER, &val);						cis2engine.sdaiAdd (aggregate, cis2engine.sdaiINTEGER, ref val);
+//							sdaiAdd (aggregate, sdaiINTEGER, &val);						CIS2Engine.sdaiAdd (aggregate, CIS2Engine.sdaiINTEGER, ref val);
 //
 //	sdaiREAL or sdaiNUMBER	double val = 123.456;										double val = 123.456;
-//							sdaiAdd (aggregate, sdaiREAL, &val);						cis2engine.sdaiAdd (aggregate, cis2engine.sdaiREAL, ref val);
+//							sdaiAdd (aggregate, sdaiREAL, &val);						CIS2Engine.sdaiAdd (aggregate, CIS2Engine.sdaiREAL, ref val);
 //
 //	sdaiBOOLEAN				SdaiBoolean val = sdaiTRUE;									bool val = true;
-//							sdaiAdd (aggregate, sdaiBOOLEAN, &val);						cis2engine.sdaiAdd (aggregate, cis2engine.sdaiBOOLEAN, ref val);
+//							sdaiAdd (aggregate, sdaiBOOLEAN, &val);						CIS2Engine.sdaiAdd (aggregate, CIS2Engine.sdaiBOOLEAN, ref val);
 //
 //	sdaiLOGICAL				const TCHAR* val = "U";										string val = "U";
-//							sdaiAdd (aggregate, sdaiLOGICAL, val);						cis2engine.sdaiAdd (aggregate, cis2engine.sdaiLOGICAL, val);
+//							sdaiAdd (aggregate, sdaiLOGICAL, val);						CIS2Engine.sdaiAdd (aggregate, CIS2Engine.sdaiLOGICAL, val);
 //
 //	sdaiENUM				const TCHAR* val = "NOTDEFINED";							string val = "NOTDEFINED";
-//							sdaiAdd (aggregate, sdaiENUM, val);							cis2engine.sdaiAdd (aggregate, cis2engine.sdaiENUM, val);
+//							sdaiAdd (aggregate, sdaiENUM, val);							CIS2Engine.sdaiAdd (aggregate, CIS2Engine.sdaiENUM, val);
 //
 //	sdaiBINARY				const TCHAR* val = "0123456ABC";							string val = "0123456ABC";
-//							sdaiAdd (aggregate, sdaiBINARY, val);						cis2engine.sdaiAdd (aggregate, cis2engine.sdaiBINARY, val);
+//							sdaiAdd (aggregate, sdaiBINARY, val);						CIS2Engine.sdaiAdd (aggregate, CIS2Engine.sdaiBINARY, val);
 //
 //	sdaiSTRING				const char* val = "My Simple String";						string val = "My Simple String";
-//							sdaiAdd (aggregate, sdaiSTRING, val);						cis2engine.sdaiAdd (aggregate, cis2engine.sdaiSTRING, val);
+//							sdaiAdd (aggregate, sdaiSTRING, val);						CIS2Engine.sdaiAdd (aggregate, CIS2Engine.sdaiSTRING, val);
 //
 //	sdaiUNICODE				const wchar_t* val = L"Any Unicode String";					string val = "Any Unicode String";
-//							sdaiAdd (aggregate, sdaiUNICODE, val);						cis2engine.sdaiAdd (aggregate, cis2engine.sdaiUNICODE, val);
+//							sdaiAdd (aggregate, sdaiUNICODE, val);						CIS2Engine.sdaiAdd (aggregate, CIS2Engine.sdaiUNICODE, val);
 //
 //	sdaiEXPRESSSTRING		const char* val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";	string val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";
-//							sdaiAdd (aggregate, sdaiEXPRESSSTRING, val);				cis2engine.sdaiAdd (aggregate, cis2engine.sdaiEXPRESSSTRING, val);
+//							sdaiAdd (aggregate, sdaiEXPRESSSTRING, val);				CIS2Engine.sdaiAdd (aggregate, CIS2Engine.sdaiEXPRESSSTRING, val);
 //
-//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "PRODUCT");	int_t val = cis2engine.sdaiCreateInstanceBN (model, "PRODUCT");
-//							sdaiAdd (aggregate, sdaiINSTANCE, val);						cis2engine.sdaiAdd (aggregate, cis2engine.sdaiINSTANCE, val);
+//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "IFCSITE");	int_t val = CIS2Engine.sdaiCreateInstanceBN (model, "IFCSITE");
+//							sdaiAdd (aggregate, sdaiINSTANCE, val);						CIS2Engine.sdaiAdd (aggregate, CIS2Engine.sdaiINSTANCE, val);
 //
 //	sdaiAGGR				SdaiAggr val = sdaiCreateAggr (inst, 0);					int_t val = sdaiCreateAggr (inst, 0);
-//							sdaiPutAttr (val, sdaiINSTANCE, inst);						cis2engine.sdaiPutAttr (val, cis2engine.sdaiINSTANCE, inst);
-//							sdaiAdd (aggregate, sdaiAGGR, val);							cis2engine.sdaiAdd (aggregate, cis2engine.sdaiAGGR, val);
+//							sdaiPutAttr (val, sdaiINSTANCE, inst);						CIS2Engine.sdaiPutAttr (val, CIS2Engine.sdaiINSTANCE, inst);
+//							sdaiAdd (aggregate, sdaiAGGR, val);							CIS2Engine.sdaiAdd (aggregate, CIS2Engine.sdaiAGGR, val);
 //
 //	sdaiADB					int_t integerValue = 123;									int_t integerValue = 123;	
-//							SdaiADB val = sdaiCreateADB (sdaiINTEGER, &integerValue);	int_t val = cis2engine.sdaiCreateADB (cis2engine.sdaiINTEGER, ref integerValue);
-//							sdaiPutADBTypePath (val, 1, "INTEGER");						cis2engine.sdaiPutADBTypePath (val, 1, "INTEGER");
-//							sdaiAdd (aggregate, sdaiADB, val);							cis2engine.sdaiAdd (aggregate, cis2engine.sdaiADB, val);	
-//							sdaiDeleteADB (val);										cis2engine.sdaiDeleteADB (val);
+//							SdaiADB val = sdaiCreateADB (sdaiINTEGER, &integerValue);	int_t val = CIS2Engine.sdaiCreateADB (CIS2Engine.sdaiINTEGER, ref integerValue);
+//							sdaiPutADBTypePath (val, 1, "IFCINTEGER");					CIS2Engine.sdaiPutADBTypePath (val, 1, "IFCINTEGER");
+//							sdaiAdd (aggregate, sdaiADB, val);							CIS2Engine.sdaiAdd (aggregate, CIS2Engine.sdaiADB, val);	
+//							...															...
+//							sdaiDeleteADB (val);	//	optional						CIS2Engine.sdaiDeleteADB (val);	//	optional
 //
 //	TCHAR is “char” or “wchar_t” depending on setStringUnicode.
 //	(Non-standard behavior) sdaiLOGICAL behaves differently from ISO 10303-24-2001: it expects char* while standard declares int_t.
-//	(Non-standard extension) sdiADB in C++ has an option to work without sdaiCreateEmptyADB and sdaiDeleteADB as shown in the table.
+//	(Non-standard extension) sdiADB has an option to work without sdaiDeleteADB as shown in the table (all open ADB's will be deleted on model close).
 //
 //
 //	Table 2 - valueType can be requested depending on actual model data.
@@ -4971,48 +5109,49 @@ static	inline	void	sdaiAdd(
 //	valueType				C/C++															C#
 //
 //	sdaiINTEGER				int_t val = 123;												int_t val = 123;
-//							sdaiInsertByIndex (aggregate, index, sdaiINTEGER, &val);		cis2engine.sdaiInsertByIndex (aggregate, index, cis2engine.sdaiINTEGER, ref val);
+//							sdaiInsertByIndex (aggregate, index, sdaiINTEGER, &val);		CIS2Engine.sdaiInsertByIndex (aggregate, index, CIS2Engine.sdaiINTEGER, ref val);
 //
 //	sdaiREAL or sdaiNUMBER	double val = 123.456;											double val = 123.456;
-//							sdaiInsertByIndex (aggregate, index, sdaiREAL, &val);			cis2engine.sdaiInsertByIndex (aggregate, index, cis2engine.sdaiREAL, ref val);
+//							sdaiInsertByIndex (aggregate, index, sdaiREAL, &val);			CIS2Engine.sdaiInsertByIndex (aggregate, index, CIS2Engine.sdaiREAL, ref val);
 //
 //	sdaiBOOLEAN				SdaiBoolean val = sdaiTRUE;										bool val = true;
-//							sdaiInsertByIndex (aggregate, index, sdaiBOOLEAN, &val);		cis2engine.sdaiInsertByIndex (aggregate, index, cis2engine.sdaiBOOLEAN, ref val);
+//							sdaiInsertByIndex (aggregate, index, sdaiBOOLEAN, &val);		CIS2Engine.sdaiInsertByIndex (aggregate, index, CIS2Engine.sdaiBOOLEAN, ref val);
 //
 //	sdaiLOGICAL				const TCHAR* val = "U";											string val = "U";
-//							sdaiInsertByIndex (aggregate, index, sdaiLOGICAL, val);			cis2engine.sdaiInsertByIndex (aggregate, index, cis2engine.sdaiLOGICAL, val);
+//							sdaiInsertByIndex (aggregate, index, sdaiLOGICAL, val);			CIS2Engine.sdaiInsertByIndex (aggregate, index, CIS2Engine.sdaiLOGICAL, val);
 //
 //	sdaiENUM				const TCHAR* val = "NOTDEFINED";								string val = "NOTDEFINED";
-//							sdaiInsertByIndex (aggregate, index, sdaiENUM, val);			cis2engine.sdaiInsertByIndex (aggregate, index, cis2engine.sdaiENUM, val);
+//							sdaiInsertByIndex (aggregate, index, sdaiENUM, val);			CIS2Engine.sdaiInsertByIndex (aggregate, index, CIS2Engine.sdaiENUM, val);
 //
 //	sdaiBINARY				const TCHAR* val = "0123456ABC";								string val = "0123456ABC";
-//							sdaiInsertByIndex (aggregate, index, sdaiBINARY, val);			cis2engine.sdaiInsertByIndex (aggregate, index, cis2engine.sdaiBINARY, val);
+//							sdaiInsertByIndex (aggregate, index, sdaiBINARY, val);			CIS2Engine.sdaiInsertByIndex (aggregate, index, CIS2Engine.sdaiBINARY, val);
 //
 //	sdaiSTRING				const char* val = "My Simple String";							string val = "My Simple String";
-//							sdaiInsertByIndex (aggregate, index, sdaiSTRING, val);			cis2engine.sdaiInsertByIndex (aggregate, index, cis2engine.sdaiSTRING, val);
+//							sdaiInsertByIndex (aggregate, index, sdaiSTRING, val);			CIS2Engine.sdaiInsertByIndex (aggregate, index, CIS2Engine.sdaiSTRING, val);
 //
 //	sdaiUNICODE				const wchar_t* val = L"Any Unicode String";						string val = "Any Unicode String";
-//							sdaiInsertByIndex (aggregate, index, sdaiUNICODE, val);			cis2engine.sdaiInsertByIndex (aggregate, index, cis2engine.sdaiUNICODE, val);
+//							sdaiInsertByIndex (aggregate, index, sdaiUNICODE, val);			CIS2Engine.sdaiInsertByIndex (aggregate, index, CIS2Engine.sdaiUNICODE, val);
 //
 //	sdaiEXPRESSSTRING		const char* val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";		string val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";
-//							sdaiInsertByIndex (aggregate, index, sdaiEXPRESSSTRING, val);	cis2engine.sdaiInsertByIndex (aggregate, index, cis2engine.sdaiEXPRESSSTRING, val);
+//							sdaiInsertByIndex (aggregate, index, sdaiEXPRESSSTRING, val);	CIS2Engine.sdaiInsertByIndex (aggregate, index, CIS2Engine.sdaiEXPRESSSTRING, val);
 //
-//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "PRODUCT");		int_t val = cis2engine.sdaiCreateInstanceBN (model, "PRODUCT");
-//							sdaiInsertByIndex (aggregate, index, sdaiINSTANCE, val);		cis2engine.sdaiInsertByIndex (aggregate, index, cis2engine.sdaiINSTANCE, val);
+//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "IFCSITE");		int_t val = CIS2Engine.sdaiCreateInstanceBN (model, "IFCSITE");
+//							sdaiInsertByIndex (aggregate, index, sdaiINSTANCE, val);		CIS2Engine.sdaiInsertByIndex (aggregate, index, CIS2Engine.sdaiINSTANCE, val);
 //
 //	sdaiAGGR				SdaiAggr val = sdaiCreateAggr (inst, 0);						int_t val = sdaiCreateAggr (inst, 0);
-//							sdaiPutAttr (val, sdaiINSTANCE, inst);							cis2engine.sdaiPutAttr (val, cis2engine.sdaiINSTANCE, inst);
-//							sdaiInsertByIndex (aggregate, index, sdaiAGGR, val);			cis2engine.sdaiInsertByIndex (aggregate, index, cis2engine.sdaiAGGR, val);
+//							sdaiPutAttr (val, sdaiINSTANCE, inst);							CIS2Engine.sdaiPutAttr (val, CIS2Engine.sdaiINSTANCE, inst);
+//							sdaiInsertByIndex (aggregate, index, sdaiAGGR, val);			CIS2Engine.sdaiInsertByIndex (aggregate, index, CIS2Engine.sdaiAGGR, val);
 //
 //	sdaiADB					int_t integerValue = 123;										int_t integerValue = 123;	
-//							SdaiADB val = sdaiCreateADB (sdaiINTEGER, &integerValue);		int_t val = cis2engine.sdaiCreateADB (cis2engine.sdaiINTEGER, ref integerValue);
-//							sdaiPutADBTypePath (val, 1, "INTEGER");							cis2engine.sdaiPutADBTypePath (val, 1, "INTEGER");
-//							sdaiInsertByIndex (aggregate, index, sdaiADB, val);				cis2engine.sdaiInsertByIndex (aggregate, index, cis2engine.sdaiADB, val);	
-//							sdaiDeleteADB (val);											cis2engine.sdaiDeleteADB (val);
+//							SdaiADB val = sdaiCreateADB (sdaiINTEGER, &integerValue);		int_t val = CIS2Engine.sdaiCreateADB (CIS2Engine.sdaiINTEGER, ref integerValue);
+//							sdaiPutADBTypePath (val, 1, "IFCINTEGER");						CIS2Engine.sdaiPutADBTypePath (val, 1, "IFCINTEGER");
+//							sdaiInsertByIndex (aggregate, index, sdaiADB, val);				CIS2Engine.sdaiInsertByIndex (aggregate, index, CIS2Engine.sdaiADB, val);	
+//							...																...
+//							sdaiDeleteADB (val);	//	optional							CIS2Engine.sdaiDeleteADB (val);	//	optional
 //
 //	TCHAR is “char” or “wchar_t” depending on setStringUnicode.
 //	(Non-standard behavior) sdaiLOGICAL behaves differently from ISO 10303-24-2001: it expects char* while standard declares int_t.
-//	(Non-standard extension) sdiADB in C++ has an option to work without sdaiCreateEmptyADB and sdaiDeleteADB as shown in the table.
+//	(Non-standard extension) sdiADB has an option to work without sdaiDeleteADB as shown in the table (all open ADB's will be deleted on model close).
 //
 //
 //	Table 2 - valueType can be requested depending on actual model data.
@@ -5101,48 +5240,49 @@ static	inline	void	sdaiInsertByIndex(
 //	valueType				C/C++														C#
 //
 //	sdaiINTEGER				int_t val = 123;											int_t val = 123;
-//							sdaiInsertBefore (iterator, sdaiINTEGER, &val);				cis2engine.sdaiInsertBefore (iterator, cis2engine.sdaiINTEGER, ref val);
+//							sdaiInsertBefore (iterator, sdaiINTEGER, &val);				CIS2Engine.sdaiInsertBefore (iterator, CIS2Engine.sdaiINTEGER, ref val);
 //
 //	sdaiREAL or sdaiNUMBER	double val = 123.456;										double val = 123.456;
-//							sdaiInsertBefore (iterator, sdaiREAL, &val);				cis2engine.sdaiInsertBefore (iterator, cis2engine.sdaiREAL, ref val);
+//							sdaiInsertBefore (iterator, sdaiREAL, &val);				CIS2Engine.sdaiInsertBefore (iterator, CIS2Engine.sdaiREAL, ref val);
 //
 //	sdaiBOOLEAN				SdaiBoolean val = sdaiTRUE;									bool val = true;
-//							sdaiInsertBefore (iterator, sdaiBOOLEAN, &val);				cis2engine.sdaiInsertBefore (iterator, cis2engine.sdaiBOOLEAN, ref val);
+//							sdaiInsertBefore (iterator, sdaiBOOLEAN, &val);				CIS2Engine.sdaiInsertBefore (iterator, CIS2Engine.sdaiBOOLEAN, ref val);
 //
 //	sdaiLOGICAL				const TCHAR* val = "U";										string val = "U";
-//							sdaiInsertBefore (iterator, sdaiLOGICAL, val);				cis2engine.sdaiInsertBefore (iterator, cis2engine.sdaiLOGICAL, val);
+//							sdaiInsertBefore (iterator, sdaiLOGICAL, val);				CIS2Engine.sdaiInsertBefore (iterator, CIS2Engine.sdaiLOGICAL, val);
 //
 //	sdaiENUM				const TCHAR* val = "NOTDEFINED";							string val = "NOTDEFINED";
-//							sdaiInsertBefore (iterator, sdaiENUM, val);					cis2engine.sdaiInsertBefore (iterator, cis2engine.sdaiENUM, val);
+//							sdaiInsertBefore (iterator, sdaiENUM, val);					CIS2Engine.sdaiInsertBefore (iterator, CIS2Engine.sdaiENUM, val);
 //
 //	sdaiBINARY				const TCHAR* val = "0123456ABC";							string val = "0123456ABC";
-//							sdaiInsertBefore (iterator, sdaiBINARY, val);				cis2engine.sdaiInsertBefore (iterator, cis2engine.sdaiBINARY, val);
+//							sdaiInsertBefore (iterator, sdaiBINARY, val);				CIS2Engine.sdaiInsertBefore (iterator, CIS2Engine.sdaiBINARY, val);
 //
 //	sdaiSTRING				const char* val = "My Simple String";						string val = "My Simple String";
-//							sdaiInsertBefore (iterator, sdaiSTRING, val);				cis2engine.sdaiInsertBefore (iterator, cis2engine.sdaiSTRING, val);
+//							sdaiInsertBefore (iterator, sdaiSTRING, val);				CIS2Engine.sdaiInsertBefore (iterator, CIS2Engine.sdaiSTRING, val);
 //
 //	sdaiUNICODE				const wchar_t* val = L"Any Unicode String";					string val = "Any Unicode String";
-//							sdaiInsertBefore (iterator, sdaiUNICODE, val);				cis2engine.sdaiInsertBefore (iterator, cis2engine.sdaiUNICODE, val);
+//							sdaiInsertBefore (iterator, sdaiUNICODE, val);				CIS2Engine.sdaiInsertBefore (iterator, CIS2Engine.sdaiUNICODE, val);
 //
 //	sdaiEXPRESSSTRING		const char* val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";	string val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";
-//							sdaiInsertBefore (iterator, sdaiEXPRESSSTRING, val);		cis2engine.sdaiInsertBefore (iterator, cis2engine.sdaiEXPRESSSTRING, val);
+//							sdaiInsertBefore (iterator, sdaiEXPRESSSTRING, val);		CIS2Engine.sdaiInsertBefore (iterator, CIS2Engine.sdaiEXPRESSSTRING, val);
 //
-//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "PRODUCT");	int_t val = cis2engine.sdaiCreateInstanceBN (model, "PRODUCT");
-//							sdaiInsertBefore (iterator, sdaiINSTANCE, val);				cis2engine.sdaiInsertBefore (iterator, cis2engine.sdaiINSTANCE, val);
+//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "IFCSITE");	int_t val = CIS2Engine.sdaiCreateInstanceBN (model, "IFCSITE");
+//							sdaiInsertBefore (iterator, sdaiINSTANCE, val);				CIS2Engine.sdaiInsertBefore (iterator, CIS2Engine.sdaiINSTANCE, val);
 //
 //	sdaiAGGR				SdaiAggr val = sdaiCreateAggr (inst, 0);					int_t val = sdaiCreateAggr (inst, 0);
-//							sdaiPutAttr (val, sdaiINSTANCE, inst);						cis2engine.sdaiPutAttr (val, cis2engine.sdaiINSTANCE, inst);
-//							sdaiInsertBefore (iterator, sdaiAGGR, val);					cis2engine.sdaiInsertBefore (iterator, cis2engine.sdaiAGGR, val);
+//							sdaiPutAttr (val, sdaiINSTANCE, inst);						CIS2Engine.sdaiPutAttr (val, CIS2Engine.sdaiINSTANCE, inst);
+//							sdaiInsertBefore (iterator, sdaiAGGR, val);					CIS2Engine.sdaiInsertBefore (iterator, CIS2Engine.sdaiAGGR, val);
 //
 //	sdaiADB					int_t integerValue = 123;									int_t integerValue = 123;	
-//							SdaiADB val = sdaiCreateADB (sdaiINTEGER, &integerValue);	int_t val = cis2engine.sdaiCreateADB (cis2engine.sdaiINTEGER, ref integerValue);
-//							sdaiPutADBTypePath (val, 1, "INTEGER");						cis2engine.sdaiPutADBTypePath (val, 1, "INTEGER");
-//							sdaiInsertBefore (iterator, sdaiADB, val);					cis2engine.sdaiInsertBefore (iterator, cis2engine.sdaiADB, val);	
-//							sdaiDeleteADB (val);										cis2engine.sdaiDeleteADB (val);
+//							SdaiADB val = sdaiCreateADB (sdaiINTEGER, &integerValue);	int_t val = CIS2Engine.sdaiCreateADB (CIS2Engine.sdaiINTEGER, ref integerValue);
+//							sdaiPutADBTypePath (val, 1, "IFCINTEGER");					CIS2Engine.sdaiPutADBTypePath (val, 1, "IFCINTEGER");
+//							sdaiInsertBefore (iterator, sdaiADB, val);					CIS2Engine.sdaiInsertBefore (iterator, CIS2Engine.sdaiADB, val);	
+//							...															...
+//							sdaiDeleteADB (val);	//	optional						CIS2Engine.sdaiDeleteADB (val);	//	optional
 //
 //	TCHAR is “char” or “wchar_t” depending on setStringUnicode.
 //	(Non-standard behavior) sdaiLOGICAL behaves differently from ISO 10303-24-2001: it expects char* while standard declares int_t.
-//	(Non-standard extension) sdiADB in C++ has an option to work without sdaiCreateEmptyADB and sdaiDeleteADB as shown in the table.
+//	(Non-standard extension) sdiADB has an option to work without sdaiDeleteADB as shown in the table (all open ADB's will be deleted on model close).
 //
 //
 //	Table 2 - valueType can be requested depending on actual model data.
@@ -5226,48 +5366,49 @@ static	inline	void	sdaiInsertBefore(
 //	valueType				C/C++														C#
 //
 //	sdaiINTEGER				int_t val = 123;											int_t val = 123;
-//							sdaiInsertAfter (iterator, sdaiINTEGER, &val);				cis2engine.sdaiInsertAfter (iterator, cis2engine.sdaiINTEGER, ref val);
+//							sdaiInsertAfter (iterator, sdaiINTEGER, &val);				CIS2Engine.sdaiInsertAfter (iterator, CIS2Engine.sdaiINTEGER, ref val);
 //
 //	sdaiREAL or sdaiNUMBER	double val = 123.456;										double val = 123.456;
-//							sdaiInsertAfter (iterator, sdaiREAL, &val);					cis2engine.sdaiInsertAfter (iterator, cis2engine.sdaiREAL, ref val);
+//							sdaiInsertAfter (iterator, sdaiREAL, &val);					CIS2Engine.sdaiInsertAfter (iterator, CIS2Engine.sdaiREAL, ref val);
 //
 //	sdaiBOOLEAN				SdaiBoolean val = sdaiTRUE;									bool val = true;
-//							sdaiInsertAfter (iterator, sdaiBOOLEAN, &val);				cis2engine.sdaiInsertAfter (iterator, cis2engine.sdaiBOOLEAN, ref val);
+//							sdaiInsertAfter (iterator, sdaiBOOLEAN, &val);				CIS2Engine.sdaiInsertAfter (iterator, CIS2Engine.sdaiBOOLEAN, ref val);
 //
 //	sdaiLOGICAL				const TCHAR* val = "U";										string val = "U";
-//							sdaiInsertAfter (iterator, sdaiLOGICAL, val);				cis2engine.sdaiInsertAfter (iterator, cis2engine.sdaiLOGICAL, val);
+//							sdaiInsertAfter (iterator, sdaiLOGICAL, val);				CIS2Engine.sdaiInsertAfter (iterator, CIS2Engine.sdaiLOGICAL, val);
 //
 //	sdaiENUM				const TCHAR* val = "NOTDEFINED";							string val = "NOTDEFINED";
-//							sdaiInsertAfter (iterator, sdaiENUM, val);					cis2engine.sdaiInsertAfter (iterator, cis2engine.sdaiENUM, val);
+//							sdaiInsertAfter (iterator, sdaiENUM, val);					CIS2Engine.sdaiInsertAfter (iterator, CIS2Engine.sdaiENUM, val);
 //
 //	sdaiBINARY				const TCHAR* val = "0123456ABC";							string val = "0123456ABC";
-//							sdaiInsertAfter (iterator, sdaiBINARY, val);				cis2engine.sdaiInsertAfter (iterator, cis2engine.sdaiBINARY, val);
+//							sdaiInsertAfter (iterator, sdaiBINARY, val);				CIS2Engine.sdaiInsertAfter (iterator, CIS2Engine.sdaiBINARY, val);
 //
 //	sdaiSTRING				const char* val = "My Simple String";						string val = "My Simple String";
-//							sdaiInsertAfter (iterator, sdaiSTRING, val);				cis2engine.sdaiInsertAfter (iterator, cis2engine.sdaiSTRING, val);
+//							sdaiInsertAfter (iterator, sdaiSTRING, val);				CIS2Engine.sdaiInsertAfter (iterator, CIS2Engine.sdaiSTRING, val);
 //
 //	sdaiUNICODE				const wchar_t* val = L"Any Unicode String";					string val = "Any Unicode String";
-//							sdaiInsertAfter (iterator, sdaiUNICODE, val);				cis2engine.sdaiInsertAfter (iterator, cis2engine.sdaiUNICODE, val);
+//							sdaiInsertAfter (iterator, sdaiUNICODE, val);				CIS2Engine.sdaiInsertAfter (iterator, CIS2Engine.sdaiUNICODE, val);
 //
 //	sdaiEXPRESSSTRING		const char* val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";	string val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";
-//							sdaiInsertAfter (iterator, sdaiEXPRESSSTRING, val);			cis2engine.sdaiInsertAfter (iterator, cis2engine.sdaiEXPRESSSTRING, val);
+//							sdaiInsertAfter (iterator, sdaiEXPRESSSTRING, val);			CIS2Engine.sdaiInsertAfter (iterator, CIS2Engine.sdaiEXPRESSSTRING, val);
 //
-//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "PRODUCT");	int_t val = cis2engine.sdaiCreateInstanceBN (model, "PRODUCT");
-//							sdaiInsertAfter (iterator, sdaiINSTANCE, val);				cis2engine.sdaiInsertAfter (iterator, cis2engine.sdaiINSTANCE, val);
+//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "IFCSITE");	int_t val = CIS2Engine.sdaiCreateInstanceBN (model, "IFCSITE");
+//							sdaiInsertAfter (iterator, sdaiINSTANCE, val);				CIS2Engine.sdaiInsertAfter (iterator, CIS2Engine.sdaiINSTANCE, val);
 //
 //	sdaiAGGR				SdaiAggr val = sdaiCreateAggr (inst, 0);					int_t val = sdaiCreateAggr (inst, 0);
-//							sdaiPutAttr (val, sdaiINSTANCE, inst);						cis2engine.sdaiPutAttr (val, cis2engine.sdaiINSTANCE, inst);
-//							sdaiInsertAfter (iterator, sdaiAGGR, val);					cis2engine.sdaiInsertAfter (iterator, cis2engine.sdaiAGGR, val);
+//							sdaiPutAttr (val, sdaiINSTANCE, inst);						CIS2Engine.sdaiPutAttr (val, CIS2Engine.sdaiINSTANCE, inst);
+//							sdaiInsertAfter (iterator, sdaiAGGR, val);					CIS2Engine.sdaiInsertAfter (iterator, CIS2Engine.sdaiAGGR, val);
 //
 //	sdaiADB					int_t integerValue = 123;									int_t integerValue = 123;	
-//							SdaiADB val = sdaiCreateADB (sdaiINTEGER, &integerValue);	int_t val = cis2engine.sdaiCreateADB (cis2engine.sdaiINTEGER, ref integerValue);
-//							sdaiPutADBTypePath (val, 1, "INTEGER");						cis2engine.sdaiPutADBTypePath (val, 1, "INTEGER");
-//							sdaiInsertAfter (iterator, sdaiADB, val);					cis2engine.sdaiInsertAfter (iterator, cis2engine.sdaiADB, val);	
-//							sdaiDeleteADB (val);										cis2engine.sdaiDeleteADB (val);
+//							SdaiADB val = sdaiCreateADB (sdaiINTEGER, &integerValue);	int_t val = CIS2Engine.sdaiCreateADB (CIS2Engine.sdaiINTEGER, ref integerValue);
+//							sdaiPutADBTypePath (val, 1, "IFCINTEGER");					CIS2Engine.sdaiPutADBTypePath (val, 1, "IFCINTEGER");
+//							sdaiInsertAfter (iterator, sdaiADB, val);					CIS2Engine.sdaiInsertAfter (iterator, CIS2Engine.sdaiADB, val);	
+//							...															...
+//							sdaiDeleteADB (val);	//	optional						CIS2Engine.sdaiDeleteADB (val);	//	optional
 //
 //	TCHAR is “char” or “wchar_t” depending on setStringUnicode.
 //	(Non-standard behavior) sdaiLOGICAL behaves differently from ISO 10303-24-2001: it expects char* while standard declares int_t.
-//	(Non-standard extension) sdiADB in C++ has an option to work without sdaiCreateEmptyADB and sdaiDeleteADB as shown in the table.
+//	(Non-standard extension) sdiADB has an option to work without sdaiDeleteADB as shown in the table (all open ADB's will be deleted on model close).
 //
 //
 //	Table 2 - valueType can be requested depending on actual model data.
@@ -5350,38 +5491,38 @@ static	inline	void	sdaiInsertAfter(
 //	valueType				C/C++														C#
 //
 //	sdaiINTEGER				int_t val = 123;											int_t val = 123;
-//							SdaiADB adb = sdaiCreateADB (sdaiINTEGER, &val);			int_t adb = cis2engine.sdaiCreateADB (cis2engine.sdaiINTEGER, ref val);
+//							SdaiADB adb = sdaiCreateADB (sdaiINTEGER, &val);			int_t adb = CIS2Engine.sdaiCreateADB (CIS2Engine.sdaiINTEGER, ref val);
 //
 //	sdaiREAL or sdaiNUMBER	double val = 123.456;										double val = 123.456;
-//							SdaiADB adb = sdaiCreateADB (sdaiREAL, &val);				int_t adb = cis2engine.sdaiCreateADB (cis2engine.sdaiREAL, ref val);
+//							SdaiADB adb = sdaiCreateADB (sdaiREAL, &val);				int_t adb = CIS2Engine.sdaiCreateADB (CIS2Engine.sdaiREAL, ref val);
 //
 //	sdaiBOOLEAN				SdaiBoolean val = sdaiTRUE;									bool val = true;
-//							SdaiADB adb = sdaiCreateADB (sdaiBOOLEAN, &val);			int_t adb = cis2engine.sdaiCreateADB (cis2engine.sdaiBOOLEAN, ref val);
+//							SdaiADB adb = sdaiCreateADB (sdaiBOOLEAN, &val);			int_t adb = CIS2Engine.sdaiCreateADB (CIS2Engine.sdaiBOOLEAN, ref val);
 //
 //	sdaiLOGICAL				const TCHAR* val = "U";										string val = "U";
-//							SdaiADB adb = sdaiCreateADB (sdaiLOGICAL, val);				int_t adb = cis2engine.sdaiCreateADB (cis2engine.sdaiLOGICAL, val);
+//							SdaiADB adb = sdaiCreateADB (sdaiLOGICAL, val);				int_t adb = CIS2Engine.sdaiCreateADB (CIS2Engine.sdaiLOGICAL, val);
 //
 //	sdaiENUM				const TCHAR* val = "NOTDEFINED";							string val = "NOTDEFINED";
-//							SdaiADB adb = sdaiCreateADB (sdaiENUM, val);				int_t adb = cis2engine.sdaiCreateADB (cis2engine.sdaiENUM, val);
+//							SdaiADB adb = sdaiCreateADB (sdaiENUM, val);				int_t adb = CIS2Engine.sdaiCreateADB (CIS2Engine.sdaiENUM, val);
 //
 //	sdaiBINARY				const TCHAR* val = "0123456ABC";							string val = "0123456ABC";
-//							SdaiADB adb = sdaiCreateADB (sdaiBINARY, val);				int_t adb = cis2engine.sdaiCreateADB (cis2engine.sdaiBINARY, val);
+//							SdaiADB adb = sdaiCreateADB (sdaiBINARY, val);				int_t adb = CIS2Engine.sdaiCreateADB (CIS2Engine.sdaiBINARY, val);
 //
 //	sdaiSTRING				const char* val = "My Simple String";						string val = "My Simple String";
-//							SdaiADB adb = sdaiCreateADB (sdaiSTRING, val);				int_t adb = cis2engine.sdaiCreateADB (cis2engine.sdaiSTRING, val);
+//							SdaiADB adb = sdaiCreateADB (sdaiSTRING, val);				int_t adb = CIS2Engine.sdaiCreateADB (CIS2Engine.sdaiSTRING, val);
 //
 //	sdaiUNICODE				const wchar_t* val = L"Any Unicode String";					string val = "Any Unicode String";
-//							SdaiADB adb = sdaiCreateADB (sdaiUNICODE, val);				int_t adb = cis2engine.sdaiCreateADB (cis2engine.sdaiUNICODE, val);
+//							SdaiADB adb = sdaiCreateADB (sdaiUNICODE, val);				int_t adb = CIS2Engine.sdaiCreateADB (CIS2Engine.sdaiUNICODE, val);
 //
 //	sdaiEXPRESSSTRING		const char* val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";	string val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";
-//							SdaiADB adb = sdaiCreateADB (sdaiEXPRESSSTRING, val);		int_t adb = cis2engine.sdaiCreateADB (cis2engine.sdaiEXPRESSSTRING, val);
+//							SdaiADB adb = sdaiCreateADB (sdaiEXPRESSSTRING, val);		int_t adb = CIS2Engine.sdaiCreateADB (CIS2Engine.sdaiEXPRESSSTRING, val);
 //
-//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "PRODUCT");	int_t val = cis2engine.sdaiCreateInstanceBN (model, "PRODUCT");
-//							SdaiADB adb = sdaiCreateADB (sdaiINSTANCE, val);			int_t adb = cis2engine.sdaiCreateADB (cis2engine.sdaiINSTANCE, val);
+//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "IFCSITE");	int_t val = CIS2Engine.sdaiCreateInstanceBN (model, "IFCSITE");
+//							SdaiADB adb = sdaiCreateADB (sdaiINSTANCE, val);			int_t adb = CIS2Engine.sdaiCreateADB (CIS2Engine.sdaiINSTANCE, val);
 //
 //	sdaiAGGR				SdaiAggr val = sdaiCreateAggr (inst, 0);					int_t val = sdaiCreateAggr (inst, 0);
-//							sdaiPutAttr (val, sdaiINSTANCE, inst);						cis2engine.sdaiPutAttr (val, cis2engine.sdaiINSTANCE, inst);
-//							SdaiADB adb = sdaiCreateADB (sdaiAGGR, val);				int_t adb = cis2engine.sdaiCreateADB (cis2engine.sdaiAGGR, val);
+//							sdaiPutAttr (val, sdaiINSTANCE, inst);						CIS2Engine.sdaiPutAttr (val, CIS2Engine.sdaiINSTANCE, inst);
+//							SdaiADB adb = sdaiCreateADB (sdaiAGGR, val);				int_t adb = CIS2Engine.sdaiCreateADB (CIS2Engine.sdaiAGGR, val);
 //
 //	sdaiADB					not applicable
 //
@@ -5773,40 +5914,40 @@ void						DECL STDC	sdaiRemoveByIterator(
 //	valueType				C/C++														C#
 //
 //	sdaiINTEGER				int_t val = 123;											int_t val = 123;
-//							sdaiRemove (aggregate, sdaiINTEGER, &val);					cis2engine.sdaiRemove (aggregate, cis2engine.sdaiINTEGER, ref val);
+//							sdaiRemove (aggregate, sdaiINTEGER, &val);					CIS2Engine.sdaiRemove (aggregate, CIS2Engine.sdaiINTEGER, ref val);
 //
 //	sdaiREAL or sdaiNUMBER	double val = 123.456;										double val = 123.456;
-//							sdaiRemove (aggregate, sdaiREAL, &val);						cis2engine.sdaiRemove (aggregate, cis2engine.sdaiREAL, ref val);
+//							sdaiRemove (aggregate, sdaiREAL, &val);						CIS2Engine.sdaiRemove (aggregate, CIS2Engine.sdaiREAL, ref val);
 //
 //	sdaiBOOLEAN				SdaiBoolean val = sdaiTRUE;									bool val = true;
-//							sdaiRemove (aggregate, sdaiBOOLEAN, &val);					cis2engine.sdaiRemove (aggregate, cis2engine.sdaiBOOLEAN, ref val);
+//							sdaiRemove (aggregate, sdaiBOOLEAN, &val);					CIS2Engine.sdaiRemove (aggregate, CIS2Engine.sdaiBOOLEAN, ref val);
 //
 //	sdaiLOGICAL				const TCHAR* val = "U";										string val = "U";
-//							sdaiRemove (aggregate, sdaiLOGICAL, val);					cis2engine.sdaiRemove (aggregate, cis2engine.sdaiLOGICAL, val);
+//							sdaiRemove (aggregate, sdaiLOGICAL, val);					CIS2Engine.sdaiRemove (aggregate, CIS2Engine.sdaiLOGICAL, val);
 //
 //	sdaiENUM				const TCHAR* val = "NOTDEFINED";							string val = "NOTDEFINED";
-//							sdaiRemove (aggregate, sdaiENUM, val);						cis2engine.sdaiRemove (aggregate, cis2engine.sdaiENUM, val);
+//							sdaiRemove (aggregate, sdaiENUM, val);						CIS2Engine.sdaiRemove (aggregate, CIS2Engine.sdaiENUM, val);
 //
 //	sdaiBINARY				const TCHAR* val = "0123456ABC";							string val = "0123456ABC";
-//							sdaiRemove (aggregate, sdaiBINARY, val);					cis2engine.sdaiRemove (aggregate, cis2engine.sdaiBINARY, val);
+//							sdaiRemove (aggregate, sdaiBINARY, val);					CIS2Engine.sdaiRemove (aggregate, CIS2Engine.sdaiBINARY, val);
 //
 //	sdaiSTRING				const char* val = "My Simple String";						string val = "My Simple String";
-//							sdaiRemove (aggregate, sdaiSTRING, val);					cis2engine.sdaiRemove (aggregate, cis2engine.sdaiSTRING, val);
+//							sdaiRemove (aggregate, sdaiSTRING, val);					CIS2Engine.sdaiRemove (aggregate, CIS2Engine.sdaiSTRING, val);
 //
 //	sdaiUNICODE				const wchar_t* val = L"Any Unicode String";					string val = "Any Unicode String";
-//							sdaiRemove (aggregate, sdaiUNICODE, val);					cis2engine.sdaiRemove (aggregate, cis2engine.sdaiUNICODE, val);
+//							sdaiRemove (aggregate, sdaiUNICODE, val);					CIS2Engine.sdaiRemove (aggregate, CIS2Engine.sdaiUNICODE, val);
 //
 //	sdaiEXPRESSSTRING		const char* val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";	string val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";
-//							sdaiRemove (aggregate, sdaiEXPRESSSTRING, val);				cis2engine.sdaiRemove (aggregate, cis2engine.sdaiEXPRESSSTRING, val);
+//							sdaiRemove (aggregate, sdaiEXPRESSSTRING, val);				CIS2Engine.sdaiRemove (aggregate, CIS2Engine.sdaiEXPRESSSTRING, val);
 //
 //	sdaiINSTANCE			SdaiInstance val = ...										int_t val = ...
-//							sdaiRemove (aggregate, sdaiINSTANCE, val);					cis2engine.sdaiRemove (aggregate, cis2engine.sdaiINSTANCE, val);
+//							sdaiRemove (aggregate, sdaiINSTANCE, val);					CIS2Engine.sdaiRemove (aggregate, CIS2Engine.sdaiINSTANCE, val);
 //
 //	sdaiAGGR				SdaiAggr val = ...											int_t val = ...
-//							sdaiRemove (aggregate, sdaiAGGR, val);						cis2engine.sdaiRemove (aggregate, cis2engine.sdaiAGGR, val);
+//							sdaiRemove (aggregate, sdaiAGGR, val);						CIS2Engine.sdaiRemove (aggregate, CIS2Engine.sdaiAGGR, val);
 //
 //	sdaiADB					SdaiADB val = ...											int_t val = ...
-//							sdaiRemove (aggregate, sdaiADB, val);						cis2engine.sdaiRemove (aggregate, cis2engine.sdaiADB, val);
+//							sdaiRemove (aggregate, sdaiADB, val);						CIS2Engine.sdaiRemove (aggregate, CIS2Engine.sdaiADB, val);
 //
 //	TCHAR is “char” or “wchar_t” depending on setStringUnicode.
 //	(Non-standard behavior) sdaiLOGICAL behaves differently from ISO 10303-24-2001: it expects char* while standard declares int_t.
@@ -6084,48 +6225,49 @@ static	inline	void	sdaiPutADBTypePath(
 //	valueType				C/C++														C#
 //
 //	sdaiINTEGER				int_t val = 123;											int_t val = 123;
-//							sdaiPutAttr (instance, attribute, sdaiINTEGER, &val);		cis2engine.sdaiPutAttr (instance, attribute, cis2engine.sdaiINTEGER, ref val);
+//							sdaiPutAttr (instance, attribute, sdaiINTEGER, &val);		CIS2Engine.sdaiPutAttr (instance, attribute, CIS2Engine.sdaiINTEGER, ref val);
 //
 //	sdaiREAL or sdaiNUMBER	double val = 123.456;										double val = 123.456;
-//							sdaiPutAttr (instance, attribute, sdaiREAL, &val);			cis2engine.sdaiPutAttr (instance, attribute, cis2engine.sdaiREAL, ref val);
+//							sdaiPutAttr (instance, attribute, sdaiREAL, &val);			CIS2Engine.sdaiPutAttr (instance, attribute, CIS2Engine.sdaiREAL, ref val);
 //
 //	sdaiBOOLEAN				SdaiBoolean val = sdaiTRUE;									bool val = true;
-//							sdaiPutAttr (instance, attribute, sdaiBOOLEAN, &val);		cis2engine.sdaiPutAttr (instance, attribute, cis2engine.sdaiBOOLEAN, ref val);
+//							sdaiPutAttr (instance, attribute, sdaiBOOLEAN, &val);		CIS2Engine.sdaiPutAttr (instance, attribute, CIS2Engine.sdaiBOOLEAN, ref val);
 //
 //	sdaiLOGICAL				const TCHAR* val = "U";										string val = "U";
-//							sdaiPutAttr (instance, attribute, sdaiLOGICAL, val);		cis2engine.sdaiPutAttr (instance, attribute, cis2engine.sdaiLOGICAL, val);
+//							sdaiPutAttr (instance, attribute, sdaiLOGICAL, val);		CIS2Engine.sdaiPutAttr (instance, attribute, CIS2Engine.sdaiLOGICAL, val);
 //
 //	sdaiENUM				const TCHAR* val = "NOTDEFINED";							string val = "NOTDEFINED";
-//							sdaiPutAttr (instance, attribute, sdaiENUM, val);			cis2engine.sdaiPutAttr (instance, attribute, cis2engine.sdaiENUM, val);
+//							sdaiPutAttr (instance, attribute, sdaiENUM, val);			CIS2Engine.sdaiPutAttr (instance, attribute, CIS2Engine.sdaiENUM, val);
 //
 //	sdaiBINARY				const TCHAR* val = "0123456ABC";							string val = "0123456ABC";
-//							sdaiPutAttr (instance, attribute, sdaiBINARY, val);			cis2engine.sdaiPutAttr (instance, attribute, cis2engine.sdaiBINARY, val);
+//							sdaiPutAttr (instance, attribute, sdaiBINARY, val);			CIS2Engine.sdaiPutAttr (instance, attribute, CIS2Engine.sdaiBINARY, val);
 //
 //	sdaiSTRING				const char* val = "My Simple String";						string val = "My Simple String";
-//							sdaiPutAttr (instance, attribute, sdaiSTRING, val);			cis2engine.sdaiPutAttr (instance, attribute, cis2engine.sdaiSTRING, val);
+//							sdaiPutAttr (instance, attribute, sdaiSTRING, val);			CIS2Engine.sdaiPutAttr (instance, attribute, CIS2Engine.sdaiSTRING, val);
 //
 //	sdaiUNICODE				const wchar_t* val = L"Any Unicode String";					string val = "Any Unicode String";
-//							sdaiPutAttr (instance, attribute, sdaiUNICODE, val);		cis2engine.sdaiPutAttr (instance, attribute, cis2engine.sdaiUNICODE, val);
+//							sdaiPutAttr (instance, attribute, sdaiUNICODE, val);		CIS2Engine.sdaiPutAttr (instance, attribute, CIS2Engine.sdaiUNICODE, val);
 //
 //	sdaiEXPRESSSTRING		const char* val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";	string val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";
-//							sdaiPutAttr (instance, attribute, sdaiEXPRESSSTRING, val);	cis2engine.sdaiPutAttr (instance, attribute, cis2engine.sdaiEXPRESSSTRING, val);
+//							sdaiPutAttr (instance, attribute, sdaiEXPRESSSTRING, val);	CIS2Engine.sdaiPutAttr (instance, attribute, CIS2Engine.sdaiEXPRESSSTRING, val);
 //
-//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "PRODUCT");	int_t val = cis2engine.sdaiCreateInstanceBN (model, "PRODUCT");
-//							sdaiPutAttr (instance, attribute, sdaiINSTANCE, val);		cis2engine.sdaiPutAttr (instance, attribute, cis2engine.sdaiINSTANCE, val);
+//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "IFCSITE");	int_t val = CIS2Engine.sdaiCreateInstanceBN (model, "IFCSITE");
+//							sdaiPutAttr (instance, attribute, sdaiINSTANCE, val);		CIS2Engine.sdaiPutAttr (instance, attribute, CIS2Engine.sdaiINSTANCE, val);
 //
 //	sdaiAGGR				SdaiAggr val = sdaiCreateAggr (inst, 0);					int_t val = sdaiCreateAggr (inst, 0);
-//							sdaiPutAttr (val, sdaiINSTANCE, inst);						cis2engine.sdaiPutAttr (val, cis2engine.sdaiINSTANCE, inst);
-//							sdaiPutAttr (instance, attribute, sdaiAGGR, val);			cis2engine.sdaiPutAttr (instance, attribute, cis2engine.sdaiAGGR, val);
+//							sdaiPutAttr (val, sdaiINSTANCE, inst);						CIS2Engine.sdaiPutAttr (val, CIS2Engine.sdaiINSTANCE, inst);
+//							sdaiPutAttr (instance, attribute, sdaiAGGR, val);			CIS2Engine.sdaiPutAttr (instance, attribute, CIS2Engine.sdaiAGGR, val);
 //
 //	sdaiADB					int_t integerValue = 123;									int_t integerValue = 123;	
-//							SdaiADB val = sdaiCreateADB (sdaiINTEGER, &integerValue);	int_t val = cis2engine.sdaiCreateADB (cis2engine.sdaiINTEGER, ref integerValue);
-//							sdaiPutADBTypePath (val, 1, "INTEGER");						cis2engine.sdaiPutADBTypePath (val, 1, "INTEGER");
-//							sdaiPutAttr (instance, attribute, sdaiADB, val);			cis2engine.sdaiPutAttr (instance, attribute, cis2engine.sdaiADB, val);	
-//							sdaiDeleteADB (val);										cis2engine.sdaiDeleteADB (val);
+//							SdaiADB val = sdaiCreateADB (sdaiINTEGER, &integerValue);	int_t val = CIS2Engine.sdaiCreateADB (CIS2Engine.sdaiINTEGER, ref integerValue);
+//							sdaiPutADBTypePath (val, 1, "IFCINTEGER");					CIS2Engine.sdaiPutADBTypePath (val, 1, "IFCINTEGER");
+//							sdaiPutAttr (instance, attribute, sdaiADB, val);			CIS2Engine.sdaiPutAttr (instance, attribute, CIS2Engine.sdaiADB, val);	
+//							...															...
+//							sdaiDeleteADB (val);	//	optional						CIS2Engine.sdaiDeleteADB (val);	//	optional
 //
 //	TCHAR is “char” or “wchar_t” depending on setStringUnicode.
 //	(Non-standard behavior) sdaiLOGICAL behaves differently from ISO 10303-24-2001: it expects char* while standard declares int_t.
-//	(Non-standard extension) sdiADB in C++ has an option to work without sdaiCreateEmptyADB and sdaiDeleteADB as shown in the table.
+//	(Non-standard extension) sdiADB has an option to work without sdaiDeleteADB as shown in the table (all open ADB's will be deleted on model close).
 //
 //
 //	Table 2 - valueType can be requested depending on actual model data.
@@ -6215,48 +6357,49 @@ static	inline	void	sdaiPutAttr(
 //	valueType				C/C++															C#
 //
 //	sdaiINTEGER				int_t val = 123;												int_t val = 123;
-//							sdaiPutAttrBN (instance, "attrName", sdaiINTEGER, &val);		cis2engine.sdaiPutAttrBN (instance, "attrName", cis2engine.sdaiINTEGER, ref val);
+//							sdaiPutAttrBN (instance, "attrName", sdaiINTEGER, &val);		CIS2Engine.sdaiPutAttrBN (instance, "attrName", CIS2Engine.sdaiINTEGER, ref val);
 //
 //	sdaiREAL or sdaiNUMBER	double val = 123.456;											double val = 123.456;
-//							sdaiPutAttrBN (instance, "attrName", sdaiREAL, &val);			cis2engine.sdaiPutAttrBN (instance, "attrName", cis2engine.sdaiREAL, ref val);
+//							sdaiPutAttrBN (instance, "attrName", sdaiREAL, &val);			CIS2Engine.sdaiPutAttrBN (instance, "attrName", CIS2Engine.sdaiREAL, ref val);
 //
 //	sdaiBOOLEAN				SdaiBoolean val = sdaiTRUE;										bool val = true;
-//							sdaiPutAttrBN (instance, "attrName", sdaiBOOLEAN, &val);		cis2engine.sdaiPutAttrBN (instance, "attrName", cis2engine.sdaiBOOLEAN, ref val);
+//							sdaiPutAttrBN (instance, "attrName", sdaiBOOLEAN, &val);		CIS2Engine.sdaiPutAttrBN (instance, "attrName", CIS2Engine.sdaiBOOLEAN, ref val);
 //
 //	sdaiLOGICAL				const TCHAR* val = "U";											string val = "U";
-//							sdaiPutAttrBN (instance, "attrName", sdaiLOGICAL, val);			cis2engine.sdaiPutAttrBN (instance, "attrName", cis2engine.sdaiLOGICAL, val);
+//							sdaiPutAttrBN (instance, "attrName", sdaiLOGICAL, val);			CIS2Engine.sdaiPutAttrBN (instance, "attrName", CIS2Engine.sdaiLOGICAL, val);
 //
 //	sdaiENUM				const TCHAR* val = "NOTDEFINED";								string val = "NOTDEFINED";
-//							sdaiPutAttrBN (instance, "attrName", sdaiENUM, val);			cis2engine.sdaiPutAttrBN (instance, "attrName", cis2engine.sdaiENUM, val);
+//							sdaiPutAttrBN (instance, "attrName", sdaiENUM, val);			CIS2Engine.sdaiPutAttrBN (instance, "attrName", CIS2Engine.sdaiENUM, val);
 //
 //	sdaiBINARY				const TCHAR* val = "0123456ABC";								string val = "0123456ABC";
-//							sdaiPutAttrBN (instance, "attrName", sdaiBINARY, val);			cis2engine.sdaiPutAttrBN (instance, "attrName", cis2engine.sdaiBINARY, val);
+//							sdaiPutAttrBN (instance, "attrName", sdaiBINARY, val);			CIS2Engine.sdaiPutAttrBN (instance, "attrName", CIS2Engine.sdaiBINARY, val);
 //
 //	sdaiSTRING				const char* val = "My Simple String";							string val = "My Simple String";
-//							sdaiPutAttrBN (instance, "attrName", sdaiSTRING, val);			cis2engine.sdaiPutAttrBN (instance, "attrName", cis2engine.sdaiSTRING, val);
+//							sdaiPutAttrBN (instance, "attrName", sdaiSTRING, val);			CIS2Engine.sdaiPutAttrBN (instance, "attrName", CIS2Engine.sdaiSTRING, val);
 //
 //	sdaiUNICODE				const wchar_t* val = L"Any Unicode String";						string val = "Any Unicode String";
-//							sdaiPutAttrBN (instance, "attrName", sdaiUNICODE, val);			cis2engine.sdaiPutAttrBN (instance, "attrName", cis2engine.sdaiUNICODE, val);
+//							sdaiPutAttrBN (instance, "attrName", sdaiUNICODE, val);			CIS2Engine.sdaiPutAttrBN (instance, "attrName", CIS2Engine.sdaiUNICODE, val);
 //
 //	sdaiEXPRESSSTRING		const char* val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";		string val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";
-//							sdaiPutAttrBN (instance, "attrName", sdaiEXPRESSSTRING, val);	cis2engine.sdaiPutAttrBN (instance, "attrName", cis2engine.sdaiEXPRESSSTRING, val);
+//							sdaiPutAttrBN (instance, "attrName", sdaiEXPRESSSTRING, val);	CIS2Engine.sdaiPutAttrBN (instance, "attrName", CIS2Engine.sdaiEXPRESSSTRING, val);
 //
-//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "PRODUCT");		int_t val = cis2engine.sdaiCreateInstanceBN (model, "PRODUCT");
-//							sdaiPutAttrBN (instance, "attrName", sdaiINSTANCE, val);		cis2engine.sdaiPutAttrBN (instance, "attrName", cis2engine.sdaiINSTANCE, val);
+//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "IFCSITE");		int_t val = CIS2Engine.sdaiCreateInstanceBN (model, "IFCSITE");
+//							sdaiPutAttrBN (instance, "attrName", sdaiINSTANCE, val);		CIS2Engine.sdaiPutAttrBN (instance, "attrName", CIS2Engine.sdaiINSTANCE, val);
 //
 //	sdaiAGGR				SdaiAggr val = sdaiCreateAggr (inst, 0);						int_t val = sdaiCreateAggr (inst, 0);
-//							sdaiPutAttr (val, sdaiINSTANCE, inst);							cis2engine.sdaiPutAttr (val, cis2engine.sdaiINSTANCE, inst);
-//							sdaiPutAttrBN (instance, "attrName", sdaiAGGR, val);			cis2engine.sdaiPutAttrBN (instance, "attrName", cis2engine.sdaiAGGR, val);
+//							sdaiPutAttr (val, sdaiINSTANCE, inst);							CIS2Engine.sdaiPutAttr (val, CIS2Engine.sdaiINSTANCE, inst);
+//							sdaiPutAttrBN (instance, "attrName", sdaiAGGR, val);			CIS2Engine.sdaiPutAttrBN (instance, "attrName", CIS2Engine.sdaiAGGR, val);
 //
 //	sdaiADB					int_t integerValue = 123;										int_t integerValue = 123;	
-//							SdaiADB val = sdaiCreateADB (sdaiINTEGER, &integerValue);		int_t val = cis2engine.sdaiCreateADB (cis2engine.sdaiINTEGER, ref integerValue);
-//							sdaiPutADBTypePath (val, 1, "INTEGER");							cis2engine.sdaiPutADBTypePath (val, 1, "INTEGER");
-//							sdaiPutAttrBN (instance, "attrName", sdaiADB, val);				cis2engine.sdaiPutAttrBN (instance, "attrName", cis2engine.sdaiADB, val);	
-//							sdaiDeleteADB (val);											cis2engine.sdaiDeleteADB (val);
+//							SdaiADB val = sdaiCreateADB (sdaiINTEGER, &integerValue);		int_t val = CIS2Engine.sdaiCreateADB (CIS2Engine.sdaiINTEGER, ref integerValue);
+//							sdaiPutADBTypePath (val, 1, "IFCINTEGER");						CIS2Engine.sdaiPutADBTypePath (val, 1, "IFCINTEGER");
+//							sdaiPutAttrBN (instance, "attrName", sdaiADB, val);				CIS2Engine.sdaiPutAttrBN (instance, "attrName", CIS2Engine.sdaiADB, val);	
+//							...																...
+//							sdaiDeleteADB (val);	//	optional							CIS2Engine.sdaiDeleteADB (val);	//	optional
 //
 //	TCHAR is “char” or “wchar_t” depending on setStringUnicode.
 //	(Non-standard behavior) sdaiLOGICAL behaves differently from ISO 10303-24-2001: it expects char* while standard declares int_t.
-//	(Non-standard extension) sdiADB in C++ has an option to work without sdaiCreateEmptyADB and sdaiDeleteADB as shown in the table.
+//	(Non-standard extension) sdiADB has an option to work without sdaiDeleteADB as shown in the table (all open ADB's will be deleted on model close).
 //
 //
 //	Table 2 - valueType can be requested depending on actual model data.
@@ -6705,40 +6848,40 @@ void						DECL STDC	sdaiEnd(
 //	valueType				C/C++														C#
 //
 //	sdaiINTEGER				int_t val = 123;											int_t val = 123;
-//							sdaiIsMember (sdaiINTEGER, &val);							cis2engine.sdaiIsMember (cis2engine.sdaiINTEGER, ref val);
+//							sdaiIsMember (sdaiINTEGER, &val);							CIS2Engine.sdaiIsMember (CIS2Engine.sdaiINTEGER, ref val);
 //
 //	sdaiREAL or sdaiNUMBER	double val = 123.456;										double val = 123.456;
-//							sdaiIsMember (sdaiREAL, &val);								cis2engine.sdaiIsMember (cis2engine.sdaiREAL, ref val);
+//							sdaiIsMember (sdaiREAL, &val);								CIS2Engine.sdaiIsMember (CIS2Engine.sdaiREAL, ref val);
 //
 //	sdaiBOOLEAN				SdaiBoolean val = sdaiTRUE;									bool val = true;
-//							sdaiIsMember (sdaiBOOLEAN, &val);							cis2engine.sdaiIsMember (cis2engine.sdaiBOOLEAN, ref val);
+//							sdaiIsMember (sdaiBOOLEAN, &val);							CIS2Engine.sdaiIsMember (CIS2Engine.sdaiBOOLEAN, ref val);
 //
 //	sdaiLOGICAL				const TCHAR* val = "U";										string val = "U";
-//							sdaiIsMember (sdaiLOGICAL, val);							cis2engine.sdaiIsMember (cis2engine.sdaiLOGICAL, val);
+//							sdaiIsMember (sdaiLOGICAL, val);							CIS2Engine.sdaiIsMember (CIS2Engine.sdaiLOGICAL, val);
 //
 //	sdaiENUM				const TCHAR* val = "NOTDEFINED";							string val = "NOTDEFINED";
-//							sdaiIsMember (sdaiENUM, val);								cis2engine.sdaiIsMember (cis2engine.sdaiENUM, val);
+//							sdaiIsMember (sdaiENUM, val);								CIS2Engine.sdaiIsMember (CIS2Engine.sdaiENUM, val);
 //
 //	sdaiBINARY				const TCHAR* val = "0123456ABC";							string val = "0123456ABC";
-//							sdaiIsMember (sdaiBINARY, val);								cis2engine.sdaiIsMember (cis2engine.sdaiBINARY, val);
+//							sdaiIsMember (sdaiBINARY, val);								CIS2Engine.sdaiIsMember (CIS2Engine.sdaiBINARY, val);
 //
 //	sdaiSTRING				const char* val = "My Simple String";						string val = "My Simple String";
-//							sdaiIsMember (sdaiSTRING, val);								cis2engine.sdaiIsMember (cis2engine.sdaiSTRING, val);
+//							sdaiIsMember (sdaiSTRING, val);								CIS2Engine.sdaiIsMember (CIS2Engine.sdaiSTRING, val);
 //
 //	sdaiUNICODE				const wchar_t* val = L"Any Unicode String";					string val = "Any Unicode String";
-//							sdaiIsMember (sdaiUNICODE, val);							cis2engine.sdaiIsMember (cis2engine.sdaiUNICODE, val);
+//							sdaiIsMember (sdaiUNICODE, val);							CIS2Engine.sdaiIsMember (CIS2Engine.sdaiUNICODE, val);
 //
 //	sdaiEXPRESSSTRING		const char* val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";	string val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";
-//							sdaiIsMember (sdaiEXPRESSSTRING, val);						cis2engine.sdaiIsMember (cis2engine.sdaiEXPRESSSTRING, val);
+//							sdaiIsMember (sdaiEXPRESSSTRING, val);						CIS2Engine.sdaiIsMember (CIS2Engine.sdaiEXPRESSSTRING, val);
 //
 //	sdaiINSTANCE			SdaiInstance val = ...										int_t val = ...
-//							sdaiIsMember (sdaiINSTANCE, val);							cis2engine.sdaiIsMember (cis2engine.sdaiINSTANCE, val);
+//							sdaiIsMember (sdaiINSTANCE, val);							CIS2Engine.sdaiIsMember (CIS2Engine.sdaiINSTANCE, val);
 //
 //	sdaiAGGR				SdaiAggr val = ...											int_t val = ...
-//							sdaiIsMember (sdaiAGGR, val);								cis2engine.sdaiIsMember (cis2engine.sdaiAGGR, val);
+//							sdaiIsMember (sdaiAGGR, val);								CIS2Engine.sdaiIsMember (CIS2Engine.sdaiAGGR, val);
 //
 //	sdaiADB					SdaiADB val = ...											int_t val = ...
-//							sdaiIsMember (sdaiADB, val);								cis2engine.sdaiIsMember (cis2engine.sdaiADB, val);
+//							sdaiIsMember (sdaiADB, val);								CIS2Engine.sdaiIsMember (CIS2Engine.sdaiADB, val);
 //
 //	TCHAR is “char” or “wchar_t” depending on setStringUnicode.
 //	(Non-standard behavior) sdaiLOGICAL behaves differently from ISO 10303-24-2001: it expects char* while standard declares int_t.
@@ -7113,7 +7256,13 @@ void						DECL STDC	setMaximumSegmentationLength(
 //
 //				double					returns								OUT
 //
-//	...
+//	This function will return the conversion factor compared to the base SI unit.
+//
+//	The possible unitType values are all enumeration values from enumeration type IfcUnitEnum.
+//
+//	For example getProjectUnitConversionFactor(model, "LENGTHUNIT") returns 0.001 in case of MilliMeters.
+//
+//	Optional arguments unitPrefix (for example "MILLI"), unitName (if defined) and SIUnitName (for example "METRE") can be requested.
 //
 double						DECL STDC	getProjectUnitConversionFactor(
 												SdaiModel				model,
@@ -7146,6 +7295,35 @@ static	inline	double	getProjectUnitConversionFactor(
 				);
 }
 
+//
+//
+static	inline	double	getProjectUnitConversionFactor(
+								SdaiModel				model,
+								SdaiString				unitType
+							)
+{
+	return	getProjectUnitConversionFactor(
+					model,
+					unitType,
+					(SdaiString*) nullptr,				//	unitPrefix
+					(SdaiString*) nullptr,				//	unitName
+					(SdaiString*) nullptr				//	SIUnitName
+				);
+}
+
+//
+//
+static	inline	double	getProjectUnitConversionFactor(
+								SdaiModel				model,
+								char					* unitType
+							)
+{
+	return	getProjectUnitConversionFactor(
+					model,
+					(SdaiString) unitType
+				);
+}
+
 //}} End C++ polymorphic versions
 	extern "C" {
 #endif
@@ -7160,7 +7338,13 @@ static	inline	double	getProjectUnitConversionFactor(
 //
 //				double					returns								OUT
 //
-//	...
+//	This function will return the conversion factor compared to the base SI unit.
+//
+//	The possible unitType values are all enumeration values from enumeration type IfcUnitEnum.
+//
+//	For example getProjectUnitConversionFactorW(model, L"LENGTHUNIT") returns 0.001 in case of MilliMeters.
+//
+//	Optional arguments unitPrefix (for example L"MILLI"), unitName (if defined) and SIUnitName (for example L"METRE") can be requested.
 //
 double						DECL STDC	getProjectUnitConversionFactorW(
 												SdaiModel				model,
@@ -7193,6 +7377,35 @@ static	inline	double	getProjectUnitConversionFactorW(
 				);
 }
 
+//
+//
+static	inline	double	getProjectUnitConversionFactorW(
+								SdaiModel				model,
+								const wchar_t			* unitType
+							)
+{
+	return	getProjectUnitConversionFactorW(
+					model,
+					unitType,
+					(const wchar_t**) nullptr,			//	unitPrefix
+					(const wchar_t**) nullptr,			//	unitName
+					(const wchar_t**) nullptr			//	SIUnitName
+				);
+}
+
+//
+//
+static	inline	double	getProjectUnitConversionFactorW(
+								SdaiModel				model,
+								wchar_t					* unitType
+							)
+{
+	return	getProjectUnitConversionFactorW(
+					model,
+					(const wchar_t*) unitType
+				);
+}
+
 //}} End C++ polymorphic versions
 	extern "C" {
 #endif
@@ -7207,7 +7420,13 @@ static	inline	double	getProjectUnitConversionFactorW(
 //
 //				double					returns								OUT
 //
-//	...
+//	This function will return the conversion factor compared to the base SI unit.
+//
+//	The unitType is derived from the instance.
+//
+//	For example getUnitInstanceConversionFactor(myInstance) returns 0.001 in case of MilliMeters if the instance defines a length unit.
+//
+//	Optional arguments unitType (for example "LENGTHUNIT"), unitPrefix (for example "MILLI"), unitName (if defined) and SIUnitName (for example "METRE") can be requested.
 //
 double						DECL STDC	getUnitInstanceConversionFactor(
 												SdaiInstance			unitInstance,
@@ -7254,7 +7473,13 @@ static	inline	double	getUnitInstanceConversionFactor(
 //
 //				double					returns								OUT
 //
-//	...
+//	This function will return the conversion factor compared to the base SI unit.
+//
+//	The unitType is derived from the instance.
+//
+//	For example getUnitInstanceConversionFactorW(myInstance) returns 0.001 in case of MilliMeters if the instance defines a length unit.
+//
+//	Optional arguments unitType (for example L"LENGTHUNIT"), unitPrefix (for example L"MILLI"), unitName (if defined) and SIUnitName (for example L"METRE") can be requested.
 //
 double						DECL STDC	getUnitInstanceConversionFactorW(
 												SdaiInstance			unitInstance,
@@ -7301,7 +7526,13 @@ static	inline	double	getUnitInstanceConversionFactorW(
 //
 //				void					returns
 //
-//	This call can be used to optimize Boundary Representation geometries.
+//	This call can be used to optimize Boundary Representation or Mesh geometries.
+//
+//	In many cases geometry within an IFC file is not semantically rich similar to an extruded profile or polygon,
+//	bounded surfaces or results from boolean operations on top of basic parametric shapes. Depending on how such geometries are stored very often
+//	only vertices and triangles or polygons based on these vertices are available. Looking at the shape however, they meant to represent often 
+//	parametric surfaces. In case normal and surface boundary information is missing in the IFC file this call allows automatic recalculation of such
+//	information.
 //
 //		consistencyCheck
 //			bit0  (1)		merge elements in the vertex array are duplicated (epsilon used as distance)
@@ -7325,8 +7556,8 @@ static	inline	double	getUnitInstanceConversionFactorW(
 //			then it will be defined as equal
 //
 //		maxVerticesSize
-//			if 0 this setting is applied to BoundaryRepresentation based geometries
-//			if larger than 0 it is applied to all BoundaryRepresentation based geometries with vertices size smaller or equal to the given number
+//			if 0 this setting is applied to all BoundaryRepresentation/Mesh based geometries
+//			if larger than 0 it is applied to BoundaryRepresentation/Mesh based geometries with vertices size smaller or equal to the given number
 //
 void						DECL STDC	setBRepProperties(
 												SdaiModel				model,
@@ -7719,10 +7950,15 @@ static	inline	SdaiInstance	iterateOverInstances(
 //		  requested valueType is matching with the value argument, a mismatch will lead to unpredictable results.
 //
 //	The Table 2 shows what valueType can be fulfilled depending on actual model data.
-//	If a get-function cannot get a value it will return 0, it may happen when model item is unset ($) or incompatible with requested valueType.
-//	To separate these cases you can use engiGetInstanceAttrType(BN), sdaiGetADBType and engiGetAggrType.
 //	On success get-function will return non-zero. More precisely, according to ISO 10303-24-2001 on success they return content of
 //	value argument (*value) for sdaiADB, sdaiAGGR, or sdaiINSTANCE or value argument itself for other types (it has no useful meaning for C#).
+//	All get-functions return NULL and set value to 0 if model data are incompatible with requested valueType.
+//	Furthermore:
+//	- for unset ($) data all get-functions return NULL and set value to 0, except when valueType = sdaiEXPRESSSTRING
+//	- for derived (*), depending on engiEnableDerivedAttributes, and except valueType = sdaiEXPRESSSTRING:
+//	   -- either calculate and follow these rues for calculated value
+//	   -- or handles it as unset ($)
+//	- if valueType = sdaiEXPRESSSTRING and data is unset ($) or derived (*), get-function will return NULL but set value to "$" or "*" respectively for any engiEnableDerivedAttributes state
 //
 //
 //	Table 1 – Required value buffer depending on valueType (on the example of sdaiGetAggrByIterator but valid for all get-functions)
@@ -7730,69 +7966,72 @@ static	inline	SdaiInstance	iterateOverInstances(
 //	valueType				C/C++															C#
 //
 //	sdaiINTEGER				int_t val;														int_t val;
-//							sdaiGetAggrByIterator (iterator, sdaiINTEGER, &val);			cis2engine.sdaiGetAggrByIterator (iterator, cis2engine.sdaiINTEGER, out val);
+//							sdaiGetAggrByIterator (iterator, sdaiINTEGER, &val);			CIS2Engine.sdaiGetAggrByIterator (iterator, CIS2Engine.sdaiINTEGER, out val);
 //
 //	sdaiREAL or sdaiNUMBER	double val;														double val;
-//							sdaiGetAggrByIterator (iterator, sdaiREAL, &val);				cis2engine.sdaiGetAggrByIterator (iterator, cis2engine.sdaiREAL, out val);
+//							sdaiGetAggrByIterator (iterator, sdaiREAL, &val);				CIS2Engine.sdaiGetAggrByIterator (iterator, CIS2Engine.sdaiREAL, out val);
 //
 //	sdaiBOOLEAN				SdaiBoolean val;												bool val;
-//							sdaiGetAggrByIterator (iterator, sdaiBOOLEAN, &val);			cis2engine.sdaiGetAggrByIterator (iterator, cis2engine.sdaiBOOLEAN, out val);
+//							sdaiGetAggrByIterator (iterator, sdaiBOOLEAN, &val);			CIS2Engine.sdaiGetAggrByIterator (iterator, CIS2Engine.sdaiBOOLEAN, out val);
 //
 //	sdaiLOGICAL				const TCHAR* val;												string val;
-//							sdaiGetAggrByIterator (iterator, sdaiLOGICAL, &val);			cis2engine.sdaiGetAggrByIterator (iterator, cis2engine.sdaiLOGICAL, out val);
+//							sdaiGetAggrByIterator (iterator, sdaiLOGICAL, &val);			CIS2Engine.sdaiGetAggrByIterator (iterator, CIS2Engine.sdaiLOGICAL, out val);
 //
 //	sdaiENUM				const TCHAR* val;												string val;
-//							sdaiGetAggrByIterator (iterator, sdaiENUM, &val);				cis2engine.sdaiGetAggrByIterator (iterator, cis2engine.sdaiENUM, out val);
+//							sdaiGetAggrByIterator (iterator, sdaiENUM, &val);				CIS2Engine.sdaiGetAggrByIterator (iterator, CIS2Engine.sdaiENUM, out val);
 //
 //	sdaiBINARY				const TCHAR* val;												string val;
-//							sdaiGetAggrByIterator (iterator, sdaiBINARY, &val);				cis2engine.sdaiGetAggrByIterator (iterator, cis2engine.sdaiBINARY, out val);
+//							sdaiGetAggrByIterator (iterator, sdaiBINARY, &val);				CIS2Engine.sdaiGetAggrByIterator (iterator, CIS2Engine.sdaiBINARY, out val);
 //
 //	sdaiSTRING				const char* val;												string val;
-//							sdaiGetAggrByIterator (iterator, sdaiSTRING, &val);				cis2engine.sdaiGetAggrByIterator (iterator, cis2engine.sdaiSTRING, out val);
+//							sdaiGetAggrByIterator (iterator, sdaiSTRING, &val);				CIS2Engine.sdaiGetAggrByIterator (iterator, CIS2Engine.sdaiSTRING, out val);
 //
 //	sdaiUNICODE				const wchar_t* val;												string val;
-//							sdaiGetAggrByIterator (iterator, sdaiUNICODE, &val);			cis2engine.sdaiGetAggrByIterator (iterator, cis2engine.sdaiUNICODE, out val);
+//							sdaiGetAggrByIterator (iterator, sdaiUNICODE, &val);			CIS2Engine.sdaiGetAggrByIterator (iterator, CIS2Engine.sdaiUNICODE, out val);
 //
 //	sdaiEXPRESSSTRING		const char* val;												string val;
-//							sdaiGetAggrByIterator (iterator, sdaiEXPRESSSTRING, &val);		cis2engine.sdaiGetAggrByIterator (iterator, cis2engine.sdaiEXPRESSSTRING, out val);
+//							sdaiGetAggrByIterator (iterator, sdaiEXPRESSSTRING, &val);		CIS2Engine.sdaiGetAggrByIterator (iterator, CIS2Engine.sdaiEXPRESSSTRING, out val);
 //
 //	sdaiINSTANCE			SdaiInstance val;												int_t val;
-//							sdaiGetAggrByIterator (iterator, sdaiINSTANCE, &val);			cis2engine.sdaiGetAggrByIterator (iterator, cis2engine.sdaiINSTANCE, out val);
+//							sdaiGetAggrByIterator (iterator, sdaiINSTANCE, &val);			CIS2Engine.sdaiGetAggrByIterator (iterator, CIS2Engine.sdaiINSTANCE, out val);
 //
 //	sdaiAGGR				SdaiAggr aggr;													int_t aggr;
-//							sdaiGetAggrByIterator (iterator, sdaiAGGR, &aggr);				cis2engine.sdaiGetAggrByIterator (iterator, cis2engine.sdaiAGGR, out aggr);
+//							sdaiGetAggrByIterator (iterator, sdaiAGGR, &aggr);				CIS2Engine.sdaiGetAggrByIterator (iterator, CIS2Engine.sdaiAGGR, out aggr);
 //
-//	sdaiADB					SdaiADB adb = sdaiCreateEmptyADB();								int_t adb = 0;	//	it is important to initialize
-//							sdaiGetAggrByIterator (iterator, sdaiADB, adb);					cis2engine.sdaiGetAggrByIterator (iterator, cis2engine.sdaiADB, out adb);		
-//							sdaiDeleteADB (adb);
+//	sdaiADB					SdaiADB adb = sdaiCreateEmptyADB();								int_t adb = CIS2Engine.sdaiCreateEmptyADB();
+//							sdaiGetAggrByIterator (iterator, sdaiADB, adb);					CIS2Engine.sdaiGetAggrByIterator (iterator, CIS2Engine.sdaiADB, adb);
+//							...																...
+//							sdaiDeleteADB (adb);	//	optional							CIS2Engine.sdaiDeleteADB (adb);	//	optional
 //
-//							SdaiADB adb = nullptr;	//	it is important to initialize
-//							sdaiGetAggrByIterator (iterator, sdaiADB, &adb);
+//							SdaiADB adb = nullptr;											int_t adb = 0;	//	it is important to initialize
+//							sdaiGetAggrByIterator (iterator, sdaiADB, &adb);				CIS2Engine.sdaiGetAggrByIterator (iterator, CIS2Engine.sdaiADB, out adb);
+//							...																...
+//							sdaiDeleteADB (adb);	//	optional							CIS2Engine.sdaiDeleteADB (adb);	//	optional
 //
 //	TCHAR is “char” or “wchar_t” depending on setStringUnicode.
 //	(Non-standard behavior) sdaiLOGICAL behaves differently from ISO 10303-24-2001: it expects char* while standard declares int_t.
-//	(Non-standard extension) sdiADB in C++ has an option to work without sdaiCreateEmptyADB and sdaiDeleteADB as shown in the table.
+//	(Non-standard extension) sdiADB has an option to work without sdaiCreateEmptyADB and sdaiDeleteADB as shown in the table (all open ADB's will be deleted on model close).
 //
 //
 //	Table 2 - valueType can be requested depending on actual model data.
 //
 //	valueType		Works for following values in the model
-//				 	  integer	   real		.T. or .F.	   .U.		other enum	  binary	  string	 instance	   list		 $ (empty)
-//	sdaiINTEGER			Yes			Yes *		 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiREAL			Yes			Yes			 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiNUMBER			Yes			Yes			 .			 .			 .			 .			 .			 .			 .			 .
-//	sdaiBOOLEAN			 .			 .			Yes			 .			 .			 .			 .			 .			 .			 .
-//	sdaiLOGICAL			 .			 .			Yes			Yes			 .			 .			 .			 .			 .			 .
-//	sdaiENUM			 .			 .			Yes			Yes			Yes			 .			 .			 .			 .			 .
-//	sdaiBINARY			 .			 .			 .			 .			 .			Yes			 .			 .			 .			 .
-//	sdaiSTRING			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiUNICODE			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiEXPRESSSTRING	Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .			 .
-//	sdaiINSTANCE		 .			 .			 .			 .			 .			 .			 .			Yes			 .			 .
-//	sdaiAGGR			 .			 .			 .			 .			 .			 .			 .			 .			Yes			 .
-//	sdaiADB				Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .
-//	Note: sdaiGetAttr, stdaiGetAttrBN, engiGetElement will success with any model data, except non-set($)
-//		  (Non-standard extensions) sdaiGetADBValue: sdaiADB is allowed and will success when sdaiGetADBTypePath is not NULL, returning ABD value has type path element removed.
+//				 	  integer	   real		.T. or .F.	   .U.		other enum	  binary	  string	 instance	   list
+//	sdaiINTEGER			Yes			Yes *		 .			 .			 .			 .			 .			 .			 .
+//	sdaiREAL			Yes			Yes			 .			 .			 .			 .			 .			 .			 .
+//	sdaiNUMBER			Yes			Yes			 .			 .			 .			 .			 .			 .			 .
+//	sdaiBOOLEAN			 .			 .			Yes			 .			 .			 .			 .			 .			 .
+//	sdaiLOGICAL			 .			 .			Yes			Yes			 .			 .			 .			 .			 .
+//	sdaiENUM			 .			 .			Yes			Yes			Yes			 .			 .			 .			 .
+//	sdaiBINARY			 .			 .			 .			 .			 .			Yes			 .			 .			 .
+//	sdaiSTRING			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiUNICODE			Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiEXPRESSSTRING	Yes			Yes			Yes			Yes			Yes			Yes			Yes			 .			 .
+//	sdaiINSTANCE		 .			 .			 .			 .			 .			 .			 .			Yes			 .
+//	sdaiAGGR			 .			 .			 .			 .			 .			 .			 .			 .			Yes
+//	sdaiADB				Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes			Yes
+//
+//	(Non-standard extensions) sdaiGetADBValue: sdaiADB is allowed and will success when sdaiGetADBTypePath is not NULL, returning ABD value has type path element removed.
 //
 void						DECL * STDC	sdaiGetAggrByIterator(
 												SdaiIterator			iterator,
@@ -7854,48 +8093,49 @@ static	inline	SdaiInstance	sdaiGetAggrByIterator(
 //	valueType				C/C++														C#
 //
 //	sdaiINTEGER				int_t val = 123;											int_t val = 123;
-//							sdaiPutAggrByIterator (iterator, sdaiINTEGER, &val);		cis2engine.sdaiPutAggrByIterator (iterator, cis2engine.sdaiINTEGER, ref val);
+//							sdaiPutAggrByIterator (iterator, sdaiINTEGER, &val);		CIS2Engine.sdaiPutAggrByIterator (iterator, CIS2Engine.sdaiINTEGER, ref val);
 //
 //	sdaiREAL or sdaiNUMBER	double val = 123.456;										double val = 123.456;
-//							sdaiPutAggrByIterator (iterator, sdaiREAL, &val);			cis2engine.sdaiPutAggrByIterator (iterator, cis2engine.sdaiREAL, ref val);
+//							sdaiPutAggrByIterator (iterator, sdaiREAL, &val);			CIS2Engine.sdaiPutAggrByIterator (iterator, CIS2Engine.sdaiREAL, ref val);
 //
 //	sdaiBOOLEAN				SdaiBoolean val = sdaiTRUE;									bool val = true;
-//							sdaiPutAggrByIterator (iterator, sdaiBOOLEAN, &val);		cis2engine.sdaiPutAggrByIterator (iterator, cis2engine.sdaiBOOLEAN, ref val);
+//							sdaiPutAggrByIterator (iterator, sdaiBOOLEAN, &val);		CIS2Engine.sdaiPutAggrByIterator (iterator, CIS2Engine.sdaiBOOLEAN, ref val);
 //
 //	sdaiLOGICAL				const TCHAR* val = "U";										string val = "U";
-//							sdaiPutAggrByIterator (iterator, sdaiLOGICAL, val);			cis2engine.sdaiPutAggrByIterator (iterator, cis2engine.sdaiLOGICAL, val);
+//							sdaiPutAggrByIterator (iterator, sdaiLOGICAL, val);			CIS2Engine.sdaiPutAggrByIterator (iterator, CIS2Engine.sdaiLOGICAL, val);
 //
 //	sdaiENUM				const TCHAR* val = "NOTDEFINED";							string val = "NOTDEFINED";
-//							sdaiPutAggrByIterator (iterator, sdaiENUM, val);			cis2engine.sdaiPutAggrByIterator (iterator, cis2engine.sdaiENUM, val);
+//							sdaiPutAggrByIterator (iterator, sdaiENUM, val);			CIS2Engine.sdaiPutAggrByIterator (iterator, CIS2Engine.sdaiENUM, val);
 //
 //	sdaiBINARY				const TCHAR* val = "0123456ABC";							string val = "0123456ABC";
-//							sdaiPutAggrByIterator (iterator, sdaiBINARY, val);			cis2engine.sdaiPutAggrByIterator (iterator, cis2engine.sdaiBINARY, val);
+//							sdaiPutAggrByIterator (iterator, sdaiBINARY, val);			CIS2Engine.sdaiPutAggrByIterator (iterator, CIS2Engine.sdaiBINARY, val);
 //
 //	sdaiSTRING				const char* val = "My Simple String";						string val = "My Simple String";
-//							sdaiPutAggrByIterator (iterator, sdaiSTRING, val);			cis2engine.sdaiPutAggrByIterator (iterator, cis2engine.sdaiSTRING, val);
+//							sdaiPutAggrByIterator (iterator, sdaiSTRING, val);			CIS2Engine.sdaiPutAggrByIterator (iterator, CIS2Engine.sdaiSTRING, val);
 //
 //	sdaiUNICODE				const wchar_t* val = L"Any Unicode String";					string val = "Any Unicode String";
-//							sdaiPutAggrByIterator (iterator, sdaiUNICODE, val);			cis2engine.sdaiPutAggrByIterator (iterator, cis2engine.sdaiUNICODE, val);
+//							sdaiPutAggrByIterator (iterator, sdaiUNICODE, val);			CIS2Engine.sdaiPutAggrByIterator (iterator, CIS2Engine.sdaiUNICODE, val);
 //
 //	sdaiEXPRESSSTRING		const char* val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";	string val = "EXPRESS format, i.e. \\X2\\00FC\\X0\\";
-//							sdaiPutAggrByIterator (iterator, sdaiEXPRESSSTRING, val);	cis2engine.sdaiPutAggrByIterator (iterator, cis2engine.sdaiEXPRESSSTRING, val);
+//							sdaiPutAggrByIterator (iterator, sdaiEXPRESSSTRING, val);	CIS2Engine.sdaiPutAggrByIterator (iterator, CIS2Engine.sdaiEXPRESSSTRING, val);
 //
-//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "PRODUCT");	int_t val = cis2engine.sdaiCreateInstanceBN (model, "PRODUCT");
-//							sdaiPutAggrByIterator (iterator, sdaiINSTANCE, val);		cis2engine.sdaiPutAggrByIterator (iterator, cis2engine.sdaiINSTANCE, val);
+//	sdaiINSTANCE			SdaiInstance val = sdaiCreateInstanceBN (model, "IFCSITE");	int_t val = CIS2Engine.sdaiCreateInstanceBN (model, "IFCSITE");
+//							sdaiPutAggrByIterator (iterator, sdaiINSTANCE, val);		CIS2Engine.sdaiPutAggrByIterator (iterator, CIS2Engine.sdaiINSTANCE, val);
 //
 //	sdaiAGGR				SdaiAggr val = sdaiCreateAggr (inst, 0);					int_t val = sdaiCreateAggr (inst, 0);
-//							sdaiPutAttr (val, sdaiINSTANCE, inst);						cis2engine.sdaiPutAttr (val, cis2engine.sdaiINSTANCE, inst);
-//							sdaiPutAggrByIterator (iterator, sdaiAGGR, val);			cis2engine.sdaiPutAggrByIterator (iterator, cis2engine.sdaiAGGR, val);
+//							sdaiPutAttr (val, sdaiINSTANCE, inst);						CIS2Engine.sdaiPutAttr (val, CIS2Engine.sdaiINSTANCE, inst);
+//							sdaiPutAggrByIterator (iterator, sdaiAGGR, val);			CIS2Engine.sdaiPutAggrByIterator (iterator, CIS2Engine.sdaiAGGR, val);
 //
 //	sdaiADB					int_t integerValue = 123;									int_t integerValue = 123;	
-//							SdaiADB val = sdaiCreateADB (sdaiINTEGER, &integerValue);	int_t val = cis2engine.sdaiCreateADB (cis2engine.sdaiINTEGER, ref integerValue);
-//							sdaiPutADBTypePath (val, 1, "INTEGER");						cis2engine.sdaiPutADBTypePath (val, 1, "INTEGER");
-//							sdaiPutAggrByIterator (iterator, sdaiADB, val);				cis2engine.sdaiPutAggrByIterator (iterator, cis2engine.sdaiADB, val);	
-//							sdaiDeleteADB (val);										cis2engine.sdaiDeleteADB (val);
+//							SdaiADB val = sdaiCreateADB (sdaiINTEGER, &integerValue);	int_t val = CIS2Engine.sdaiCreateADB (CIS2Engine.sdaiINTEGER, ref integerValue);
+//							sdaiPutADBTypePath (val, 1, "IFCINTEGER");					CIS2Engine.sdaiPutADBTypePath (val, 1, "IFCINTEGER");
+//							sdaiPutAggrByIterator (iterator, sdaiADB, val);				CIS2Engine.sdaiPutAggrByIterator (iterator, CIS2Engine.sdaiADB, val);	
+//							...															...
+//							sdaiDeleteADB (val);	//	optional						CIS2Engine.sdaiDeleteADB (val);	//	optional
 //
 //	TCHAR is “char” or “wchar_t” depending on setStringUnicode.
 //	(Non-standard behavior) sdaiLOGICAL behaves differently from ISO 10303-24-2001: it expects char* while standard declares int_t.
-//	(Non-standard extension) sdiADB in C++ has an option to work without sdaiCreateEmptyADB and sdaiDeleteADB as shown in the table.
+//	(Non-standard extension) sdiADB has an option to work without sdaiDeleteADB as shown in the table (all open ADB's will be deleted on model close).
 //
 //
 //	Table 2 - valueType can be requested depending on actual model data.
@@ -8067,6 +8307,25 @@ int_t						DECL STDC	InitializeMultiThreading(
 												SdaiModel				model,
 												int_t					threadCount
 											);
+
+#ifdef __cplusplus
+	}
+//{{ Begin C++ polymorphic versions
+
+//
+//
+static	inline	int_t	InitializeMultiThreading(
+							)
+{
+	return	InitializeMultiThreading(
+					0,									//	model
+					0									//	threadCount
+				);
+}
+
+//}} End C++ polymorphic versions
+	extern "C" {
+#endif
 
 //
 //		CreateOwlModelMultiThreadingWrapper                     (https://rdf.bg/cis2doc/CP64/CreateOwlModelMultiThreadingWrapper.html)
@@ -8669,11 +8928,11 @@ int_t						DECL STDC	sdaiValidateSchemaInstance(
 //				SdaiPrimitiveType		* valueType							IN / OUT
 //				void					* value								IN / OUT
 //
-//				void					returns
+//				void					* returns							OUT
 //
 //	This call is deprecated, please use engiGetAggrType, the index is irrelevant.
 //
-void						DECL STDC	engiGetAggrUnknownElement(
+void						DECL * STDC	engiGetAggrUnknownElement(
 												const SdaiAggr			aggregate,
 												int_t					elementIndex,
 												SdaiPrimitiveType		* valueType,

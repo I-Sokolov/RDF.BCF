@@ -31,18 +31,6 @@ public: // Methods
 		// Write UTF-8 BOM
 		unsigned char BOM[3] = { 0xEF, 0xBB, 0xBF };
 		m_pOutputStream->write((char*)BOM, sizeof(BOM));
-
-		// UTF-8 locale
-		try {
-			// Try to use UTF-8 locale if available
-			std::locale utf8_locale("en_US.UTF-8");
-			m_pOutputStream->imbue(utf8_locale);
-		}
-		catch (...) {
-			// Fallback to classic locale
-			// For Emscripten, classic locale should work with UTF-8 if we use ofstream
-			m_pOutputStream->imbue(std::locale::classic());
-		}
 	}
 
 	virtual ~_xml_writer()

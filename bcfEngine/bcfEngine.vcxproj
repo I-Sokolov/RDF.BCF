@@ -396,6 +396,7 @@
     <ClInclude Include="XMLparser\_string.h" />
     <ClInclude Include="XMLparser\_time.h" />
     <ClInclude Include="XMLparser\_xml.h" />
+    <ClInclude Include="XMLparser\_xml_writer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Implementation\Archivator.cpp" />

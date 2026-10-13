@@ -61,11 +61,11 @@ call emcc engineControlAnyConceptDeriveBoundingBox.o engineControlAnyConceptGeom
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 REM Coplile chunk 5
-call emcc %EMCC_OPTS% -c IfcSrc/GeometryKernel/sweptAreaSolidConcept.cpp IfcSrc/GeometryKernel/sweptBlendConcept.cpp IfcSrc/GeometryKernel/textures.cpp IfcSrc/GeometryKernel/triangulation.cpp IfcSrc/GeometryKernel/triangulationBoth.cpp IfcSrc/GeometryKernel/triangulationLower.cpp IfcSrc/GeometryKernel/triangulationShared.cpp IfcSrc/GeometryKernel/triangulationStruct.cpp IfcSrc/GeometryKernel/triangulationUpper.cpp IfcSrc/GeometryKernel/triangulation_DEBUG.cpp
+call emcc %EMCC_OPTS% -c IfcSrc/GeometryKernel/sweptAreaSolidConcept.cpp IfcSrc/GeometryKernel/sweptBlendConcept.cpp IfcSrc/GeometryKernel/textures.cpp IfcSrc/GeometryKernel/triangulation.cpp IfcSrc/GeometryKernel/triangulationBoth.cpp IfcSrc/GeometryKernel/triangulationLower.cpp IfcSrc/GeometryKernel/triangulationShared.cpp IfcSrc/GeometryKernel/triangulationStruct.cpp IfcSrc/GeometryKernel/triangulationUpper.cpp IfcSrc/GeometryKernel/triangulation_DEBUG.cpp IfcSrc/GeometryKernel/createSweptPath.cpp IfcSrc/GeometryKernel/createAdvancedFaceCurve2D.cpp IfcSrc/GeometryKernel/booleanOperation2DFindIntersectionsCoreOLD.cpp IfcSrc/GeometryKernel/booleanOperation2DFindIntersectionsSubOLD.cpp
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 REM Combine chunk 5
-call emcc sweptAreaSolidConcept.o sweptBlendConcept.o textures.o triangulation.o triangulationBoth.o triangulationLower.o triangulationShared.o triangulationStruct.o triangulationUpper.o triangulation_DEBUG.o -r -o GeometryKernel_4.o
+call emcc sweptAreaSolidConcept.o sweptBlendConcept.o textures.o triangulation.o triangulationBoth.o triangulationLower.o triangulationShared.o triangulationStruct.o triangulationUpper.o triangulation_DEBUG.o createSweptPath.o createAdvancedFaceCurve2D.o booleanOperation2DFindIntersectionsCoreOLD.o booleanOperation2DFindIntersectionsSubOLD.o -r -o GeometryKernel_4.o
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 REM ------------------ IFC2x3 - 3 chunk(s) ----------------------
